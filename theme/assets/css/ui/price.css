@@ -1,0 +1,61 @@
+.ui-price {
+    --theme-price-font-size: calc(var(--theme-font-size-base) + 3px);
+    --theme-price-line-height: 1.69;
+    --theme-price-font-size-small: var(--theme-font-size-base);
+    --theme-price-line-height-small: var(--theme-price-font-size);
+
+    display: inline-flex;
+    gap: var(--space);
+    font-weight: var(--theme-font-weight-heavy);
+    font-size: var(--theme-price-font-size);
+    line-height: var(--theme-price-line-height);
+}
+
+.ui-price--small {
+    font-weight: var(--theme-font-weight-normal);
+    font-size: var(--theme-price-font-size-small);
+    line-height: var(--theme-price-font-size-small-line-height);
+}
+
+.ui-price--tiny {
+    font-weight: var(--theme-font-weight-normal);
+    font-size: var(--theme-font-size-minus-1);
+    line-height: var(--theme-font-size-minus-1-line-height);
+}
+
+.ui-price__regular {
+    text-decoration: line-through;
+}
+
+.ui-price__final {
+    color: var(--theme-sale-text-color);
+}
+
+.ui-price__range {
+    flex-flow: column;
+    gap: 0;
+}
+
+.ui-price__row-break {
+    flex-basis: 100%;
+    height: 0;
+}
+
+.ui-price__extra {
+    display: inline-flex;
+    align-items: center;
+    font-weight: var(--theme-font-weight-heavy);
+    font-size: var(--theme-price-font-size);
+    line-height: var(--theme-price-line-height);
+}
+
+.ui-price__extra:not(.ui-price__extra--hide-divider)::before {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: var(--space);
+    vertical-align: middle;
+    background-color: currentcolor;
+    border-radius: 50%;
+    content: "";
+}

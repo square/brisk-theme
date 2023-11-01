@@ -1,0 +1,34 @@
+{% if badges.has_discounts %}
+    <div class="ui-badges-container">
+        {% for discount in discounts %}
+            {{ include('partials/components/store/item/badges/discount', { label: discount.name, shouldAnnounce, size: badgeSize }) }}
+        {% endfor %}
+    </div>
+{% elseif badges.can_preorder %}
+    {% set startAt = preorder.start_at|date('M j') %}
+    {{ include('partials/components/store/item/badges/preorder', { label: 'partials.components.store.item.badges.preorder'|localize({ startAt }), shouldAnnounce, size: badgeSize }) }}
+{% elseif badges.on_sale %}
+    {{ include('partials/components/store/item/badges/sale', { label: 'partials.components.store.item.badges.sale'|localize, shouldAnnounce, size: badgeSize }) }}
+{% elseif badges.low_stock %}
+    {{ include('partials/components/store/item/badges/low-stock', { label: 'partials.components.store.item.badges.low_stock'|localize, shouldAnnounce, size: badgeSize }) }}
+{% elseif badges.out_of_stock %}
+    {{ include('partials/components/store/item/badges/out-of-stock', { label: 'partials.components.store.item.badges.out_of_stock'|localize, shouldAnnounce, size: badgeSize }) }}
+{% elseif badges.is_new %}
+    {{ include('partials/components/store/item/badges/new', { label: 'partials.components.store.item.badges.new'|localize, shouldAnnounce, size: badgeSize }) }}
+{% endif %}
+
+{% schema %}
+{
+    "badges": {
+        "type": "array"
+    },
+    "discounts": {
+        "type": "array",
+        "optional": true
+    },
+    "preorder": {
+        "type": "object",
+        "optional": true
+    },
+}
+{% endschema %}

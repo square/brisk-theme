@@ -1,0 +1,209 @@
+<style>
+    {% set isDark = square.site.styles.colors.background|color_is_dark %}
+    {% set foregroundHex = square.site.styles.colors.paragraph %}
+
+    /* Set CSS variables from the Site's style data */
+    :root {
+        /* Container Variables */
+        {% if square.site.styles.spacing.site_width > 0 %}
+            --settings-container-max-width: {{ square.site.styles.spacing.site_width }}px;
+        {% endif %}
+        {% if square.site.styles.spacing.site_margin %}
+            --settings-container-padding: {{ square.site.styles.spacing.site_margin }}px;
+        {% endif %}
+
+        /* Color Variables */
+        --settings-color-primary: {{ square.site.styles.colors.primary }};
+        --settings-color-primary-contrast: {{ square.site.styles.colors.primary_contrast }};
+        --settings-color-primary-bright-dark: {{ square.site.styles.colors.primary_bright_dark }};
+        --settings-color-primary-subtle-dark: {{ square.site.styles.colors.primary_subtle_dark }};
+        --settings-color-primary-bright-light: {{ square.site.styles.colors.primary_bright_light }};
+        --settings-color-primary-subtle-light: {{ square.site.styles.colors.primary_subtle_light }};
+        --settings-color-background: {{ square.site.styles.colors.background }};
+        --settings-color-body-text: {{ square.site.styles.colors.paragraph }};
+        --settings-color-body-text-subtle: {{ square.site.styles.colors.paragraph|color_adjust(45) }};
+        --settings-color-body-text-contrast: {{ square.site.styles.colors.paragraph|color_contrast({ 'foreground_hex': square.site.styles.colors.background }) }};
+        --settings-color-title: {{ square.site.styles.colors.title }};
+
+        /* Neutral Color Variables */
+        {% set neutral100 = square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': 1 }) %}
+        --settings-color-neutral-0: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': isDark ? 0.08 : 0 }) }};
+        --settings-color-neutral-05: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': isDark ? 0.08 : 0.05 }) }};
+        --settings-color-neutral-10: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': isDark ? 0.13 : 0.10 }) }};
+        --settings-color-neutral-15: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': isDark ? 0.18 : 0.15 }) }};
+        --settings-color-neutral-20: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': isDark ? 0.22 : 0.20 }) }};
+        --settings-color-neutral-30: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': 0.30 }) }};
+        --settings-color-neutral-55: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': 0.55 }) }};
+        --settings-color-neutral-60: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': 0.60 }) }};
+        --settings-color-neutral-70: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': 0.70 }) }};
+        --settings-color-neutral-80: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': 0.80 }) }};
+        --settings-color-neutral-90: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': 0.90 }) }};
+        --settings-color-neutral-100: {{ neutral100 }};
+        --settings-color-overlay: {{ neutral100|color_alpha(70) }};
+        --settings-color-overlay-scrollbar: {{ square.site.styles.colors.background|color_neutral({ 'foreground_hex': foregroundHex, 'ratio': 0.25 }) }};
+
+        /* Alpha Color Variables */
+        --settings-color-background-85-alpha: {{ square.site.styles.colors.background|color_alpha(85) }};
+        --settings-color-background-70-alpha: {{ square.site.styles.colors.background|color_alpha(70) }};
+        --settings-color-neutral-10-alpha: {{ neutral100|color_alpha(10) }};
+
+        /* Typography Variables */
+        --settings-font-family-headline: "{{ square.site.styles.typography.text_styles.headline.font_name }}";
+        --settings-font-weight-headline: {{ square.site.styles.typography.text_styles.headline.weight }};
+        --settings-font-family-title: "{{ square.site.styles.typography.text_styles.title.font_name }}";
+        --settings-font-weight-title: {{ square.site.styles.typography.text_styles.title.weight }};
+        --settings-font-family-body: "{{ square.site.styles.typography.text_styles.body.font_name }}";
+        --settings-font-weight-body: {{ square.site.styles.typography.text_styles.body.weight }};
+        --settings-font-family-label: "{{ square.site.styles.typography.text_styles.label.font_name }}";
+        --settings-font-weight-label: {{ square.site.styles.typography.text_styles.label.weight }};
+        --settings-font-size-base: {{ square.site.styles.typography.base_font_size }}px;
+        --settings-type-scale: {{ square.site.styles.typography.type_scale }};
+        --settings-font-letter-spacing: 0; /* override the default theme letter spacing */
+
+        /* Shape Variables */
+        --settings-border-radius-button: {{ square.site.styles.shapes.button_border_radius }};
+        --settings-border-radius-image: {{ square.site.styles.shapes.image_border_radius }};
+        --settings-border-radius-card: {{ square.site.styles.shapes.card_border_radius }};
+        --settings-border-radius-default: {{ square.site.styles.shapes.default_border_radius }};
+
+        /* Contextual Variables */
+        --settings-color-emphasis-text: {{ square.site.styles.colors.contextual_primary.text }};
+        --settings-color-success-text: {{ square.site.styles.colors.success.text }};
+        --settings-color-warning-text: {{ square.site.styles.colors.warning.text }};
+        --settings-color-critical-text: {{ square.site.styles.colors.error.text }};
+        --settings-color-sale-text: {{ square.site.styles.colors.error.text|color_darken(5) }};
+
+        {% set contextualFillAlpha = isDark ? 40 : 20 %}
+        --settings-color-emphasis-bg: {{ square.site.styles.colors.contextual_primary.fill|color_adjust(10)|color_alpha(contextualFillAlpha) }};
+        --settings-color-success-bg: {{ square.site.styles.colors.success.fill|color_adjust(10)|color_alpha(contextualFillAlpha) }};
+        --settings-color-warning-bg: {{ square.site.styles.colors.warning.fill|color_adjust(10)|color_alpha(contextualFillAlpha) }};
+        --settings-color-critical-bg: {{ square.site.styles.colors.error.fill|color_adjust(10)|color_alpha(contextualFillAlpha) }};
+
+        {% if isDark %}
+            --settings-color-info-text: {{ square.site.styles.colors.paragraph|color_adjust(10) }};
+            --settings-color-info-bg: {{ square.site.styles.colors.background|color_adjust(10) }};
+        {% endif %}
+
+        /* Component Style Variables */
+        {% set badges = square.site.styles.components.badges %}
+        {% set buttons = square.site.styles.component_styles.buttons %}
+
+        /* Badges */
+        {% for key in badges.types|keys %}
+            {% set badgeVariant = badges.types[key].variant %}
+            {% set badgeStyles = badges.styles[badgeVariant] %}
+                {% if badgeStyles.color is not empty %}
+                    {% if badgeVariant == 'primary' and badgeStyles.fill_style != 'outline' and badgeStyles.fill_style != 'text' %}
+                        --settings-badge-{{ key|replace({ '_': '-' }) }}-bg: {{ badgeStyles.color }};
+                        --settings-badge-{{ key|replace({ '_': '-' }) }}-text: {{ badgeStyles.color|color_contrast({ 'foreground_hex': '#fff' }) }};
+                    {% else %}
+                        --settings-badge-{{ key|replace({ '_': '-' }) }}-text: {{ badgeStyles.color }};
+                    {% endif %}
+                {% endif %}
+        {% endfor %}
+
+        /* Primary button */
+        {% set primaryButtonFillBg = square.site.styles.colors.button_filled %}
+        {% set primaryButtonFilledText = square.site.styles.colors.button_filled_text %}
+        {% set primaryButtonOutline = square.site.styles.colors.button_outline %}
+
+        {% if buttons.primary.border.size > 0 %}
+            --settings-button-primary-width: {{ buttons.primary.border.size }}px;
+        {% endif %}
+
+        {% if buttons.primary.shape.value is not empty %}
+            --settings-button-primary-radius: {{ buttons.primary.shape.value }};
+        {% endif %}
+
+        {% if buttons.primary.shadow.active %}
+            --settings-button-primary-shadow: {{ buttons.primary.shadow.horizontal }}px {{ buttons.primary.shadow.vertical }}px {{ buttons.primary.shadow.blur }}px {{ buttons.primary.shadow.spread }}px {{ buttons.primary.shadow.color }};
+        {% endif %}
+
+        {% if buttons.primary.fill_color is not empty %}
+            {% set primaryButtonFillBg = buttons.primary.fill_color %}
+        {% endif %}
+
+        {% if buttons.primary.text.color is not empty %}
+            {% set primaryButtonFilledText = buttons.primary.text.color %}
+        {% endif %}
+
+        {% if buttons.primary.border.color is not empty %}
+            {% set primaryButtonOutline = buttons.primary.border.color %}
+        {% endif %}
+
+        --settings-button-primary-filled-bg: {{ primaryButtonFillBg }};
+        --settings-button-primary-filled-text: {{ primaryButtonFillBg|color_contrast({ 'foreground_hex': primaryButtonFilledText  }) }};
+        --settings-button-primary-outline: {{ primaryButtonOutline }};
+        --settings-button-primary-outline-text: {{ square.site.styles.colors.paragraph }};
+
+        {% if buttons.primary.hover.border.color is not empty %}
+            --settings-button-primary-outline-hover: {{ buttons.primary.hover.border.color }};
+            --settings-button-primary-outline-active: {{ buttons.primary.hover.border.color|color_darken(10) }};
+        {% endif %}
+
+        {% if buttons.primary.hover.fill_color is not empty %}
+            --settings-button-primary-filled-bg-hover: {{ buttons.primary.hover.fill_color }};
+            --settings-button-primary-filled-bg-active: {{ buttons.primary.hover.fill_color|color_darken(5) }};
+        {% else %}
+            --settings-button-primary-filled-bg-hover: {{ primaryButtonFillBg|color_adjust(8) }};
+            --settings-button-primary-filled-bg-active: {{ primaryButtonFillBg|color_adjust(16) }};
+        {% endif %}
+
+        {% if buttons.primary.hover.text.color is not empty %}
+            --theme-button-primary-filled-text-hover: {{ buttons.primary.hover.text.color }};
+        {% endif %}
+
+        {% if buttons.primary.hover.shadow.active %}
+            --settings-button-primary-shadow-hover: {{ buttons.primary.hover.shadow.horizontal }}px {{ buttons.primary.hover.shadow.vertical }}px {{ buttons.primary.hover.shadow.blur }}px {{ buttons.primary.hover.shadow.spread }}px {{ buttons.primary.hover.shadow.color }};
+        {% endif %}
+
+        /* Secondary button */
+        {% set secondaryButtonOutline = square.site.styles.colors.button_outline %}
+
+        {% if buttons.secondary.border.size > 0 %}
+            --settings-button-secondary-width: {{ buttons.secondary.border.size }}px;
+        {% endif %}
+
+        {% if buttons.secondary.shape.value is not empty %}
+            --settings-button-secondary-radius: {{ buttons.secondary.shape.value }};
+        {% endif %}
+
+        {% if buttons.secondary.shadow.active %}
+            --settings-button-secondary-shadow: {{ buttons.secondary.shadow.horizontal }}px {{ buttons.secondary.shadow.vertical }}px {{ buttons.secondary.shadow.blur }}px {{ buttons.secondary.shadow.spread }}px {{ buttons.secondary.shadow.color }};
+        {% endif %}
+
+        {% if buttons.secondary.border.color is not empty %}
+            {% set secondaryButtonOutline = buttons.secondary.border.color %}
+        {% endif %}
+
+        {% if buttons.secondary.fill_color is not empty %}
+            --settings-button-secondary-filled-bg: {{ buttons.secondary.fill_color }};
+            --settings-button-secondary-filled-text: {{ buttons.secondary.fill_color|color_contrast({ 'foreground_hex': foregroundHex }) }};
+        {% endif %}
+
+        {% if buttons.secondary.hover.fill_color is not empty %}
+            --settings-button-secondary-filled-bg-hover: {{ buttons.secondary.hover.fill_color }};
+            --settings-button-secondary-filled-bg-active: {{ buttons.secondary.hover.fill_color|color_darken(5) }};
+        {% elseif buttons.secondary.fill_color is not empty %}
+            --settings-button-secondary-filled-bg-hover: {{ buttons.secondary.fill_color|color_adjust(5) }};
+            --settings-button-secondary-filled-bg-active: {{ buttons.secondary.fill_color|color_adjust(10) }};
+        {% endif %}
+
+        {% if buttons.secondary.hover.border.color is not empty %}
+            --settings-button-secondary-outline-text-hover: {{ buttons.secondary.hover.border.color }};
+            --settings-button-secondary-outline-hover: {{ buttons.secondary.hover.border.color }};
+            --settings-button-secondary-outline-active: {{ buttons.secondary.hover.border.color|color_darken(10) }};
+        {% endif %}
+
+        --settings-button-secondary-outline: {{ secondaryButtonOutline|color_alpha(85) }};
+        --settings-button-secondary-outline-text: {{ secondaryButtonOutline }};
+
+        {% if buttons.secondary.hover.text.color is not empty %}
+            --settings-button-secondary-filled-text-hover: {{ buttons.secondary.hover.text.color }};
+        {% endif %}
+
+        {% if buttons.secondary.hover.shadow.active %}
+            --settings-button-secondary-shadow-hover: {{ buttons.secondary.hover.shadow.horizontal }}px {{ buttons.secondary.hover.shadow.vertical }}px {{ buttons.secondary.hover.shadow.blur }}px {{ buttons.secondary.hover.shadow.spread }}px {{ buttons.secondary.hover.shadow.color }};
+        {% endif %}
+    }
+</style>

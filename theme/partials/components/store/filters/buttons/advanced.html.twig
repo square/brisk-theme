@@ -1,0 +1,97 @@
+{% if 'PICKUP' in square.store.fulfillment_support %}
+    {{ register_asset('css/components/store/item/locations-dialog.css') }}
+    {{ register_asset('js/components/store/item/locations-dialog.js', { defer: false }) }}
+{% endif %}
+
+<div
+    x-data="advancedFilterDropdown()"
+    class="filters__advanced-wrapper"
+>
+    {% embed 'partials/ui/button' with {
+            label: 'partials.components.store.filters.buttons.filters'|localize,
+            size: 'medium',
+            variant: 'neutral',
+            style: 'outline',
+            action: 'handleFiltersButtonClick()'
+    } %}
+        {% block attributes %}
+            x-ref="advancedButton"
+            @click.outside="(e) => { const hasClickedDialog = $store.dialog?.isDialogOpen || e.target.closest('.ui-dialog__overlay'); if (!e.target.closest('#{{ id }}') && !hasClickedDialog) { closeAdvancedFiltersDropdown(); } }"
+        {% endblock %}
+        {% block content %}
+            <span
+                x-text="$store.global.isMobile ? getAllSelectedFiltersCount() : getSelectedFiltersCount()"
+                class="filters__advanced-count"
+            ></span>
+        {% endblock %}
+    {% endembed %}
+    {% embed 'partials/ui/tooltip' with { id, isDropdown: true } %}
+        {% block content %}
+            <div
+                class="filters__advanced-dropdown"
+            >
+                <div class="filters__advanced-dropdown-scrollbar custom-scrollbar">
+                    <div class="filters__advanced-options custom-scrollbar-inner">
+                        <template x-if="!dialogExists()">
+                            <template x-teleport="body">
+                                {{ include('partials/ui/dialog') }}
+                            </template>
+                        </template>
+
+                        <div class="filters__advanced-options-row">
+                            {# Fulfillments and item status #}
+                            {{ include('partials/components/store/filters/options/fulfillments-and-status', { chooseLocationTemplateId, fulfillmentSupport: square.store.fulfillment_support }) }}
+                        </div>
+
+                        {% if globalOptions|length %}
+
+                            {# Size filter #}
+                            {{ include('partials/components/store/filters/options/size') }}
+
+                            {# Swatches filter #}
+                            {{ include('partials/components/store/filters/options/swatches', { tooltipBoundary: '.filters__advanced-options-swatches' }) }}
+
+                        {% endif %}
+
+                        {# Price range #}
+                        {{ include('partials/components/store/filters/options/price') }}
+                    </div>
+                </div>
+
+                <div class="filters__advanced-buttons">
+                    {# Apply button #}
+                    {% embed 'partials/ui/button' with {
+                            label: 'shared.buttons.apply'|localize,
+                            size: 'small',
+                            variant: 'primary',
+                            fullWidth: true,
+                            action: 'applyFilters()'
+                    } %}
+                        {% block attributes %}
+                            :disabled="shouldDisableApplyButton()"
+                        {% endblock %}
+                    {% endembed %}
+                    {# Reset button #}
+                    {% embed 'partials/ui/button' with {
+                            label: 'shared.buttons.reset'|localize,
+                            size: 'small',
+                            variant: 'neutral',
+                            style: 'fill',
+                            fullWidth: true,
+                            action: 'resetAdvancedFilters()',
+                    } %}
+                        {% block attributes %}
+                            :disabled="getSelectedFiltersCount() === 0"
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+            </div>
+        {% endblock %}
+    {% endembed %}
+</div>
+
+<template x-if="!dialogExists()">
+    <template x-teleport="body">
+        {{ include('partials/ui/dialog') }}
+    </template>
+</template>

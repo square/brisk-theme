@@ -1,0 +1,138 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/pagination.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/ui/pagination.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/ui/pagination.css') }}
+    {{ register_asset('js/ui/pagination.js', { defer: false }) }}
+{% endif %}
+
+{% set defaultPerPageOptions = [
+    { label: 'partials.ui.pagination.x_results'|localize({ total: 5 }), value: 5 },
+    { label: 'partials.ui.pagination.x_results'|localize({ total: 10 }), value: 10 },
+    { label: 'partials.ui.pagination.x_results'|localize({ total: 20 }), value: 20 },
+    { label: 'partials.ui.pagination.x_results'|localize({ total: 50 }), value: 50 },
+    { label: 'partials.ui.pagination.show_all.label'|localize, value: 'all' },
+] %}
+
+{% set perPageOptions = pageOptions|default(defaultPerPageOptions) %}
+
+{% set pageNavigationOptions = [] %}
+
+{% if totalPages %}
+    {% for page in 1..totalPages %}
+        {% set pageNavigationOptions = pageNavigationOptions|merge([{ label: 'partials.ui.pagination.per_page.label'|localize({ currentPage: page, totalPages }), value: page }]) %}
+    {% endfor %}
+{% endif %}
+
+{% set paginationUIDataId = 'pagination-ui-data-' ~ random() %}
+<script id="{{ paginationUIDataId }}" type="application/json">
+    {{ {
+        translations: {
+            perPageLabel: 'partials.ui.pagination.per_page.label'|localize,
+        },
+    }|json_encode }}
+</script>
+
+<div
+    x-data="{ ...paginationUI('{{ paginationUIDataId }}'), {% block data %}{% endblock %} }"
+    x-init="initPaginationUI()"
+    aria-label="Pagination"
+    class="ui-pagination"
+>
+    {% set paginationId = 'pagination-' ~ random() %}
+    <div
+        x-data="paginationButtonUI('{{ paginationId }}__per-page-tooltip')"
+        class="ui-pagination__button ui-pagination__per-page"
+    >
+        {% embed 'partials/ui/button' with {
+                size: 'small',
+                variant: 'neutral',
+                style: 'outline',
+                label: 'partials.ui.pagination.buttons.per_page'|localize,
+                action: 'toggleDropdown(!isDropdownVisible)',
+        } %}
+            {% block attributes %}
+                x-ref="paginationButton"
+                :fullwidth="isMobile"
+                @click.outside="toggleDropdown(false)"
+                @keydown.down="isDropdownVisible = true"
+                @keydown.tab="isDropdownVisible = false"
+            {% endblock %}
+            {% block content %}
+                <span class="ui-pagination__button-sublabel" x-text="perPage.value"></span>
+            {% endblock %}
+        {% endembed %}
+        {% embed 'partials/ui/tooltip' with {
+            id: paginationId ~ '__per-page-tooltip',
+            variant: 'menu',
+            items: perPageOptions,
+            menuTriggerRef: 'paginationButton',
+            parentModel: 'perPage',
+        } %}
+            {% block data %}
+                model: perPage,
+                ...paginationDropdownUI('perPage')
+            {% endblock %}
+        {% endembed %}
+    </div>
+    <div
+        x-data="paginationButtonUI('{{ paginationId }}__page-nav-tooltip')"
+        class="ui-pagination__navigation"
+    >
+        {% embed 'partials/ui/button' with {
+            variant: 'neutral',
+            style: 'fill',
+            size: 'small',
+            icon: 'arrow_back',
+            iconAlt: 'partials.ui.pagination.buttons.nav.previous'|localize,
+            action: 'backButtonClick',
+        } %}
+            {% block attributes %}
+                :disabled="currentPage.value == 1"
+            {% endblock %}
+        {% endembed %}
+        <div class="ui-pagination__button">
+            {% embed 'partials/ui/button' with {
+                    size: 'small',
+                    variant: 'neutral',
+                    style: 'outline',
+                    label: 'partials.ui.pagination.pages.label'|localize,
+                    action: 'toggleDropdown(!isDropdownVisible)',
+            } %}
+                {% block attributes %}
+                    x-ref="paginationButton"
+                    :fullwidth="isMobile"
+                    @click.outside="toggleDropdown(false)"
+                    @keydown.down="isDropdownVisible = true"
+                    @keydown.tab="isDropdownVisible = false"
+                {% endblock %}
+                {% block content %}
+                    <span class="ui-pagination__button-sublabel" x-text="currentPage.value + ' of ' + totalPages"></span>
+                {% endblock %}
+            {% endembed %}
+            {% embed 'partials/ui/tooltip' with {
+                id: paginationId ~ '__page-nav-tooltip',
+                variant: 'menu',
+                parentModel: 'currentPage',
+                asyncTemplateName: 'pagination-dropdown',
+                asyncProps: { items: pageNavigationOptions, menuTriggerRef: 'paginationButton', selectedItem: currentPage },
+            } %}
+                {% block data %}
+                    ...paginationDropdownUI('currentPage')
+                {% endblock %}
+            {% endembed %}
+        </div>
+        {% embed 'partials/ui/button' with {
+            variant: 'neutral',
+            style: 'fill',
+            size: 'small',
+            icon: 'arrow_forward',
+            iconAlt: 'partials.ui.pagination.buttons.nav.next'|localize,
+            action: 'forwardButtonClick'
+        } %}
+            {% block attributes %}
+                :disabled="currentPage.value == totalPages"
+            {% endblock %}
+        {% endembed %}
+    </div>
+</div>

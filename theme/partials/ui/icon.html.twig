@@ -1,0 +1,9 @@
+{% if name %}
+<span
+    x-cloak
+    class="material-symbols-outlined {% if filled %}material-symbols-filled{% endif %} {{ iconClasses }}"
+    {% if ariaHidden %}aria-hidden="true"{% endif %}
+    {% block attributes %}{% endblock %}
+>{{ name }}</span>
+{% if hiddenLabel %}<span class="visually-hidden">{{ hiddenLabel }}</span>{% endif %}
+{% endif %}

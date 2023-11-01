@@ -1,0 +1,106 @@
+.form-swatches__options {
+    display: flex;
+    gap: var(--space);
+}
+
+.form-swatches__option {
+    position: relative;
+    display: flex;
+    cursor: pointer;
+}
+
+.form-swatches__input {
+    width: 40px;
+    height: 40px;
+    margin: 2px 0 0;
+    vertical-align: middle;
+    border: 1px solid var(--theme-form-field-image-border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.form-swatches__option--disabled,
+.form-swatches__input[disabled] {
+    cursor: not-allowed;
+}
+
+.form-swatches--invalid .form-swatches__input {
+    border-color: var(--theme-form-field-border-error);
+}
+
+.form-swatches__input:disabled {
+    border-color: var(--theme-form-field-image-border-disabled);
+}
+
+/* dot icon */
+.form-swatches__input:not([checked])::after {
+    display: block;
+    width: 7px;
+    height: 7px;
+    margin: var(--space-x2) 0 0 var(--space-x2);
+    background-color: var(--theme-form-field-icon);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+    content: '';
+}
+
+.form-swatches__input:focus::after {
+    width: 15px;
+    height: 15px;
+    margin: var(--space-x1_5) 0 0 var(--space-x1_5);
+}
+
+.form-swatches__input--light:not([checked])::after {
+    background-color: var(--theme-form-field-icon-contrast);
+}
+
+.form-swatches__input:hover::after,
+.form-swatches__input:focus::after {
+    opacity: 1;
+}
+
+.form-swatches__input[disabled]:not([checked])::after {
+    width: 2px;
+    height: 40px;
+    margin: 0 0 0 19px;
+    border-radius: 0;
+    transform: rotate(45deg);
+    opacity: 1;
+}
+
+/* checkmark icon */
+.form-swatches__input::before {
+    position: absolute;
+    top: 0.9em;
+    left: 1.1em;
+    width: 11px;
+    height: 15px;
+    border-right: 2px solid var(--theme-form-field-icon);
+    border-bottom: 2px solid var(--theme-form-field-icon);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    content: "";
+}
+
+.form-swatches__input--light::before {
+    border-color: var(--theme-form-field-icon-contrast);
+}
+
+.form-swatches__input[checked]::before {
+    transform: rotate(45deg);
+}
+
+.form-swatches__input:not([disabled])[checked]::before {
+    opacity: 1;
+}
+
+.form-swatches__input[disabled][checked]::before {
+    opacity: 0.6;
+}
+
+.form-swatches__input.form-swatches__input--light[disabled]::after,
+.form-swatches__input.form-swatches__input--light[disabled][checked]::before {
+    opacity: 0.3;
+}

@@ -1,0 +1,22 @@
+{% set colorOptions = globalOptions|filter(option => option.type == 'color') %}
+{% for colorOption in colorOptions %}
+    {% if colorOption.choices %}
+        {% set formattedColorOptions = [] %}
+        <div class="filters__advanced-options-row filters__advanced-options-swatches">
+            {% for choice in colorOption.choices %}
+                {% set formattedColorOptions = formattedColorOptions|merge([{ label: choice.name, value: choice.id, color: choice.color }]) %}
+            {% endfor %}
+
+            {{ include('partials/form/swatches', {
+                label: colorOption.name,
+                hideSublabel: true,
+                multiSelect: true,
+                tooltipBoundary,
+                tooltipKey: 'label',
+                options: formattedColorOptions,
+                parentModel: 'advancedFilterOptionSets',
+                tooltipContrast: true,
+            }) }}
+        </div>
+    {% endif %}
+{% endfor %}

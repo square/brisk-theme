@@ -1,0 +1,54 @@
+{% set formattedSummary = [] %}
+
+<script id="item-discount-data" type="application/json">
+    {{ { discount }|json_encode }}
+</script>
+
+<div
+    x-data="itemDiscount('item-discount-data')"
+    class="ui-loader-wrapper--overlay"
+>
+    <div
+        x-show="isLoadingDetails"
+        class="ui-loader--overlay"
+    >
+        {{ include('partials/ui/loader') }}
+    </div>
+    <div
+        x-show="!isLoadingDetails"
+        class="ui-dialog__content--inner"
+    >
+        <div class="ui-dialog__icon">
+            {{ include('partials/ui/icon', { name: 'bolt' }) }}
+        </div>
+        <h4 class="heading-4">{{ discount.display_strings.summary_text }}</h4>
+
+        <div
+            x-show="formattedEligibleItems.length"
+            class="ui-dialog__section"
+        >
+            <span class="title"{{ 'templates.components.dialogs.discount.eligible_items.title'|localize }}</span>
+            <p x-text="formattedEligibleItems"></p>
+        </div>
+
+        <div
+            x-show="formattedDetails.length"
+            class="ui-dialog__section"
+        >
+            <span class="title">Details</span>
+            <ul class="bulleted-list">
+                <template x-for="detail in formattedDetails">
+                    <li x-text="detail"></li>
+                </template>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "discount": {
+        "type": "array"
+    }
+}
+{% endschema %}

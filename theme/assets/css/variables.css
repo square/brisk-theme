@@ -1,0 +1,143 @@
+:root {
+    /* Spacing variables */
+    --space-half: 4px;
+    --space: 8px;
+    --space-x1_5: 12px;
+    --space-x2: 16px;
+    --space-x2_5: 20px;
+    --space-x3: 24px;
+    --space-x4: 32px;
+    --space-x5: 40px;
+    --space-x6: 48px;
+    --space-x7: 56px;
+    --space-x8: 64px;
+    --space-x9: 72px;
+    --space-x10: 80px;
+    --space-x11: 88px;
+    --space-x12: 96px;
+
+    /* Typography variables */
+    --theme-font-family-body: var(--settings-font-family-body, 'Inter', sans-serif);
+    --theme-font-family-headline: var(--settings-font-family-headline, 'Inter', sans-serif);
+    --theme-font-family-title: var(--settings-font-family-title, 'Inter', sans-serif);
+    --theme-font-family-label: var(--settings-font-family-label, 'Inter', sans-serif);
+    --theme-font-size-scale: var(--settings-type-scale, 1);
+    --theme-font-size-base: var(--settings-font-size-base, 16px);
+    --theme-line-height-base: 1.5;
+    --line-height-scale: 0.9;
+    --theme-font-size-plus-1: calc(var(--theme-font-size-base) + 2px);
+    --theme-font-size-minus-1: calc(var(--theme-font-size-base) - 2px);
+    --theme-font-size-minus-2: calc(var(--theme-font-size-minus-1) - 2px);
+    --theme-font-size-plus-1-line-height: calc(var(--theme-line-height-base) * var(--line-height-scale));
+    --theme-font-size-minus-1-line-height: calc(var(--theme-line-height-base) / var(--line-height-scale));
+    --theme-font-size-minus-2-line-height: calc(var(--theme-font-size-minus-1-line-height) / var(--line-height-scale));
+    --theme-font-size-minus-2-letter-spacing: var(--settings-font-letter-spacing, 0.24px);
+    --theme-font-weight-heavy: calc(var(--theme-font-weight-normal) + 200);
+    --theme-font-weight-medium: calc(var(--theme-font-weight-normal) + 100);
+    --theme-font-weight-normal: var(--settings-font-weight-body, 500);
+    --theme-font-weight-light: calc(var(--theme-font-weight-normal) - 100);
+    --theme-font-weight-headline: var(--settings-font-weight-headline, var(--theme-font-weight-normal));
+    --theme-font-weight-title: var(--settings-font-weight-title, var(--theme-font-weight-medium));
+    --theme-font-weight-label: var(--settings-font-weight-label, var(--theme-font-weight-normal));
+    --theme-h2-font-size: calc((var(--theme-font-size-base) * var(--theme-font-size-scale)) + 32px);
+    --theme-h2-line-height: 1.17;
+    --theme-h2-letter-spacing: var(--settings-font-letter-spacing, -2.4px);
+    --theme-h2-letter-spacing-mobile: var(--settings-font-letter-spacing, -0.96px);
+    --theme-h3-font-size: calc((var(--theme-font-size-base) * var(--theme-font-size-scale)) + 16px);
+    --theme-h3-line-height: 1.25;
+    --theme-h3-letter-spacing: var(--settings-font-letter-spacing, -0.64px);
+    --theme-h4-font-size: calc((var(--theme-font-size-base) * var(--theme-font-size-scale)) + 9px);
+    --theme-h4-line-height: 1.28;
+    --theme-h5-font-size: calc((var(--theme-font-size-base) * var(--theme-font-size-scale)) + 3px);
+    --theme-h5-line-height: 1.37;
+    --theme-h6-font-size: var(--theme-font-size-base);
+    --theme-h6-line-height: var(--theme-line-height-base);
+
+    /* Neutral color variables */
+    --theme-color-neutral-0: var(--settings-color-neutral-0, #fff);
+    --theme-color-neutral-05: var(--settings-color-neutral-05, #f2f2f2);
+    --theme-color-neutral-10: var(--settings-color-neutral-10, #e6e6e6);
+    --theme-color-neutral-15: var(--settings-color-neutral-15, #d9d9d9);
+    --theme-color-neutral-20: var(--settings-color-neutral-20, #cccccc);
+    --theme-color-neutral-30: var(--settings-color-neutral-30, #b3b3b3);
+    --theme-color-neutral-55: var(--settings-color-neutral-55, #737373);
+    --theme-color-neutral-60: var(--settings-color-neutral-60, #666666);
+    --theme-color-neutral-70: var(--settings-color-neutral-70, #4d4d4d);
+    --theme-color-neutral-80: var(--settings-color-neutral-80, #303030);
+    --theme-color-neutral-90: var(--settings-color-neutral-90, #1b1b1b);
+    --theme-color-neutral-100: var(--settings-color-neutral-100, #000);
+
+    /* Alpha color variables */
+    --theme-color-body-70-alpha: var(--settings-color-background-70-alpha, rgba(255, 255, 255, 30%));
+    --theme-color-body-85-alpha: var(--settings-color-background-85-alpha, rgba(255, 255, 255, 15%));
+    --theme-color-neutral-10-alpha: var(--settings-color-neutral-10-alpha, rgba(0, 0, 0, 10%));
+
+    /* Base color variables */
+    --theme-body-color: var(--settings-color-background, var(--theme-color-neutral-0));
+    --theme-body-text-color: var(--settings-color-body-text, var(--theme-color-neutral-90));
+    --theme-body-text-color-subtle: var(--settings-color-body-text-subtle, var(--theme-color-neutral-55));
+    --theme-body-text-color-contrast: var(--settings-color-body-text-contrast, var(--theme-color-neutral-0));
+    --theme-title-color: var(--settings-color-title, var(--theme-color-neutral-90));
+    --theme-bulleted-list-icon-color: var(--theme-color-neutral-100);
+    --theme-border-color: var(--theme-color-neutral-05);
+    --theme-placeholder-color: var(--theme-color-neutral-05);
+    --theme-active-border-color: var(--theme-color-neutral-100);
+    --theme-form-field-focus-color: var(--theme-color-neutral-90, #1b1b1b);
+    --theme-overlay-color: var(--settings-color-overlay, rgba(0, 0, 0, 55%));
+    --theme-overlay-scrollbar-color: var(--settings-color-overlay-scrollbar, rgba(0, 0, 0, 55%));
+    --theme-megamenu-overlay-color: rgba(0, 0, 0, 25%);
+
+    /* Container */
+    --theme-max-container: var(--settings-container-max-width, 3200px);
+    --theme-container-padding: calc(var(--settings-container-padding, 0px) + var(--space-x4));
+
+    /* Borders */
+    --theme-border-radius: var(--settings-border-radius-default, 6px);
+    --theme-border-radius-button: var(--settings-border-radius-button, 6px);
+    --theme-border-radius-image: var(--settings-border-radius-image, 0);
+    --theme-border-radius-card: var(--settings-border-radius-card, 6px);
+
+    /* Contextual text color variables */
+    --theme-info-text-color: var(--settings-color-info-text, var(--theme-body-text-color-subtle));
+    --theme-emphasis-text-color: var(--settings-color-emphasis-text, #005ad9);
+    --theme-success-text-color: var(--settings-color-success-text, #007d2a);
+    --theme-warning-text-color: var(--settings-color-warning-text, #945c25);
+    --theme-critical-text-color: var(--settings-color-critical-text, #bf0020);
+    --theme-sale-text-color: var(--settings-color-sale-text, #990838);
+
+    /* Contextual background color variables */
+    --theme-info-bg-color: var(--settings-color-info-bg, var(--theme-color-neutral-05));
+    --theme-emphasis-bg-color: var(--settings-color-emphasis-bg, #e5f0ff);
+    --theme-warning-bg-color: var(--settings-color-warning-bg, #fff2e5);
+    --theme-success-bg-color: var(--settings-color-success-bg, #e5ffee);
+    --theme-critical-bg-color: var(--settings-color-critical-bg, #ffe5ea);
+
+    /* Loader */
+    --theme-loader-color: var(--theme-body-text-color);
+    --theme-loader-size: 24px;
+    --theme-loader-overlay-color: var(--theme-color-body-85-alpha);
+
+    /* Button Sizes */
+    --theme-button-small-height: 40px;
+    --theme-button-medium-height: 48px;
+    --theme-button-large-height: 64px;
+
+    /* Footer and Header Logo */
+
+    --theme-logo-font-size: 32px;
+    --theme-logo-line-height: 1.25;
+    --theme-logo-font-weight: var(--theme-font-weight-heavy);
+
+    /* Scrollbar */
+    --theme-scrollbar-width: 8px;
+    --theme-scrollbar-color: var(--theme-body-color);
+    --theme-scrollbar-thumb-color: var(--theme-color-neutral-60);
+
+    /* Z-index */
+    --theme-z-index-controls: 1;
+    --theme-z-index-hover: 1;
+    --theme-z-index-overlay: 10;
+    --theme-z-index-megamenu-overlay: 1;
+    --theme-z-index-header: 2;
+    --theme-z-index-flyout: 100;
+}

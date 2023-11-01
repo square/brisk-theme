@@ -1,0 +1,63 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/swatches.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/form/swatches.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/form/swatches.css') }}
+    {{ register_asset('js/form/swatches.js', { defer: false }) }}
+{% endif %}
+
+{% set placeholderText = 'partials.form.placeholder'|localize %}
+{% set labelId = 'swatches-label-' ~ random() %}
+{% set siteBackground = themeColors.background|default('#fff') %}
+
+<fieldset
+    x-data="{ isInvalid: false, model: {% if multiSelect %}[]{% else %}''{% endif %}, {% block data %}{% endblock %} }"
+    {% if parentModel %}x-modelable="model"{% endif %}
+    {% if isRequired %}aria-required="true"{% endif %}
+    :aria-invalid="isInvalid"
+    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    role="{% if multiSelect %}group{% else %}radiogroup{% endif %}"
+    class="form-fieldset"
+    :class="{'form-swatches--invalid': isInvalid }"
+>
+    {% if hideLabel == false %}
+        {{ include('partials/form/fieldset-label') }}
+    {% endif %}
+
+    <div class="form-swatches__options">
+        {% for option in options %}
+            {% set optionId = random() %}
+            <label
+                id="swatches-{{ optionId }}-label"
+                aria-describedby="swatches-{{ optionId }}__tooltip"
+                x-data="swatchesFormOption('{{ option.value }}', '{{ tooltipBoundary }}')"
+                x-effect="updateSwatchOption({% if parentModel %}{{ parentModel }}{% else %}model{% endif %})"
+                class="form-swatches__option"
+                :class="{ 'form-swatches__option--disabled': isDisabled }"
+                @mouseenter="UITooltip.toggleTooltip($refs.tooltip, true, 1000)"
+                @mouseleave="UITooltip.toggleTooltip($refs.tooltip, false)"
+            >
+                <input
+                    aria-label="swatches-{{ optionId }}-label"
+                    x-ref="input"
+                    x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
+                    type="{% if multiSelect %}checkbox{% else %}radio{% endif %}"
+                    {% if multiSelect == false %}name="{{ label }}"{% endif %}
+                    value="{{ option.value }}"
+                    :checked="isChecked"
+                    :disabled="isDisabled"
+                    class="form-swatches__input"
+                    :class="{ 'form-swatches__input--light': !Boolean({{ siteBackground|color_is_dark }}) && !Boolean({{ option.color|color_is_dark([0.5]) }}) }"
+                    :style="{ backgroundColor: isDisabled ? '{{ option.color|color_alpha(95) }}' : '{{ option.color }}' }"
+                >
+                {# Tooltip #}
+                {% embed 'partials/ui/tooltip' with { id: 'swatches-' ~ optionId ~ '__tooltip', tooltipContrast, } %}
+                    {% block content %}
+                        {% set tooltipText = option[tooltipKey]|default(option.value) %}
+                        <p x-text="isDisabled ? '{{ 'partials.form.swatches.not_available.label'|localize }}' : '{{ tooltipText|capitalize }}'"></p>
+                    {% endblock %}
+                {% endembed %}
+            </label>
+        {% endfor %}
+    </div>
+</fieldset>

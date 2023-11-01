@@ -1,0 +1,11 @@
+.category-page {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x3);
+}
+
+.category-page__heading {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space);
+}

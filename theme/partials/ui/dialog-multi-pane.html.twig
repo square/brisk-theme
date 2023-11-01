@@ -1,0 +1,15 @@
+{% set currentIndex = index|default(0) %}
+<div
+    x-show="$store.dialog.options.currentPane === {{ currentIndex }}"
+    x-transition:enter="fade-enter-active"
+    x-transition:enter-start="fade-enter-from"
+    x-transition:enter-end="fade-enter-to"
+    x-transition:leave="fade-leave-active"
+    x-transition:leave-start="fade-leave-from"
+    x-transition:leave-end="fade-leave-to"
+    data-index="{{ currentIndex }}"
+    class="ui-dialog__multi-pane"
+    :hidden="$store.dialog.options.currentPane !== {{ currentIndex }}"
+>
+    {% block content %}{% endblock %}
+</div>

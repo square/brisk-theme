@@ -1,0 +1,141 @@
+/* Multiple badges container */
+.ui-badges-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-half);
+}
+
+.ui-badge {
+    --theme-badge-radius-rounded: var(--theme-border-radius);
+    --theme-badge-radius-pill: 100px;
+    --theme-badge-height: 32px;
+    --theme-badge-height-small: 24px;
+    --theme-badge-info-bg-color: var(--settings-badge-discount-bg, var(--theme-info-bg-color));
+    --theme-badge-info-text-color: var(--settings-badge-discount-text, var(--theme-info-text-color));
+    --theme-badge-low-stock-bg-color: var(--settings-badge-low-inventory-bg, var(--theme-warning-bg-color));
+    --theme-badge-low-stock-text-color: var(--settings-badge-low-inventory-text, var(--theme-warning-text-color));
+    --theme-badge-out-of-stock-bg-color: var(--settings-badge-out-of-stock-bg, var(--theme-warning-bg-color));
+    --theme-badge-out-of-stock-text-color: var(--settings-badge-out-of-stock-text, var(--theme-warning-text-color));
+    --theme-badge-sale-bg-color: var(--settings-badge-sale-bg, var(--theme-critical-bg-color));
+    --theme-badge-sale-text-color: var(--settings-badge-sale-text, var(--theme-critical-text-color));
+    --theme-badge-new-bg-color: var(--theme-emphasis-bg-color);
+    --theme-badge-new-text-color: var(--theme-emphasis-text-color);
+    --theme-badge-emphasis-bg-color: var(--settings-color-primary, var(--theme-color-neutral-100));
+    --theme-badge-emphasis-text-color: var(--settings-color-primary-contrast, var(--theme-color-neutral-0));
+
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--theme-badge-height);
+    padding: 0 var(--space-x1_5);
+    font-weight: var(--theme-font-weight-medium);
+    font-size: var(--theme-font-size-minus-1);
+    text-transform: uppercase;
+    border-radius: var(--theme-badge-radius-pill);
+}
+
+/* Size */
+.ui-badge--small {
+    min-height: var(--theme-badge-height-small);
+    font-size: var(--theme-font-size-minus-2);
+}
+
+/* Shape */
+.ui-badge--squared {
+    border-radius: 0;
+}
+
+.ui-badge--rounded {
+    border-radius: var(--theme-badge-radius-rounded);
+}
+
+/* Fill */
+.ui-badge--fill.ui-badge--info {
+    color: var(--theme-badge-info-text-color);
+    background-color: var(--theme-badge-info-bg-color);
+}
+
+.ui-badge--fill.ui-badge--new {
+    color: var(--theme-badge-new-text-color);
+    background-color: var(--theme-badge-new-bg-color);
+}
+
+.ui-badge--fill.ui-badge--low-stock {
+    color: var(--theme-badge-low-stock-text-color);
+    background-color: var(--theme-badge-low-stock-bg-color);
+}
+
+.ui-badge--fill.ui-badge--out-of-stock {
+    color: var(--theme-badge-out-of-stock-text-color);
+    background-color: var(--theme-badge-out-of-stock-bg-color);
+}
+
+.ui-badge--fill.ui-badge--sale {
+    color: var(--theme-badge-sale-text-color);
+    background-color: var(--theme-badge-sale-bg-color);
+}
+
+.ui-badge--fill.ui-badge--emphasis {
+    color: var(--theme-badge-emphasis-text-color);
+    background-color: var(--theme-badge-emphasis-bg-color);
+}
+
+/* Outline */
+.ui-badge--outline.ui-badge--info {
+    color: var(--theme-info-text-color);
+    border: 1px solid var(--theme-info-text-color);
+}
+
+.ui-badge--outline.ui-badge--new {
+    color: var(--theme-badge-new-text-color);
+    border: 1px solid var(--theme-badge-new-text-color);
+}
+
+.ui-badge--outline.ui-badge--low-stock {
+    color: var(--theme-badge-low-stock-text-color);
+    border: 1px solid var(--theme-badge-low-stock-text-color);
+}
+
+.ui-badge--outline.ui-badge--out-of-stock {
+    color: var(--theme-badge-out-of-stock-text-color);
+    border: 1px solid var(--theme-badge-out-of-stock-text-color);
+}
+
+.ui-badge--outline.ui-badge--sale {
+    color: var(--theme-badge-sale-text-color);
+    border: 1px solid var(--theme-badge-sale-text-color);
+}
+
+.ui-badge--outline.ui-badge--emphasis {
+    color: var(--theme-badge-emphasis-text-color);
+    border: 1px solid var(--theme-badge-emphasis-text-color);
+}
+
+/* Text */
+.ui-badge--text {
+    height: auto !important;
+    padding: 0;
+}
+
+.ui-badge--text.ui-badge--info {
+    color: var(--theme-info-text-color);
+}
+
+.ui-badge--text.ui-badge--new {
+    color: var(--theme-badge-new-text-color);
+}
+
+.ui-badge--text.ui-badge--low-stock {
+    color: var(--theme-badge-low-stock-text-color);
+}
+
+.ui-badge--text.ui-badge--out-of-stock {
+    color: var(--theme-badge-out-of-stock-text-color);
+}
+
+.ui-badge--text.ui-badge--sale {
+    color: var(--theme-badge-sale-text-color);
+}
+
+.ui-badge--text.ui-badge--emphasis {
+    color: var(--theme-badge-emphasis-text-color);
+}

@@ -1,0 +1,58 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/text.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/form/text.css') }}
+{% endif %}
+
+{% set showClearButton = showClearButton|default(false) %}
+{% set labelId = 'text-' ~ random() %}
+
+<div
+    x-data="{ isInvalid: false, model: '', clearInput() { this.model = ''; this.$dispatch('input:clear'); },{% block data %}{% endblock %} }"
+    class="form-fieldset form-text form-text--{{ size|default('large') }} {{ wrapperClasses }}"
+    :class="{'form-text--invalid': isInvalid }"
+>
+    {% if hideLabel == false %}
+        <label
+            for="{{ labelId }}__input"
+            class="form-fieldset__label"
+        >
+            <span class="form-fieldset__label--primary">
+                <span>{{ label }}</span>
+                <span class="form-fieldset__label--secondary">
+                    {% if isRequired %}
+                        {{ 'partials.form.required'|localize }}
+                    {% elseif isOptional %}
+                        {{ 'partials.form.optional'|localize }}
+                    {% endif %}
+                </span>
+            </span>
+        </label>
+    {% endif %}
+    <span class="form-text__input-wrapper">
+        <input
+            id="{{ labelId }}__input"
+            x-model="model"
+            type="{{ type|default('text') }}"
+            name="{{ inputName|default(label) }}"
+            placeholder="{{ placeholder|default('') }}"
+            {% if min %}min="{{ min }}"{% endif %}
+            {% if max %}max="{{ max }}" maxlength="{{ max }}"{% endif %}
+            {% if isRequired %}required{% endif %}
+            {% block attributes %}{% endblock %}
+            class="form-text__input"
+        >
+        {% if showClearButton %}
+            {{ include('partials/ui/button', {
+                variant: 'text',
+                size: 'small',
+                icon: 'close',
+                hideLabel: true,
+                buttonClasses: 'form-text__clear-button',
+                iconAlt: 'partials.ui.input.clear'|localize,
+                action: 'clearInput'
+            }, with_context = false ) }}
+        {% endif %}
+    </span>
+    {{ include('partials/form/fieldset-error') }}
+</div>

@@ -1,0 +1,93 @@
+.filters__category-wrapper {
+    display: flex;
+    gap: var(--space-x2);
+    align-items: center;
+    min-width: 168px;
+}
+
+.filters__category-back {
+    align-self: flex-start;
+    width: 40px;
+    margin-left: var(--space-x2);
+}
+
+.filters__category-dropdown {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x2);
+    width: calc(327px - var(--space-x2));
+    padding: var(--space-x2) 0;
+}
+
+.filters__dialog .filters__category-dropdown {
+    min-width: 100%;
+    max-width: initial;
+    padding: 0;
+}
+
+.filters__category-options {
+    position: relative;
+}
+
+.filters__category-options.custom-scrollbar {
+    margin-right: calc(var(--browser-scrollbar-width) * -1);
+}
+
+.filters__category-options-heading {
+    margin-bottom: var(--space);
+}
+
+.filters__category-dropdown-content {
+    padding-right: var(--space-x2);
+    padding-left: var(--space-x2);
+}
+
+.filters__category-dropdown-content.custom-scrollbar-inner {
+    max-height: 350px;
+    padding-right: calc(var(--space) + var(--browser-scrollbar-width));
+}
+
+.filters__category-select-all .form-checkbox__options,
+.filters__category-checkbox .form-checkbox__options {
+    gap: var(--space-x2);
+    margin-top: var(--space-x2);
+}
+
+.filters__category-select-all .form-checkbox__input-labels {
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+.filters__category-option.ui-button--row {
+    font-weight: var(--theme-font-weight-light);
+}
+
+.filters__category-option--hide-divider.form-checkbox--row-divider .form-checkbox__option,
+.filters__category-option--hide-divider.ui-button--row {
+    border-color: transparent;
+}
+
+/* dash icon */
+.filters__category-select-all--partial .form-checkbox__input:checked::after {
+    top: 0.1em;
+    width: 7px;
+    border-right-width: 2px;
+    transform: rotate(45deg);
+}
+
+/* override the checked style and replace the checkmark with the dash icon */
+.form-checkbox--row.filters__category-select-all--partial .form-checkbox__input::after,
+.form-checkbox--row.filters__category-select-all--partial .form-checkbox__option:hover .form-checkbox__input:not(:checked)::after {
+    top: -0.1em;
+    width: 8px;
+    border-color: var(--theme-form-field-button-text);
+    border-right-width: 0;
+    transform: rotate(0);
+    opacity: 1;
+}
+
+.filters__category-buttons {
+    display: flex;
+    gap: var(--space-x2);
+    padding: 0 var(--space-x2);
+}

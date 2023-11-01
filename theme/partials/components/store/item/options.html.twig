@@ -1,0 +1,113 @@
+{% if product.item_options|length %}
+
+{{ register_asset('js/components/store/item/options.js', { defer: false }) }}
+
+<div  class="item-page__options">
+    {% for option in product.item_options %}
+        {% set itemOptionDataId = 'item-option-data-' ~ random() %}
+
+        {% if option.name|lower == 'size' or option.name|lower == 'sizes' %}
+            {% set sizeOptions = [] %}
+            {% for choice in option.choices %}
+                {% set key = choice|lower %}
+                {% set label = choice|slice(0, 2)|upper %}
+                {% if config.theme.mapSizeToLocalizeKey[key] %}
+                    {% set label = config.theme.mapSizeToLocalizeKey[key]|localize %}
+                {% endif %}
+                {% set sizeOptions = sizeOptions|merge([{ label: label, value: choice }]) %}
+            {% endfor %}
+
+            <script id="{{ itemOptionDataId }}" type="application/json">
+                {{ {
+                    productId: product.square_online_id,
+                    property: option.id,
+                    options: sizeOptions,
+                }|json_encode }}
+            </script>
+
+            {# Size options #}
+            {% embed 'partials/form/choice' with {
+                label: option.name,
+                options: sizeOptions,
+                isRequired: option.required,
+            } %}
+                {% block data %}
+                    ...itemOption('{{ itemOptionDataId }}')
+                {% endblock %}
+            {% endembed %}
+        {% elseif option.renderer is same as ('color') %}
+            {# Color options #}
+            {% set colorOptions = [] %}
+            {% for choice in option.choices %}
+                {% set colorOptions = colorOptions|merge([{ label: choice, value: choice, color: option.colors[loop.index0] }]) %}
+            {% endfor %}
+
+            <script id="{{ itemOptionDataId }}" type="application/json">
+                {{ {
+                    productId: product.square_online_id,
+                    property: option.id,
+                    options: colorOptions,
+                }|json_encode }}
+            </script>
+
+            {% embed 'partials/form/swatches' with {
+                label: option.name,
+                options: colorOptions,
+                isRequired: option.required,
+            } %}
+                {% block data %}
+                    ...itemOption('{{ itemOptionDataId }}')
+                {% endblock %}
+            {% endembed %}
+        {% elseif option.renderer is same as ('radio') %}
+            {# Radio options #}
+            {% set options = [] %}
+            {% for choice in option.choices %}
+                {% set options = options|merge([{ label: choice, value: choice }]) %}
+            {% endfor %}
+
+            <script id="{{ itemOptionDataId }}" type="application/json">
+                {{ {
+                    productId: product.square_online_id,
+                    property: option.id,
+                    options,
+                }|json_encode }}
+            </script>
+
+            {% embed 'partials/form/radio' with {
+                label: option.name,
+                options: options,
+                isRequired: option.required,
+            } %}
+                {% block data %}
+                    ...itemOption('{{ itemOptionDataId }}')
+                {% endblock %}
+            {% endembed %}
+        {% else %}
+            {# Select dropdown #}
+            {% set options = [] %}
+            {% for choice in option.choices %}
+                {% set options = options|merge([{ label: choice, value: choice }]) %}
+            {% endfor %}
+
+            <script id="{{ itemOptionDataId }}" type="application/json">
+                {{ {
+                    productId: product.square_online_id,
+                    property: option.id,
+                    options,
+                }|json_encode }}
+            </script>
+
+            {% embed 'partials/form/select' with {
+                label: option.name,
+                options,
+                isRequired: option.required,
+            } %}
+                {% block data %}
+                    ...itemOption('{{ itemOptionDataId }}')
+                {% endblock %}
+            {% endembed %}
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}

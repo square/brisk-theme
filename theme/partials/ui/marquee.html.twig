@@ -1,0 +1,18 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/marquee.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/marquee.css') }}
+{% endif %}
+
+<div
+    class="ui-marquee-container"
+>
+    {% for i in 1..5 %}
+        <div
+            class="ui-marquee ui-marquee--direction-{{ direction|default('left') }}"
+            data-text="{{ content }}"
+        >
+            <span>{{ content }}</span>
+        </div>
+    {% endfor %}
+</div>

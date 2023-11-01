@@ -1,0 +1,12 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/loader.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/loader.css') }}
+{% endif %}
+
+<div class="ui-loader {% if contrast %}ui-loader--contrast{% endif %}">
+    <div class="ui-loader__ring"></div>
+    <div class="ui-loader__ring"></div>
+    <div class="ui-loader__ring"></div>
+    <div class="ui-loader__ring"></div>
+</div>

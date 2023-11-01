@@ -1,0 +1,16 @@
+<li
+    role="option"
+    tabindex="-1"
+    aria-posinset="{{ total }}"
+    aria-setsize="{{ index }}"
+    :aria-selected="menuValue && (menuValue.value == '{{ item.value }}' || menuValue == '{{ item.value }}')"
+    class="ui-menu__item"
+    :class="{ 'ui-menu__item--hover': hoverIndex == {{ index }}, 'ui-menu__item--hide-divider': hoverIndex == {{ index + 1 }}, 'ui-menu__item--active': menuValue && (menuValue.value == '{{ item.value }}' || menuValue == '{{ item.value }}') }"
+    @mouseenter="hoverIndex = {{ index }}"
+    @click.stop="onMenuItemClick({{ index }}, '{{ item.value }}')"
+    @keydown.enter.prevent="onMenuItemClick({{ index }}, '{{ item.value }}')"
+>
+    {% block menuItem %}
+        <span class="ui-menu__item-text">{{ item.label }}</span>
+    {% endblock %}
+</li>

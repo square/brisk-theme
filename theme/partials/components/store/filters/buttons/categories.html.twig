@@ -1,0 +1,66 @@
+<div
+    x-data="categoriesFilterDropdown()"
+    class="filters__category-wrapper"
+>
+    {% embed 'partials/ui/button' with {
+            label: 'partials.components.store.filters.buttons.categories'|localize,
+            size: 'medium',
+            variant: 'neutral',
+            style: 'outline',
+            fullWidth: true,
+            alignment: 'space-between',
+            action: 'toggleDropdown(!isDropdownVisible)'
+    } %}
+        {% block attributes %}
+            x-ref="categoriesButton"
+            @click.outside="(e) => { if (!e.target.closest('#{{ id }}')) { toggleDropdown(false); } }"
+        {% endblock %}
+        {% block content %}
+            {% embed 'partials/ui/icon' with { name: 'expand_more' } %}
+                {% block attributes %}
+                    x-show="!isDropdownVisible"
+                {% endblock %}
+            {% endembed %}
+            {% embed 'partials/ui/icon' with { name: 'expand_less' } %}
+                {% block attributes %}
+                    x-show="isDropdownVisible"
+                {% endblock %}
+            {% endembed %}
+        {% endblock %}
+    {% endembed %}
+    {% embed 'partials/ui/tooltip' with { id, isDropdown: true } %}
+        {% block content %}
+            <div class="filters__category-dropdown">
+                {{ include('partials/components/store/filters/options/categories-selector', { categoryHierarchy: category_hierarchy, parentCategory: category, showScrollbar: true }) }}
+
+                <div class="filters__category-buttons">
+                    {# Apply button #}
+                    {% embed 'partials/ui/button' with {
+                            label: 'shared.buttons.apply'|localize,
+                            size: 'small',
+                            variant: 'primary',
+                            fullWidth: true,
+                            action: 'applyFilters()'
+                    } %}
+                        {% block attributes %}
+                            :disabled="shouldDisableApplyButton()"
+                        {% endblock %}
+                    {% endembed %}
+                    {# Reset button #}
+                    {% embed 'partials/ui/button' with {
+                            label: 'shared.buttons.reset'|localize,
+                            size: 'small',
+                            variant: 'neutral',
+                            style: 'fill',
+                            fullWidth: true,
+                            action: 'resetCategoriesFilters()',
+                    } %}
+                        {% block attributes %}
+                            :disabled="getSelectedCategoriesCount() === 0"
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+            </div>
+        {% endblock %}
+    {% endembed %}
+</div>

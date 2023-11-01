@@ -1,0 +1,37 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/textarea.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/form/textarea.css') }}
+{% endif %}
+
+{% set textareaId = 'textarea-' ~ random() %}
+{% set isLabelVisible = hideLabel == false %}
+
+<div
+    x-data="{ isInvalid: false, model: '', {% block data %}{% endblock %} }"
+    {% if parentModel %}x-modelable="model"{% endif %}
+    aria-invalid="isInvalid"
+    {% if isLabelVisible %}aria-describedby="{{ textareaId }}__label"{% endif %}
+    class="form-fieldset form-textarea"
+    :class="{'form-textarea--label-visible': '{{ isLabelVisible }}', 'form-textarea--invalid': isInvalid }"
+>
+    {% if isLabelVisible %}
+    <label
+        id="{{ textareaId }}__label"
+        for="textarea-{{ textareaId }}"
+        class="form-fieldset__label"
+    >  
+        {{ label }}
+    </label>
+    {% endif %}
+    <textarea
+        id="textarea-{{ textareaId }}"
+        x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
+        placeholder="{{ placeholder|default('') }}"
+        {% if max %}maxlength="{{ max }}"{% endif %}
+        class="form-textarea__input"
+    ></textarea>
+
+    {{ include('partials/form/fieldset-error') }}
+
+</div>

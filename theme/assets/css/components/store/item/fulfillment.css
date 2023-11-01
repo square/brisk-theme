@@ -1,0 +1,13 @@
+.fulfillment-detail {
+    margin-bottom: var(--space);
+    font-size: var(--theme-font-size-minus-1);
+    line-height: var(--theme-font-size-minus-1-line-height);
+}
+
+.fulfillment-detail__subtext {
+    color: var(--theme-body-text-color-subtle);
+}
+
+.fulfillment-detail__button {
+    text-decoration: underline;
+}

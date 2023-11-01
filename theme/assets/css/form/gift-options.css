@@ -1,0 +1,10 @@
+.form-gift-options {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space);
+}
+
+
+.form-gift-option__gift-wrap {
+    order: 2;
+}

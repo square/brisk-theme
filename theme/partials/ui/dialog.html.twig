@@ -1,0 +1,84 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/dialog.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/ui/dialog.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/ui/dialog.css') }}
+    {{ register_asset('js/ui/dialog.js', { defer: false }) }}
+{% endif %}
+
+{% set dialogId = 'dialog-' ~ random() %}
+
+<div
+    role="dialog"
+    aria-modal="true"
+    :aria-labelledby="$store.dialog.shouldShowSecondaryDialog() ? '{{ dialogId }}-secondary__title' : '{{ dialogId }}__title'"
+    :aria-describedby="$store.dialog.shouldShowSecondaryDialog() ? '{{ dialogId }}-secondary__content' : '{{ dialogId }}__content'"
+    :aria-hidden="!$store.dialog.isDialogOpen"
+    class="ui-dialog__overlay"
+    :class="{ ['ui-dialog__overlay--' + $store.dialog.options.size]: true, ['ui-dialog__overlay--' + $store.dialog.options.variant]: true, 'ui-dialog__overlay--scrollable': $store.dialog.options.scrollable, 'ui-dialog__overlay--flush': $store.dialog.options.flush }"
+    x-ref="dialog"
+    x-show="$store.dialog.isDialogOpen"
+    x-transition:enter="fade-enter-active"
+    x-transition:enter-start="fade-enter-from"
+    x-transition:enter-end="fade-enter-to"
+    x-transition:leave="fade-leave-active"
+    x-transition:leave-start="fade-leave-from"
+    x-transition:leave-end="fade-leave-to"
+>
+    {# Loader #}
+    <div
+        x-show="$store.dialog.isDialogLoading"
+        class="ui-dialog__loader"
+    >
+        {{ include('partials/ui/loader', { contrast: true }) }}
+    </div>
+    {# Dialog container #}
+    <div
+        x-show="$store.dialog.shouldShowPrimaryDialog() || $store.dialog.shouldShowSecondaryDialog()"
+        class="ui-dialog__container"
+        x-transition:enter="slide-enter-active"
+        x-transition:enter-start="slide-enter-from"
+        x-transition:enter-end="slide-enter-to"
+        x-transition:leave="slide-leave-active"
+        x-transition:leave-start="slide-leave-from"
+        x-transition:leave-end="slide-leave-to"
+        dialog-transition-override
+    >
+        {# Primary dialog content #}
+        <div
+            x-show="$store.dialog.shouldShowPrimaryDialog()"
+            x-trap.inert="$store.dialog.shouldShowPrimaryDialog()"
+            class="ui-dialog__container-inner ui-dialog__primary-dialog"
+            :class="{ 'ui-dialog__container--header-visible': $store.dialog.isHeaderVisible, 'ui-dialog__container--footer-visible': $store.dialog.isFooterVisible }"
+            x-transition:enter="slide-enter-active"
+            x-transition:enter-start="slide-enter-from"
+            x-transition:enter-end="slide-enter-to"
+            x-transition:leave="slide-leave-active"
+            x-transition:leave-start="slide-leave-from"
+            x-transition:leave-end="slide-leave-to"
+            dialog-transition-override
+            @click.outside="$store.dialog.closeDialog()"
+            @keydown.escape.window="$store.dialog.closeDialog()"
+        >
+            {{ include('partials/ui/dialog-content') }}
+        </div>
+        {# Secondary dialog content #}
+        <div
+            x-show="$store.dialog.shouldShowSecondaryDialog()"
+            x-trap.inert="$store.dialog.shouldShowSecondaryDialog()"
+            class="ui-dialog__container-inner ui-dialog__secondary-dialog"
+            :class="{ 'ui-dialog__container--header-visible': $store.dialog.isHeaderVisible, 'ui-dialog__container--footer-visible': $store.dialog.isFooterVisible }"
+            x-transition:enter="slide-enter-active"
+            x-transition:enter-start="slide-enter-from"
+            x-transition:enter-end="slide-enter-to"
+            x-transition:leave="slide-leave-active"
+            x-transition:leave-start="slide-leave-from"
+            x-transition:leave-end="slide-leave-to"
+            dialog-transition-override
+            @click.outside="$store.dialog.closeDialog()"
+            @keydown.escape.window="$store.dialog.closeDialog()"
+        >
+            {{ include('partials/ui/dialog-content', { dialogId: dialogId ~ '-secondary' }) }}
+        </div>
+    </div>
+</div>

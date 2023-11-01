@@ -1,0 +1,48 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/checkbox.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/form/checkbox.css') }}
+{% endif %}
+
+{% set labelId = 'checkbox-label-' ~ random() %}
+
+<div
+    x-data="{ isInvalid: false, isDisabled: false, model: false, {% block data %}{% endblock %} }"
+    {% if parentModel %}x-modelable="model"{% endif %}
+    class="form-fieldset form-checkbox--single form-checkbox--{{ variant|default('normal') }} form-checkbox--{{ size|default('medium') }} form-checkbox--{{ align|default('left') }} {% if showDivider %}form-checkbox--{{ variant|default('normal') }}-divider{% endif %} {{ singleCheckboxClasses }}"
+    {% block attributes %}{% endblock %}
+>
+    <div class="form-checkbox__options">
+        {% set optionId = 'checkbox-single-' ~ random() %}
+        <label
+            for="{{ optionId }}"
+            class="form-checkbox__option"
+            :class="{'form-checkbox__option--disabled': isDisabled }"
+        >
+            <input
+                id="{{ optionId }}"
+                x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
+                type="checkbox"
+                value="{{ value }}"
+                class="form-checkbox__input"
+                :checked="model === '{{ value }}'"
+                :disabled="isDisabled"
+                {% if isRequired %}required{% endif %}
+            >
+            <span class="form-checkbox__input-labels">
+                <span class="form-checkbox__input-label">
+                    {{ label }}
+                </span>
+                {% if block('sublabel') %}
+                    <span class="form-checkbox__input-sublabel">
+                        {% block sublabel %}{% endblock %}
+                    </span>
+                {% elseif sublabel %}
+                    <span class="form-checkbox__input-sublabel">
+                        {{ sublabel }}
+                    </span>
+                {% endif %}
+            </span>
+        </label>
+    </div>
+</div>

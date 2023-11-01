@@ -1,0 +1,170 @@
+{% if product.review_meta.rating_breakdown.total > 0 %}
+
+{{ register_asset('css/components/store/item/reviews.css') }}
+{{ register_asset('js/components/store/item/reviews.js', { defer: false }) }}
+
+{% set reviews = product.reviews %}
+{% set sortBy = 'newest' %}
+{% set sortedByNewest = reviews|sort((a, b) => b.updated_at|date('U') - a.updated_at|date('U')) %}
+{% set perPage = 5 %}
+{% set currentPage = 1 %}
+{% set totalPages =  max(((reviews|length) / perPage)|round, 1) %}
+
+<script id="item-reviews-data" type="application/json">
+    {{ {
+        perPage,
+        currentPage,
+        totalPages,
+        translations: {
+            imagesDialogTitle: 'components.sections.store.item.photo_reviews.title'|localize,
+            imagesDialogNext: 'shared.buttons.next'|localize,
+            imagesDialogPrev: 'shared.buttons.prev'|localize,
+        },
+    }|json_encode }}
+</script>
+
+<div x-data="itemReviews('item-reviews-data')" class="product-reviews">
+    <h3 class="heading-3 product-reviews__heading">{{ heading }}</h3>
+    <div class="row">
+
+        {# Reviews rating breakdown #}
+        <div
+            class="product-reviews__breakdown col"
+            col-xs-12 col-sm-5 col-md-3
+        >
+            <div class="product-reviews__summary">
+                <div class="product-reviews__average">
+                    {{ product.review_meta.avg_rating|round(1, 'floor') }}/5
+                </div>
+                <div class="product-reviews__rating">
+                    {% embed 'partials/ui/rating' with { average: product.review_meta.avg_rating } %}
+                        {% block content %}
+                            ({{ product.review_meta.rating_breakdown.total }} reviews)
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+            </div>
+            <div class="product-reviews__progress">
+                {% set reviewsTotal = max(product.review_meta.rating_breakdown.total, 1) %}
+                {% for key, breakdown in product.review_meta.rating_breakdown|reverse(true) %}
+                    {% if key in range(1,5) %}
+                        {% set percentage = (breakdown / reviewsTotal * 100)|round %}
+                        <div class="product-reviews__progress-rate" style="grid-row: {{ loop.index }} / auto;">
+                            {{ key }}
+                        </div>
+                        <progress
+                            class="product-reviews__progress-bar {% if percentage == 0 %}product-reviews__progress-bar--empty{% endif %}"
+                            style="grid-row: {{ loop.index }} / auto;"
+                            value="{{ percentage }}"
+                            aria-valuemin="0"
+                            aria-valuenow="{{ percentage }}"
+                            aria-valuemax="100"
+                            max="100">
+                        </progress>
+                        <div class="product-reviews__progress-percentage" style="grid-row: {{ loop.index }} / auto;">
+                            {{ percentage }}%
+                        </div>
+                        <div class="product-reviews__progress-count" style="grid-row: {{ loop.index }} / auto;">
+                            ({{ breakdown }})
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Photo reviews carousel #}
+        {% set photos = [] %}
+        {% set index = 0 %}
+        {% for review in sortedByNewest %}
+            {% if review.images|length > 0 %}
+                {% set photos = photos|merge(review.images|map((review, i) => review|merge({ reviewIndex: index, imageIndex: i }))) %}
+                {% set index = index + 1 %}
+            {% endif %}
+        {% endfor %}
+        {% if photos|length > 0 %}
+        <div
+            role="region"
+            class="product-reviews__photos col"
+            col-xs-12 col-sm-6 col-md-8
+            offset-sm-1 offset-md-1
+        >
+            {% set imageSizes = { xs: 599, sm: 599, md: 190 } %}
+            {% set reviewsPhotosTitle = 'components.sections.store.item.photo_reviews.title'|localize %}
+
+            {% embed 'partials/ui/carousel' with { title: reviewsPhotosTitle } %}
+                {% block carouselItems %}
+                    {% for image in photos %}
+                        <figure
+                            role="button"
+                            tabindex="0"
+                            aria-haspopup="true"
+                            class="product-reviews__photos-figure"
+                            @click.stop="openReviewImagesModal({{ image.reviewIndex }}, '{{ sortBy }}')"
+                            @keydown.enter.prevent="openReviewImagesModal({{ image.reviewIndex }}, '{{ sortBy }}')"
+                        >
+                            {{ include('partials/ui/image', { image: { uri: image.absolute_uri, urls: image.absolute_urls }, imageSizes, altText: reviewsPhotosTitle ~ ' ' ~ loop.index }) }}
+                        </figure>
+                    {% endfor %}
+                {% endblock %}
+            {% endembed %}
+
+            <div class="product-reviews__see-all">
+                {{ include('partials/ui/button', {
+                    variant: 'text',
+                    size: 'small',
+                    label: 'components.sections.store.item.photo_reviews.see_all_link'|localize,
+                    action: 'openReviewImagesModal(0, \'{{ sortBy }}\')',
+                } ) }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {# Customer reviews #}
+    <div class="product-reviews__paginated-list">
+        <div class="row">
+            <div
+                class="product-reviews__total col"
+                col-xs-12 col-sm-6 col-md-4
+            >
+                {{ 'components.sections.store.item.customer_reviews.rating.total'|localize({ total: product.review_meta.rating_breakdown.total }) }}
+            </div>
+            <div
+                class="product-reviews__sort col"
+                col-xs-12 col-sm-6 col-md-8
+            >
+                {% set reviewsSortOptions = [
+                    { label: 'components.sections.store.item.customer_reviews.sort_by.newest'|localize, value: 'newest' },
+                    { label: 'components.sections.store.item.customer_reviews.sort_by.highest_lowest'|localize, value: 'rating_highest' },
+                    { label: 'components.sections.store.item.customer_reviews.sort_by.lowest_highest'|localize, value: 'rating_lowest' },
+                ] %}
+                {{ include('partials/form/select', {
+                    options: reviewsSortOptions,
+                    property: 'Sort',
+                    size: 'small',
+                    hideLabel: true,
+                    parentModel: 'pagination.sortBy',
+                }) }}
+            </div>
+        </div>
+        {{ async('customer-reviews', 'customer-reviews', { props: { reviews, perPage, currentPage, sortBy, productName: product.name } }) }}
+
+        {% embed 'partials/ui/pagination' with { currentPage: { value: currentPage }, totalPages } %}
+            {% block data %}
+                ...reviewsPagination()
+            {% endblock %}
+        {% endembed %}
+    </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+    "heading": {
+        "type": "string"
+    },
+    "product": {
+        "type": "item"
+    }
+}
+{% endschema %}

@@ -1,0 +1,229 @@
+{{ register_asset('js/components/store/item/options.js', { defer: false }) }}
+
+{# tall or square #}
+{% set imageShape = shape|default('tall') %}
+{% set isCarousel = collectionLayout == 'carousel' %}
+
+{% set quickAddSwatchRenderer = ['color'] %}
+{% set quickAddChoiceRenderer = ['size', 'sizes'] %} {# using lowercase option name b/c the `size` renderer doesn't exist #}
+{% set quickAddRendererToOptionId = {} %}
+
+{% set swatchOptions = [] %}
+{% set choiceOptions = [] %}
+{% set swatchOptionLabel = '' %}
+{% set swatchOptionKey = quickAddSwatchRenderer[0] %}
+{% set choiceOptionKey = quickAddChoiceRenderer[0] %}
+{% set requiredFields = [] %}
+
+{% if enableQuickAdd and product.item_options %}
+    {# Find color, size, and required options #}
+    {% for option in product.item_options %}
+        {% if option.renderer in quickAddSwatchRenderer %}
+            {% set swatchOptionLabel = option.name %}
+            {% set quickAddRendererToOptionId = quickAddRendererToOptionId|merge({ (option.renderer): option.id }) %}
+
+            {% for choice in option.choices %}
+                {% set swatchOptions = swatchOptions|merge([{ label: choice, value: choice, color: option.colors[loop.index0] }]) %}
+            {% endfor %}
+        {% elseif option.name|lower in quickAddChoiceRenderer %}
+            {% set choiceOptionKey = option.name|lower %}
+            {% set quickAddRendererToOptionId = quickAddRendererToOptionId|merge({ (option.name|lower): option.id }) %}
+
+            {% for choice in option.choices %}
+                {% set key = choice|lower %}
+                {% set label = choice|slice(0, 2)|upper %}
+                {% if config.theme.mapSizeToLocalizeKey[key] %}
+                    {% set label = config.theme.mapSizeToLocalizeKey[key]|localize %}
+                {% endif %}
+                {% set choiceOptions = choiceOptions|merge([{ label: label, value: choice }]) %}
+            {% endfor %}
+        {% else %}
+            {% set requiredFields = requiredFields|merge([option.renderer]) %}
+        {% endif %}
+    {% endfor %}
+
+    {# Find required modifiers #}
+    {% for option in product.modifier_lists %}
+        {% set isRequired = (option.min_selected_modifiers and option.max_selected_modifiers) >= 1 %}
+        {% if isRequired %}
+            {% set requiredFields = requiredFields|merge([option.renderer]) %}
+        {% endif %}
+    {% endfor %}
+
+    {# Don't enable quick add if other fields are required #}
+    {% if requiredFields|length %}
+        {% set swatchOptions = [] %}
+        {% set choiceOptions = [] %}
+    {% endif %}
+{% endif %}
+
+{% set hasQuickAddOptions = false %}
+{% if choiceOptions|length or swatchOptions|length %}
+    {% set hasQuickAddOptions = true %}
+{% endif %}
+
+<span
+    tabindex="0"
+    role="button"
+    class="col collection__tile collection__tile--{{ collectionLayout }} {% if swatchOptions|length %}collection__tile--has-quick-add{% endif %}"
+    {{ columnAttrs }}
+    data-href="{{ item_link(product.square_online_id) }}"
+    {% if hasQuickAddOptions and not hideHover %}
+        :class="{ 'collection__tile--has-quick-add--hover': isItemFocused({{ product.square_online_id }}) }"
+        @focus.debounce="onItemFocused({{ product.square_online_id }})"
+        @mouseleave.debounce="onItemBlur()"
+    {% endif %}
+    @click="onItemClicked(event, {{ product.square_online_id }})"
+>
+    {% set productGifs = (product.media_files|default([]))|filter(media => media.format == 'gif') %}
+    {% set productImages = product.images|merge(productGifs) %}
+    {% set productImage = productImages[0] %}
+
+    {% set imageSizes = { xs: 599, md: 344 } %}
+    <div
+        class="collection__tile-image collection__tile-image--{{ imageShape }} {% if isCarousel %}ui-carousel-slide{% endif %}"
+        {% if hasQuickAddOptions and not hideHover %}
+            @mouseenter.debounce="onItemFocused({{ product.square_online_id }})"
+        {% endif %}
+    >
+        {% if productImage %}
+            {{ include('partials/ui/image', { image: { uri: productImage.absolute_uri, urls: productImage.absolute_urls }, imageSizes, altText: product.name, showPlaceholder: true }) }}
+        {% else %}
+            {{ include('partials/ui/placeholder') }}
+        {% endif %}
+
+        {% set hoverImage = productImages[1] %}
+        {% if (hoverImage or choiceOptions|length) and not hideHover %}
+            {# Display size options or secondary image on hover - desktop only #}
+            <div
+                x-cloak
+                class="collection__tile-image-hover {% if hoverImage %}collection__tile-has-secondary-image{% endif %}"
+            >
+                {% if hoverImage %}
+                    {{ include('partials/ui/image', { image: { uri: hoverImage.absolute_uri, urls: hoverImage.absolute_urls }, imageSizes, altText: product.name }) }}
+                {% endif %}
+
+                {% if choiceOptions|length %}
+
+                {% set collectionTileSizeDataId = 'collection-tile-size-data-' ~ random() %}
+                <script id="{{ collectionTileSizeDataId }}" type="application/json">
+                    {{ {
+                        quickAddKey: choiceOptionKey,
+                        item: product,
+                        options: choiceOptions,
+                        quickAddRendererToOptionId,
+                    }|json_encode }}
+                </script>
+
+                <div
+                    x-show="shouldShowQuickAdd({{ product.square_online_id }})"
+                    class="collection__tile-quick-add"
+                >
+                    <p>{{ 'partials.components.collection.item.quick_add.label'|localize }}</p>
+
+                    {% embed 'partials/form/choice-carousel' with {
+                        variant: 'grid',
+                        options: choiceOptions,
+                        itemWidth: 48,
+                    } %}
+                        {% block data %}
+                            ...collectionTile('{{ collectionTileSizeDataId }}'),
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if choiceOptions|length or swatchOptions|length and not hideHover %}
+            <div
+                x-cloak
+                x-show="shouldShowItemStatus({{ product.square_online_id }})"
+                x-transition
+                class="collection__tile-quick-add collection__tile-quick-add-status"
+            >
+                <p x-show="isItemAddedToCart({{ product.square_online_id }})">{{ 'partials.components.collection.item.quick_add.status.success'|localize }}</p>
+                <p
+                    x-show="isItemFailedToAdd({{ product.square_online_id }})"
+                    class="collection__tile-quick-add-failed"
+                >
+                    {{ 'shared.errors.general'|localize }}
+                </p>
+                <div
+                    x-show="isAddingItemToCart({{ product.square_online_id }})"
+                    class="collection__tile-quick-add-loading"
+                >
+                    {{ 'partials.components.collection.item.quick_add.status.add'|localize }} {{ include('partials/ui/loader') }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="collection__tile-details">
+        {# Display color options on hover - desktop only #}
+        {% if swatchOptions|length and not hideHover %}
+            <div
+                x-cloak
+                x-show="!$store.global.isMobile"
+                class="collection__tile-swatches"
+            >
+                {% set collectionTileColorDataId = 'collection-tile-color-data-' ~ random() %}
+                <script id="{{ collectionTileColorDataId }}" type="application/json">
+                    {{ {
+                        quickAddKey: swatchOptionKey,
+                        item: product,
+                        options: swatchOptions,
+                        quickAddRendererToOptionId,
+                    }|json_encode }}
+                </script>
+
+                {% set tooltipBoundary = null %}
+                {% if isCarousel and carouselId %}
+                    {% set tooltipBoundary = '#' ~ carouselId %}
+                {% elseif isCarousel %}
+                    {% set tooltipBoundary = '.ui-carousel' %}
+                {% endif %}
+
+                {% set defaultColorOptionValue = '' %}
+                {% if choiceOptions|length %}
+                    {% set defaultColorOptionValue = swatchOptions[0].value %}
+                {% endif %}
+
+                {% embed 'partials/form/swatches' with {
+                    label: swatchOptionLabel,
+                    tooltipBoundary,
+                    options: swatchOptions|slice(0, 6),
+                } %}
+                    {% block data %}
+                        model: '{{ defaultColorOptionValue }}',
+                        ...collectionTile('{{ collectionTileColorDataId }}'),
+                    {% endblock %}
+                {% endembed %}
+            </div>
+        {% endif %}
+
+        {# Badges #}
+        {% set preorder = ((product.fulfillment_availability|default([]))|filter(availability => availability[0])|first)[0] %}
+        {% set badges = (product.badges|default([]))|merge({ can_preorder: preorder|keys|length > 0 }) %}
+        {% set badges = badges|filter(value => value) %}
+        {% if product.created_at|date('U') > '-30 days'|date('U') %}
+            {% set badges = badges|merge({ is_new: true }) %}
+        {% endif %}
+
+        {% if badges|length > 0 %}
+        <div class="collection__tile-badges">
+            {{ include('partials/components/store/item/badges', { badges, discounts: product.discounts, preorder, size: 'small', shape: 'rounded' } ) }}
+        </div>
+        {% endif %}
+
+        {# Product name #}
+        <div class="collection__tile-name">{{ product.name }}</div>
+
+        {# Price #}
+        {% if product.price %}
+            <div class="collection__tile-price">
+                {{ include('partials/ui/price', { price: product.price, variations: product.variations, size: 'small' }) }}
+            </div>
+        {% endif %}
+    </div>
+</span>

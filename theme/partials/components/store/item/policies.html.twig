@@ -1,0 +1,23 @@
+{% set accordions = [] %}
+{% set accordionAllowedTags = '<p><strong><em><ul><li><ol><a>' %}
+{% if square.store.shipping_policy is not empty %}
+    {% set accordions = accordions|merge([{
+        icon: 'receipt_long',
+        label: 'partials.components.store.item.policies.shipping.label'|localize,
+        content: square.store.shipping_policy,
+    }]) %}
+{% endif %}
+{% if square.store.return_policy is not empty %}
+    {% set accordions = accordions|merge([{
+        icon: 'policy',
+        label: 'partials.components.store.item.policies.return.label'|localize,
+        content: square.store.return_policy,
+    }]) %}
+{% endif %}
+{% if accordions|length > 0 %}
+<div class="item-page__accordion">
+    {% for item in accordions %}
+        {{ include('partials/ui/accordion', { accordionItems: [item], allowedTags: accordionAllowedTags, richTextFormatting: true }) }}
+    {% endfor %}
+</div>
+{% endif %}

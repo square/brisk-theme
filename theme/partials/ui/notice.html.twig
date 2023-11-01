@@ -1,0 +1,26 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/notice.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/notice.css') }}
+{% endif %}
+
+
+<div
+    role="alert"
+    class="ui-notice ui-notice--{{ variant|default('normal') }}"
+>
+    {% set noticeIcon = 'add' %}
+    {% if variant is same as ('info') %}
+        {% set noticeIcon = 'info' %}
+    {% elseif variant is same as ('success') %}
+        {% set noticeIcon = 'done' %}
+    {% elseif variant is same as ('warning') %}
+        {% set noticeIcon = 'warning' %}
+    {% elseif variant is same as ('critical') %}
+        {% set noticeIcon = 'error' %}
+    {% endif %}
+    {{ include('partials/ui/icon', { name: noticeIcon, ariaHidden: true, iconClasses: 'ui-notice__icon' }) }}
+    <div class="ui-notice__message">
+        {{ message }}
+    </div>
+</div>

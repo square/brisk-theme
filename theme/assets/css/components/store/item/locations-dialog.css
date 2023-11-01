@@ -1,0 +1,47 @@
+.locations-dialog__content {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 1;
+    gap: var(--space-x2);
+    height: 100%;
+}
+
+.locations-dialog__input {
+    gap: var(--space-x3);
+    margin-bottom: var(--space-x3);
+}
+
+.locations-dialog__content--empty .locations-dialog__input {
+    margin-bottom: 0;
+}
+
+.locations-dialog__options {
+    position: relative;
+    height: 100%;
+
+    /* adding negative margin so the row hover style doesn't cutoff and the scroll content will extend to the dialog edge */
+    margin: calc(var(--space-x2) * -1) calc((var(--space-x2) + var(--browser-scrollbar-width)) * -1) calc(var(--space-x4) * -1) calc(var(--space-x2) * -1);
+    overflow: hidden;
+}
+
+.locations-dialog__options--scroll {
+    height: 100%;
+    padding: var(--space-x2);
+}
+
+.locations-dialog__options .form-radio__input {
+    align-self: start;
+    margin-top: 2px;
+}
+
+.locations-dialog__item-status {
+    font-weight: var(--theme-font-weight-medium);
+}
+
+.locations-dialog__options-label {
+    font-weight: var(--theme-font-weight-light);
+}
+
+.locations-dialog__options-sublabel {
+    font-weight: var(--theme-font-weight-normal);
+}

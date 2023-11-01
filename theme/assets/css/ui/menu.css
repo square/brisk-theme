@@ -1,0 +1,90 @@
+.ui-menu {
+    --theme-menu-color: var(--theme-body-color);
+    --theme-menu-hover-color: var(--theme-color-neutral-05);
+    --theme-menu-text-color: var(--theme-body-text-color);
+    --theme-menu-height: 180px;
+
+    width: 100%;
+    min-width: 160px;
+    margin-top: var(--space-half);
+    padding: var(--space-half) var(--space);
+    overflow: hidden;
+    color: var(--theme-menu-text-color);
+    font-weight: var(--theme-font-weight-normal);
+    font-size: var(--theme-font-size-minus-1);
+    line-height: var(--theme-font-size-minus-1-line-height);
+    white-space: nowrap;
+    background: var(--theme-menu-color);
+    border-radius: var(--theme-border-radius);
+}
+
+.ui-menu--scrollbar {
+    margin-right: calc(var(--browser-scrollbar-width) * -1);
+}
+
+.ui-menu__list {
+    max-height: var(--theme-menu-height);
+    margin: var(--space) 0;
+    padding: 0 var(--space-x2);
+    list-style: none;
+}
+
+.ui-menu__list:focus-visible {
+    outline: none;
+}
+
+.ui-menu__item {
+    position: relative;
+    padding: var(--space-x2) 0;
+    cursor: pointer;
+}
+
+.ui-menu__item:not(:last-child) {
+    border-bottom: 1px solid var(--theme-border-color);
+}
+
+.ui-menu__item::before {
+    position: absolute;
+    bottom: 0;
+    left: calc(var(--space-x4) / 2 * -1);
+    display: block;
+    width: calc(100% + var(--space-x4));
+    height: 100%;
+    background-color: var(--theme-menu-hover-color);
+    border-radius: var(--theme-border-radius);
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+    content: '';
+}
+
+.ui-menu__item--hover,
+.ui-menu__item:hover,
+.ui-menu__item--hide-divider.ui-menu__item {
+    border-color: transparent;
+}
+
+.ui-menu__item--hover::before,
+.ui-menu__item:hover::before {
+    opacity: 1;
+}
+
+.ui-menu__item::after {
+    position: absolute;
+    top: calc(var(--space-x2) + var(--space-half));
+    right: var(--space-half);
+    width: 8px;
+    height: 13px;
+    border-right: 2px solid var(--theme-body-text-color);
+    border-bottom: 2px solid var(--theme-body-text-color);
+    transform: rotate(45deg);
+    opacity: 0;
+    content: "";
+}
+
+.ui-menu__item--active::after {
+    opacity: 1;
+}
+
+.ui-menu__item-text {
+    position: relative;
+}

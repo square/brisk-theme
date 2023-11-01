@@ -1,0 +1,37 @@
+{% async:content %}
+
+{% if items|length %}
+    {% embed 'partials/ui/menu' with { items, menuTriggerRef } %}
+        {% block data %}
+            {% set selected = selectedItem|default(items|first) %}
+            init() {
+                const selectedItem = JSON.parse('{{ selected|json_encode|escape('js') }}');
+                if (!this.menuValue && selectedItem?.value) {
+                    this.menuValue = { value: selectedItem.value };
+                }
+                this.$watch('menuValue', value => model = value);
+            },
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+{% endasync %}
+{% async:loading %}
+    {{ include('partials/ui/loader') }}
+{% endasync %}
+
+{% schema %}
+{
+    "items": {
+        "type": "array",
+        "optional": true
+    },
+    "menuTriggerRef": {
+        "type": "string",
+        "default": ""
+    },
+    "selectedItem": {
+        "type": "array",
+        "optional": true
+    }
+}
+{% endschema %}

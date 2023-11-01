@@ -1,0 +1,15 @@
+<div>
+    <h3 class="heading-3 heading-with-margin">{{ heading }}</h3>
+    {{ include('partials/components/collection/list', { items: products, layout: 'carousel' }) }}
+</div>
+
+{% schema %}
+{
+    "heading": {
+        "type": "string"
+    },
+    "products": {
+        "type": "item-list"
+    }
+}
+{% endschema %}

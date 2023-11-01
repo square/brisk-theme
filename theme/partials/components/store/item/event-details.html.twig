@@ -1,0 +1,58 @@
+{% set eventDetails = product.product_type_details %}
+
+{% if eventDetails.start_date is not empty or eventDetails.end_date is not empty %}
+<div class="form-fieldset">
+    <div class="form-fieldset__label">{{ 'partials.components.store.item.event_details.date_time.label'|localize }}</div>
+    <div>
+        {% set hasEndDate = eventDetails.start_date != eventDetails.end_date %}
+        {% if hasEndDate %}
+            <p>{{ 'partials.components.store.item.event_details.start_date_time'|localize({
+                startDate: eventDetails.start_date|date('D, F j, Y', eventDetails.start_date.timezone),
+                startTime: eventDetails.start_time,
+                }) }}</p>
+            <p>{{ 'partials.components.store.item.event_details.end_date_time'|localize({
+                endDate: eventDetails.end_date|date('D, F j, Y', eventDetails.end_date.timezone),
+                endTime: eventDetails.end_time,
+                }) }}</p>
+        {% else %}
+            <p>{{ eventDetails.start_date|date('D, F j, Y', eventDetails.start_date.timezone) }}</p>
+            <p>
+                {{ eventDetails.start_time }}
+                {% if eventDetails.end_time is not empty %}
+                    - {{ eventDetails.end_time }}
+                {% endif %}
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% if eventDetails.address is iterable and (eventDetails.address|filter(address => address|length))|length %}
+<div class="form-fieldset">
+    <div class="form-fieldset__label">{{ 'partials.components.store.item.event_details.location.label'|localize }}</div>
+    <div>
+        {% set locationAddress = {
+            'street': eventDetails.address.street,
+            'street2': eventDetails.address.street2,
+            'city': eventDetails.address.city,
+            'region': eventDetails.address.region_code,
+            'postal_code': eventDetails.address.postal_code } %}
+        {% set formattedAddress = locationAddress|address_format_multiline %}
+        {% for text in formattedAddress %}
+            {% if text is not empty %}
+                <p>{{ text }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% if eventDetails.geocode.lat and eventDetails.geocode.long %}
+        <div class="product-detail__map">
+            {% set mapConfig = {
+                height: '230px',
+                lat: eventDetails.geocode.lat,
+                long: eventDetails.geocode.long,
+            } %}
+            {{ include('partials/ui/google-map', { mapConfig }) }}
+        </div>
+    {% endif %}
+</div>
+{% endif %}

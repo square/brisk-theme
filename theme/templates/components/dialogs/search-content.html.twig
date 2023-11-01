@@ -1,0 +1,28 @@
+<div class="search-dialog" x-data="search()">
+    <div class="search-dialog__header">
+        <div class="search-dialog__logo">
+            <a 
+                class="site-logo" 
+                href="/"
+            >
+                {{ square.site.title }}
+            </a>
+        </div>
+        <div class="search-dialog__close">
+            {{ include('partials/ui/button', {
+                variant: 'neutral',
+                style: 'fill',
+                size: 'medium',
+                label: 'shared.buttons.cancel'|localize,
+                action: '$store.dialog.closeDialog',
+                buttonClasses: 'search-dialog__close-button'
+            } ) }}
+        </div>
+        <div class="search-dialog__searchbar">
+            {{ include('partials/ui/search-bar') }}
+        </div>
+    </div>
+
+    {# search results here, it's async and will be refreshed #}
+    {{ async('search-results', 'search-results', { props: { items: [] } }) }}
+</div>

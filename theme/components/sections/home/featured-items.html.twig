@@ -1,0 +1,24 @@
+{% set featuredItems = [] %}
+{% for item in items %}
+    {% set featuredItems = featuredItems|merge([{ item, template: 'item' }]) %}
+{% endfor %}
+{% if featuredItems|length %}
+    <div class="container home-page__container">
+        <div class="home-page__featured-tiles-wrapper">
+            <h3 class="heading-3 heading-with-margin home-page__heading">{{ heading }}</h3>
+
+            {{ include('partials/components/collection/list', { items: featuredItems, layout: 'carousel' }) }}
+        </div>
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "heading": {
+        "type": "string"
+    },
+    "items": {
+        "type": "item-list"
+    }
+}
+{% endschema %}

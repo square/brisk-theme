@@ -1,0 +1,44 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/button.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/button.css') }}
+{% endif %}
+
+{# primary, secondary, tertiary, text, neutral, or row #}
+{% set buttonVariant = variant|default('primary') %}
+{# fill or outline #}
+{% set defaultStyle = themeButtons.primary.fill_style|default('fill') %}
+
+{% if buttonVariant == 'secondary' %}
+    {% set defaultStyle = themeButtons.secondary.fill_style|default('outline') %}
+{% endif %}
+
+{% set buttonContent %}
+    {% if icon %}{{ include('partials/ui/icon', { name: icon, ariaHidden: true, hiddenLabel: iconAlt, iconClasses: 'ui-button__icon' }) }}{% endif %}
+    {% if label %}<span>{{ label }}</span>{% endif %}
+    {% block content %}{% endblock %}
+{% endset %}
+
+{% if link %}
+    <a class="ui-button ui-button--text {{ contrast ? 'ui-button--contrast' : '' }}" href="{{ link }}">
+        {{ buttonContent }}
+    </a>
+{% else %}
+    <button
+        {% if ariaRole %}{{ ariaRole }}{% endif %}
+        class="
+            ui-button
+            ui-button--{{ size|default('medium') }}
+            ui-button--{{ alignment|default('center') }}
+            ui-button--{{ buttonVariant }}{% if buttonVariant == 'primary' or buttonVariant == 'secondary' or buttonVariant == 'neutral' %}-{{ style|default(defaultStyle) }}{% endif %}{{ destructive ? '-destructive' : '' }} 
+            {{ fullWidth ? 'ui-button--fullwidth' : '' }}
+            {{ buttonClasses }}
+        "
+        {% if buttonType %}{{ buttonType }} {% else %} type="button" {% endif %}
+        {{ disabled ? 'disabled' : '' }}
+        {% block attributes %}{% endblock %}
+        {% if action %} @click.prevent="{{ action }}" {% endif %}
+    >
+        {{ buttonContent }}
+    </button>
+{% endif %}

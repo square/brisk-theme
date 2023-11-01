@@ -1,0 +1,50 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/select.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/form/select.css') }}
+{% endif %}
+
+{% set placeholderText = 'partials.form.placeholder'|localize %}
+{% set labelId = 'select-label-' ~ random() %}
+
+<fieldset
+    x-data="{ isDisabled: false, isInvalid: false, model: '', {% block data %}{% endblock %} }"
+    {% if parentModel %}x-modelable="model"{% endif %}
+    {% if isRequired %}aria-required=true{% endif %}
+    :aria-invalid="isInvalid"
+    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    role="radiogroup"
+    class="form-fieldset form-select form-select--{{ size|default('large') }}"
+    :class="{'form-select--invalid': isInvalid }"
+>
+    {% if hideLabel == false %}
+        {{ include('partials/form/fieldset-label', { exludeError: true }) }}
+        {% block secondaryLabel %}{% endblock %}
+    {% endif %}
+
+    <div class="form-select__dropdown-wrapper">
+        <div
+            class="form-select__icon"
+        >
+            {{ include('partials/ui/icon', { name: 'expand_more' }) }}
+        </div>
+        <select
+            x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
+            class="form-select__dropdown"
+            :disabled="isDisabled"
+            {% if isRequired %}required{% endif %}
+        >
+            <option value="" selected disabled>{{ placeholderText }}</option>
+            {% for option in options %}
+                <option
+                    value="{{ option.value }}"
+                    :selected="model === '{{ option.value }}'"
+                    :disabled="disabledChoices?.includes('{{ option.value }}')"
+                >
+                    {{ option.label }}
+                </option>
+            {% endfor %}
+        </select>
+        {{ include('partials/form/fieldset-error') }}
+    </div>
+</fieldset>

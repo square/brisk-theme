@@ -1,0 +1,161 @@
+.ui-carousel__container {
+    --theme-carousel-nav-size: 24px;
+    --theme-carousel-indicator-size: 8px;
+    --theme-carousel-indicator-color: var(--theme-color-neutral-30);
+    --theme-carousel-indicator-selected-color: var(--theme-color-neutral-100);
+
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    gap: var(--space);
+}
+
+.ui-carousel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ui-carousel {
+    margin-top: calc(var(--theme-form-field-focus-outline-width) * -1);
+    margin-left: calc(var(--theme-form-field-focus-outline-width) * -1);
+    overflow-x: scroll;
+}
+
+.ui-carousel--full-bleed {
+    overflow: hidden;
+}
+
+.container--fullwidth .ui-carousel {
+    padding-right: var(--theme-container-padding);
+    padding-left: var(--theme-container-padding);
+}
+
+.ui-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.ui-carousel__slider {
+    position: relative;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: var(--space);
+    min-width: 100%;
+    transition: 0.2s ease;
+}
+
+.ui-carousel__slider > * {
+    margin: var(--theme-form-field-focus-outline-width);
+}
+
+.ui-carousel__slider--dragging > * {
+    cursor: grabbing;
+}
+
+/* fixes outline being cutoff on focus */
+.ui-carousel__slider > *:focus-visible {
+    outline-offset: 0;
+}
+
+.ui-carousel__navigation--overlay {
+    position: absolute;
+    top: 0;
+    left: calc(var(--theme-carousel-nav-size) * -1);
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% + var(--theme-carousel-nav-size) * 2);
+}
+
+.ui-carousel__navigation--hide-disabled .ui-button[disabled] {
+    visibility: hidden;
+}
+
+.container--fullwidth .ui-carousel__navigation--overlay {
+    left: 0;
+    width: 100%;
+}
+
+.container--fullwidth .ui-carousel__navigation--overlay .ui-button {
+    position: relative;
+    z-index: var(--theme-z-index-controls);
+}
+
+/* Indicator navigation */
+.ui-carousel__navigation--indicator {
+    display: flex;
+    gap: var(--space);
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--space);
+}
+
+.ui-carousel__navigation--indicator-dot {
+    width: var(--theme-carousel-indicator-size);
+    height: var(--theme-carousel-indicator-size);
+    background: var(--theme-carousel-indicator-color);
+    border-radius: 100%;
+}
+
+.ui-carousel__navigation--indicator-dot-selected {
+    background: var(--theme-carousel-indicator-selected-color);
+}
+
+/* Full bleed variant */
+
+.ui-carousel__slider--full-bleed {
+    --carousel-item-width: calc(100vw - var(--space-x10));
+    --carousel-item-height: 70vw;
+
+    display: flex;
+    width: var(--carousel-item-width);
+    margin-left: 50%;
+    overflow-x: scroll;
+    transform: translateX(-50%);
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+}
+
+.ui-carousel__slider--full-bleed::-webkit-scrollbar {
+    display: none;
+}
+
+.ui-carousel__slider--dragging.ui-carousel__slider--full-bleed {
+    scroll-snap-type: none;
+}
+
+.ui-carousel__item--full-bleed {
+    position: relative;
+    display: flex;
+    flex: 0 0 var(--carousel-item-width);
+    flex-flow: column;
+    box-sizing: content-box;
+    width: var(--carousel-item-width);
+    height: var(--carousel-item-height);
+    overflow: hidden;
+    scroll-snap-align: center;
+}
+
+.ui-carousel__item--full-bleed:first-child {
+    padding-left: calc(50vw - (var(--carousel-item-width) / 2));
+}
+
+.ui-carousel__item--full-bleed:last-child {
+    margin-right: 0;
+    padding-right: calc(50vw - (var(--carousel-item-width) / 2));
+}
+
+.ui-carousel__item--full-bleed img {
+    flex: 1;
+    object-fit: cover;
+}
+
+.ui-carousel__item--full-bleed .ui-carousel__item-button {
+    position: absolute;
+    right: var(--space-x4);
+    bottom: var(--space-x3);
+    text-decoration: underline;
+}
+
+.ui-carousel__item--full-bleed:last-child .ui-carousel__item-button {
+    margin-right: calc(50vw - (var(--carousel-item-width) / 2));
+}

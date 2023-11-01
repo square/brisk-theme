@@ -1,0 +1,267 @@
+{{ register_asset('css/sections/header.css') }}
+{{ register_asset('css/components/search.css') }}
+{{ register_asset('js/sections/header.js', { defer: false }) }}
+{{ register_asset('js/ui/nested-menu.js', { defer: false }) }}
+{{ register_asset('js/components/search.js', { defer: false }) }}
+
+{# Create the data that we'll use for the Alpine header component #}
+
+{% set formattedLinks = [] %}
+
+{% if nav_links is not defined or nav_links is empty %}
+    {% set nav_links = config.header.placeholder_nav_links %}
+{% endif %}
+
+{% for link in nav_links %}
+    {% set topLevelLink = {
+        title: link.label,
+        url: link(link),
+        isOpen: false
+    } %}
+
+    {% if link.menu_image_url is not empty %}
+        {% set topLevelLink = topLevelLink|merge({ menu_image_url: link.menu_image_url|asset_url }) %}
+    {% endif %}
+    {% if link.children is not empty %}
+        {% set children = {} %}
+
+        {% for child_link in link.children %}
+            {% set formattedChildLink = {
+                title: child_link.label,
+                url: link(child_link),
+                isOpen: false,
+            } %}
+
+            {% if child_link.children is not empty %}
+                {% set grandchildren = {} %}
+                {% for grandchild_link in child_link.children %}
+                    {% set formattedGrandchildLink = {
+                        (grandchild_link.label): {
+                            title: grandchild_link.label,
+                            url: link(grandchild_link),
+                            isOpen: false,
+                        }
+                    } %}
+                    {% set grandchildren = grandchildren|merge(formattedGrandchildLink) %}
+                {% endfor %}
+
+                {% set formattedChildLink = formattedChildLink|merge({ children: grandchildren }) %}
+            {% endif %}
+
+            {% set children = children|merge({ (child_link.label): formattedChildLink }) %}
+        {% endfor %}
+
+        {% set topLevelLink = topLevelLink|merge({ children: children }) %}
+
+    {% endif %}
+
+    {% set formattedLinks = formattedLinks|merge({ (link.label): topLevelLink }) %}
+{% endfor %}
+
+<script id="nav-links-data" type="application/json">
+    {
+        "navLinks": {{ formattedLinks | json_encode() }}
+    }
+</script>
+
+{{ include('partials/ui/mobile-menu', { nav_links }) }}
+
+<div 
+    x-data="header('nav-links-data')"
+    class="site-header"
+    :class="headerClasses"
+    x-show="isHeaderVisible"
+    x-transition:enter="slide-down-enter-active"
+    x-transition:enter-start="slide-down-enter-from"
+    x-transition:enter-end="slide-down-enter-to"
+    x-transition:leave="slide-down-leave-active"
+    x-transition:leave-start="slide-down-leave-from"
+    x-transition:leave-end="slide-down-leave-to"
+    @scroll.window.throttle.50ms="onScroll"
+>
+    {% if announcement_bar_show %}
+        <div class="site-topbar">
+            <div class="site-topbar__inner">
+                <div class="site-topbar__dummy"></div>
+                <span class="site-topbar__message">
+                    {{ announcement_bar_text }}
+                    {% if announcement_bar_link %}
+                        <a 
+                            class="site-topbar__link" 
+                            href="{{ link(announcement_bar_link) }}"
+                        >
+                            {{ announcement_bar_link.label }}
+                        </a>
+                    {% endif %}
+                </span>
+                <div class="site-topbar__info">
+                    {% embed 'partials/ui/icon' with { name: 'location_on', iconClasses: 'site-topbar__icon' } %}
+                        {% block attributes %}
+                            x-show="$store.global.customerLocale.postal_code"
+                        {% endblock %}
+                    {% endembed %}
+                    <span 
+                        class="site-topbar__zipcode" 
+                        x-show="$store.global.customerLocale.postal_code" 
+                        x-text="$store.global.customerLocale.postal_code"
+                    ></span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="site-header__inner container">
+        <div class="site-header__menu-button-wrapper">
+            {{ include('partials/ui/button', {
+                variant: 'text',
+                size: 'small',
+                icon: 'menu',
+                iconAlt: 'components.header.menu_icon.alt'|localize,
+                action: 'openMobileMenu'
+            }) }}
+        </div>
+        <div class="site-header__logo-wrapper">
+            <a class="site-logo" href="/">
+                {{ square.site.title }}
+            </a>
+        </div>
+
+        <nav class="site-header__nav site-header__nav--desktop">
+            <ul class="site-header__nav-linklist">
+                {% for link in nav_links %}
+                    <li @mouseenter.native="onMouseEnter('{{ link.label }}')" @mouseleave.native="onMouseLeave">
+                        <a class="site-header__nav-link" :class="currentlyDisplayedLink?.title === '{{link.label}}' && 'is-active' " href="{{ link(link) }}">
+                            {{ link.label }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <div class="site-header__utility-buttons">
+            {{ include('partials/ui/button', {
+                variant: 'text',
+                size: 'small',
+                icon: 'search',
+                iconAlt: 'components.header.search_icon.alt'|localize,
+                action: 'openSearch',
+                buttonClasses: 'site-header__utility-button site-header__utility-button--search',
+            })}}
+            
+            {# required for Search Dialog #}
+            <template x-if="!dialogExists()">
+                <template x-teleport="body">
+                    {{ include('partials/ui/dialog') }}
+                </template>
+            </template>
+
+            <script id="header-mini-cart-data" type="application/json">
+                {{ {
+                    cartUrl: link({ type: 'cart' }),
+                    dropdownId: 'mini-cart',
+                }|json_encode }}
+            </script>
+
+            <div
+                x-data="headerMiniCart('header-mini-cart-data')"
+                class="mini-cart__wrapper"
+                @click.outside="closeMiniCart"
+            >
+                {% embed 'partials/ui/button' with {
+                    variant: 'text',
+                    size: 'small',
+                    icon: 'shopping_bag',
+                    iconAlt: 'components.header.cart_icon.alt'|localize,
+                    action: 'goToCartPage()',
+                    buttonClasses: 'site-header__utility-button site-header__utility-button--cart',
+                } %}
+                    {% block attributes %}
+                        x-ref="miniCartTrigger"
+                        @mouseenter.debounce="openMiniCart"
+                        @mouseleave.debounce.500ms="onMiniCartButtonBlur"
+                        @focus.debounce="onMiniCartFocus"
+                    {% endblock %}
+                    {% block content %}
+                        <span
+                            x-show="$store.cart.miniCartItemsTotal > 0"
+                            class="site-header__utility-button--cart-total"
+                            x-text="$store.cart.miniCartItemsTotal"
+                        ></span>
+                    {% endblock %}
+                {% endembed %}
+                {% embed 'partials/ui/tooltip' with {
+                    id: 'mini-cart',
+                    isDropdown: true,
+                } %}
+                    {% block content %}
+                        {{ async('mini-cart', 'mini-cart', { props: { cart: cart() } }) }}
+                    {% endblock %}
+                {% endembed %}
+            </div>
+        </div>
+    </div>
+
+    <hr class="site-header__underline" x-show="showUnderline"></hr>
+
+    <div x-show="isMegaMenuVisible" class="mega-menu" x-transition:enter="slide-down-enter-active" x-transition:enter-start="slide-down-enter-from" x-transition:enter-end="slide-down-enter-to" @mouseleave.native="onMouseLeave" @mouseenter.native="cancelDelayedMegaMenuClose">
+        <div class="mega-menu__inner">
+            <div class="mega-menu__submenu-grid" :style="gridStyles">
+                <template x-for="(navItem, menuIndex) in currentlyDisplayedLink?.children" :key="menuIndex">
+                    <div class="mega-menu__submenu">
+                        <div
+                            class="mega-menu__child-nav">
+                            {# the title of the submenu #}
+                            <a class="mega-menu__child-nav-title" :href="navItem.url" x-text="generateTitle(navItem)"></a>
+                            <ul
+                                class="mega-menu__child-nav-links">
+                                {# links in the submenu #}
+                                <template x-for="(navItemChild, navItemChildIndex) in navItem.children"
+                                x-key="navItemChildIndex">
+                                    <li>
+                                        <a :href="navItemChild.url" x-text="generateTitle(navItemChild)" class="mega-menu__child-nav-item"></a>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <template x-if="currentlyDisplayedLink?.menu_image_url">
+                <div class="mega-menu__image-wrapper">
+                    <img class="mega-menu__image" :src="currentlyDisplayedLink.menu_image_url">
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
+
+<template x-teleport="body">
+    <div
+        x-show="$store.global.isMegaMenuVisible" 
+        class="ui-megamenu-overlay"
+        x-transition:enter="fade-enter-active"
+        x-transition:enter-start="fade-enter-from"
+        x-transition:enter-end="fade-enter-to"
+        x-transition:leave="fade-leave-active"
+        x-transition:leave-start="fade-leave-from"
+        x-transition:leave-end="fade-leave-to">
+    </div>
+</template>
+
+{% schema %}
+    {
+        "announcement_bar_show": {
+            "type": "bool"
+        },
+        "announcement_bar_text": {
+            "type": "string"
+        },
+        "announcement_bar_link": {
+            "type": "link",
+            "optional": "true"
+        },
+        "nav_links": {
+            "type": "link-list"
+        }
+    }
+{% endschema %}

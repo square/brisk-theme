@@ -1,0 +1,14 @@
+<div class="container home-page__container">
+    {{ include('partials/components/text', { heading, text }) }}
+</div>
+
+{% schema %}
+{
+    "heading": {
+        "type": "string"
+    },
+    "text": {
+        "type": "string"
+    }
+}
+{% endschema %}

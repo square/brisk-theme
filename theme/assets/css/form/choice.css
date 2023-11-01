@@ -1,0 +1,103 @@
+.form-choice__options {
+    display: flex;
+    gap: var(--space);
+}
+
+.form-choice__option {
+    position: relative;
+    display: flex;
+    gap: var(--space-x2);
+}
+
+.form-choice__button {
+    position: relative;
+    min-width: var(--theme-form-field-button-height);
+    height: var(--theme-form-field-button-height);
+}
+
+.form-choice__label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 var(--space-x1_5);
+    color: var(--theme-form-field-button-text);
+    background-color: var(--theme-form-field-button);
+    border: 1px solid transparent;
+    border-radius: var(--theme-border-radius);
+    cursor: pointer;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.form-choice__label-text {
+    display: inline-flex;
+    gap: var(--space-half);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.form-choice__input {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: var(--theme-font-size-base);
+    line-height: var(--theme-line-height-base);
+    border-radius: var(--theme-border-radius);
+    cursor: pointer;
+}
+
+.form-choice__label:hover {
+    background-color: var(--theme-form-field-button-hover);
+}
+
+.form-choice__label:active {
+    background-color: var(--theme-form-field-button-pressed);
+}
+
+.form-choice__button--selected .form-choice__label {
+    color: var(--theme-form-field-button-selected-text);
+    background-color: var(--theme-form-field-button-selected);
+}
+
+.form-choice__button--disabled .form-choice__label,
+.form-choice__button--disabled .form-choice__input {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.form-choice--invalid .form-choice__input {
+    border: 1px solid var(--theme-form-field-border-error);
+}
+
+.form-choice__button--disabled .form-choice__input:checked {
+    background-color: var(--theme-form-field-button-selected-disabled);
+}
+
+/* grid */
+.form-choice--grid .form-choice__options {
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 700px) {
+    .form-choice--grid .form-choice__options {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.form-choice--grid[columns="1"] .form-choice__options,
+.form-choice--grid[columns="2"] .form-choice__options {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-choice--grid .form-choice__label {
+    padding: var(--space);
+}
+
+.form-choice--grid .form-choice__button {
+    height: 100%;
+    min-height: var(--theme-form-field-button-height);
+}

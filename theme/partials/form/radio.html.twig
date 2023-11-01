@@ -1,0 +1,84 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/radio.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/form/radio.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/form/radio.css') }}
+    {{ register_asset('js/form/radio.js', { defer: false }) }}
+{% endif %}
+
+{% set translations = { notAvailable: 'Not currently available' } %}
+
+{% set isRowVariant = variant == 'row' %}
+{% set placeholderText = 'partials.form.placeholder'|localize %}
+{% set labelId = 'radio-label-' ~ random() %}
+
+<fieldset
+    x-data="{ isInvalid: false, model: '', onRadioInputChange() {}, {% block data %}{% endblock %} }"
+    {% if parentModel %}x-modelable="model"{% endif %}
+    {% if isRequired %}aria-required="true"{% endif %}
+    :aria-invalid="isInvalid"
+    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    role="radiogroup"
+    class="form-fieldset form-radio--{{ variant|default('normal') }} form-radio--{{ size|default('medium') }} form-radio--{{ align|default('left') }} {% if showDivider %}form-radio--{{ variant|default('normal') }}-divider{% endif %} {{ radioClasses }}"
+    :class="{'form-radio--invalid': isInvalid }"
+    {% block attributes %}{% endblock %}
+>
+    {% if hideLabel == false %}
+        {{ include('partials/form/fieldset-label') }}
+    {% endif %}
+
+    <div class="form-radio__options">
+        {% for option in options %}
+            {% set optionId = random() %}
+            <label
+                x-data="radioForm('{{ option.value }}')"
+                x-effect="updateRadioOption()"
+                for="radio-{{ optionId }}"
+                aria-describedby="radio-{{ optionId }}__tooltip"
+                class="form-radio__option"
+                :class="{ 'form-radio__option--disabled': isDisabled, {{ option.classes|default('') }} }"
+                {% if showDivider %}
+                    @mouseenter.debounce="onRadioOptionHover({{ loop.index0 }})"
+                    @mouseleave.debounce="onRadioOptionBlur"
+                {% endif %}
+            >
+                <input
+                    id="radio-{{ optionId }}"
+                    x-ref="input"
+                    x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
+                    type="radio"
+                    name="{{ label }}"
+                    value="{{ option.value }}"
+                    :checked="model === '{{ option.value }}'"
+                    :disabled="isDisabled"
+                    class="form-radio__input"
+                    @change="onRadioInputChange('{{ option.value }}')"
+                >
+                <span class="form-radio__input-labels">
+                    <span class="form-radio__input-label">
+                        {{ option.label }}
+                    </span>
+                    {% if option.sublabel and isRowVariant %}
+                        <span class="form-radio__input-sublabel">
+                            {{ option.sublabel }}
+                        </span>
+                    {% endif %}
+                    {% block afterLabel %}{% endblock %}
+                </span>
+                {% if isRowVariant %}
+                    {% if block('side') %}
+                        <span class="form-radio__input-side">
+                            {% block side %}{% endblock %}
+                        </span>
+                    {% endif %}
+                    {% if option.image.absolute_url %}
+                    <span class="form-radio__input-image">
+                        {{ include('partials/ui/image', { image: { uri: option.image.absolute_url, urls: option.image.absolute_urls }, imageSizes: { xs: 80 }, altText: option.name }) }}
+                    </span>
+                    {% endif %}
+                {% endif %}
+            </label>
+        {% endfor %}
+        {% block after %}{% endblock %}
+    </div>
+</fieldset>

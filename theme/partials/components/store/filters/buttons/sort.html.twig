@@ -1,0 +1,59 @@
+{{ register_asset('css/components/store/filters/sort.css') }}
+{{ register_asset('js/components/store/filters/sort.js', { defer: false }) }}
+
+<div
+    x-data="sortFilter()"
+    class="filters__sort-wrapper"
+>
+    {% embed 'partials/ui/button' with {
+            size: 'medium',
+            variant: 'neutral',
+            style: 'outline',
+            alignment: 'space-between',
+            action: 'handleSortButtonClick()'
+    } %}
+        {% block attributes %}
+            x-ref="sortButton"
+            :fullwidth="$store.global.isMobile"
+            @click.outside="closeSortDropdown()"
+        {% endblock %}
+        {% block content %}
+            <span x-text="getSortByLabel()"></span>
+            {% embed 'partials/ui/icon' with { name: 'expand_more' } %}
+                {% block attributes %}
+                    x-show="!isDropdownVisible"
+                {% endblock %}
+            {% endembed %}
+            {% embed 'partials/ui/icon' with { name: 'expand_less' } %}
+                {% block attributes %}
+                    x-show="isDropdownVisible"
+                {% endblock %}
+            {% endembed %}
+        {% endblock %}
+    {% endembed %}
+    {% embed 'partials/ui/tooltip' with { id, isDropdown: true } %}
+        {% block content %}
+            <div class="filters__sort-dropdown">
+                {% embed 'partials/form/radio' with {
+                    hideLabel: true,
+                    align: 'right',
+                    variant: 'row',
+                    size: 'large',
+                    showDivider: true,
+                    options: sortOptions,
+                    parentModel: 'sortValue',
+                } %}
+                    {% block data %}
+                        {% if currentValue %}
+                            model: '{{ currentValue }}',
+                        {% endif %}
+                        ...sortOptions()
+                    {% endblock %}
+                {% endembed %}
+            </div>
+        {% endblock %}
+    {% endembed %}
+    <p x-show="!$store.global.isMobile">
+        {{ totalItems }} items
+    </p>
+</div>

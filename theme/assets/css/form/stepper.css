@@ -1,0 +1,58 @@
+.form-stepper--normal {
+    --theme-stepper-height: var(--theme-button-medium-height);
+}
+
+.form-stepper--small {
+    --theme-stepper-height: var(--theme-button-small-height);
+}
+
+.form-stepper__wrapper {
+    display: inline-flex;
+    gap: var(--space);
+    align-items: center;
+    height: var(--theme-stepper-height);
+    padding: var(--space);
+    border: 1px solid var(--theme-form-field-border);
+    border-radius: 6px;
+}
+
+.form-stepper--invalid .form-stepper__wrapper {
+    border-color: var(--theme-form-field-border-error);
+}
+
+.form-stepper__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: var(--theme-form-field-button);
+    border-radius: 4px;
+}
+
+.form-stepper__button--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.form-stepper .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.form-stepper__button:not(.form-stepper__button--disabled):hover {
+    background-color: var(--theme-form-field-button-hover);
+}
+
+.form-stepper__button:not(.form-stepper__button--disabled):focus {
+    background-color: var(--theme-form-field-button-pressed);
+}
+
+.form-stepper__input {
+    width: auto;
+    height: 100%;
+    color: inherit;
+    text-align: center;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}

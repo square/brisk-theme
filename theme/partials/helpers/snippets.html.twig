@@ -1,0 +1,9 @@
+{% if square.site.communications_scripts %}
+    {{ square.site.communications_scripts | raw }}
+    {% if square.site.config.hide_site_before_age_modal %}
+        {{ include('partials/helpers/hide_site_before_age_modal') }}
+    {% endif %}
+{% endif %}
+{% if square.site.snippets_api %}
+    {{ square.site.snippets_api | raw }}
+{% endif %}

@@ -1,0 +1,78 @@
+{# If you have an Age Check Pop-up, you can use the script below to block your page 
+    from showing prior to the pop-up appearing #}
+    <script>
+        const leadFormRegex = /leadForm\(.*form_ids:\s*\[(.*?)\].*\)/;
+        const communicationsScripts = "{{ square.site.communications_scripts | escape('js') }}";
+        const leadFormMatch = communicationsScripts.match(leadFormRegex);
+        if (leadFormMatch.length === 2) {
+            const popupIds = leadFormMatch[1].split(',').map(s => s.replaceAll('\"', ''));
+            const popupStates = {};
+            const cookie = document.cookie;
+            popupIds.forEach(p => {
+                // If a cookie exists for the pop-up, we won't block on it. Note that this means an
+                // inactive pop-up will never trigger this early escape logic.
+                if (cookie.indexOf(p) === -1) {
+                    popupStates[p] = 0;
+                }
+            });
+            if (Object.keys(popupStates).length) {
+                var popupCover = document.createElement('div');
+                popupCover.style.cssText = 'position:fixed;z-index:998;background-color:white;top:0;left:0;width:100%;height:100%;';
+                const removePopupCover = () => {
+                    if (popupCover) {
+                        document.body.removeChild(popupCover);
+                        popupCover = null;
+                    }
+                    window.removeEventListener('message', popupCoverRemoveEvent);
+                };
+                var popupCoverTimeout;
+                const setPopupCoverTimeout = () => {
+                    clearTimeout(popupCoverTimeout);
+                    popupCoverTimeout = setTimeout(() => {
+                        removePopupCover();
+                    }, 5000);
+                };
+                const domContentLoaded = () => {
+                    document.removeEventListener('DOMContentLoaded', domContentLoaded);
+                    document.body.appendChild(popupCover);
+                    // In case of unexpected errors, make sure we clear the cover
+                    setPopupCoverTimeout();
+                };
+                const checkPopupStates = () => {
+                    if (Object.values(popupStates).every(p => p > 0)) {
+                        if (Object.values(popupStates).some(p => p > 1)) {
+                            // Restart the timeout knowing we have an age verification pop-up coming
+                            setPopupCoverTimeout();
+                        } else {
+                            removePopupCover();
+                        }
+                    }
+                };
+                document.addEventListener('DOMContentLoaded', domContentLoaded);
+                const popupCoverRemoveEvent = (e) => {
+                    const id = e?.data?.id;
+                    switch (e?.data?.action) {
+                        case 'docReady':
+                            setTimeout(() => {
+                                removePopupCover();
+                            }, 1500);
+                            break;
+                        case 'noShow':
+                            popupStates[id] = 1;
+                            checkPopupStates();
+                            break;
+                        case 'prepElements':
+                            if (!e?.data?.showForm
+                                || e?.data?.modelData?.formData?.goalType !== 'age_verification') {
+                                popupStates[id] = 1;
+                            } else {
+                                popupStates[id] = 2;
+                            }
+                            checkPopupStates();
+                            break;
+                    }
+                };
+                window.addEventListener('message', popupCoverRemoveEvent);
+            }
+        }
+    </script>

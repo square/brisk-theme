@@ -1,0 +1,56 @@
+{% set srcSet = [] %}
+{% set defaultImageSizes = { xs: 600, sm: 900, md: 1200 } %}
+{% set xs = imageSizes.xs|default(defaultImageSizes.xs) %}
+{% set sm = imageSizes.sm|default(imageSizes.xs)|default(defaultImageSizes.sm) %}
+{% set md = imageSizes.md|default(imageSizes.sm)|default(imageSizes.xs)|default(defaultImageSizes.md) %}
+{% set lg = imageSizes.lg|default(md) %}
+{% set sizes = [
+    '(max-width: 599px) ' ~ xs ~ 'px',
+    '(max-width: 839px) ' ~ sm ~ 'px',
+    '(max-width: 1199px) ' ~ md ~ 'px',
+    '(max-width: 1599px) ' ~ lg ~ 'px',
+] %}
+{% for key, url in image.urls %}
+    {% set dpr = '' %}
+    {% if image.format != 'spin' %}
+        {% set dpr = '&dpr=2' %}
+    {% endif %}
+    {% set srcSet = srcSet|merge([url ~ dpr ~ ' ' ~ key ~ 'w']) %}
+{% endfor %}
+
+{% if showPlaceholder %}
+<figure
+    x-data="{ isLoadingImage: true, isFailedToLoad: false, onLoadSuccess() { this.isLoadingImage = false, this.onLoadComplete('{{ image.uri|default(image.urls|first) }}') }, onLoadError() { this.isFailedToLoad = true, this.isLoadingImage = false, this.onLoadComplete('{{ image.uri|default(image.urls|first) }}') }, onLoadComplete() {}, {% block data %}{% endblock %} }"
+    {% block attributes %}{% endblock %}
+>
+    <img
+        x-init="$watch('isFailedToLoad', () => $el.style.display = 'none')"
+        src="{{ image.uri }}"
+        srcset="{{ srcSet|join(', ') }}"
+        sizes="{{ sizes|join(', ') }}, {{ lg }}px"
+        alt="{{ altText }}"
+        x-bind:onload="onLoadSuccess"
+        @error="onLoadError"
+    />
+    <template x-if="isLoadingImage || isFailedToLoad">
+        {% embed 'partials/ui/placeholder' %}
+                {% block data %}
+                    init() {
+                        this.$watch('isLoadingImage', (isLoading) => {
+                            this.isLoading = isLoading;
+                        });
+                    },
+                {% endblock %}
+        {% endembed %}
+    </template>
+</figure>
+{% else %}
+<img
+    src="{{ image.uri }}"
+    srcset="{{ srcSet|join(', ') }}"
+    sizes="{{ sizes|join(', ') }}, {{ lg }}px"
+    alt="{{ altText }}"
+    {% if loadCallback %}x-bind:onload="{{ loadCallback }}"{% endif %}
+    {% if errorCallback %}@error="{{ errorCallback }}"{% endif %}
+/>
+{% endif %}

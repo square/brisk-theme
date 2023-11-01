@@ -1,0 +1,56 @@
+.form-price-range__wrapper {
+    --theme-price-range-height: var(--theme-button-small-height);
+
+    display: flex;
+    gap: var(--space);
+    align-items: center;
+    justify-content: space-between;
+    height: var(--theme-price-range-height);
+}
+
+.form-price-range--invalid .form-price-range__wrapper {
+    border-color: var(--theme-form-field-border-error);
+}
+
+.form-price-range__label {
+    position: relative;
+    width: 45%;
+}
+
+.form-price-range__input {
+    width: 100%;
+    height: 100%;
+    padding: var(--space) var(--space) var(--space) var(--space-x3);
+    color: inherit;
+    background-color: var(--theme-form-field-background);
+    border: 1px solid var(--theme-form-field-border);
+    border-radius: 6px;
+}
+
+.form-price-range__input:hover {
+    border-color: var(--theme-form-field-border-hover);
+}
+
+.form-price-range__input:focus {
+    border-color: var(--theme-form-field-border-pressed);
+}
+
+.form-price-range__wrapper--currency-after .form-price-range__input {
+    padding-right: var(--space-x3);
+    padding-left: var(--space);
+    text-align: right;
+}
+
+.form-price-range__input-suffix {
+    position: absolute;
+    left: calc(var(--space-x2) - var(--space-half));
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    color: var(--theme-form-field-text-placeholder);
+}
+
+.form-price-range__wrapper--currency-after .form-price-range__input-suffix {
+    right: calc(var(--space-x2) - var(--space-half));
+    left: auto;
+}

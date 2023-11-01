@@ -1,0 +1,77 @@
+{{ register_asset('css/components/gallery/masonry.css') }}
+{{ register_asset('js/components/gallery/masonry.js', { defer: false }) }}
+
+{% set hasImages = images|length > 0 %}
+{% set galleryName = name|default('') %}
+
+<div
+    x-data="masonry('{{ masonryDataId }}')"
+    {% if hasImages %}role="region"{% endif %}
+    class="masonry"
+>
+    {% if hasImages %}
+        {% for image in images %}
+            {% set isTwoColumn = false %}
+
+            {% if (loop.length > 2) and (loop.index0 % 3 != 0) %}
+                {% set isTwoColumn = true %}
+                {% set isPortraitOrientation = image.height > image.width %}
+                {% set imageFlex = 1 %}
+                {% if image.width and image.height %}
+                    {% set imageFlex = isPortraitOrientation ? image.height / image.width : image.width / image.height %}
+                {% endif %}
+                {% set imageSizes = { xs: 559, sm: 862, md: 580 } %}
+            {% else %}
+                {% set imageSizes = { xs: 559, sm: 431, md: 290 } %}
+            {% endif %}
+
+            {% if isTwoColumn and (loop.index0 % 3 == 1) %}
+            <div class="masonry__item--row">
+            {% endif %}
+
+            {% if image.format == 'spin' %}
+                <figure class="masonry__item">
+                    {{ include('partials/ui/image-spin', { source: image.absolute_uri, altText: galleryName ~ ' ' ~ loop.index }) }}
+                </figure>
+            {% else %}
+                {% embed 'partials/ui/image' with {
+                    image: { uri: image.absolute_uri, urls: image.absolute_urls },
+                    imageSizes,
+                    altText: galleryName ~ ' ' ~ loop.index,
+                    showPlaceholder: true,
+                } %}
+                    {% block data %}
+                        ...masonryImage()
+                    {% endblock %}
+                    {% block attributes %}
+                        role="button"
+                        tabindex="0"
+                        aria-haspopup="true"
+                        class="masonry__item"
+                        :class="{ 'masonry__item--failed': isFailedToLoad }"
+                        {% if isTwoColumn %}style="flex: {{ imageFlex }}"{% endif %}
+                        @click.stop="!isFailedToLoad ? openImagesDialog('{{ loop.index0 }}') : null"
+                        @keydown.enter.prevent="!isFailedToLoad ? openImagesDialog('{{ loop.index0 }}') : null"
+                    {% endblock %}
+                {% endembed %}
+            {% endif %}
+            {% if isTwoColumn and ((loop.index0 % 3 == 2) or (loop.index0 % 3 == 1 and loop.last)) %}
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        {# dialog assets #}
+        {{ register_asset('js/components/gallery/dialog.js', { defer: false }) }}
+        {{ register_asset('css/components/gallery/dialog.css') }}
+
+        <template x-if="!dialogExists()">
+            <template x-teleport="body">
+                {{ include('partials/ui/dialog') }}
+            </template>
+        </template>
+    {% else %}
+    <figure class="masonry__item masonry__item-placeholder">
+        {{ include('partials/ui/placeholder') }}
+    </figure>
+{% endif %}
+</div>

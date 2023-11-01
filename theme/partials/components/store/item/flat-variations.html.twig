@@ -1,0 +1,30 @@
+{% if product.item_options is empty and product.square_online_type != 'DONATION' %}
+
+{{ register_asset('js/components/store/item/flat-variations.js', { defer: false }) }}
+
+<div  class="item-page__flat-variations">
+    {% set itemVariationsDataId = 'item-variation-data-' ~ random() %}
+    <script id="{{ itemVariationsDataId }}" type="application/json">
+        {{ {
+            productId: product.square_online_id,
+            variations: product.variations,
+        }|json_encode }}
+    </script>
+
+    {% set options = [] %}
+    {% for variation in product.variations %}
+        {% set options = options|merge([{ label: variation.name, value: variation.name }]) %}
+    {% endfor %}
+
+    {% embed 'partials/form/radio' with {
+        label: product.variations[0].item_option_name|default('partials.components.store.item.flat_variations.default_label'|localize),
+        options,
+        isRequired: true,
+    } %}
+        {% block data %}
+            ...itemFlatVariations('{{ itemVariationsDataId }}')
+        {% endblock %}
+    {% endembed %}
+</div>
+
+{% endif %}

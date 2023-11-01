@@ -1,0 +1,30 @@
+<span x-show="$store.dialog.options.showSecondaryButton">
+    {% embed 'partials/ui/button' with {
+        variant: 'secondary',
+        style: 'fill',
+        fullWidth: true,
+        action: '$store.dialog.secondaryButtonClick',
+    } %}
+        {% block content %}
+            <span x-text="$store.dialog.options.secondaryButtonText"></span>
+        {% endblock %}
+        {% block attributes %}
+            :disabled="$store.dialog.isSecondaryButtonDisabled()"
+            :variant="$store.dialog.isMultiPane ? 'secondary' : ''"
+        {% endblock %}
+    {% endembed %}
+</span>
+<span x-show="$store.dialog.options.showPrimaryButton">
+    {% embed 'partials/ui/button' with {
+        variant: 'primary',
+        fullWidth: true,
+        action: '$store.dialog.primaryButtonClick',
+    } %}
+        {% block content %}
+            <span x-text="$store.dialog.options.primaryButtonText"></span>
+        {% endblock %}
+        {% block attributes %}
+            :disabled="$store.dialog.isPrimaryButtonDisabled()"
+        {% endblock %}
+    {% endembed %}
+</span>

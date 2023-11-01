@@ -1,0 +1,35 @@
+{% set isRowVariant = variant == 'row' %}
+
+<div class="form-fieldset__label {% if isRowVariant %}form-fieldset__label--row{% endif %}">
+    {% if isRowVariant %}
+        <span class="form-fieldset__label--primary">
+            <span id="{{ labelId }}" aria-describedby="{{ labelId }}__sublabel">{{ label }}</span>
+            {% if isRequired or isOptional %}
+            <span class="form-fieldset__label--secondary">
+                {% if isRequired %}
+                    {{ 'partials.form.required'|localize }}
+                {% elseif isOptional %}
+                    {{ 'partials.form.optional'|localize }}
+                {% endif %}
+            </span>
+            {% endif %}
+        </span>
+        <span
+            id="{{ labelId }}__sublabel"
+            class="form-fieldset__sublabel {% if hideSublabel %}visually-hidden{% endif %}"
+        >
+            {{ sublabel|default(placeholderText) }}
+        </span>
+    {% else %}
+        <span id="{{ labelId }}" aria-describedby="{{ labelId }}__sublabel">{{ label }}</span>{% if hideSublabel == false %}:{% endif %}
+        <span
+            id="{{ labelId }}__sublabel"
+            class="form-fieldset__sublabel {% if hideSublabel %}visually-hidden{% endif %}"
+            x-text="model || '{{ sublabel|default(placeholderText) }}'"
+        ></span>
+    {% endif %}
+
+    {% if exludeError == false %}
+        {{ include('partials/form/fieldset-error') }}
+    {% endif %}
+</div>

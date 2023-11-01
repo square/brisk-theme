@@ -1,0 +1,52 @@
+{# tiles or masonry or carousel #}
+{% set collectionLayout = layout|default('tiles') %}
+{% set isCarousel = collectionLayout == 'carousel' %}
+{% set isMasonry = collectionLayout == 'masonry' %}
+
+{% if request.async == true %}
+    <link href="{{ 'css/components/collection.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/components/collection.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/components/collection.css') }}
+    {{ register_asset('js/components/collection.js', { defer: false }) }}
+{% endif %}
+
+{% if isCarousel %}
+{% set carouselId = 'carousel-' ~ random() %}
+{% embed 'partials/ui/carousel' with {
+    navPosition: 'overlay',
+    carouselClasses: 'collection collection--' ~ collectionLayout,
+} %}
+    {% block data %}
+        ...collection(),
+    {% endblock %}
+    {% block carouselItems %}
+        {% for listItem in items %}
+            {% if listItem.template == 'simple' %}
+                {{ include('partials/components/collection/simple', { item: listItem.item|default(listItem), buttonText: listItem.buttonText }) }}
+            {% else %}
+                {{ include('partials/components/collection/tile', { product: listItem.item|default(listItem), enableQuickAdd: isMasonry == false, hideHover, carouselId }) }}
+            {% endif %}
+        {% endfor %}
+    {% endblock %}
+{% endembed %}
+{% else %}
+
+{% set itemTemplates = items|reduce((unique, item) => item.template in unique ? unique : unique|merge([item.template]), []) %}
+{% set isMixedTemplates = itemTemplates|length > 1 %}
+<div
+    x-data="collection()"
+    class="row collection collection--{{ collectionLayout }}"
+    @resize.window.debounce="updateCollectionImageHeight"
+>
+    {% for listItem in items %}
+        {% if listItem.template == 'featured' %}
+            {{ include('partials/components/collection/featured', { item: listItem.item, buttonText: listItem.buttonText, columnAttrs: 'col-xs-12 col-sm-8 col-md-6', isMixedTemplates }) }}
+        {% elseif listItem.template == 'simple' %}
+            {{ include('partials/components/collection/simple', { item: listItem.item, buttonText: listItem.buttonText, columnAttrs: 'col-xs-12 col-sm-8 col-md-6', isMixedTemplates }) }}
+        {% else %}
+            {{ include('partials/components/collection/tile', { product: listItem.item, enableQuickAdd: isMasonry == false, hoverEnabled, columnAttrs: 'col-xs-6 col-sm-4 col-md-3', isMixedTemplates }) }}
+        {% endif %}
+    {% endfor %}
+</div>
+{% endif %}

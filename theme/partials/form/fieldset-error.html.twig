@@ -1,0 +1,10 @@
+<div
+    id="{{ labelId }}__error"
+    data-scroll-to="{{ labelId }}"
+    x-ref="formError"
+    x-show="isInvalid"
+    x-cloak
+    :class="{ 'form-fieldset__error--visible': isInvalid }"
+>
+    {{ include('partials/ui/notice', { variant: 'critical', message: errorMessage|default('partials.form.error'|localize({ label })) } ) }}
+</div>

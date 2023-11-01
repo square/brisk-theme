@@ -1,0 +1,83 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/price-range.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/form/price-range.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/form/price-range.css') }}
+    {{ register_asset('js/form/price-range.js', { defer: false }) }}
+{% endif %}
+
+{% set inputRangeId = 'price-range-' ~ random() %}
+{% set labelId = 'price-range-label-' ~ random() %}
+
+<fieldset
+    x-data="{ isInvalid: false, error: { min: false, max: false }, disabled: { min: false, max: false }, model: { min: '', max: '' }, {% block data %}{% endblock %} }"
+    {% if isMinRequired or isMaxRequired %}aria-required="true"{% endif %}
+    :aria-invalid="isInvalid"
+    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    role="group"
+    class="form-fieldset"
+    :class="{'form-price-range--invalid': isInvalid }"
+>
+    {% if label %}
+        <div class="form-fieldset__label">
+            <span id="{{ labelId }}">{{ label }}</span>
+            {{ include('partials/form/fieldset-error', { errorMessage: 'partials.form.error'|localize({ label: 'Price range' }) }) }}
+        </div>
+    {% endif %}
+
+    <div
+        x-data="priceRangeForm()"
+        :class="'form-price-range__wrapper form-price-range__wrapper--currency-' + $store.global.currencySymbolPosition"
+    >
+        <label
+            class="form-price-range__label"
+            for="price-range-min-{{ inputRangeId }}"
+        >
+            <span
+                class="form-price-range__input-suffix"
+                x-text="$store.global.currencySymbol"
+            ></span>
+            <input
+                id="price-range-min-{{ inputRangeId }}"
+                x-model="model.min"
+                :disabled="disabled.min"
+                :max="model.max"
+                min="0"
+                type="number"
+                name="{{ label }}__min"
+                placeholder="0"
+                class="form-price-range__input"
+                {% if isMinRequired %}required{% endif %}
+                @input.change="model.min = Number(model.min)"
+                @blur="validatePriceRange()"
+            >
+        </label>
+        <span
+            class="form-price-range__divider"
+        >
+            {{ 'partials.form.price_range.divider'|localize }}
+        </span>
+        <label
+            class="form-price-range__label"
+            for="price-range-max-{{ inputRangeId }}"
+        >
+            <span
+                class="form-price-range__input-suffix"
+                x-text="$store.global.currencySymbol"
+            ></span>
+            <input
+                id="price-range-max-{{ inputRangeId }}"
+                x-model="model.max"
+                :disabled="disabled.max"
+                :min="Math.max(model.min, 0)"
+                type="number"
+                name="{{ label }}__max"
+                placeholder="100"
+                class="form-price-range__input"
+                {% if isMaxRequired %}required{% endif %}
+                @input.change="model.max = Number(model.max)"
+                @blur="validatePriceRange()"
+            >
+        </label>
+    </div>
+</fieldset>

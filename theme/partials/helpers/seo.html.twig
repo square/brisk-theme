@@ -1,0 +1,18 @@
+<title>{% if title %}{{ title }} | {% endif %}{{ square.site.title }}</title>
+{% if no_index %}
+    <meta data-vue-meta="1" name="robots" content="noindex">
+{% endif %}
+{% if description %}
+    <meta name="description" content="{{ description }}">
+{% endif %}
+
+<meta property="og:title" content="{% if title %}{{ title }} | {% endif %}{{ square.site.title }}">
+<meta property="og:site_name" content="{{ square.site.title }}">
+{% if description %}
+    <meta property="og:description" content="{{ description }}">
+{% endif %}
+<meta property="og:url" content="{{ square.page.url }}">
+<meta property="og:type" content="website">
+{# Add your own asset image
+<meta property="og:image" content="{{ 'images/image.jpg' | asset_full_url }}">
+#}

@@ -1,0 +1,147 @@
+{% set categoriesPane = [] %}
+{% set mainCategoryOptions = [] %}
+
+{% for mainCategory in category_hierarchy %}
+    {% set mainCategoryOptions = mainCategoryOptions|merge([{ label: mainCategory.name, value: mainCategory.square_online_id, hasSubCategories: mainCategory.children|length > 0 }]) %}
+
+    {% if mainCategory.children|length %}
+        {% set categoryOptions = [] %}
+        {% for category in mainCategory.children %}
+            {% set categoryOptions = categoryOptions|merge([{ label: category.name, value: category.square_online_id, hasSubCategories: category.children|length > 0 }]) %}
+
+            {% set childOptions = [] %}
+            {% for child in category.children %}
+                {% set childOptions = childOptions|merge([{ label: child.name, value: child.square_online_id, hasSubCategories: child.children|length > 0 }]) %}
+
+                {% set subChildOptions = [] %}
+                {% for subChild in child.children %}
+                    {% set subChildOptions = subChildOptions|merge([{ label: subChild.name, value: subChild.square_online_id, hasSubCategories: subChild.children|length > 0 }]) %}
+                {% endfor %}
+
+                {% if subChildOptions|length %}
+                    {% set categoriesPane = categoriesPane|merge([{ level: 2, options: subChildOptions, parentId: child.square_online_id, parentLabel: child.name }]) %}
+                {% endif %}
+            {% endfor %}
+
+            {% if childOptions|length %}
+                {% set categoriesPane = categoriesPane|merge([{ level: 1, options: childOptions, parentId: category.square_online_id, parentLabel: category.name }]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if categoryOptions|length %}
+            {% set categoriesPane = categoriesPane|merge([{ level: 0, options: categoryOptions, parentId: mainCategory.square_online_id, parentLabel: mainCategory.name }]) %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{% if mainCategoryOptions|length %}
+    {% set categoriesPane = categoriesPane|merge([{ level: 0, options: mainCategoryOptions, parentId: parentCategory.square_online_id|default(0), parentLabel: parentCategory.name|default('') }]) %}
+{% endif %}
+
+{% embed 'partials/ui/button' with {
+        size: 'small',
+        variant: 'neutral',
+        buttonClasses: 'filters__category-back',
+        action: 'backToParentLevel()'
+} %}
+    {% block attributes %}
+        x-show="isBackButtonVisible"
+    {% endblock %}
+    {% block content %}
+        {{ include('partials/ui/icon', { name: 'arrow_back', iconAlt: 'partials.components.store.filters.options.categories_selector.back_button'|localize }) }}
+    {% endblock %}
+{% endembed %}
+
+<div x-ref="categoryOptions" class="filters__category-options {% if showScrollbar %}custom-scrollbar{% endif %}">
+    {% for pane in categoriesPane %}
+        <div
+            id="pane_{{ pane.parentId }}"
+            x-show="currentPane == {{ pane.parentId }}"
+            x-transition:enter="slide-right-enter-active"
+            x-transition:enter-start="slide-right-enter-from"
+            x-transition:enter-end="slide-right-enter-to"
+            x-transition:leave="slide-right-leave-active"
+            x-transition:leave-start="slide-right-leave-from"
+            x-transition:leave-end="slide-right-leave-to"
+            class="filters__category-dropdown-content {% if showScrollbar %}custom-scrollbar-inner{% endif %}"
+        >
+            <div
+                x-show="isBackButtonVisible"
+                class="heading-5 filters__category-options-heading"
+            >
+                {{ pane.parentLabel }}
+            </div>
+
+            {% set categoriesSelectAllOptionDataId = 'categories-select-all-data-' ~ random() %}
+            <script id="{{ categoriesSelectAllOptionDataId }}" type="application/json">
+                {{ {
+                    parentId: pane.parentId,
+                    options: pane.options,
+                }|json_encode }}
+            </script>
+
+            {% embed 'partials/form/checkbox-single' with {
+                label: 'partials.components.store.filters.options.categories_selector.select_all'|localize,
+                align: 'right',
+                variant: 'row',
+                size: 'large',
+                showDivider: true,
+                singleCheckboxClasses: 'filters__category-option filters__category-select-all',
+            } %}
+                {% block attributes %}
+                    :class="getSelectAllClasses({{ pane.parentId }})"
+                {% endblock %}
+                {% block data %}
+                    ...categoriesSelectAllOption('{{ categoriesSelectAllOptionDataId }}'),
+                {% endblock %}
+            {% endembed %}
+            {% for categoryOption in pane.options %}
+                {% if categoryOption.hasSubCategories %}
+                    {% embed 'partials/ui/button' with {
+                        icon: 'navigate_next',
+                        size: 'large',
+                        variant: 'row',
+                        fullWidth: true,
+                        buttonClasses: 'filters__category-option',
+                        action: 'navigateToSubCategories(' ~ categoryOption.value ~ ')',
+                    } %}
+                        {% block attributes %}
+                            x-data="categoryFilterButton({{ pane.level }})"
+                            @mouseenter.debounce="onCategoryOptionHover"
+                            @mouseleave.debounce="onCategoryOptionBlur"
+                        {% endblock %}
+                        {% block content %}
+                            <span x-text="'{{ categoryOption.label }} ' + getSubCategoriesCount({{ categoryOption.value }})"></span>
+                        {% endblock %}
+                    {% endembed %}
+                {% else %}
+                    {% set categoryFilterOptionData = 'category-filter-option-data-' ~ random() %}
+                    <script id="{{ categoryFilterOptionData }}" type="application/json">
+                        {{ {
+                            parentId: pane.parentId,
+                            optionValue: categoryOption.value,
+                            options: pane.options,
+                        }|json_encode }}
+                    </script>
+
+                    {% embed 'partials/form/checkbox-single' with {
+                        label: categoryOption.label,
+                        align: 'right',
+                        variant: 'row',
+                        size: 'large',
+                        showDivider: true,
+                        singleCheckboxClasses: 'filters__category-option filters__category-checkbox',
+                    } %}
+                        {% block data %}
+                            ...categoryFilterOption('{{ categoryFilterOptionData }}'),
+                        {% endblock %}
+                        {% block attributes %}
+                            @mouseenter.debounce="onCategoryOptionHover"
+                            @mouseleave.debounce="onCategoryOptionBlur"
+                        {% endblock %}
+                    {% endembed %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

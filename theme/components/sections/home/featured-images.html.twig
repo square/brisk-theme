@@ -1,0 +1,30 @@
+{% set formattedImages = images %}
+<div class="home-page__featured-images-container">
+    {% embed 'partials/ui/carousel' with { carouselVariant: 'full-bleed', navPosition: 'indicator', navigationItems: images } %}
+        {% block carouselItems %}
+            {% for image in formattedImages %}
+                <div class="ui-carousel__item--full-bleed">
+                    {% set imageSrc = image.src|asset_url %}
+                    {{ include('partials/ui/image', {
+                        image: { uri: imageSrc, urls: { 640: imageSrc ~ '?width=640', 1280: imageSrc ~ '?width=1280' } },
+                        altText: image.alt,
+                    }) }}
+                    <div
+                        x-show="currentIndex == {{ loop.index0 }}"
+                        class="ui-carousel__item-button"
+                    >
+                        {{ include('partials/ui/button', { variant: 'text', label: 'components.sections.home.text_and_images.button'|localize, link: link({ type: 'shopAll' }), contrast: true }) }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+</div>
+
+{% schema %}
+{
+    "images": {
+        "type": "array"
+    }
+}
+{% endschema %}

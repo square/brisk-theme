@@ -1,0 +1,46 @@
+{% extends "layouts/theme" %}
+
+{% block main_content %}
+
+{{ register_asset('css/templates/store/search.css') }}
+
+<div class="container page search-page">
+    <div class="search-page__heading">
+        {# Breadcrumb #}
+        {% set breadcrumb = [
+            { title: 'templates.store.shop.breadcrumb.shop'|localize, link: link({ type: 'shopAll' }) },
+            { title: 'templates.store.shop.breadcrumb.search_results'|localize, link: '' },
+        ] %}
+        {{ include('partials/ui/breadcrumb', { breadcrumb: breadcrumb }) }}
+
+        {# Page name #}
+        <h2 class="heading-2">{{ search_term }}</h2>
+    </div>
+
+    {# Sort options #}
+    {% set sortOptions = [
+        { label: 'templates.store.shop.sort_options.score'|localize, value: 'score' },
+        { label: 'templates.store.shop.sort_options.popularity_score'|localize, value: 'popularity_score' },
+        { label: 'templates.store.shop.sort_options.created_date'|localize, value: 'created_date' },
+        { label: 'templates.store.shop.sort_options.price_desc'|localize, value: 'price_desc' },
+        { label: 'templates.store.shop.sort_options.price_asc'|localize, value: 'price_asc' },
+        { label: 'templates.store.shop.sort_options.name_asc'|localize, value: 'name_asc' },
+        { label: 'templates.store.shop.sort_options.name_desc'|localize, value: 'name_desc' },
+    ] %}
+
+    {# Search results #}
+    {{ include('components/sections/store/item-list', { items, categories: category_list([]), category_hierarchy: category_hierarchy(), sort_options: sortOptions, search_term }) }}
+</div>
+
+{% endblock %}
+
+{% schema %}
+{
+    "items": {
+        "type": "item-list"
+    },
+    "search_term": {
+        "type": "string"
+    }
+}
+{% endschema %}

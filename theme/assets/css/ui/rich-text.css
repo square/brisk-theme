@@ -1,0 +1,27 @@
+/* Rich Text Editor content */
+
+.ui-rich-text ul {
+    margin-left: var(--space-x4);
+    list-style: none;
+}
+
+.ui-rich-text ul li {
+    position: relative;
+    font-weight: var(--theme-font-weight-light);
+}
+
+.ui-rich-text ul li::before {
+    position: absolute;
+    top: calc(var(--theme-line-height-base) * var(--theme-font-size-base) / 2.5);
+    left: 0;
+    width: 4px;
+    height: 4px;
+    margin-left: calc(var(--space-x2) * -1);
+    background-color: var(--theme-bulleted-list-icon-color);
+    border-radius: 50%;
+    content: "";
+}
+
+.ui-rich-text ol li {
+    margin-left: var(--space-x4);
+}

@@ -1,0 +1,39 @@
+{% set isCategory = item.type == 'CATEGORY' %}
+{% set isItem = item.type == 'CATEGORY' %}
+{% set linkHref = '' %}
+
+{% if isCategory %}
+    {% set linkHref = category_link(item.square_online_id) %}
+{% elseif isItem %}
+    {% set linkHref = item_link(item.square_online_id) %}
+{% endif %}
+
+<a
+    class="col collection__tile collection__tile--simple collection__tile--{{ collectionLayout }}"
+    {{ columnAttrs }}
+    href="{{ linkHref }}"
+    {% if isMixedTemplates %}:style="collectionImageHeight > 0 ? { height: collectionImageHeight + 'px' } : {}"{% endif %}
+    @click.throttle="(e) => { if (isDragging) { e.preventDefault() } }"
+>
+    {% set itemImage = item.images[0] %}
+    {% set imageSizes = { xs: 599 } %}
+    <div class="collection__tile-image collection__tile-image--tall {% if isCarousel %}ui-carousel-slide{% endif %}">
+        {% if itemImage %}
+            {{ include('partials/ui/image', { image: { uri: itemImage.absolute_uri, urls: itemImage.absolute_urls }, imageSizes, altText: item.name, showPlaceholder: true }) }}
+        {% else %}
+            {{ include('partials/ui/placeholder') }}
+        {% endif %}
+    </div>
+    <div class="collection__tile-details">
+        <div
+            x-data="{ onButtonClick() { document.location.href = '{{ linkHref }}' } }"
+            class="collection__tile-button-wrapper"
+        >
+            {{ include('partials/ui/button', {
+                variant: 'primary',
+                label: buttonText|default(item.name),
+                action: 'onButtonClick'
+            }) }}
+        </div>
+    </div>
+</a>

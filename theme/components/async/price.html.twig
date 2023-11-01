@@ -1,0 +1,23 @@
+{% async:content %}
+    {{ include('partials/ui/price', { price, variations, size, secondaryText }) }}
+{%  endasync %}
+
+{% schema %}
+{
+    "price": {
+        "type": "array"
+    },
+    "variations": {
+        "type": "array",
+        "optional": true
+    },
+    "size": {
+        "type": "string",
+        "optional": true
+    },
+    "secondaryText": {
+        "type": "string",
+        "optional": true
+    }
+}
+{% endschema %}

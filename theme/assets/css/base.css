@@ -1,0 +1,386 @@
+html {
+    box-sizing: border-box;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: var(--theme-body-color);
+}
+
+body {
+    position: relative;
+    overflow-x: hidden; /* used to correctly center sticky elements and dialogs when the scrollbar is visible */
+    color: var(--theme-body-text-color);
+    font-weight: var(--theme-font-weight-normal);
+    font-size: var(--theme-font-size-base);
+    font-family: var(--theme-font-family-body);
+    line-height: var(--theme-line-height-base);
+    background-color: var(--theme-body-color);
+}
+
+body.has-header-padding {
+    padding-top: var(--header-height, 125px);
+}
+
+body.has-scrollbar {
+    --theme-scrollbar-offset: var(--theme-scrollbar-width);
+}
+
+body.is-scrolling-disabled {
+    position: fixed; /* keep scrollbar to avoid width reflow */
+    inline-size: 100%;
+    overflow-y: scroll;
+}
+
+body a {
+    color: inherit;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Resets */
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+body,
+html,
+p,
+blockquote,
+fieldset,
+input,
+button,
+figure {
+    margin: 0;
+    padding: 0;
+}
+
+figure img {
+    vertical-align: middle;
+}
+
+input[type='text'],
+input[type='number'],
+input[type='email'],
+textarea,
+select,
+input[type='radio'],
+input[type='checkbox'] {
+    font-family: inherit;
+    text-shadow: none;
+    outline: none;
+    appearance: none;
+}
+
+textarea {
+    resize: none;
+}
+
+/* outline when focused with keyboard */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+*:focus-visible {
+    outline: var(--theme-form-field-focus-outline-width) solid var(--theme-form-field-focus-outline-color);
+    outline-offset: calc(var(--theme-form-field-focus-outline-width) * -1);
+}
+
+/* Chrome, Safari, Edge, Opera - hide input arrows */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    margin: 0;
+    -webkit-appearance: none; /* stylelint-disable-line */
+}
+
+/* Firefox - hide input arrows */
+input[type="number"] {
+    -moz-appearance: textfield; /* stylelint-disable-line */
+}
+
+button,
+[role="button"] {
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    appearance: none;
+}
+
+fieldset {
+    border: none;
+}
+
+/* Hiding class, making content visible only to screen readers but not visually */
+.visually-hidden:not(:focus, :active) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+}
+
+div[hidden] {
+    display: none;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* text */
+.heading-2,
+.heading-3,
+.heading-4,
+.heading-5,
+.heading-6 {
+    color: var(--theme-title-color);
+    font-family: var(--theme-font-family-headline);
+}
+
+.heading-2 {
+    font-weight: calc(var(--theme-font-weight-headline) + 100);
+    font-size: var(--theme-h3-font-size);
+    line-height: var(--theme-h3-line-height);
+    letter-spacing: var(--theme-h2-letter-spacing-mobile);
+}
+
+@media (min-width: 700px) {
+    .heading-2 {
+        font-weight: var(--theme-font-weight-headline);
+        font-size: var(--theme-h2-font-size);
+        line-height: var(--theme-h2-line-height);
+        letter-spacing: var(--theme-h2-letter-spacing);
+    }
+}
+
+.heading-3 {
+    font-weight: calc(var(--theme-font-weight-headline) + 200);
+    font-size: var(--theme-h4-font-size);
+    line-height: var(--theme-h4-line-height);
+    letter-spacing: var(--theme-h3-letter-spacing);
+}
+
+@media (min-width: 700px) {
+    .heading-3 {
+        font-size: var(--theme-h3-font-size);
+        line-height: var(--theme-h3-line-height);
+    }
+}
+
+.heading-4 {
+    font-weight: calc(var(--theme-font-weight-headline) + 200);
+    font-size: var(--theme-h5-font-size);
+    line-height: var(--theme-h5-line-height);
+}
+
+@media (min-width: 700px) {
+    .heading-4 {
+        font-size: var(--theme-h4-font-size);
+        line-height: var(--theme-h4-line-height);
+    }
+}
+
+.heading-5 {
+    font-weight: calc(var(--theme-font-weight-headline) + 200);
+    font-size: var(--theme-h6-font-size);
+    line-height: var(--theme-h6-line-height);
+}
+
+@media (min-width: 700px) {
+    .heading-5 {
+        font-size: var(--theme-h5-font-size);
+        line-height: var(--theme-h5-line-height);
+    }
+}
+
+.heading-6 {
+    font-weight: calc(var(--theme-font-weight-headline) - 200);
+    font-size: var(--theme-font-size-base);
+    line-height: var(--theme-line-height-base);
+}
+
+@media (min-width: 700px) {
+    .heading-6 {
+        font-size: var(--theme-h6-font-size);
+        line-height: var(--theme-h6-line-height);
+    }
+}
+
+.title {
+    font-weight: var(--theme-font-weight-title);
+    font-family: var(--theme-font-family-title);
+}
+
+p {
+    font-weight: var(--theme-font-weight-light);
+}
+
+.font--normal {
+    font-weight: var(--theme-font-weight-normal);
+}
+
+/* Global Page spacing */
+
+.page {
+    padding-top: var(--space-x4);
+}
+
+/* global section heading margin */
+.heading-with-margin {
+    margin-bottom: var(--space-x2);
+}
+
+@media (min-width: 700px) {
+    .heading-with-margin {
+        margin-bottom: var(--space-x4);
+    }
+}
+
+/* icon */
+.material-symbols-filled {
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
+/* container */
+.container {
+    box-sizing: content-box;
+    max-width: var(--theme-max-container);
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: var(--theme-container-padding);
+    padding-left: var(--theme-container-padding);
+}
+
+.container--fullwidth {
+    margin-right: calc(var(--theme-container-padding) * -1);
+    margin-left: calc(var(--theme-container-padding) * -1);
+}
+
+@media (min-width: 700px) {
+    .container--fullwidth {
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+.container--fullwidth-padding {
+    padding-right: var(--theme-container-padding);
+    padding-left: var(--theme-container-padding);
+}
+
+@media (min-width: 700px) {
+    .container--fullwidth-padding {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+/* custom scrollbar */
+body,
+.custom-scrollbar {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+}
+
+@media (min-width: 700px) {
+    body {
+        overflow-x: initial; /* required for sticky position */
+    }
+}
+
+.custom-scrollbar {
+    overflow-y: scroll; /* always show scrollbar to avoid width reflow */
+    visibility: hidden;
+}
+
+.is-touch-device .custom-scrollbar,
+.custom-scrollbar-inner {
+    visibility: visible;
+}
+
+/* Show scrollbar on hover */
+.custom-scrollbar:hover {
+    animation: 0s linear 0.1s forwards delayed-visible;
+}
+
+@keyframes delayed-visible {
+    to {
+        visibility: visible;
+    }
+}
+
+body::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+    width: var(--theme-scrollbar-width);
+    background: var(--theme-scrollbar-color);
+}
+
+body::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--theme-scrollbar-thumb-color);
+    border-radius: var(--theme-scrollbar-width);
+}
+
+body[dialog-size="large"].is-mobile.custom-scrollbar::-webkit-scrollbar {
+    background: var(--theme-scrollbar-color);
+}
+
+body[dialog-variant="halfsheet"] main {
+    filter: blur(3px);
+}
+
+/* page loader */
+.page-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+/* list styles */
+.bulleted-list {
+    margin-left: var(--space-x4);
+    list-style: none;
+}
+
+.bulleted-list li {
+    position: relative;
+    font-weight: var(--theme-font-weight-light);
+}
+
+.bulleted-list li::before {
+    position: absolute;
+    top: calc(var(--theme-line-height-base) * var(--theme-font-size-base) / 3);
+    left: 0;
+    width: 8px;
+    height: 8px;
+    margin-left: calc(var(--space-x3) * -1);
+    background-color: var(--theme-bulleted-list-icon-color);
+    border-radius: 50%;
+    content: "";
+}
+
+.site-logo {
+    font-weight: var(--theme-logo-font-weight);
+    font-size: var(--theme-logo-font-size);
+    line-height: var(--theme-logo-line-height);
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+}

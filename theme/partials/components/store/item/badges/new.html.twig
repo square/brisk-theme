@@ -1,0 +1,5 @@
+{% set badgeSize = size|default('normal') %}
+{% set badgeShape = shape|default('pill') %}
+{% set badgeVariant = variant|default('fill') %}
+
+{{ include('partials/ui/badge', { label, type: 'new', size: badgeSize, shape: badgeShape, variant: badgeVariant, badgeClasses, shouldAnnounce }) }}

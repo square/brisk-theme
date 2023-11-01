@@ -1,0 +1,13 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/badge.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/badge.css') }}
+{% endif %}
+
+{# type - info, new, low-stock, out-of-stock, sale #}
+{# size - small, normal #}
+{# variant - fill, outline, text #}
+{# shape - rounded, pill, squared #}
+<div class="ui-badge ui-badge--{{ type|default('info') }} ui-badge--{{ size|default('normal') }} ui-badge--{{ variant|default('fill') }} ui-badge--{{ shape|default('pill') }} {{ badgeClasses }}" {% if shouldAnnounce %}aria-live="polite"{% endif %}>
+    {{ label }}
+</div>

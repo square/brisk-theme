@@ -1,0 +1,55 @@
+{% set filterOptions = [] %}
+
+{% if fulfillmentSupport.SHIPMENT %}
+    {% set filterOptions = filterOptions|merge([{ label: 'partials.components.store.filters.options.fulfillments.shipping'|localize, property: 'SHIPMENT' }]) %}
+{% endif %}
+{% if fulfillmentSupport.PICKUP %}
+    {% set filterOptions = filterOptions|merge([{ label: 'partials.components.store.filters.options.fulfillments.pickup'|localize, property: 'PICKUP' }]) %}
+{% endif %}
+
+{# Sale and deals #}
+{% set filterOptions = filterOptions|merge([{
+    label: 'partials.components.store.filters.options.item_status.in_stock'|localize,
+    property: 'in_stock',
+}, {
+    label: 'partials.components.store.filters.options.item_status.on_sale'|localize,
+    property: 'on_sale',
+}]) %}
+
+{% if filterOptions|length %}
+    {% for filter in filterOptions %}
+        {% set fulfillments = (currentValue.fulfillments|split(','))|default([]) %}
+        {% set itemStatus = (currentValue.item_status|split(','))|default([]) %}
+        {% set isCurrentValueSelected = (filter.property in itemStatus) or fulfillments|filter(fulfillment => fulfillment == filter.property)|length %}
+
+        {% if filter.property == 'PICKUP' %}
+            {% embed 'partials/form/checkbox-single' with {
+                label: filter.label,
+                size: 'large',
+                singleCheckboxClasses: 'filters__advanced-location',
+            } %}
+                {% block data %}
+                    {% if isCurrentValueSelected %}
+                        model: true,
+                    {% endif %}
+                    ...advancedFilterOption('{{ filter.property }}'),
+                {% endblock %}
+                {% block sublabel %}
+                    {{ async('choose-location-link', chooseLocationTemplateId, { props: { button_size: 'medium', action: 'openChooseLocation()' } }) }}
+                {% endblock %}
+            {% endembed %}
+        {% else %}
+            {% embed 'partials/form/checkbox-single' with {
+                label: filter.label,
+                size: 'large',
+            } %}
+                {% block data %}
+                    {% if isCurrentValueSelected %}
+                        model: true,
+                    {% endif %}
+                    ...advancedFilterOption('{{ filter.property }}'),
+                {% endblock %}
+            {% endembed %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

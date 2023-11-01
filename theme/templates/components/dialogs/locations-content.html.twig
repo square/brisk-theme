@@ -1,0 +1,60 @@
+{% set locationsDialogDataId = 'locations-dialog-data-' ~ random() %}
+<script id="{{ locationsDialogDataId }}" type="application/json">
+    {{ {
+        fulfillment,
+        locationId,
+        alpineStoreName: alpine_store_name,
+    }|json_encode }}
+</script>
+
+<div
+    x-data="locationsDialog('{{ locationsDialogDataId }}')"
+    class="locations-dialog__content"
+    :class="{ 'locations-dialog__content--empty': !hasSelectedItem() && !hasLocations() }"
+>
+    <h4 class="heading-4" x-text="hasSelectedItem() || hasLocations() ? '{{ 'templates.components.dialogs.locations.has_locations.label'|localize }}' : '{{ 'templates.components.dialogs.locations.empty_locations.label'|localize }}'"></h4>
+
+    <div class="ui-dialog__section locations-dialog__input">
+        {% embed 'partials/form/autocomplete' with {
+            label: 'templates.components.dialogs.locations.input.label'|localize,
+            placeholder: 'templates.components.dialogs.locations.input.placeholder'|localize,
+        } %}
+            {% block data %}
+                ...itemSuggestions('{{ square.site.user_id }}', '{{ square.site.classic_site_id }}'),
+            {% endblock %}
+        {% endembed %}
+        <p
+            x-show="hasSelectedItem()"
+            class="locations-dialog__options-label"
+        >
+            {{ 'templates.components.dialogs.locations.results.label'|localize }}: <span aria-live="polite" role="status" x-text="`${getLocationsCount()} found`" class="locations-dialog__options-sublabel"></span>
+        </p>
+    </div>
+
+    <div x-ref="locations" class="locations-dialog__options">
+        <div class="locations-dialog__options--scroll custom-scrollbar">
+            <div class="custom-scrollbar-inner">
+                {{ async('location-selector', 'location-selector', { props: { locations } }) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "fulfillment": {
+        "type": "string"
+    },
+    "locationId": {
+        "type": "string",
+        "optional": true
+    },
+    "locations": {
+        "type": "array"
+    },
+    "alpine_store_name": {
+        "type": "string",
+        "optional": true
+    }
+}
+{% endschema %}

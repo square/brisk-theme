@@ -1,0 +1,24 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/rating.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/rating.css') }}
+{% endif %}
+
+<div class="ui-rating">
+    <div class="ui-rating__average">
+    {% for i in range(1, 5) %}
+        {% if average >= max(0, i - 0.25) %}
+            {{ include('partials/ui/icon', { name: 'star', arialHidden: true, filled: true, iconClasses: 'ui-rating__star' }) }}
+        {% elseif average > (i - 0.75) %}
+            {{ include('partials/ui/icon', { name: 'star_rate_half', arialHidden: true, iconClasses: 'ui-rating__star' }) }}
+        {% else %}
+            {{ include('partials/ui/icon', { name: 'star', arialHidden: true, iconClasses: 'ui-rating__star' }) }}
+        {% endif %}
+    {% endfor %}
+    </div>
+    {% if block('content') %}
+    <div class="ui-rating__content">
+        {% block content %}{% endblock %}
+    </div>
+    {% endif %}
+</div>

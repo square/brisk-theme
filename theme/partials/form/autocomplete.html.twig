@@ -1,0 +1,81 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/text.css' | asset_url }}" rel="stylesheet" />
+    <link href="{{ 'css/form/autocomplete.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/form/autocomplete.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/form/text.css') }}
+    {{ register_asset('css/form/autocomplete.css') }}
+    {{ register_asset('js/form/autocomplete.js', { defer: false }) }}
+{% endif %}
+
+{% set labelId = 'autocomplete-' ~ random() %}
+{% set asyncTemplatePath = asyncTemplate|default('tooltip-menu') %}
+
+<div
+    x-data="{ ...autocompleteForm('{{ labelId }}__dropdown'), {% block data %}{% endblock %} }"
+    x-init="initAutocomplete()"
+    class="form-fieldset form-text form-text--{{ size|default('large') }} form-text--standalone"
+    :class="{'form-text--invalid': isInvalid }"
+    @click.outside="toggleDropdown(false)"
+>
+    {% if hideLabel == false %}
+    <label
+        for="{{ labelId }}__input"
+        class="form-fieldset__label"
+    >
+        <span class="form-fieldset__label--primary">
+            <span>{{ label }}</span>
+        </span>
+    </label>
+    {% endif %}
+
+    <span class="form-autocomplete__input">
+        <input
+            id="{{ labelId }}__input"
+            aria-owns="{{ labelId }}__dropdown"
+            aria-autocomplete="list"
+            :aria-expanded="isDropdownOpen"
+            autocomplete="off"
+            autocapitalize="none"
+            role="combobox"
+            x-ref="input"
+            x-model="model"
+            type="{{ type|default('text') }}"
+            name="{{ inputName|default(label) }}"
+            placeholder="{{ placeholder|default('') }}"
+            {% if min %}min="{{ min }}"{% endif %}
+            {% if max %}max="{{ max }}" maxlength="{{ max }}"{% endif %}
+            {% if isRequired %}required{% endif %}
+            class="form-text__input"
+            @focus="toggleDropdown(true)"
+            @input.debounce="onInputChange"
+            @keydown.down="onKeyDown"
+            @keydown.tab="toggleDropdown(false)"
+        >
+        <span
+            x-show="isLoadingAutocomplete"
+            class="form-autocomplete__input-loader"
+        >
+            {{ include('partials/ui/loader') }}
+        </span>
+        {% embed 'partials/ui/tooltip' with {
+            id: labelId ~ '__dropdown',
+            variant: 'menu',
+            asyncTemplateName: 'autocomplete-tooltip-menu',
+            asyncProps: { items: [], menuTriggerRef: 'input' },
+        } %}
+            {% block data %}
+                init() {
+                    this.$watch('model', (value) => {
+                        const formattedInputValue = this.getInputValue(value);
+                        if (formattedInputValue !== value) {
+                            this.autocompleteValue = value;
+                        }
+                    });
+                },
+            {% endblock %}
+        {% endembed %}
+    </span>
+
+    {{ include('partials/form/fieldset-error') }}
+</div>

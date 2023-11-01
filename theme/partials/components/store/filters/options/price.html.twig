@@ -1,0 +1,14 @@
+<div class="filters__advanced-options-row">
+    {% embed 'partials/form/price-range' with { label: 'partials.components.store.filters.options.price'|localize } %}
+        {% block data %}
+            init() {
+                this.$watch('model', (value) => {
+                    this.advancedFilterPriceRange = value;
+                });
+                this.$watch('advancedFilterPriceRange', (value) => {
+                    this.model = value;
+                });
+            },
+        {% endblock %}
+    {% endembed %}
+</div>

@@ -1,0 +1,98 @@
+<html lang="{{ square.site.language }}">
+    <head>
+        {% block head %}
+            {{ include('partials/helpers/seo') }}
+
+            {{ head_trackers() }}
+
+            <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+            {% if config.theme.shouldUseThemeStyles %}
+                {{ include('partials/helpers/font-assets') }}
+                {{ include('partials/helpers/css-variables') }}
+            {% else %}
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+                </style>
+            {% endif %}
+
+            {{ include('partials/helpers/grid') }}
+
+            <link href="{{ 'css/variables.css' | asset_url }}" rel="stylesheet" />
+            <link href="{{ 'css/base.css' | asset_url }}" rel="stylesheet" />
+            <link href="{{ 'css/transitions.css' | asset_url }}" rel="stylesheet" />
+            <link href="{{ 'css/form/shared.css' | asset_url }}" rel="stylesheet" />
+
+            <!-- Must be included before alpine -->
+            <script type="module">
+                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v4.1.0') | asset_url }}";
+                window.SquareWebSDK = new SDK({{ sdk_init_config() }});
+            </script>
+
+            <!-- Must be included before core file -->
+            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/async-alpine@1.x.x/dist/async-alpine.script.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+            <script src="https://unpkg.com/@popperjs/core@2"></script>
+
+            <!-- product spin -->
+            <script src="https://scripts.sirv.com/sirv.js" async></script>
+
+            <script src="{{ 'js/helpers/utils.js' | asset_url }}"></script>
+            <script src="{{ 'js/helpers/tooltip.js' | asset_url }}"></script>
+
+            {{ async_templates_script() }}
+        {% endblock %}
+    </head>
+
+    {% set defaultFulfillment = (square.store.default_item_fulfillment|split(',')[0])|default('SHIPMENT') %}
+
+    {% if config.theme.shouldUseThemeStyles %}
+        {% set themeContainerWidth = max(square.site.styles.spacing.site_width, 1200) %}
+        {% set themeColors = square.site.styles.colors %}
+        {% set themeBadges = square.site.styles.component_styles.badges %}
+        {% set themeButtons = square.site.styles.component_styles.buttons %}
+    {% endif %}
+
+    <body
+        x-data="global('global-data')"
+        class="has-header-padding"
+        :class="{ 'is-mobile': $store.global.isMobile, 'is-scrolling-disabled': $store.global.isPageScrollDisabled }"
+        :style="bodyStyles"
+        @pageshow.window="$store.global.isLoadingPage = false"
+        @resize.window="onWindowResize"
+    >
+        <script id="global-data" type="application/json">
+            {{ {
+                userId: square.site.user_id,
+                locale: square.store.locale,
+                currency: square.store.currency,
+                defaultFulfillment,
+            }|json_encode }}
+        </script>
+
+        {{ include('partials/helpers/snippets') }}
+        {{ global_section('header') }}
+        <main>
+            {% block main_content %}
+
+            {% endblock %}
+        </main>
+
+        {{ global_section('footer') }}
+
+        <div x-show="$store.global.isLoadingPage" class="page-loader">
+            <div class="ui-loader--overlay">{{ include('partials/ui/loader') }}</div>
+        </div>
+
+        {{ body_trackers() }}
+
+        {# Must be included after document is ready #}
+        <script src="{{ 'js/global.js' | asset_url }}"></script>
+    </body>
+</html>

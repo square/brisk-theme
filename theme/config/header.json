@@ -1,0 +1,54 @@
+{
+    "placeholder_nav_links": [
+        {
+            "label": "Link 1",
+            "href": "/",
+            "type": "external",
+            "menu_image_url": "images/placeholder.jpeg",
+            "children": [
+                {
+                    "label": "Child Link 1",
+                    "type": "external",
+                    "href": "/",
+                    "children": [
+                        {
+                            "label": "Grandchild Link 1",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Grandchild Link 2",
+                            "type": "external",
+                            "href": "/"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Link 2",
+            "href": "/",
+            "type": "external",
+            "menu_image_url": "images/placeholder.jpeg",
+            "children": [
+                {
+                    "label": "Child Link 2",
+                    "type": "external",
+                    "href": "/",
+                    "children": [
+                        {
+                            "label": "Grandchild Link 3",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Grandchild Link 4",
+                            "type": "external",
+                            "href": "/"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

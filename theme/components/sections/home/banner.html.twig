@@ -1,0 +1,18 @@
+{% set bannerSrc = image.src|asset_url %}
+{{ include('partials/components/banner', {
+    fullwidth: true,
+    bannerImage: { uri: bannerSrc, urls: { 640: bannerSrc ~ '?width=640', 1280: bannerSrc ~ '?width=1280' } },
+    bannerSizes: { sm: 640, lg: 1280 },
+}) }}
+
+<div class="home-page__marquee-wrapper">
+    {{ include('partials/ui/marquee', { content: 'components.sections.home.banner.marquee'|localize }) }}
+</div>
+
+{% schema %}
+{
+    "image": {
+        "type": "image"
+    }
+}
+{% endschema %}

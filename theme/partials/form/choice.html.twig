@@ -1,0 +1,72 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/choice.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/form/choice.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/form/choice.css') }}
+    {{ register_asset('js/form/choice.js', { defer: false }) }}
+{% endif %}
+
+{% set placeholderText = 'partials.form.placeholder'|localize %}
+{% set labelId = 'choice-label-' ~ random() %}
+{% set isGridVariant = variant == 'grid' %}
+
+<fieldset
+    x-data="{ isInvalid: false, model: {% if multiSelect %}[]{% else %}''{% endif %}, {% block data %}{% endblock %} }"
+    {% if parentModel %}x-modelable="model"{% endif %}
+    {% if isRequired %}aria-required="true"{% endif %}
+    :aria-invalid="isInvalid"
+    aria-describedby="{{ labelId }}"
+    role="{% if multiSelect %}group{% else %}radiogroup{% endif %}"
+    class="form-fieldset form-choice--{{ variant|default('normal') }}"
+    :class="{'form-choice--invalid': isInvalid }"
+    {% block attributes %}{% endblock %}
+>
+    {% if hideLabel == false %}
+        {{ include('partials/form/fieldset-label') }}
+    {% endif %}
+
+    <div class="form-choice__options">
+        {% for option in options %}
+            {% set optionId = random() %}
+            {% set modelName = 'model' %}
+            {% if parentModel %}
+                {% set modelName = parentModel %}
+            {% endif %}
+
+            <div
+                x-data="choiceForm('{{ option.value }}')"
+                x-effect="updateChoiceOption({{ modelName }})"
+                class="form-choice__button"
+                :class="{ 'form-choice__button--selected': isSelected, 'form-choice__button--disabled': isDisabled }"
+            >
+                <label
+                    x-ref="label"
+                    for="choice-{{ optionId }}"
+                    class="form-choice__label"
+                >
+                    <span class="form-choice__label-text">
+                        {% if option.icon %}
+                            {{ include('partials/ui/icon', { name: option.icon, ariaHidden: true }) }}
+                        {% endif %}
+                        <span>{{ option.label }}</span>
+                    </span>
+                    <input
+                        id="choice-{{ optionId }}"
+                        x-ref="input"
+                        x-model="{{ modelName }}"
+                        type="{% if multiSelect %}checkbox{% else %}radio{% endif %}"
+                        {% if multiSelect == false %}name="{{ label }}"{% endif %}
+                        value="{{ option.value }}"
+                        :disabled="isDisabled"
+                        class="form-choice__input"
+                    >
+                </label>
+            </div>
+        {% endfor %}
+        {% if block('customOption') %}
+            <div class="form-choice__button form-choice__button--custom">{% block customOption %}{% endblock %}</div>
+        {% endif %}
+    </div>
+
+    {% block after %}{% endblock %}
+</fieldset>

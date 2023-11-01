@@ -1,0 +1,58 @@
+{% extends "layouts/theme" %}
+
+{% block main_content %}
+
+{{ register_asset('css/templates/store/item.css') }}
+{{ register_asset('js/templates/store/item.js', { defer: false }) }}
+
+{# Checks if the default fulfillment is enabled #}
+{% if item.fulfillment.methods[defaultFulfillment] == false %}
+    {% set enabledFulfillment = item.fulfillment.methods|filter(value => value)|keys|first %}
+    {% if enabledFulfillment %}
+        {% set defaultFulfillment = enabledFulfillment %}
+    {% endif %}
+{% endif %}
+
+{% set locations = location_list({}) %}
+
+{# Sets default location by fulfillment #}
+{% if locations|length %}
+    {% set defaultLocation = locations|filter(location => location[defaultFulfillment|lower].enabled)|first %}
+    {% if defaultFulfillment == 'SHIPMENT' %}
+        {% set defaultLocation = locations|filter(location => location.is_shipping_location)|first %}
+    {% endif %}
+    {% set defaultLocationId = defaultLocation.id|default(locations[0].id) %}
+{% endif %}
+
+{% set isManualFulfillment = item.fulfillment.methods.MANUAL == true %}
+
+<div
+    class="container page item-page"
+    x-data="productPage('{{ defaultFulfillment }}', '{{ defaultLocationId }}')"
+>
+    {{ include('components/sections/store/item/main', { product: item, locations }) }}
+
+    {# retrieve similar items, filter out the currently viewed item #}
+    {% set similarItems = similar_items(item) | filter(sim_item => sim_item.id != item.id ) %}
+    {% if similarItems|length %}
+        {{ include('components/sections/store/item/upsell', { products: similarItems, heading: 'templates.store.item.upsell.heading'|localize }) }}
+    {% endif %}
+
+    {# retrieve popular items, filter out the currently viewed item #}
+    {% set popularItems = popular_items() | filter(pop_item => pop_item.id != item.id ) %}
+    {% if popularItems|length %}
+        {{ include('components/sections/store/item/cross-sell', { products: popularItems, heading: 'templates.store.item.cross_sell.heading'|localize }) }}
+    {% endif %}
+
+    {{ include('components/sections/store/item/reviews', { product: item, heading: 'templates.store.item.reviews.heading'|localize }) }}
+</div>
+
+{% endblock %}
+
+{% schema %}
+{
+    "item": {
+        "type": "item"
+    }
+}
+{% endschema %}

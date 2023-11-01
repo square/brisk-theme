@@ -1,0 +1,38 @@
+.banner-image {
+    position: relative;
+    max-height: 160px;
+    overflow: hidden;
+    border-radius: var(--theme-border-radius-image);
+}
+
+@media (min-width: 700px) {
+    .banner-image {
+        max-height: 320px;
+    }
+}
+
+@media (min-width: 992px) {
+    .banner-image {
+        max-height: 520px;
+    }
+}
+
+.banner-image--fullwidth {
+    height: 463px;
+    max-height: initial;
+    border-radius: 0;
+}
+
+.banner-image::after {
+    display: block;
+    padding-bottom: 50%;
+    content: "";
+}
+
+.banner-image img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% top;
+}

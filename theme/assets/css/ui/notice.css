@@ -1,0 +1,43 @@
+.ui-notice {
+    --theme-notice-normal-text-color: var(--theme-emphasis-text-color);
+    --theme-notice-info-text-color: var(--theme-color-neutral-90);
+    --theme-notice-success-text-color: var(--theme-success-text-color);
+    --theme-notice-warning-text-color: var(--theme-warning-text-color);
+    --theme-notice-critical-text-color: var(--theme-critical-text-color);
+
+    display: flex;
+    gap: var(--space-half);
+    align-items: top;
+    font-size: var(--theme-font-size-minus-1);
+    line-height: var(--theme-font-size-minus-1-line-height);
+}
+
+.ui-notice--normal {
+    color: var(--theme-notice-normal-text-color);
+}
+
+.ui-notice--info {
+    color: var(--theme-notice-info-text-color);
+}
+
+.ui-notice--success {
+    color: var(--theme-notice-success-text-color);
+}
+
+.ui-notice--warning {
+    color: var(--theme-notice-warning-text-color);
+}
+
+.ui-notice--critical {
+    color: var(--theme-notice-critical-text-color);
+}
+
+.ui-notice__icon {
+    margin-top: var(--space-half);
+    font-size: 16px;
+}
+
+.ui-notice__message {
+    font-weight: var(--theme-font-weight-light);
+    white-space: wrap;
+}

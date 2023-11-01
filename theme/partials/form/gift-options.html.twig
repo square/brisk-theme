@@ -1,0 +1,72 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/gift-options.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/form/gift-options.css') }}
+{% endif %}
+
+{% set labelId = 'gift-options-label-' ~ random() %}
+
+<fieldset
+    x-data="{ isGiftOptionsVisible: false, giftMessageModel: '', giftWrapModel: false, {% block data %}{% endblock %} }"
+    aria-describedby="{{ labelId }}"
+    role="group"
+    class="form-fieldset"
+>
+    <label
+        id="{{ labelId }}"
+        class="form-fieldset__label"
+    >
+        {{ option.name }}
+    </label>
+
+    {% embed 'partials/form/checkbox-single' with {
+        label: 'partials.components.store.item.modifiers.gift_options.checkbox_label'|localize,
+        parentModel: 'isGiftOptionsVisible',
+    } %}
+        {% block data %}
+            init() {
+                this.$watch('isGiftOptionsVisible', (value) => {
+                    if (!value) {
+                        this.giftWrapModel = false;
+                    }
+                });
+            },
+        {% endblock %}
+    {% endembed %}
+
+    <div
+        class="form-gift-options"
+        x-show="isGiftOptionsVisible"
+        x-collapse
+    >
+        {% for option in options|sort((a, b) => a.type == 'gift_message' ? 0 : 1) %}
+            {% if option.type is same as ('GIFT_MESSAGE') %}
+                <div class="form-gift-option__message">
+                    {{ include('partials/form/textarea', {
+                        label: option.name,
+                        min: option.min_selected_modifiers,
+                        max: option.max_selected_modifiers,
+                        placeholder: 'Optional gift message',
+                        hideLabel: true,
+                        parentModel: 'giftMessageModel',
+                    }) }}
+                </div>
+            {% elseif option.type is same as ('GIFT_WRAP') %}
+                <div
+                    class="form-gift-option__gift-wrap"
+                >
+                    {% set modifier = option.modifiers[0] %}
+                    {% set price = '' %}
+                    {% if modifier.price_money.amount > 0 %}
+                        {% set price = modifier.price_money.amount|format_currency(modifier.price_money.currency) %}
+                    {% endif %}
+                    {{ include('partials/form/checkbox-single', {
+                        label: option.name,
+                        sublabel: price,
+                        parentModel: 'giftWrapModel',
+                    }) }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</fieldset>

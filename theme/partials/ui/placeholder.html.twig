@@ -1,0 +1,19 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/placeholder.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/placeholder.css') }}
+{% endif %}
+
+<div
+    x-data="{ isLoading: false, {% block data %}{% endblock %} }"
+    class="ui-placeholder"
+>
+    <div x-show="isLoading" class="ui-placeholder__loader">
+        {{ include('partials/ui/loader') }}
+    </div>
+    {% embed 'partials/ui/icon' with { name: icon|default('image'), iconClasses: 'ui-placeholder__icon' } %}
+        {% block attributes %}
+            x-show="!isLoading"
+        {% endblock %}
+    {% endembed %}
+</div>

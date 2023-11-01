@@ -1,0 +1,34 @@
+{% set lastOrderAt = preorder.availability_cutoff_at|date('F j, Y g:i a') %}
+{% set availableDates = preorder.start_at|date('F j, Y') %}
+{% if preorder.end_at %}
+    {% set availableDates = availableDates ~ ' - ' ~ preorder.end_at|date('F j, Y') %}
+{% endif %}
+<div class="ui-dialog__icon">
+    {{ include('partials/ui/icon', { name: 'calendar_today' }) }}
+</div>
+<h4 class="heading-4">
+    {{ 'templates.components.dialogs.preorder.heading'|localize }}
+</h4>
+<div class="ui-dialog__section">
+    <span class="title">{{ 'templates.components.dialogs.preorder.order_at.title'|localize }}</span>
+    <p>{{ lastOrderAt }}</p>
+</div>
+<div class="ui-dialog__section">
+    <span class="title">
+        {{ 'templates.components.dialogs.preorder.available_dates.title'|localize({ fulfillment: fulfillment|capitalize }) }}
+    </span>
+    <ul class="bulleted-list">
+        <li>{{ availableDates }}</li>
+    </ul>
+</div>
+
+{% schema %}
+{
+    "preorder": {
+        "type": "array"
+    },
+    "fulfillment": {
+        "type": "string"
+    }
+}
+{% endschema %}

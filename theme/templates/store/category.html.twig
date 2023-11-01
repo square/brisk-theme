@@ -1,0 +1,69 @@
+{% extends "layouts/theme" %}
+
+{% block main_content %}
+
+{{ register_asset('css/templates/store/category.css') }}
+
+<div class="container page category-page">
+    <div class="category-page__heading">
+        {# Breadcrumb #}
+        {% set breadcrumb = [] %}
+        {% for ancestor in category.ancestors %}
+            {% set breadcrumb = [{ title: ancestor.name, link: category_link(ancestor.square_online_id) }]|merge(breadcrumb) %}
+        {% endfor %}
+        {% set breadcrumb = [{ title: 'templates.store.shop.breadcrumb.shop'|localize, link: link({ type: 'shopAll' }) }]|merge(breadcrumb) %}
+        {{ include('partials/ui/breadcrumb', { breadcrumb: breadcrumb }) }}
+
+        {# Category name #}
+        <h2 class="heading-2">{{ category.name }}</h2>
+    </div>
+
+    {# Category image #}
+    {% set categoryImage = category.images[0] %}
+    {% if categoryImage %}
+        {{ include('partials/components/banner', {
+            bannerImage: { uri: categoryImage.absolute_uri, urls: categoryImage.absolute_urls },
+            bannerAlt: category.name,
+        }) }}
+    {% endif %}
+
+    {# Sort options #}
+    {% set sortOptions = [
+        { label: 'templates.store.shop.sort_options.category_order'|localize, value: 'category_order' },
+        { label: 'templates.store.shop.sort_options.popularity_score'|localize, value: 'popularity_score' },
+        { label: 'templates.store.shop.sort_options.created_date'|localize, value: 'created_date' },
+        { label: 'templates.store.shop.sort_options.price_desc'|localize, value: 'price_desc' },
+        { label: 'templates.store.shop.sort_options.price_asc'|localize, value: 'price_asc' },
+        { label: 'templates.store.shop.sort_options.name_asc'|localize, value: 'name_asc' },
+        { label: 'templates.store.shop.sort_options.name_desc'|localize, value: 'name_desc' },
+    ] %}
+
+    {# Category options #}
+    {% set globalOptions = category_options(category.square_online_id) %}
+
+    {# Category items #}
+    {{ include('components/sections/store/item-list', {
+        items,
+        category,
+        categories,
+        category_hierarchy: category_hierarchy(null, category.square_online_id),
+        sort_options: sortOptions,
+        global_options: globalOptions,
+    }) }}
+</div>
+
+{% endblock %}
+
+{% schema %}
+{
+    "category": {
+        "type": "category"
+    },
+    "items": {
+        "type": "item-list"
+    },
+    "categories": {
+        "type": "category-list"
+    }
+}
+{% endschema %}

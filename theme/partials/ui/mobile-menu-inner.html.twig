@@ -1,0 +1,128 @@
+{% set navPanes = [] %}
+{% set topLinkOptions = [] %}
+{% set defaultPaneId = 'id_top_pane' %}
+
+{% for topLink in nav_links %}
+    {% set topLinkId = 'id_' ~ topLink.label %}
+    {% set topLinkOptions = topLinkOptions|merge([{ label: topLink.label, href: link(topLink), paneId: topLinkId, hasChildren: topLink.children|length > 0 }]) %}
+
+    {% if topLink.children|length %}
+        {% set subLinkOptions = [] %}
+        {% for subLink in topLink.children %}
+            {% set subLinkId = topLinkId ~ '_' ~ subLink.label %}
+            {% set subLinkOptions = subLinkOptions|merge([{ label: subLink.label, href: link(subLink), parentId: topLinkId, paneId: subLinkId, hasChildren: subLink.children|length > 0 }]) %}
+
+            {% set childOptions = [] %}
+            {% for child in subLink.children %}
+                {% set childId = subLinkId ~ '_' ~ child.label %}
+                {% set childOptions = childOptions|merge([{ label: child.label, href: link(child), parentId: subLinkId, paneId: childId, hasChildren: child.children|length > 0 }]) %}
+
+                {% set grandChildOptions = [] %}
+                {% for grandChild in child.children %}
+                    {% set grandChildId = childId ~ '_' ~ grandChild.label %}
+                    {% set grandChildOptions = grandChildOptions|merge([{ label: grandChild.label, href: link(grandChild), parentId: childId, paneId: grandChildId, hasChildren: grandChild.children|length > 0 }]) %}
+                {% endfor %}
+
+                {% if grandChildOptions|length %}
+                    {% set navPanes = navPanes|merge([{ level: 2, children: grandChildOptions, parentId: childId, parentLabel: child.label }]) %}
+                {% endif %}
+            {% endfor %}
+
+            {% if childOptions|length %}
+                {% set navPanes = navPanes|merge([{ level: 1, children: childOptions, parentId: subLinkId, parentLabel: subLink.label }]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if subLinkOptions|length %}
+            {% set navPanes = navPanes|merge([{ level: 0, children: subLinkOptions, parentId: topLinkId, parentLabel: topLink.label }]) %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{% if topLinkOptions|length %}
+    {% set navPanes = navPanes|merge([{ level: 0, children: topLinkOptions, parentId: defaultPaneId, parentLabel: square.site.title }]) %}
+{% endif %}
+
+<script type="application/json" id="mobile-menu-links">
+    {{ { navPanes, defaultPaneId } | json_encode }}
+</script>
+
+<nav class="mobile-menu__nav" x-data="nestedMenu('mobile-menu-links')">
+    <div class="mobile-menu__button-wrapper">
+        {% embed 'partials/ui/button' with {
+            size: 'medium',
+            variant: 'neutral',
+            buttonClasses: 'mobile-menu__back-button',
+            action: 'backToParentLevel()'
+        } %}
+            {% block attributes %}
+                x-show="isBackButtonVisible"
+            {% endblock %}
+            {% block content %}
+                {{ include('partials/ui/icon', { name: 'arrow_back', iconAlt: 'shared.buttons.prev'|localize }) }}
+            {% endblock %}
+        {% endembed %}
+
+        {# Close Mobile Menu button #}
+        {% embed 'partials/ui/button' with {
+            size: 'medium',
+            variant: 'neutral',
+            buttonClasses: 'mobile-menu__close-button',
+            action: 'closeMobileMenu()'
+        } %}
+            {% block attributes %}
+                x-show="!isBackButtonVisible"
+            {% endblock %}
+            {% block content %}
+                {{ include('partials/ui/icon', { name: 'close', iconClasses:'site-header__icon', iconAlt: 'shared.buttons.close'|localize }) }}
+            {% endblock %}
+        {% endembed %}
+    </div>
+    <div class="mobile-menu__pane-wrapper">
+        {% for pane in navPanes %}
+            <div id="pane_{{ pane.parentId }}"
+                x-show="currentPane == '{{ pane.parentId }}'"
+                x-transition:enter="slide-right-enter-active"
+                x-transition:enter-start="slide-right-enter-from"
+                x-transition:enter-end="slide-right-enter-to"
+                x-transition:leave="slide-right-leave-active"
+                x-transition:leave-start="slide-right-leave-from"
+                x-transition:leave-end="slide-right-leave-to" 
+                class="mobile-menu__nav-pane"
+            >
+                <div class="heading-4 mobile-menu__nav-heading">
+                    {{ pane.parentLabel }}
+                </div>
+                <ul class="mobile-menu__nav-list">
+                    {% for linkOption in pane.children %}
+                        <li class="mobile-menu__nav-list-item">
+                            {% if linkOption.hasChildren %}
+                                {% embed 'partials/ui/button' with {
+                                    icon: 'navigate_next',
+                                    size: 'large',
+                                    variant: 'row',
+                                    fullWidth: true,
+                                    buttonClasses: 'mobile-menu__option',
+                                    action: 'openPane(\'' ~ linkOption.paneId ~ '\')',
+                                } %}
+                                {% block content %}
+                                    <span>{{ linkOption.label }}</span>
+                                {% endblock %}
+                            {% endembed %}
+                            
+                            {% else %}
+                                <a 
+                                    class="mobile-menu__option ui-button--row"
+                                    href="{{ linkOption.href }}"
+                                >
+                                    <span>{{ linkOption.label }}
+                                    </span>
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+</nav>

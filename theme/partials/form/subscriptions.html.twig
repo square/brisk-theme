@@ -1,0 +1,231 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/subscriptions.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/form/subscriptions.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/form/subscriptions.css') }}
+    {{ register_asset('js/form/subscriptions.js', { defer: false }) }}
+{% endif %}
+
+{% set options = [{ label: 'partials.form.subscriptions.one_time.label'|localize, value: 'one-time' }] %}
+{% set subscriptionCards = {} %}
+{% set DAYS = 'days' %}
+{% set WEEKS = 'weeks' %}
+{% set MONTHS = 'months' %}
+{% set YEARS = 'years' %}
+{% set SUBSCRIPTION_CADENCES = {
+    DAILY: {
+        label: 'partials.form.subscriptions.daily'|localize,
+        definition: {
+            cadence: DAYS,
+            frequency: 1,
+        },
+    },
+    WEEKLY: {
+        label: 'partials.form.subscriptions.weekly'|localize,
+        definition: {
+            cadence: WEEKS,
+            frequency: 1,
+        },
+    },
+    EVERY_TWO_WEEKS: {
+        label: 'partials.form.subscriptions.every_two_weeks'|localize,
+        definition: {
+            cadence: WEEKS,
+            frequency: 2,
+        },
+    },
+    THIRTY_DAYS: {
+        label: 'partials.form.subscriptions.every_x_days'|localize({ days: 30 }),
+        definition: {
+            cadence: DAYS,
+            frequency: 30,
+        },
+    },
+    SIXTY_DAYS: {
+        label: 'partials.form.subscriptions.every_x_days'|localize({ days: 60 }),
+        definition: {
+            cadence: DAYS,
+            frequency: 60,
+        },
+    },
+    NINETY_DAYS: {
+        label: 'partials.form.subscriptions.every_x_days'|localize({ days: 90 }),
+        definition: {
+            cadence: DAYS,
+            frequency: 90,
+        },
+    },
+    MONTHLY: {
+        label: 'partials.form.subscriptions.monthly'|localize,
+        definition: {
+            cadence: MONTHS,
+            frequency: 1,
+        },
+    },
+    EVERY_TWO_MONTHS: {
+        label: 'partials.form.subscriptions.every_x_months'|localize({ months: 2 }),
+        definition: {
+            cadence: MONTHS,
+            frequency: 2,
+        },
+    },
+    QUARTERLY: {
+        label: 'partials.form.subscriptions.every_x_months'|localize({ months: 3 }),
+        definition: {
+            cadence: MONTHS,
+            frequency: 3,
+        },
+    },
+    EVERY_FOUR_MONTHS: {
+        label: 'partials.form.subscriptions.every_x_months'|localize({ months: 4 }),
+        definition: {
+            cadence: MONTHS,
+            frequency: 4,
+        },
+    },
+    EVERY_SIX_MONTHS: {
+        label: 'partials.form.subscriptions.every_x_months'|localize({ months: 6 }),
+        definition: {
+            cadence: MONTHS,
+            frequency: 6,
+        },
+    },
+    ANNUAL: {
+        label: 'partials.form.subscriptions.yearly'|localize,
+        definition: {
+            cadence: YEARS,
+            frequency: 1,
+        },
+    },
+    EVERY_TWO_YEARS: {
+        label: 'partials.form.subscriptions.every_x_years'|localize({ years: 2 }),
+        definition: {
+            cadence: YEARS,
+            frequency: 2,
+        },
+    },
+} %}
+
+{% for subscription in subscriptions %}
+    {% set plan = subscription.subscription_plan_data %}
+    {% set options = options|merge([{ label: plan.name, value: subscription.id }]) %}
+    {% set cards = [] %}
+    {% set allowPausing = false %}
+
+    {% for variation in plan.subscription_plan_variations %}
+        {% set config = variation.subscription_plan_variation_data.configuration %}
+        {% set allowPausing = (config.buyer_max_cycles_to_skip and config.buyer_max_cycles_to_skip > 0) or config.buyer_allow_indefinite_pausing %}
+        {% set phase = variation.subscription_plan_variation_data.phases[0] %}
+        {% if phase %}
+            {% set cards = cards|merge([{
+                label: SUBSCRIPTION_CADENCES[phase.cadence].label,
+                value: variation.id,
+                phase,
+                allowPausing,
+            }]) %}
+        {% endif %}
+    {% endfor %}
+
+    {% set subscriptionCards = subscriptionCards|merge({ (subscription.id): { options: cards, allowPausing } }) %}
+{% endfor %}
+
+{% set subscriptionsFormDataId = 'subscriptions-form-data-' ~ random() %}
+<script id="{{ subscriptionsFormDataId }}" type="application/json">
+    {{ {
+        cadences: SUBSCRIPTION_CADENCES,
+        subscriptionCards,
+        currency: product.price.currency,
+        translations: {
+            billingCycleOneDay: 'partials.form.subscriptions.billing_cycle.one_day'|localize,
+            billingCycleDays: 'partials.form.subscriptions.billing_cycle.days'|localize,
+            billingCycleOneWeek: 'partials.form.subscriptions.billing_cycle.one_week'|localize,
+            billingCycleWeeks: 'partials.form.subscriptions.billing_cycle.weeks'|localize,
+            billingCycleOneMonth: 'partials.form.subscriptions.billing_cycle.one_month'|localize,
+            billingCycleMonths: 'partials.form.subscriptions.billing_cycle.months'|localize,
+            billingCycleOneYear: 'partials.form.subscriptions.billing_cycle.one_year'|localize,
+            billingCycleYears: 'partials.form.subscriptions.billing_cycle.years'|localize,
+        },
+    }|json_encode }}
+</script>
+
+<div
+    x-data="subscriptionForm('{{ subscriptionsFormDataId }}')"
+>
+    {% embed 'partials/form/radio' with {
+        hideLabel: true,
+        options,
+        radioClasses: 'form-field__subscriptions'
+    } %}
+        {% block data %}
+            model: 'one-time',
+            init() {
+                this.$watch('model', (value) => {
+                    this.formData.subscription = { id: value, value: null };
+                    this.isSubscriptionSelected = value !== 'one-time';
+                });
+            },
+        {% endblock %}
+        {% block after %}
+            {% for id, card in subscriptionCards %}
+                {% set defaultPhase = card.options[0].phase %}
+                <div
+                    class="form-subscription__card"
+                    x-show="isOpen"
+                    x-data="subscriptionCard('{{ id }}', '{{ card.options[0].value }}')"
+                    x-collapse
+                >
+                    <div class="form-subscription__card-content">
+                        {% set discount = defaultPhase.pricing.discounts[0] %}
+                        {% set subscriptionPrice = null %}
+                        {% if defaultPhase.pricing.regular %}
+                            {% set subscriptionPrice = { regular_high: defaultPhase.pricing.regular, regular_low: defaultPhase.pricing.subscription, currency: product.price.currency } %}
+                        {% endif %}
+
+                        {% if discount.discount_type == 'FIXED_PERCENTAGE' %}
+                            <div class="form-subscription__badge">
+                                {{ async('single-badge', 'subscription-badge-' ~ id, { props: { template: 'emphasis', label: discount.percentage ~ '% off', shouldAnnounce: true } }) }}
+                            </div>
+                        {% endif %}
+
+                        {% if card.options|length > 1 %}
+                        <div class="form-subscription__select">
+                            {% embed 'partials/form/select' with {
+                                hideLabel: false,
+                                hideSublabel: true,
+                                label: 'Subscription',
+                                options: card.options,
+                                parentModel: 'subscriptionModel',
+                            } %}
+                                {% block secondaryLabel %}
+                                    {% if subscriptionPrice %}
+                                    <div class="form-subscription__price">
+                                        {{ async('price', 'subscription-price-' ~ id, { props: { price: subscriptionPrice, size: 'small' } }) }}
+                                    </div>
+                                    {% endif %}
+                                {% endblock %}
+                            {% endembed %}
+                        </div>
+                        {% else %}
+                            <p class="form-subscription__single-option">{{ card.options[0].label }}</p>
+                            {% if subscriptionPrice %}
+                            {{ async('price', 'subscription-price-' ~ id, { props: { price: subscriptionPrice, size: 'small' } }) }}
+                            {% endif %}
+                        {% endif %}
+
+                        <p
+                            x-show="getSubscriptionDuration('{{ id }}')"
+                            x-text="getSubscriptionBillingCycleLabel('{{ id }}')"
+                            class="form-subscription__info form-subscription__info--duration"
+                        ></p>
+
+                        {% if card.allowPausing %}
+                            <p class="form-subscription__info">{{ 'partials.form.subscriptions.pause_or_cancel'|localize }}</p>
+                        {% else %}
+                            <p class="form-subscription__info">{{ 'partials.form.subscriptions.cancel'|localize }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+</div>

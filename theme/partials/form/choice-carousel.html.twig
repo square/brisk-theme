@@ -1,0 +1,58 @@
+{% if request.async == true %}
+    <link href="{{ 'css/form/choice.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/form/choice-carousel.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/form/choice.css') }}
+    {{ register_asset('js/form/choice-carousel.js', { defer: false }) }}
+{% endif %}
+
+{% set placeholderText = 'partials.form.placeholder'|localize %}
+{% set labelId = 'choice-label-' ~ random() %}
+{% set isGridVariant = variant == 'grid' %}
+
+<div
+    x-data="{ isInvalid: false, model: '', {% block data %}{% endblock %} }"
+>
+    {% embed 'partials/ui/carousel' with { navPosition: 'overlay' } %}
+        {% block data %}
+            itemCount: 3,
+            itemWidth: {{ itemWidth|default(0) }}
+        {% endblock %}
+        {% block carouselItems %}
+            {% for option in options %}
+                {% set optionId = random() %}
+                <div
+                    x-data="choiceCarouselForm('{{ option.value }}')"
+                    x-effect="updateChoiceCarouselOption()"
+                    class="form-choice__button"
+                    :class="{ 'form-choice__button--selected': model === '{{ option.value }}', 'form-choice__button--disabled': isDisabled }"
+                    :style="itemWidth && itemWidth > 0 ? { width: itemWidth + 'px' } : {}"
+                >
+                    <label
+                        x-ref="label"
+                        for="choice-{{ optionId }}"
+                        class="form-choice__label"
+                    >
+                        <span class="form-choice__label-text">
+                            {% if option.icon %}
+                                {{ include('partials/ui/icon', { name: option.icon, ariaHidden: true }) }}
+                            {% endif %}
+                            <span>{{ option.label }}</span>
+                        </span>
+                        <input
+                            id="choice-{{ optionId }}"
+                            x-ref="input"
+                            x-model="model"
+                            type="radio"
+                            name="{{ label }}"
+                            value="{{ option.value }}"
+                            :checked="model === '{{ option.value }}'"
+                            :disabled="isDisabled"
+                            class="form-choice__input"
+                        >
+                    </label>
+                </div>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+</div>

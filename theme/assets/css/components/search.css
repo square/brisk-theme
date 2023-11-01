@@ -1,0 +1,128 @@
+.search__input-wrapper {
+    position: relative;
+}
+
+.search__input-loader {
+    position: absolute;
+    right: var(--space-x2);
+    bottom: 50%;
+    transform: translateY(50%);
+}
+
+.search-results {
+    --search-result-tiles-gap: var(--space-x3);
+
+    display: flex;
+    flex-direction: column-reverse;
+    margin-top: var(--space-x4);
+}
+
+@media (min-width: 992px) {
+    .search-results {
+        flex-direction: row;
+        gap: var(--space-x5);
+        
+        /* Containerize above mobile */
+        margin-top: var(--space-x5);
+    }
+}
+
+.search-results__category-list-wrapper {
+    flex: 0 0 240px;
+    margin-top: var(--space-x5);
+}
+
+@media (min-width: 992px) {
+    .search-results__category-list-wrapper {
+        margin-top: 0;
+    }
+}
+
+.search-results__category-list-header {
+    font-weight: var(--theme-font-weight-light);
+    font-size: var(--theme-font-size-minus-2);
+    text-transform: uppercase;
+}
+
+.search-results__category-list {
+    margin-top: var(--space-x2);
+}
+
+.search-results__category-list-item {
+    list-style: none;
+}
+
+.search-results__category-link {
+    display: block;
+    padding: var(--space-half) 0;
+    text-decoration: none;
+}
+
+.search-results__category-link:hover {
+    text-decoration: underline;
+}
+
+.search-results__tiles-list {
+    margin-top: var(--space);
+}
+
+.search-results__tiles-list .collection__tile--carousel {
+    width: calc(50vw - var(--search-result-tiles-gap));
+}
+
+.search-results__tiles-list .ui-carousel__slider {
+    gap: var(--search-result-tiles-gap);
+}
+
+@media (min-width: 992px) {
+    .search-results__tiles-list-wrapper {
+        flex: 1 0 auto;
+    }
+
+    .search-results__tiles-list .collection__tile--carousel {
+        width: calc(25% - var(--search-result-tiles-gap));
+    }
+
+    .search-results .ui-carousel__navigation--overlay {
+        display: none;
+    }
+}
+
+.search-results__tiles-list-header {
+    line-height: var(--theme-line-height-base);
+}
+
+.search-dialog {
+    padding: 0 var(--space);
+}
+
+.search-dialog__header {
+    display: grid;
+    grid-template-areas: 'logo close' 'searchbar searchbar';
+    gap: var(--space-x2);
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media (min-width: 992px) {
+    .search-dialog__header {
+        grid-template-areas: 'logo searchbar close';
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.search-dialog__logo {
+    grid-area: logo;
+}
+
+.search-dialog__close {
+    grid-area: close;
+}
+
+.search-dialog__searchbar {
+    grid-area: searchbar;
+}
+
+.search-dialog__close-button {
+    margin-left: auto;
+}

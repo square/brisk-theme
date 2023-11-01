@@ -1,0 +1,138 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/carousel.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/ui/carousel.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/ui/carousel.css') }}
+    {{ register_asset('js/ui/carousel.js', { defer: false }) }}
+{% endif %}
+
+{% set carouselId = 'carousel-' ~ random() %}
+{% set carouselNavPosition = navPosition|default('top') %}
+{% set isFullWidthVariant = carouselVariant == 'full-bleed' %}
+
+<div>
+   <div
+      x-data="{ ...carouselUI(Boolean({{ isFullWidthVariant }})), {% block data %}{% endblock %}}"
+      x-init="initCarousel()"
+      class="ui-carousel__container"
+      :class="{ 'container--fullwidth': $store.global.isMobile }"
+   >
+      {% if title or  carouselNavPosition == 'top' %}
+      <div
+         class="ui-carousel__header"
+         :class="{ 'container--fullwidth-padding': $store.global.isMobile }"
+      >
+         {% if title %}
+            <div id="{{ carouselId }}__title">{{ title }}</div>
+         {% endif %}
+         {% if carouselNavPosition == 'top' %}
+            <div class="ui-carousel__navigation--top">
+               {% embed 'partials/ui/button' with {
+                  variant: 'text',
+                  size: 'small',
+                  icon: 'navigate_before',
+                  iconAlt: 'partials.ui.carousel.chevron_left'|localize,
+                  action: 'scrollToPrev',
+               } %}
+                     {% block attributes %}
+                        :disabled="isAtBeginning()"
+                     {% endblock %}
+                  {% endembed %}
+               {% embed 'partials/ui/button' with {
+                  variant: 'text',
+                  size: 'small',
+                  icon: 'navigate_next',
+                  iconAlt: 'partials.ui.carousel.chevron_right'|localize,
+                  action: 'scrollToNext',
+               } %}
+                  {% block attributes %}
+                     :disabled="isAtEnd()"
+                  {% endblock %}
+               {% endembed %}
+            </div>
+         {% endif %}
+      </div>
+      {% endif %}
+
+      {% if carouselNavPosition == 'overlay' %}
+         <div
+            x-ref="carouselOverlayNav"
+            class="ui-carousel__navigation--overlay"
+            :class="{ 'ui-carousel__navigation--hide-disabled': !canScroll() }"
+            :style="{ top: carouselNavPosition }"
+            :hidden="$store.global.isMobile"
+         >
+            {% embed 'partials/ui/button' with {
+               variant: 'text',
+               size: 'small',
+               icon: 'navigate_before',
+               iconAlt: 'partials.ui.carousel.chevron_left'|localize,
+               action: 'scrollToPrev',
+            } %}
+                  {% block attributes %}
+                     :disabled="isAtBeginning()"
+                  {% endblock %}
+               {% endembed %}
+            {% embed 'partials/ui/button' with {
+               variant: 'text',
+               size: 'small',
+               icon: 'navigate_next',
+               iconAlt: 'partials.ui.carousel.chevron_right'|localize,
+               action: 'scrollToNext',
+            } %}
+               {% block attributes %}
+                  :disabled="isAtEnd()"
+               {% endblock %}
+            {% endembed %}
+         </div>
+      {% endif %}
+
+      <div
+         x-ref="carousel"
+         role="group"
+         aria-labelledby="{{ carouselId }}__title"
+         {% if carouselId %}id="{{ carouselId }}"{% endif %}
+         class="ui-carousel"
+         :class="{ 'ui-carousel--full-bleed': Boolean({{ isFullWidthVariant }}) }"
+         @mousedown.prevent="onCarouselDragStart"
+         @mouseup.prevent="onCarouselDragEnd"
+         @mousemove.prevent="onCarouselDrag"
+         {% if isFullWidthVariant == false %}
+            @scroll="onCarouselScroll"
+         {% endif %}
+         @resize.window.debounce="onResize"
+      >
+         <div
+            x-ref="carouselSlider"
+            class="ui-carousel__slider {{ carouselClasses }}"
+            :class="{ 'ui-carousel__slider--full-bleed': Boolean({{ isFullWidthVariant }}), 'ui-carousel__slider--dragging': isDragging }"
+            :style="getCarouselSliderStyles()"
+            {% if isFullWidthVariant %}
+               @scroll="onCarouselScroll"
+            {% endif %}
+         >
+            {% block carouselItems %}{% endblock %}
+         </div>
+      </div>
+
+      {% if carouselNavPosition == 'indicator' %}
+         <div
+            class="ui-carousel__navigation--indicator"
+            :hidden="$store.global.isMobile"
+         >
+            {% for i in 0..(navigationItems|length - 1) %}
+               <span
+                  role="button"
+                  tabindex="0"
+                  class="ui-carousel__navigation--indicator-dot"
+                  :class="{ 'ui-carousel__navigation--indicator-dot-selected': currentIndex == {{ i }} }"
+                  @click.stop="goToSlide({{ i }})"
+                  @keydown.enter.prevent="goToSlide({{ i }})"
+               >
+                  <span class="visually-hidden">slide {{ i }}</span>
+               </span>
+            {% endfor %}
+         </div>
+      {% endif %}
+   </div>
+</div>

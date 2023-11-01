@@ -1,0 +1,95 @@
+{% set advancedFiltersId = 'filters-dialog-' ~ random() %}
+{% set chooseLocationTemplateId = advancedFiltersId ~ '-choose-pickup-location' %}
+
+<script id="dialog-advanced-filter-data" type="application/json">
+    {{ {
+        chooseLocationTemplateId,
+        currentValue: current_value|default({}),
+        categoryHierarchy: category_hierarchy,
+        parentCategory: category|default({}),
+    }|json_encode }}
+</script>
+
+<div x-data="itemList('item-list-data')">
+    <div
+        x-data="advancedFilter('dialog-advanced-filter-data')"
+        class="filters__dialog"
+    >
+        <div class="filters__dialog-scrollbar custom-scrollbar">
+            <div class="filters__dialog-scrollbar-inner custom-scrollbar-inner">
+                <h4 class="heading-4 filters__dialog-heading">{{ 'templates.components.dialogs.advanced_filters.heading'|localize }}</h4>
+                <div class="filters__dialog-status">
+                    <p x-text="getAllSelectedFiltersCountText()"></p>
+                    {% embed 'partials/ui/button' with {
+                            label: 'shared.buttons.reset'|localize,
+                            variant: 'text',
+                            action: 'resetAdvancedFiltersAndCategories()',
+                    } %}
+                        {% block attributes %}
+                            :disabled="getAllSelectedFiltersCount() === 0"
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+
+                <div class="filters__dialog-options">
+                    <template x-if="!dialogExists()">
+                        <template x-teleport="body">
+                            {{ include('partials/ui/dialog') }}
+                        </template>
+                    </template>
+
+                    <div class="filters__dialog-options-row">
+                        {# Fulfillments and item status #}
+                        {{ include('partials/components/store/filters/options/fulfillments-and-status', { chooseLocationTemplateId, fulfillmentSupport: fulfillment_support }) }}
+                    </div>
+
+                    {% if category_hierarchy|length %}
+                    <div class="filters__dialog-options-row filters__dialog-options-row--categories">
+                        <div class="form-fieldset__label filters__dialog-heading">
+                            {{ 'templates.components.dialogs.advanced_filters.categories.heading'|localize }}
+                        </div>
+                        <div class="filters__category-dropdown">
+                            {{ include('partials/components/store/filters/options/categories-selector', { categoryHierarchy: category_hierarchy, parentCategory: category, showScrollbar: false }) }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if global_options|length %}
+                        {# Size filter #}
+                        {{ include('partials/components/store/filters/options/size', { globalOptions: global_options }) }}
+
+                        {# Swatches filter #}
+                        {{ include('partials/components/store/filters/options/swatches', { globalOptions: global_options, tooltipBoundary: '.ui-dialog__content' }) }}
+                    {% endif %}
+
+                    {# Price range #}
+                    {{ include('partials/components/store/filters/options/price') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "current_value": {
+        "type": "array"
+    },
+    "category": {
+        "type": "array",
+        "optional": true
+    },
+    "category_hierarchy": {
+        "type": "array"
+    },
+    "global_options": {
+        "type": "array",
+        "optional": true
+    },
+    "fulfillment_support": {
+        "type": "array",
+        "optional": true,
+        "default": []
+    }
+}
+{% endschema %}

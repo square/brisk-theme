@@ -1,0 +1,11 @@
+.search-page {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x3);
+}
+
+.search-page__heading {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space);
+}

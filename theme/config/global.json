@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "header": {
+      "template": "header"
+    },
+    "footer": {
+      "template": "footer"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+.text-section__heading {
+    margin-bottom: var(--space-x2);
+    text-align: center;
+}
+
+.text-section__desc {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+@media (min-width: 700px) {
+    .text-section__desc {
+        width: 80%;
+        max-width: 784px;
+    }
+}

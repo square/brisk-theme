@@ -1,0 +1,98 @@
+<div x-data="galleryDialog('{{ activeIndex }}')">
+    <div x-ref="galleryDialogHeader" class="gallery-dialog__header">
+        <div class="gallery-dialog__back">
+            {{ include('partials/ui/button', {
+                variant: 'text',
+                size: 'small',
+                label: 'templates.components.dialogs.gallery.back_button'|localize,
+                icon: 'arrow_back_ios',
+                action: '$store.dialog.closeDialog',
+            }) }}
+        </div>
+    </div>
+    <div
+        class="gallery-dialog__content"
+        :style="getContainerStyles()"
+    >
+        <div
+            x-ref="galleryThumbnailsScroll"
+            x-show="!$store.global.isMobile"
+            role="region"
+            class="gallery-thumbnails"
+        >
+            {% for image in images %}
+                {% set uri = image.absolute_uri %}
+                {% if image.format == 'spin' %}
+                    {% set uri = image.absolute_urls[160] %}
+                {% endif %}
+                {% embed 'partials/ui/image' with {
+                    image: { uri, urls: image.absolute_urls, format: image.format },
+                    imageSizes: { xs: 80, sm: 160 },
+                    altText: image.name|default(name ~ ' thumbnail ' ~ loop.index),
+                    showPlaceholder: true,
+                } %}
+                    {% block attributes %}
+                        role="button"
+                        tabindex="0"
+                        class="gallery-thumbnails__figure"
+                        :class="{ 'gallery-thumbnails__figure--active': activeImageIndex == '{{ loop.index0 }}' }"
+                        @click.stop="handleThumbnailClick('{{ loop.index0 }}')"
+                        @keydown.enter.prevent="handleThumbnailClick('{{ loop.index0 }}')"
+                    {% endblock %}
+                {% endembed %}
+            {% endfor %}
+        </div>
+        <div
+            x-ref="galleryImagesScroll"
+            role="presentation"
+            class="gallery-images gallery-images-scrollbar custom-scrollbar"
+            @scroll="onGalleryImagesScroll"
+        >
+            <div class="custom-scrollbar-inner">
+                <div x-show="isLoadingImages" class="gallery-images--loading">
+                    {{ include('partials/ui/loader') }}
+                </div>
+                {% for image in images %}
+                    {% if image.format == 'spin' %}
+                        <figure class="gallery-images__figure">
+                            {{ include('partials/ui/image-spin', {
+                                source: image.absolute_uri,
+                                altText: image.name|default(name ~ ' ' ~ loop.index),
+                            }) }}
+                        </figure>
+                    {% else %}
+                        {% embed 'partials/ui/image' with {
+                            image: { uri: image.absolute_uri, urls: image.absolute_urls },
+                            imageSizes: { xs: 600, sm: 600, md: 800, lg: 990 },
+                            altText: image.name|default(name ~ ' ' ~ loop.index),
+                            showPlaceholder: true,
+                        } %}
+                            {% block data %}
+                                onLoadComplete(url) { this.onImageLoaded(url) }
+                            {% endblock %}
+                            {% block attributes %}
+                                class="gallery-images__figure"
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% schema %}
+{
+    "images": {
+        "type": "array"
+    },
+    "name": {
+        "type": "string",
+        "optional": true
+    },
+    "activeIndex": {
+        "type": "string"
+    }
+}
+{% endschema %}

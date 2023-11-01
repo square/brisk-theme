@@ -1,0 +1,23 @@
+{% for availableFont in square.site.styles.typography.available_fonts %}
+
+    {# Will only preload woff #}
+    {% for fontFormat, fileUrl in availableFont.url %}
+        {% if fontFormat == "woff" %}
+            <link rel="preload" as="font" href="{{fileUrl}}" type="font/{{fontFormat}}" crossorigin="anonymous">
+        {% endif %}
+    {% endfor %}
+
+    {# Fonts have an array of URLs, one for each format #}
+    <style>
+        @font-face {
+            font-family: "{{ availableFont.font_name }}";
+            src: {% for fontFormat, fileUrl in availableFont.url -%}
+                url("{{ fileUrl }}") {% if fontFormat != '' -%} format("{{ fontFormat }}") {%- endif -%}{%- if loop.last %};{% else %},{% endif %}
+
+            {% endfor -%}
+            font-weight: {{ availableFont.weight }};
+            font-display: fallback;
+            font-style: normal;
+        }
+    </style>
+{% endfor %}

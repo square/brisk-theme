@@ -1,0 +1,1 @@
+We can place Theme-specific config data in a JSON file and access it from within our theme

@@ -1,0 +1,44 @@
+<span class="product-reviews__customer-detail row row--divider">
+    <div
+        class="product-reviews__rating col"
+        {{ firstColumnAttrs }}
+    >
+        <div x-show="$store.global.isMobile" class="product-reviews__customer">
+            <div class="product-reviews__customer-rating">
+                {{ include('partials/ui/rating', { average: review.rating }) }}
+                {% if review.verified_purchase %}
+                    <span class="product-reviews__customer-verified">
+                        {{ include('partials/ui/icon', { name: 'verified' }) }}
+                        {{ 'partials.components.store.item.review.verified'|localize }}
+                    </span>
+                {% endif %}
+            </div>
+            <span class="product-reviews__customer-name">{{ 'partials.components.store.item.review.name_and_date'|localize({ name: review.reviewer_name, date: review.updated_at|date('F j, Y') }) }}</span>
+        </div>
+        <div x-show="!$store.global.isMobile" class="product-reviews__customer">
+            {{ include('partials/ui/rating', { average: review.rating }) }}
+            <span class="product-reviews__customer-name">{{ 'partials.components.store.item.review.name_and_date'|localize({ name: review.reviewer_name, date: review.updated_at|date('F j, Y') }) }}</span>
+            {% if review.verified_purchase %}
+                <span class="product-reviews__customer-verified">
+                    {{ include('partials/ui/icon', { name: 'verified' }) }}
+                    {{ 'partials.components.store.item.review.verified'|localize }}
+                </span>
+            {% endif %}
+        </div>
+    </div>
+    <div
+        class="product-reviews__comment col"
+        {{ secondColumnAttrs }}
+    >
+        <p>{{ review.content }}</p>
+        {% block images %}{% endblock %}
+    </div>
+</span>
+
+{% schema %}
+{
+    "review": {
+        "type": "array"
+    }
+}
+{% endschema %}

@@ -1,0 +1,130 @@
+{% if product.modifier_lists|length %}
+
+{{ register_asset('js/components/store/item/modifiers.js', { defer: false }) }}
+
+<div class="item-page__modifiers">
+    {% set giftOptions = [] %}
+
+    {% for option in product.modifier_lists %}
+        {% set itemModifierDataId = 'item-modifier-data-' ~ random() %}
+
+        {% set isRequired = (option.min_selected_modifiers and option.max_selected_modifiers) >= 1 %}
+        {% set isOptional = isRequired == false %}
+        {% set unlimitedChoicesAllowed = (option.min_selected_modifiers == 0) and (option.max_selected_modifiers == 0) %}
+        {% set sublabel = '' %}
+
+        {% if unlimitedChoicesAllowed %}
+            {% set sublabel = 'partials.components.store.item.modifiers.choices_allowed.unlimited'|localize %}
+        {% elseif option.min_selected_modifiers == option.max_selected_modifiers %}
+            {% set sublabel = 'partials.components.store.item.modifiers.choices_allowed.some'|localize({ count: option.min_selected_modifiers }) %}
+        {% elseif (option.min_selected_modifiers > 0) and (option.max_selected_modifiers > 0) %}
+            {% set sublabel = 'partials.components.store.item.modifiers.choices_allowed.min_max'|localize({ min: option.min_selected_modifiers, max: option.max_selected_modifiers }) %}
+        {% elseif option.max_selected_modifiers > 0 %}
+            {% set sublabel = 'partials.components.store.item.modifiers.choices_allowed.some'|localize({ max: option.max_selected_modifiers }) %}
+        {% elseif option.min_selected_modifiers > 0 %}
+            {% set sublabel = 'partials.components.store.item.modifiers.choices_allowed.some'|localize({ max: option.min_selected_modifiers }) %}
+        {% endif %}
+
+        {% if option.type is same as ('CHOICE') %}
+            {% set options = [] %}
+            {% for modifier in option.modifiers %}
+                {% set price = '' %}
+                {% if modifier.price_money.amount > 0 %}
+                    {% set price = modifier.price_money.amount|format_currency(modifier.price_money.currency) %}
+                {% endif %}
+                {% set options = options|merge([{ label: modifier.name, value: modifier.id, sublabel: price, image: modifier.image }]) %}
+            {% endfor %}
+
+            {% if isRequired %}
+                <script id="{{ itemModifierDataId }}" type="application/json">
+                    {{ {
+                        productId: product.square_online_id,
+                        property: option.id,
+                        options,
+                    }|json_encode }}
+                </script>
+
+                {# Radio options #}
+                {% embed 'partials/form/radio' with {
+                    label: option.name,
+                    sublabel,
+                    options: options,
+                    variant: 'row',
+                    isRequired,
+                } %}
+                    {% block data %}
+                        ...itemModifier('{{ itemModifierDataId }}')
+                    {% endblock %}
+                {% endembed %}
+            {% else %}
+                <script id="{{ itemModifierDataId }}" type="application/json">
+                    {{ {
+                        productId: product.square_online_id,
+                        property: option.id,
+                        options,
+                    }|json_encode }}
+                </script>
+
+                {# Checkboxes #}
+                {% embed 'partials/form/checkbox' with {
+                    label: option.name,
+                    options: options,
+                    variant: 'row',
+                    isRequired,
+                } %}
+                    {% block data %}
+                        ...itemModifier('{{ itemModifierDataId }}')
+                    {% endblock %}
+                {% endembed %}
+            {% endif %}
+        {% elseif option.type is same as ('TEXT') %}
+            <script id="{{ itemModifierDataId }}" type="application/json">
+                {{ {
+                    productId: product.square_online_id,
+                    property: option.id,
+                }|json_encode }}
+            </script>
+
+            {# Text input #}
+            {% embed 'partials/form/text' with {
+                label: option.name,
+                min: option.min_selected_modifiers,
+                max: option.max_selected_modifiers,
+                isRequired,
+            } %}
+                {% block data %}
+                    ...itemModifier('{{ itemModifierDataId }}')
+                {% endblock %}
+            {% endembed %}
+        {% elseif (option.type is same as ('GIFT_MESSAGE')) or (option.type is same as ('GIFT_WRAP')) %}
+            {% set optionKey = option.type %}
+            {% set giftOptions = giftOptions|merge([option]) %}
+        {% endif %}
+    {% endfor %}
+
+    {# Gift options #}
+    {% if giftOptions is not empty %}
+        {% set itemModifierDataId = 'item-gift-modifier-data-' ~ random() %}
+        <script id="{{ itemModifierDataId }}" type="application/json">
+            {{ {
+                productId: product.square_online_id,
+                property: 'giftOptions',
+                options: giftOptions,
+            }|json_encode }}
+        </script>
+
+        {% set giftOptionsToggle = {
+            name: 'partials.components.store.item.modifiers.gift_options.label'|localize,
+            options: [{ label: 'partials.components.store.item.modifiers.gift_options.checkbox_label'|localize, value: false }],
+        } %}
+        {% embed 'partials/form/gift-options' with {
+            option: giftOptionsToggle,
+            options: giftOptions,
+        } %}
+            {% block data %}
+                ...itemModifier('{{ itemModifierDataId }}')
+            {% endblock %}
+        {% endembed %}
+    {% endif %}
+</div>
+{% endif %}

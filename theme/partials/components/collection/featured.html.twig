@@ -1,0 +1,26 @@
+{% set isCategory = item.type == 'CATEGORY' %}
+
+<a
+    class="col collection__tile collection__tile--featured collection__tile--{{ collectionLayout }}"
+    {{ columnAttrs }}
+    href="{% if isCategory %}{{ category_link(item.square_online_id) }}{% else %}{{ item_link(item.square_online_id) }}{% endif %}"
+    @click.throttle="(e) => { if (isDragging) { e.preventDefault() } }"
+>
+    {% set itemImage = item.images[0] %}
+    {% set imageSizes = { xs: 599 } %}
+    <div
+        class="collection__tile-image collection__tile-image--rectangle {% if isCarousel %}ui-carousel-slide{% endif %}"
+        {% if isMixedTemplates %}:style="collectionImageHeight > 0 ? { height: collectionImageHeight + 'px' } : {}"{% endif %}
+    >
+        {% if itemImage %}
+            {{ include('partials/ui/image', { image: { uri: itemImage.absolute_uri, urls: itemImage.absolute_urls }, imageSizes, altText: item.name, showPlaceholder: true }) }}
+        {% else %}
+            {{ include('partials/ui/placeholder') }}
+        {% endif %}
+    </div>
+    <div class="collection__tile-details">
+        <div class="collection__tile-title">
+            {{ buttonText|default(item.name) }}
+        </div>
+    </div>
+</a>

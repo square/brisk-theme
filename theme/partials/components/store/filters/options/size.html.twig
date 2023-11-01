@@ -1,0 +1,22 @@
+{% set formattedSizeOptions = [] %}
+{% set sizeOptions = globalOptions|filter(option => option.name|lower == 'size' or option.name|lower == 'sizes')|first %}
+{% if sizeOptions.choices %}
+    <div class="filters__advanced-options-row">
+        {% for choice in sizeOptions.choices %}
+            {% set key = choice.name|lower %}
+            {% set label = choice.name|slice(0, 2)|upper %}
+            {% if config.theme.mapSizeToLocalizeKey[key] %}
+                {% set label = config.theme.mapSizeToLocalizeKey[key]|localize %}
+            {% endif %}
+            {% set formattedSizeOptions = formattedSizeOptions|merge([{ label: label, value: choice.id }]) %}
+        {% endfor %}
+
+        {{ include('partials/form/choice', {
+            label: 'partials.components.store.filters.options.size'|localize,
+            hideSublabel: true,
+            multiSelect: true,
+            options: formattedSizeOptions,
+            parentModel: 'advancedFilterOptionSets',
+        }) }}
+    </div>
+{% endif %}

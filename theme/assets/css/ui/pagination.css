@@ -1,0 +1,64 @@
+.ui-pagination {
+    --theme-pagination-height: var(--theme-button-small-height);
+    --theme-pagination-border-color: var(--theme-border-color);
+    --theme-pagination-sublabel-color: var(--theme-body-text-color);
+
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x2);
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media (min-width: 700px) {
+    .ui-pagination {
+        flex-flow: row;
+        gap: 0;
+    }
+}
+
+.ui-pagination__navigation {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: var(--space);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+@media (min-width: 700px) {
+    .ui-pagination__navigation {
+        width: auto;
+    }
+}
+
+.ui-pagination__button {
+    position: relative;
+    width: 100%;
+}
+
+@media (min-width: 700px) {
+    .ui-pagination__button {
+        width: auto;
+    }
+}
+
+.ui-pagination .ui-button {
+    font-weight: var(--theme-font-weight-light);
+    border-radius: var(--theme-border-radius);
+}
+
+.ui-pagination__per-page {
+    order: 1;
+}
+
+@media (min-width: 700px) {
+    .ui-pagination__per-page {
+        order: initial;
+    }
+}
+
+.ui-pagination__button-sublabel {
+    color: var(--theme-pagination-sublabel-color);
+    font-weight: var(--theme-font-weight-medium);
+}

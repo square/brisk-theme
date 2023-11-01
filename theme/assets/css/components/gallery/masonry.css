@@ -1,0 +1,55 @@
+.masonry {
+    --single-item-max-height: 692px;
+    --row-item-max-height: 335px;
+
+    display: flex;
+    flex-flow: row wrap;
+    counter-reset: brick;
+}
+
+.masonry__item {
+    display: inline-block;
+    width: 100%;
+    max-height: var(--single-item-max-height);
+    overflow: hidden;
+    border: 1px solid var(--theme-border-color);
+    border-radius: var(--theme-border-radius-image);
+    cursor: zoom-in;
+}
+
+.masonry__item:not(:last-child) {
+    margin-bottom: var(--space-x2);
+}
+
+.masonry__item--failed {
+    cursor: initial;
+}
+
+.masonry__item-placeholder {
+    position: relative;
+    cursor: initial;
+}
+
+.masonry__item--row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-x2);
+    align-items: stretch;
+    width: 100%;
+    max-height: var(--row-item-max-height);
+    margin-bottom: var(--space-x2);
+}
+
+.masonry__item--row .masonry__item {
+    min-width: calc(50% - var(--space-x2));
+    height: 100%;
+}
+
+.masonry__item a {
+    display: block;
+}
+
+.masonry__item img {
+    width: 100%;
+    min-height: 100%;
+}

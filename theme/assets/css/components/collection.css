@@ -1,0 +1,233 @@
+.collection--tiles {
+    --gutter-column: var(--space-x2);
+}
+
+.collection__tile {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+
+.collection__tile-name {
+    font-weight: var(--theme-font-weight-light);
+    font-size: var(--theme-h6-font-size);
+    line-height: var(--theme-h6-line-height);
+    transition: opacity 0.2s ease-in;
+}
+
+.collection__tile-image {
+    position: relative;
+    margin-bottom: var(--space-x2);
+    overflow: hidden;
+    border: 1px solid var(--theme-border-color);
+    border-radius: var(--theme-border-radius-image);
+    transition: height 0.2s ease;
+}
+
+.collection__tile-image::after {
+    display: block;
+    content: "";
+}
+
+.collection__tile-image--square::after {
+    padding-bottom: 100%;
+}
+
+.collection__tile-image--tall::after {
+    padding-bottom: 140%;
+}
+
+.collection__tile-image--rectangle::after {
+    padding-bottom: 68%;
+}
+
+.collection__tile-image .ui-placeholder,
+.collection__tile-image img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.collection__tile-image img {
+    object-fit: cover;
+    object-position: 50% 0%;
+}
+
+.collection__tile-image-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+}
+
+.collection__tile-has-secondary-image {
+    background-color: var(--theme-color-neutral-0);
+}
+
+.collection__tile--has-quick-add--hover .collection__tile-image-hover,
+.collection__tile-image:hover .collection__tile-image-hover {
+    opacity: 1;
+}
+
+.collection__tile-quick-add {
+    position: absolute;
+    bottom: var(--space-x2);
+    left: var(--space-x2);
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x2);
+    width: calc(100% - var(--space-x4));
+    padding: var(--space-x2) var(--space-x3);
+    text-align: center;
+    background-color: var(--theme-body-color);
+    border-radius: var(--theme-border-radius-card);
+    box-shadow: 0px 4px 16px 0px var(--theme-color-neutral-10-alpha);
+}
+
+.collection__tile-quick-add-status {
+    align-items: center;
+}
+
+.collection__tile-quick-add-loading {
+    display: inline-flex;
+    gap: var(--space);
+    align-items: center;
+}
+
+.collection__tile-quick-add-failed {
+    color: var(--theme-critical-text-color);
+}
+
+.collection__tile-details {
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    opacity: 1;
+    transition: opacity 0.2s ease-in;
+}
+
+/* featured item */
+.collection__tile--featured .collection__tile-details {
+    position: absolute;
+    bottom: var(--space-x4);
+    left: 0;
+    align-items: center;
+    width: 100%;
+}
+
+.collection__tile--featured .collection__tile-title {
+    box-sizing: border-box;
+    width: calc(100% - var(--space-x6));
+    padding: var(--space-x2) var(--space-x3);
+    text-align: center;
+    background-color: var(--theme-body-color);
+    border-radius: var(--theme-border-radius-card);
+}
+
+@media (min-width: 700px) {
+    .collection__tile--featured .collection__tile-title {
+        width: auto;
+    }
+}
+
+.collection__tile-swatches {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    padding-bottom: var(--space);
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+}
+
+.collection__tile-swatches .form-fieldset__label {
+    font-weight: calc(var(--theme-font-weight-light) - 100);
+}
+
+@media (min-width: 700px) {
+    .collection__tile--has-quick-add .collection__tile-details {
+        min-height: 87px;
+    }
+
+    .collection__tile--has-quick-add--hover .collection__tile-swatches {
+        opacity: 1;
+    }
+
+    .collection__tile--has-quick-add--hover .collection__tile-details > div:not(.collection__tile-swatches) {
+        position: relative;
+        z-index: -1;
+        opacity: 0;
+    }
+}
+
+.collection__tile-badges {
+    margin-bottom: var(--space);
+}
+
+/* simple item */
+.collection__tile--simple .collection__tile-details {
+    position: absolute;
+    bottom: var(--space-x4);
+    width: 100%;
+}
+
+.collection__tile--simple .collection__tile-button-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* carousel */
+.collection--carousel {
+    flex-wrap: nowrap;
+}
+
+.collection__tile--carousel {
+    width: calc(100vw / 12 * 8);
+}
+
+@media (min-width: 700px) {
+    .collection__tile--carousel {
+        width: calc(100vw / 12 * 4);
+    }
+}
+
+@media (min-width: 1200px) {
+    .collection__tile--carousel {
+        width: calc(100vw / 12 * 3);
+    }
+}
+
+/* masonry */
+.collection--masonry {
+    display: grid;
+    grid-gap: var(--space-x2);
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.collection__tile--masonry:nth-child(6n+1),
+.collection__tile--masonry:nth-child(6n+2),
+.collection__tile--masonry:nth-child(6n+5),
+.collection__tile--masonry:nth-child(6n+6) {
+    grid-row-end: span 1;
+    grid-column-end: span 2;
+}
+
+.collection__tile--masonry:nth-child(6n+3),
+.collection__tile--masonry:nth-child(6n+4) {
+    grid-row-end: span 2;
+    grid-column-end: span 4;
+}
+
+.collection--masonry .collection__tile-image {
+    margin-bottom: 0;
+}
+
+.collection__tile--masonry .collection__tile-details {
+    display: none;
+}

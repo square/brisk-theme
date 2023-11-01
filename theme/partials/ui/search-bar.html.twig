@@ -1,0 +1,26 @@
+{# Search Bar #}
+
+<div 
+    class="search-bar"
+>
+    <form 
+        class="search-bar__input-form"
+        action="/s/search"
+    >
+        <div class="search-bar__input-wrapper" @input:clear="reset">
+            {% embed "partials/form/text" with {
+                label: 'components.search.input.label'|localize,
+                placeholder: 'components.search.input.placeholder'|localize,
+                hideLabel: true,
+                showClearButton: true,
+                inputName: 'q',
+                size: 'medium',
+                wrapperClasses: 'form-text--standalone search-bar__input'
+            } %}
+                {% block attributes %}
+                    @input.debounce="onInputChange"
+                {% endblock %}
+            {% endembed %}
+        </div>
+    </form>
+</div>

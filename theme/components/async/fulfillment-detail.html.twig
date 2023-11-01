@@ -1,0 +1,29 @@
+{% async:content %}
+    {% set isPickup = fulfillment == 'PICKUP' %}
+    {% if isPickup %}
+        <div x-ref="fulfillmentDetail">
+            <div class="fulfillment-detail">
+                {% if isPickup %}
+                    <p>{{ 'components.async.fulfillment_detail.location_label'|localize({ name: location.name }) }} {% if location.formatted_distance %}<span class="fulfillment-detail__subtext">({{ location.formatted_distance }})</span>{% endif %}</p>
+                {% endif %}
+            </div>
+            {% set buttonLabel = 'components.async.fulfillment_detail.buttons.pickup'|localize %}
+            {{ include('partials/ui/button', { variant: 'text', size: 'small', label: buttonLabel, buttonClasses: 'fulfillment-detail__button', action: 'openLocationsDialog' }) }}
+        </div>
+    {% endif %}
+{% endasync %}
+
+{% async:loading %}
+    {{ include('partials/ui/loader') }}
+{% endasync %}
+
+{% schema %}
+{
+    "fulfillment": {
+        "type": "string"
+    },
+    "location": {
+        "type": "array"
+    }
+}
+{% endschema %}

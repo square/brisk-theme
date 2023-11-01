@@ -1,0 +1,11 @@
+{% set spinUrl = source ~ '?' ~ ({ autospin: 'off', hintText: 'Drag image to rotate | Click to zoom', mobileHintText: 'Swipe image to rotate | Tab to zoom' }|url_encode) %}
+
+<div class="ui-spin">
+    <div
+        data-src="{{ spinUrl }}"
+        source="{{ source }}"
+        class="Sirv image-full"
+        alt="{{ altText }}"
+    >
+    </div>
+</div>

@@ -1,0 +1,15 @@
+{% async:content %}
+    {{ include('partials/components/store/item/badges', { badges, discounts: product.discounts } ) }}
+{%  endasync %}
+
+{% schema %}
+{
+    "badges": {
+        "type": "array"
+    },
+    "discounts": {
+        "type": "array",
+        "optional": true
+    }
+}
+{% endschema %}

@@ -1,0 +1,81 @@
+{{ register_asset('css/components/gallery/slides.css') }}
+{{ register_asset('js/components/gallery/slides.js', { defer: false }) }}
+
+{% set hasImages = images|length > 0 %}
+{% set galleryName = name|default('') %}
+
+<div
+    x-data="slides('{{ slidesDataId }}')"
+    {% if hasImages %}role="region"{% endif %}
+    class="slides"
+    @touchstart="onTouchStart"
+    @touchend="onTouchEnd"
+>
+    {% if hasImages %}
+        {% set imageSizes = { xs: 559 } %}
+        {% set currentIndex = 0 %}
+
+        {% for image in images %}
+            {% set uri = image.absolute_uri %}
+            {% if image.format == 'spin' %}
+                {% set uri = image.absolute_urls[160] %}
+            {% endif %}
+            {% embed 'partials/ui/image' with {
+                image: { uri, urls: image.absolute_urls, format: image.format },
+                imageSizes,
+                altText: image.name|default(product.name ~ ' ' ~ loop.index),
+                showPlaceholder: true,
+            } %}
+                {% block data %}
+                    ...slidesImage()
+                {% endblock %}
+                {% block attributes %}
+                    role="button"
+                    tabindex="0"
+                    aria-haspopup="true"
+                    x-show="currentSlide == '{{ loop.index }}'"
+                    x-transition:enter="fade-enter-active"
+                    x-transition:enter-start="fade-enter-from"
+                    x-transition:enter-end="fade-enter-to"
+                    x-transition:leave="fade-leave-active"
+                    x-transition:leave-start="fade-leave-from"
+                    x-transition:leave-end="fade-leave-to"
+                    :hidden="currentSlide != '{{ loop.index }}'"
+                    class="slides__item"
+                    :class="{ 'slides__item--failed': isFailedToLoad }"
+                    @click.stop="!isFailedToLoad ? openImagesDialog('{{ loop.index0 }}') : null"
+                    @keydown.enter.prevent="!isFailedToLoad ? openImagesDialog('{{ loop.index0 }}') : null"
+                {% endblock %}
+            {% endembed %}
+        {% endfor %}
+
+        {# dialog assets #}
+        {{ register_asset('js/components/gallery/dialog.js', { defer: false }) }}
+        {{ register_asset('css/components/gallery/dialog.css') }}
+
+        <template x-if="!dialogExists()">
+            <template x-teleport="body">
+                {{ include('partials/ui/dialog') }}
+            </template>
+        </template>
+
+        <div class="slides__indicator">
+            {% for i in 1..images|length %}
+                <span
+                    role="button"
+                    tabindex="0"
+                    class="slides__indicator--dot"
+                    :class="{ 'slides__indicator--dot--selected': currentSlide == '{{ i }}' }"
+                    @click.stop="goToSlide('{{ i }}')"
+                    @keydown.enter.prevent="goToSlide('{{ i }}')"
+                >
+                    <span class="visually-hidden">image {{ i }}</span>
+                </span>
+            {% endfor %}
+        </div>
+    {% else %}
+    <figure class="slides__item slides__item-placeholder">
+        {{ include('partials/ui/placeholder') }}
+    </figure>
+{% endif %}
+</div>

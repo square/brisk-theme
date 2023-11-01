@@ -1,0 +1,58 @@
+{{ register_asset('css/components/store/item/fulfillment.css') }}
+{{ register_asset('js/components/store/item/fulfillment.js', { defer: false }) }}
+
+{% set options = [] %}
+{% set locationIds = ids|default([]) %}
+{% if fulfillments.SHIPMENT %}
+    {% set options = options|merge([{ label: 'partials.components.store.item.fulfillment.buttons.shipping'|localize, value: 'SHIPMENT', icon: 'box' }]) %}
+{% endif %}
+{% if fulfillments.PICKUP %}
+    {% set options = options|merge([{ label: 'partials.components.store.item.fulfillment.buttons.pickup'|localize, value: 'PICKUP', icon: 'storefront' }]) %}
+{% endif %}
+
+{% if options|length %}
+
+{# dialog assets #}
+{{ register_asset('js/components/gallery/dialog.js', { defer: false }) }}
+{{ register_asset('css/components/gallery/dialog.css') }}
+
+<template x-if="!dialogExists()">
+    <template x-teleport="body">
+        {{ include('partials/ui/dialog') }}
+    </template>
+</template>
+
+{{ register_asset('css/components/store/item/locations-dialog.css') }}
+{{ register_asset('js/components/store/item/locations-dialog.js', { defer: false }) }}
+
+<script id="item-fulfillment-data" type="application/json">
+    {{ {
+        model: defaultFulfillment,
+        translations: {
+            buttonUpdate: 'shared.buttons.update'|localize,
+            buttonCancel: 'shared.buttons.cancel'|localize,
+        },
+    }|json_encode }}
+</script>
+
+{% embed 'partials/form/choice' with {
+    label: 'partials.components.store.item.fulfillment.label'|localize,
+    variant: 'grid',
+    options,
+    hideSublabel: true,
+    isRequired: true,
+} %}
+    {% block data %}
+        ...itemFulfillment('item-fulfillment-data')
+    {% endblock %}
+    {% block attributes %}
+        columns="{{ options|length }}"
+    {% endblock %}
+    {% block after %}
+        {% if locations|length > 0 %}
+            {{ async('fulfillment-detail', 'fulfillment-detail', { props: { location: defaultLocation|default([]), fulfillment: defaultFulfillment } }) }}
+        {% endif %}
+    {% endblock %}
+{% endembed %}
+
+{% endif %}

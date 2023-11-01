@@ -1,0 +1,251 @@
+{% set productTypes = {
+    EVENT: {
+        buttonText: 'shared.buttons.attend'|localize,
+        useAddToCartButton: false,
+        useBuyNowButton: true,
+    },
+    MEMBERSHIP: {
+        buttonText: 'shared.buttons.join'|localize,
+        useAddToCartButton: false,
+        useBuyNowButton: true,
+    },
+    DONATION: {
+        buttonText: 'shared.buttons.donate'|localize,
+        useAddToCartButton: false,
+        useBuyNowButton: true,
+    },
+} %}
+
+<div
+    x-init="setInitialProductStore()"
+    :class="{ 'container--fullwidth item-page__main': $store.global.isMobile, 'row': !$store.global.isMobile }"
+>
+    {# Product images #}
+    <div
+        class="item-page__main-images col"
+        col-xs-12 col-sm-5 col-md-7 col-lg-8
+    >
+        {% set productGifs = (product.media_files|default([])) %}
+        {% set productImages = product.images|merge(productGifs) %}
+        {% set productImagesDataId = 'item-images-data' %}
+
+        <script id="{{ productImagesDataId }}" type="application/json">
+            {{ { images: productImages }|json_encode }}
+        </script>
+
+        <template x-if="$store.global.isMobile">
+            {{ include('partials/components/gallery/slides', { images: productImages, slidesDataId: productImagesDataId }) }}
+        </template>
+        <template x-if="!$store.global.isMobile">
+            {{ include('partials/components/gallery/masonry', { images: productImages, masonryDataId: productImagesDataId }) }}
+        </template>
+    </div>
+
+    {% set productFormDataId = 'product-form-data' %}
+
+    <script id="{{ productFormDataId }}" type="application/json">
+        {{ {
+            translations: {
+                caloriesLabel: 'components.sections.store.item.main.calories.label'|localize,
+            },
+        }|json_encode }}
+    </script>
+
+    <div
+        class="item-page__main-detail-wrapper col"
+        col-xs-12 col-sm-7 col-md-5 col-lg-4
+    >
+        <div
+            x-data="productForm('{{ productFormDataId }}')"
+            class="item-page__main-detail"
+            :class="{ 'container--fullwidth-padding': $store.global.isMobile }"
+        >
+            <div class="item-page__info">
+                {# Breadcrumb #}
+                {% set breadcrumb = [{ 'title' : 'components.sections.store.item.main.breadcrumb.shop'|localize, 'link' : link({ type: 'shopAll' }) }] %}
+                {% for category in product.categories %}
+                    {% set breadcrumb = breadcrumb|merge([{ 'title' : category.name, 'link' : category_link(category.square_online_id) }]) %}
+                {% endfor %}
+                {{ include('partials/ui/breadcrumb', { breadcrumb: breadcrumb }) }}
+
+                {# Product name #}
+                <h2 class="heading-2">{{ product.name }}</h2>
+
+                {# Badges #}
+                {% set badges = product.badges|filter(value => value) %}
+                {% if badges|length > 0 %}
+                <div x-ref="productBadges">
+                    {{ async('badges', 'badges', { props: { badges, discounts: product.discounts, shouldAnnounce: true, } }) }}
+                </div>
+                {% endif %}
+
+                {# Price #}
+                <div class="item-page__price">
+                    {% set caloriesText = '' %}
+                    {% if product.product_type_details.calorie_count %}
+                        {% set caloriesText = product.product_type_details.calorie_count ~ ' Cal' %}
+                    {% endif %}
+                    {{ async('price', 'product-price', { props: { price: product.price, variations: product.variations, secondaryText: caloriesText } }) }}
+                </div>
+
+                {# Rating #}
+                {% if product.review_meta.rating_breakdown.total > 0 %}
+                {% embed 'partials/ui/rating' with { average: product.review_meta.avg_rating } %}
+                    {% block content %}
+                        {% set buttonText = 'components.sections.store.item.main.rating.total'|localize({ total: product.review_meta.rating_breakdown.total }) %}
+                        {{ include('partials/ui/button', { variant: 'text', size: 'small', label: buttonText, action: 'goToProductReviews' }) }}
+                    {% endblock %}
+                {% endembed %}
+                {% endif %}
+            </div>
+
+            {# Banners #}
+            {{ include('partials/components/store/item/banners', { fulfillment: defaultFulfillment }) }}
+
+            {# Options, modifiers, quantity and add to cart button #}
+            <form
+                class="item-page__form"
+            >
+                {% if product.square_online_type == 'FOOD' and product.product_type_details %}
+                    {{ include('partials/components/store/item/food-details') }}
+                {% endif %}
+
+                {% if product.item_options|length %}
+                    {{ include('partials/components/store/item/options') }}
+                {% else %}
+                    {{ include('partials/components/store/item/flat-variations') }}
+                {% endif %}
+                {{ include('partials/components/store/item/modifiers') }}
+
+                {% if isManualFulfillment == false %}
+                    {{ include('partials/components/store/item/fulfillment', {
+                        fulfillments: product.fulfillment.methods,
+                        defaultFulfillment,
+                    }) }}
+                {% endif %}
+
+                {% if product.square_online_type == 'EVENT' and product.product_type_details %}
+                    {{ include('partials/components/store/item/event-details') }}
+                {% endif %}
+
+                {% if product.square_online_type == 'DONATION' and (product.variations|length) %}
+                    {{ include('partials/form/donation', { donationVariations: product.variations }) }}
+                {% endif %}
+
+                {% if product.subscriptions|length %}
+                    {{ include('partials/form/subscriptions', { subscriptions: product.subscriptions }) }}
+                {% endif %}
+
+                {% if product.square_online_type != 'DONATION' %}
+                    {{ include('partials/components/store/item/quantity') }}
+                {% endif %}
+
+                <div
+                    x-data="productFormButtons(Boolean({{ isManualFulfillment }}))"
+                    class="item-page__add-to-buttons"
+                >
+                    {% set isNotAcceptingOrders = square.store.accepting_orders == false %}
+                    {% set shouldShowAddToCartButton = true %}
+                    {% set shouldShowBuyNowButton = square.store.show_pdp_buy_now_button %}
+                    {% set buyNowButtonText = 'shared.buttons.buy_now'|localize %}
+
+                    {% if productTypes[product.square_online_type] %}
+                        {% set buyNowButtonText = productTypes[product.square_online_type].buttonText %}
+                        {% set shouldShowAddToCartButton = productTypes[product.square_online_type].useAddToCartButton %}
+                        {% set shouldShowBuyNowButton = productTypes[product.square_online_type].useBuyNowButton %}
+                    {% elseif isManualFulfillment %}
+                        {% set shouldShowAddToCartButton = false %}
+                        {% set shouldShowBuyNowButton = true %}
+                    {% endif %}
+
+                    {# Add to cart button - hidden for subscription, event/membership/donation/digital item types #}
+                    {% if shouldShowAddToCartButton %}
+                        {% embed 'partials/ui/button' with {
+                            variant: 'primary',
+                            fullWidth: true,
+                            label: 'shared.buttons.add_to_cart'|localize,
+                            action: 'addToCart',
+                            disabled: isNotAcceptingOrders,
+                        } %}
+                            {% block attributes %}
+                                :disabled="isAddingItemToCart"
+                                :hidden="isSubscribeButton"
+                            {% endblock %}
+                            {% block content %}
+                                <span
+                                    x-show="isAddingItemToCart"
+                                    class="product-detail__button-loader"
+                                >
+                                    {{ include('partials/ui/loader') }}
+                                </span>
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+
+                    {# Buy now button - used for subscription, event/membership/donation/digital item types #}
+                    {% if shouldShowBuyNowButton or product.subscriptions|length %}
+                        {% set primaryButtonStyle = themeButtons.primary.fill_style|default('fill') %}
+                        {% set secondaryButtonStyle = themeButtons.secondary.fill_style|default('outline') %}
+                        {% set buyNowButtonStyle = secondaryButtonStyle %}
+                        {% set buyNowButtonVariant = 'secondary' %}
+                        {% if shouldShowAddToCartButton == false %}
+                            {% set buyNowButtonStyle = primaryButtonStyle %}
+                            {% set buyNowButtonVariant = 'primary' %}
+                        {% endif %}
+
+                        {% embed 'partials/ui/button' with { fullWidth: true, action: 'buyNow', disabled: isNotAcceptingOrders } %}
+                            {% block attributes %}
+                                :disabled="isBuyingItem"
+                                :variant="isSubscribeButton ? 'primary' : '{{ buyNowButtonVariant }}'"
+                                :style="isSubscribeButton ? '{{ primaryButtonStyle }}' : '{{ buyNowButtonStyle }}'"
+                                {% if shouldShowBuyNowButton == false %}:hidden="!isSubscribeButton"{% endif %}
+                            {% endblock %}
+                            {% block content %}
+                                <span x-text="isSubscribeButton ? '{{ 'shared.buttons.subscribe'|localize }}' : '{{ buyNowButtonText }}'"></span>
+                                <span
+                                    x-show="isBuyingItem"
+                                    class="product-detail__button-loader"
+                                >
+                                    {{ include('partials/ui/loader') }}
+                                </span>
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+                    <span x-show="isFailedToBuy">
+                        {{ include('partials/ui/notice', { variant: 'critical', message: 'shared.errors.general'|localize } ) }}
+                    </span>
+                </div>
+            </form>
+
+            {# Product description #}
+            {% if product.description_html is not empty %}
+            <div class="item-page__description">
+                {{ product.description_html|striptags('<p><strong><em><ul><li><ol><a>')|raw }}
+            </div>
+            {% endif %}
+
+            {# Shipping and return policies #}
+            {{ include('partials/components/store/item/policies') }}
+        </div>
+    </div>
+</div>
+
+<script>
+function setInitialProductStore() {
+    const product = JSON.parse('{{ product|json_encode|escape("js") }}');
+    const locations = JSON.parse('{{ locations|json_encode|escape("js") }}');
+    Alpine.store('product').setProduct(product);
+    Alpine.store('product').setLocations(locations);
+}
+</script>
+
+{% schema %}
+{
+    "product": {
+        "type": "item"
+    },
+    "locations": {
+        "type": "location-list"
+    }
+}
+{% endschema %}

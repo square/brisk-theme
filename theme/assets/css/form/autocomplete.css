@@ -1,0 +1,10 @@
+.form-autocomplete__input {
+    position: relative;
+}
+
+.form-autocomplete__input-loader {
+    position: absolute;
+    right: var(--space-x2);
+    bottom: 50%;
+    transform: translateY(50%);
+}

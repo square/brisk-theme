@@ -1,0 +1,44 @@
+{% set sortFilterId = 'sort-filter-dialog-' ~ random() %}
+
+<div x-data="itemList('item-list-data')">
+    <div
+        x-data="sortFilter()"
+        class="filters__dialog filters__sort-dialog"
+    >
+        <div class="filters__dialog-scrollbar custom-scrollbar">
+            <div class="filters__dialog-scrollbar-inner custom-scrollbar-inner">
+                <h4 class="heading-4 filters__dialog-heading">{{ 'templates.components.dialogs.advanced_filters.heading'|localize }}</h4>
+
+                <div class="filters__dialog-sort-options">
+                    {% embed 'partials/form/radio' with {
+                        hideLabel: true,
+                        align: 'right',
+                        variant: 'row',
+                        size: 'large',
+                        showDivider: true,
+                        options: sort_options,
+                        parentModel: 'sortValue',
+                    } %}
+                        {% block data %}
+                            {% if current_value %}
+                                model: '{{ current_value }}',
+                            {% endif %}
+                            ...sortOptions()
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "sort_options": {
+        "type": "array"
+    },
+    "current_value": {
+        "type": "string"
+    }
+}
+{% endschema %}

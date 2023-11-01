@@ -1,0 +1,77 @@
+{% set preorders = [] %}
+{% set discounts = product.discounts %}
+{% set preorderTitle = 'partials.components.store.item.banners.preorder.title'|localize %}
+{% set button = 'partials.components.store.item.banners.preorder.button'|localize %}
+
+{% for key, availability in product.fulfillment_availability|filter(availability => availability[0]) %}
+    {% set startAt = availability[0].start_at|date('M j') %}
+    {% set text = 'partials.components.store.item.banners.preorder.text'|localize({ startAt, fulfillment: key }) %}
+    {% set preorders = preorders|merge({ (key): [{ title: preorderTitle, text, button }|merge(availability[0])] }) %}
+{% endfor %}
+
+{% if (preorders|length) or (discounts|length) %}
+
+{{ register_asset('js/components/store/item/banners.js', { defer: false }) }}
+
+<script id="item-banners-data" type="application/json">
+    {{ {
+        preorders,
+        discounts,
+        fulfillment,
+        translations: {
+            buttonClose: 'shared.buttons.close'|localize,
+            excludeItems: 'partials.components.store.item.banners.exclude_items'|localize,
+            expiration: 'partials.components.store.item.banners.expiration'|localize,
+            recurring: 'partials.components.store.item.banners.recurring'|localize,
+        },
+    }|json_encode }}
+</script>
+
+<div
+    x-data="itemBanners('item-banners-data')"
+    x-show="hasPreorder() || hasDiscount()"
+    class="item-page__banners"
+>
+    {# Preorder banner #}
+    {% if preorders|length %}
+        <span
+            :hidden="!hasPreorder()"
+            @click="openPreorderDialog"
+        >
+            {% embed 'partials/ui/row' with { icon: 'calendar_today', title: preorderTitle, button, ariaRole: 'aria-haspopup="true"', action: 'openPreorderDialog' } %}
+                {% block title %}
+                    {{ title }}
+                {% endblock %}
+                {% block text %}
+                    <span x-text="getPreorderText()"></span>
+                {% endblock %}
+            {% endembed %}
+        </span>
+    {% endif %}
+
+    {# Discount banner #}
+    {% if discounts|length %}
+        {% for discount in discounts %}
+            <span
+                :hidden="!hasDiscount()"
+                @click="openDiscountDialog({{ loop.index0 }})"
+            >
+                {% embed 'partials/ui/row' with { icon: 'bolt', title: discount.name, text: discount.display_strings.summary_text, button, ariaRole: 'aria-haspopup="true"' } %}
+                    {% block title %}
+                        {{ title }}
+                    {% endblock %}
+                    {% block text %}
+                        {{ text }}
+                    {% endblock %}
+                {% endembed %}
+            </span>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<template x-if="!dialogExists()">
+    <template x-teleport="body">
+        {{ include('partials/ui/dialog') }}
+    </template>
+</template>
+{% endif %}

@@ -1,0 +1,5 @@
+{% set badgeSize = size|default('normal') %}
+{% set badgeShape = themeBadges.styles[themeBadges.types.sale.variant].shape.id|default(shape) %}
+{% set badgeVariant = themeBadges.styles[themeBadges.types.sale.variant].fill_style|default(variant) %}
+
+{{ include('partials/ui/badge', { label, type: 'sale', size: badgeSize, shape: badgeShape, variant: badgeVariant, badgeClasses, shouldAnnounce }) }}

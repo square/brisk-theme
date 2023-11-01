@@ -1,0 +1,178 @@
+{% if request.async == true %}
+    <link href="{{ 'css/components/store/item-list.css' | asset_url }}" rel="stylesheet" />
+    <script src="{{ 'js/components/store/item-list.js' | asset_url }}"></script>
+{% else %}
+    {{ register_asset('css/components/store/item-list.css') }}
+    {{ register_asset('js/components/store/item-list.js', { defer: false }) }}
+{% endif %}
+
+{% set collectionItems = [] %}
+{% set categoryOptions = [] %}
+
+{% paginate items %}
+
+{# Per page options #}
+{% set pageOptions = [
+    { label: 'components.sections.store.item_list.pagination.per_page'|localize({ perPage: 32 }), value: 32 },
+    { label: 'components.sections.store.item_list.pagination.per_page'|localize({ perPage: 60 }), value: 60 },
+    { label: 'components.sections.store.item_list.pagination.per_page'|localize({ perPage: 100 }), value: 100 },
+    { label: 'components.sections.store.item_list.pagination.per_page'|localize({ perPage: 200 }), value: 200 },
+] %}
+
+{# Pagination #}
+{% set perPage = max(paginate.limit, pageOptions[0].value) %}
+{% set currentPage = max(paginate.current_page, 1) %}
+{% set totalItems =  paginate.total %}
+{% if totalItems == 0 and items|length > 0 %}
+    {% set totalItems =  items|length %}
+{% endif %}
+{% set totalPages =  max(paginate.total_pages, 1) %}
+
+{# Filters categories with images #}
+{% set featuredCategories = categories %}
+
+{# Get sub categories if current page is a category page #}
+{% if category %}
+    {# Get sub categories #}
+    {% set subCategoryIds = category_hierarchy|map((cat) => cat.square_online_id) %}
+    {% if subCategoryIds|length %}
+        {% set featuredCategories = category_list({ filters: { ids: subCategoryIds } })|merge(categories) %}
+    {% endif %}
+{% endif %}
+
+{% set collectionFeaturedItems = []|merge(featuredCategories|filter(cat => cat.images|length > 0)) %}
+{% set featuredItemIndex = 6 %}
+{% set featuredItem = collectionFeaturedItems[currentPage - 1] %}
+
+{# Items with featured categories combined #}
+{% for item in items|slice(0, perPage) %}
+    {% set collectionItems = collectionItems|merge([{ item, template: 'tile' }]) %}
+    {% if loop.index == featuredItemIndex and featuredItem %}
+        {% set collectionItems = collectionItems|merge([{ item: featuredItem, template: 'featured', buttonText: 'components.sections.store.item_list.featured_item.button'|localize({ name: featuredItem.name|lower }) }]) %}
+    {% endif %}
+{% endfor %}
+
+{% set filterDropdownId = 'filter-dropdown-' ~ random() %}
+{% set chooseLocationTemplateId = filterDropdownId ~ '-choose-pickup-location' %}
+{% set isFilteredItemsList = totalItems > 0 or (totalItems == 0 and (request.query|keys is not empty)) %}
+{% set currentSortValue = request.query.sort_by|default(sort_options[0].value) %}
+{% if request.query.sort_by == 'price' or request.query.sort_by == 'name' %}
+    {% set currentSortValue = request.query.sort_by ~ '_' ~ request.query.sort_order|default('asc') %}
+{% endif %}
+{% set filtersDialogProps = {
+    id: filterDropdownId ~ '__dialog',
+    fulfillment_support: square.store.fulfillment_support,
+    current_value: request.query|default({}),
+    global_options,
+    category,
+    category_hierarchy,
+} %}
+
+<script id="item-list-data" type="application/json">
+    {{ {
+        pageUrl: square.page.url,
+        paginate,
+        sortOptions: sort_options,
+        sortValue: currentSortValue,
+        searchTerm: search_term,
+        perPage,
+        currentPage,
+        totalPages,
+        translations: {
+            sortByLabel: 'partials.components.store.filters.buttons.sort'|localize,
+            buttonUpdate: 'shared.buttons.update'|localize,
+            selectedCount: 'templates.components.dialogs.advanced_filters.selected_count'|localize,
+            subCategoriesCount: 'partials.components.store.filters.options.categories_selector.sub_categories_total'|localize,
+        },
+    }|json_encode }}
+</script>
+
+<script id="item-list-advanced-filter-data" type="application/json">
+    {{ {
+        chooseLocationTemplateId,
+        currentValue: request.query|default({}),
+        categoryHierarchy: category_hierarchy,
+        parentCategory: category|default({}),
+        filtersDialogProps,
+    }|json_encode }}
+</script>
+
+<div
+    x-data="itemList('item-list-data')"
+    class="item-list"
+>
+    {% if isFilteredItemsList %}
+        {{ register_asset('css/components/store/filters/advanced.css') }}
+        {{ register_asset('js/components/store/filters/advanced.js', { defer: false }) }}
+
+        {% if category_hierarchy|length %}
+            {{ register_asset('css/components/store/filters/categories.css') }}
+            {{ register_asset('js/components/store/filters/categories.js', { defer: false }) }}
+        {% endif %}
+
+        <div
+            class="filters-wrapper"
+        >
+            <div
+                x-data="advancedFilter('item-list-advanced-filter-data')"
+                class="filters"
+            >
+                {% if category_hierarchy|length %}
+                    <span x-show="!$store.global.isMobile">
+                        {{ include('partials/components/store/filters/buttons/categories', { id: filterDropdownId ~ '__categories', currentValue: (request.query.category_ids|split(','))|default({}), category }) }}
+                    </span>
+                {% endif %}
+                {{ include('partials/components/store/filters/buttons/advanced', { id: filterDropdownId ~ '__advanced', chooseLocationTemplateId, currentValue: request.query|default({}), filtersDialogProps, globalOptions: global_options }) }}
+            </div>
+            {{ include('partials/components/store/filters/buttons/sort', { id: filterDropdownId ~ '__sort', sortOptions: sort_options, currentValue: currentSortValue }) }}
+        </div>
+    {% endif %}
+
+    {% if items|length %}
+        {{ include('partials/components/collection/list', { items: collectionItems, layout: 'tiles' }) }}
+    {% elseif isFilteredItemsList %}
+        <p>{{ 'components.sections.store.item_list.no_filtered_items'|localize }}</p>
+    {% else %}
+        <p>{{ 'components.sections.store.item_list.no_items'|localize }}</p>
+    {% endif %}
+
+    {% if isFilteredItemsList %}
+        {% embed 'partials/ui/pagination' with { pageOptions, currentPage: { value: currentPage }, totalPages } %}
+            {% block data %}
+                {% if paginate.limit %}
+                    model: {{ paginate.limit }},
+                {% endif %}
+                ...itemListPagination()
+            {% endblock %}
+        {% endembed %}
+    {% endif %}
+</div>
+{% endpaginate %}
+
+{% schema %}
+{
+    "items": {
+        "type": "item-list"
+    },
+    "category": {
+        "type": "category",
+        "optional": true
+    }
+    "categories": {
+        "type": "category-list",
+        "optional": true,
+        "default": []
+    },
+    "category_hierarchy": {
+        "type": "category-hierarchy",
+        "optional": true
+    },
+    "sort_options": {
+        "type": "array"
+    },
+    "global_options": {
+        "type": "array",
+        "optional": true
+    }
+}
+{% endschema %}

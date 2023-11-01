@@ -1,0 +1,89 @@
+<style>
+
+.row {
+    --gutter-column: var(--space-x4);
+    --max-grid-width: min(calc(var(--theme-max-container) + var(--gutter-column)), 100%);
+    --row-divider-color: var(--theme-border-color, #f2f2f2);
+
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: calc(100vw + var(--gutter-column));
+    margin-right: calc(var(--gutter-column) / -2);
+    margin-left: calc(var(--gutter-column) / -2);
+    row-gap: var(--gutter-column);
+}
+
+.row--divider:not(:last-of-type)::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: calc(var(--gutter-column) / 2);
+    bottom: 0;
+    width: calc(100% - var(--gutter-column));
+    height: 1px;
+    background: var(--row-divider-color);
+}
+
+.row > .col {
+    flex: 0 0 calc(var(--max-grid-width) / 12 * var(--column));
+    max-width: calc(var(--max-grid-width) / 12 * var(--column));
+    padding-right: calc(var(--gutter-column) / 2);
+    padding-left: calc(var(--gutter-column) / 2);
+    transition: 0.3s ease-out;
+}
+
+{% for column in range(1, 12) %}
+    .row > .col[col-{{ column }}] {
+        flex: 0 0 calc(var(--max-grid-width) / 12 * {{ column }});
+        max-width: calc(var(--max-grid-width) / 12 * {{ column }});
+    }
+
+    {% if column < 12 %}
+        {% if column > 1 %}
+            .row > .col[offset-{{ column }}] {
+                margin-left: calc(var(--max-grid-width) / 12 * {{ column }} + var(--gutter-column));
+            }
+        {% else %}
+            .row > .col[offset-{{ column }}] {
+                margin-left: calc(var(--max-grid-width) / 12 * {{ column }});
+            }
+        {% endif %}
+
+        .row > .col[offset-{{ column }}]:first-child {
+            margin-left: calc(var(--max-grid-width) / 12 * {{ column }});
+        }
+    {% endif %}
+{% endfor %}
+
+{% set breakpoints = { xs: 699, sm: 700, md: 840, lg: 1200, xl: 1600 } %}
+{% for breakpoint in breakpoints|keys %}
+    {% set mediaWidth = 'min-width' %}
+    {% if breakpoint == 'xs' %}
+        {% set mediaWidth = 'max-width' %}
+    {% endif %}
+
+    @media ({{ mediaWidth }}: {{ breakpoints[breakpoint] }}px) {
+
+    {% for column in range(1, 12) %}
+        .row > .col[col-{{ breakpoint }}-{{ column }}] {
+            flex: 0 0 calc(var(--max-grid-width) / 12 * {{ column }});
+            max-width: calc(var(--max-grid-width) / 12 * {{ column }});
+        }
+
+        {% if column < 12 %}
+            {% if column > 1 %}
+                .row > .col[offset-{{ breakpoint }}-{{ column }}] {
+                    margin-left: calc(var(--max-grid-width) / 12 * {{ column }} + var(--gutter-column));
+                }
+            {% else %}
+                .row > .col[offset-{{ breakpoint }}-{{ column }}] {
+                    margin-left: calc(var(--max-grid-width) / 12 * {{ column }});
+                }
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    }
+{% endfor %}
+</style>

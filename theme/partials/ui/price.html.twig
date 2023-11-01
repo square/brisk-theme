@@ -1,0 +1,74 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/price.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/price.css') }}
+{% endif %}
+
+{% set regularPrice = price.regular_high|default(0) %}
+{% set finalPrice = price.regular_low|default(0) %}
+{% set productVariations = variations|default([]) %}
+
+{% if productVariations|length == 1 and productVariations[0].price.regular and productVariations[0].price.sale %}
+    {% set regularPrice = productVariations[0].price.regular %}
+    {% set finalPrice = productVariations[0].price.sale %}
+{% endif %}
+
+{% set isPriceRange = productVariations|length > 1 %}
+{% set formattedRegularPrice = formattedPrice.regular|default(regularPrice|format_price({ currency: price.currency })) %}
+{% set formattedFinalPrice = formattedPrice.final|default(finalPrice|format_price({ currency: price.currency })) %}
+{% set isOnSale = formattedRegularPrice != formattedFinalPrice %}
+
+{% if isPriceRange %}
+    {% set isOnSale = price.high != price.regular_high or price.low != price.regular_low %}
+    {% if isOnSale %}
+        {% if regularPrice != finalPrice %}
+            {% set formattedRegularPrice = finalPrice|format_price({ currency: price.currency }) ~ ' - ' ~ regularPrice|format_price({ currency: price.currency }) %}
+        {% else %}
+            {% set formattedRegularPrice = finalPrice|format_price({ currency: price.currency }) %}
+        {% endif %}
+        {% set formattedFinalPrice = price.low|format_price({ currency: price.currency }) ~ ' - ' ~ price.high|format_price({ currency: price.currency }) %}
+    {% else %}
+        {% if regularPrice != finalPrice %}
+            {% set formattedFinalPrice = finalPrice|format_price({ currency: price.currency }) ~ ' - ' ~ regularPrice|format_price({ currency: price.currency }) %}
+        {% else %}
+            {% set formattedFinalPrice = finalPrice|format_price({ currency: price.currency }) %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+<div class="ui-price ui-price--{{ size|default('normal') }} {% if isPriceRange %}ui-price__range{% endif %}">
+    {% if isOnSale %}
+        <div x-ref="regularPrice" class="ui-price__regular">
+            {{ formattedRegularPrice }}
+        </div>
+        <div x-ref="finalPrice" class="ui-price__final" aria-live="polite">
+            {{ formattedFinalPrice }}
+        </div>
+    {% else %}
+        <div x-ref="finalPrice" class="ui-price ui-price--{{ size|default('normal') }}" aria-live="polite">
+            {{ formattedFinalPrice }}
+        </div>
+    {% endif %}
+    {% if secondaryText %}
+        {% if isPriceRange and isOnSale %}
+        <div class="ui-price__row-break"></div>
+        {% endif %}
+        <div class="ui-price__extra {% if isPriceRange and isOnSale %}ui-price__extra--hide-divider{% endif %}">{{ secondaryText }}</div>
+    {% endif %}
+</div>
+
+{% schema %}
+{
+    "price": {
+        "type": "array"
+    },
+    "variations": {
+        "type": "array",
+        "optional": true
+    },
+    "secondaryText": {
+        "type": "string",
+        "optional": true
+    }
+}
+{% endschema %}

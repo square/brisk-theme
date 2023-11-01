@@ -1,0 +1,79 @@
+{% async:content %}
+
+
+{# If no query is passed, we'll default to popular items #}
+{% if query is not defined %}
+    {% set items = popular_items({ pagination: { page_size: 4 } }) %}
+{% endif %}
+
+{# Max four items #}
+{% set items = items|slice(0, 4) %}
+
+{% if query is not defined or (query is defined and items|length > 0) %}
+    <div class="search-results">
+        <div class="search-results__category-list-wrapper">
+            <p class="search-results__category-list-header">
+                {% if query is not defined %}
+                    {{ 'components.search.suggested_searches'|localize }}
+                {% else %}
+                    {{ 'components.search.top_results'|localize }}
+                {% endif %}
+            </p>
+            <ul class="search-results__category-list">
+                {% set item_categories = [] %}
+                {% for item in items %}
+                    {% set category = item.categories[0] %}
+                    {% if category.square_online_id not in item_categories %}
+                        {% set item_categories = item_categories|merge([category.square_online_id]) %}
+                        <li class="search-results__category-list-item">
+                            <a class="search-results__category-link" href="{{ category_link(category.square_online_id) }}">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="search-results__tiles-list-wrapper">
+            <p class="search-results__tiles-list-header">
+                {% if query is not defined %}
+                    {{ 'components.search.popular_items'|localize }}
+                {% else %}
+                    {{ 'components.search.similar_items'|localize }}
+                {% endif %}
+            </p>
+            <div class="search-results__tiles-list">
+                {{ include('partials/components/collection/list',
+                    { 
+                        items, 
+                        layout: 'carousel', 
+                        hideHover: true
+                    }) 
+                }}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="search-results search-results--empty">
+        {{ 'components.search.empty'|localize({ query }) }}
+    </div>
+{% endif %}
+
+{% endasync %}
+
+{% async:loading %}
+{{ include('partials/ui/loader') }}
+{% endasync %}
+
+{% schema %}
+{
+    "items": {
+        "type": "array",
+        "optional": true
+    },
+    "query": {
+        "type": "string",
+        "optional": true
+    }
+}
+{% endschema %}

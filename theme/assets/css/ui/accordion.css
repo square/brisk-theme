@@ -1,0 +1,49 @@
+.ui-accordion__trigger {
+    display: flex;
+    gap: var(--space-x2);
+    align-items: center;
+    width: 100%;
+    padding: var(--space-x2) var(--space-half) var(--space) var(--space-half);
+    color: inherit;
+    font-weight: var(--theme-font-weight-medium);
+    background-color: transparent;
+    border-top: 1px solid var(--theme-border-color);
+}
+
+.ui-accordion__trigger:not(:first-child) {
+    margin-top: var(--space);
+}
+
+.ui-accordion__trigger-label {
+    flex: 1;
+    text-align: left;
+}
+
+.ui-accordion__trigger-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.ui-accordion__panel {
+    padding: 0 calc(var(--space-x5) + var(--space-half)) var(--space) calc(var(--space-x5) + var(--space-half));
+    font-weight: var(--theme-font-weight-light);
+    font-size: var(--theme-font-size-minus-1);
+    line-height: var(--theme-font-size-minus-1-line-height);
+}
+
+/* Footer Accordion variant */
+
+.ui-accordion--footer .ui-accordion__trigger {
+    padding-left: 0;
+    border-top: none;
+}
+
+.ui-accordion--footer .ui-accordion__trigger-label {
+    font-weight: var(--theme-font-weight-heavy);
+    font-size: var(--theme-font-size-plus-1);
+    line-height: var(--theme-font-size-plus-1-line-height);
+}
+
+.ui-accordion--footer .ui-accordion__panel {
+    padding: 0;
+}

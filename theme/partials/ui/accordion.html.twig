@@ -1,0 +1,56 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/accordion.css' | asset_url }}" rel="stylesheet" />
+    <link href="{{ 'css/ui/rich-text.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/accordion.css') }}
+    {{ register_asset('css/ui/rich-text.css') }}
+{% endif %}
+
+<div x-data="{ expandedIndex: 0 }" class="ui-accordion {% if variant %} ui-accordion--{{ variant }} {% endif %}">
+    {% for accordion in accordionItems %}
+        {% set accordionId = 'accordion-' ~ random() %}
+        {% set accordionIndex = loop.index0 %}
+        <button
+            :aria-expanded="expandedIndex === '{{ accordionIndex }}'"
+            aria-controls="{{ accordionId }}_panel"
+            id="{{ accordionId }}_trigger"
+            class="ui-accordion__trigger"
+            @click="expandedIndex !== '{{ accordionIndex }}' ? expandedIndex = '{{ accordionIndex }}' : expandedIndex = null"
+        >
+            {% if accordion.icon %}
+            <div
+                class="ui-accordion__trigger-icon"
+                aria-hidden="true"
+            >
+                {{ include('partials/ui/icon', { name: accordion.icon }) }}
+            </div>
+            {% endif %}
+            <div class="ui-accordion__trigger-label">{{ accordion.label }}</div>
+            <div
+                class="ui-accordion__trigger-arrow"
+                aria-hidden="true"
+            >
+                {% embed 'partials/ui/icon' with { name: expandIcon|default('expand_more') } %}
+                    {% block attributes %}
+                        x-show="expandedIndex !== '{{ accordionIndex }}'"
+                    {% endblock %}
+                {% endembed %}
+                {% embed 'partials/ui/icon' with { name: collapseIcon|default('expand_less') } %}
+                    {% block attributes %}
+                        x-show="expandedIndex === '{{ accordionIndex }}'"
+                    {% endblock %}
+                {% endembed %}
+            </div>
+        </button>
+        <section
+            x-show="expandedIndex === '{{ accordionIndex }}'"
+            id="{{ accordionId }}_panel"
+            class="ui-accordion__panel {% if richTextFormatting %} ui-rich-text {% endif %}"
+            aria-labelledby="{{ accordionId }}_label"
+            x-collapse
+            x-cloak
+        >
+            {{ accordion.content|striptags(allowedTags|default('<p>'))|raw }}
+        </section>
+    {% endfor %}
+</div>

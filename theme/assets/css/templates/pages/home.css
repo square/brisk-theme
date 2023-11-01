@@ -1,0 +1,28 @@
+.home-page__container {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x8);
+    margin-top: var(--space-x8);
+}
+
+.home-page__heading {
+    text-align: left;
+}
+
+@media (min-width: 700px) {
+    .home-page__heading {
+        text-align: center;
+    }
+}
+
+.home-page__marquee-wrapper {
+    margin-top: var(--space-x2);
+}
+
+.home-page__featured-tiles-wrapper .collection__tile--simple .collection__tile-title {
+    width: auto;
+}
+
+.home-page__featured-images-container {
+    margin-top: var(--space-x8);
+}

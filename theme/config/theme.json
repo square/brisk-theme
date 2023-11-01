@@ -1,0 +1,16 @@
+{
+    "shouldUseThemeStyles": true,
+    "mapSizeToLocalizeKey": {
+        "xx-small": "shared.sizes.xx_small",
+        "x-small": "shared.sizes.x_small",
+        "small": "shared.sizes.small",
+        "medium": "shared.sizes.medium",
+        "large": "shared.sizes.large",
+        "x-large": "shared.sizes.x_large",
+        "xx-large": "shared.sizes.xx_large",
+        "xxx-large": "shared.sizes.xxx_large",
+        "xxs": "shared.sizes.xx_small",
+        "xxl": "shared.sizes.xx_large",
+        "xxxl": "shared.sizes.xxx_large"
+    }
+}

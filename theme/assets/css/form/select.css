@@ -1,0 +1,53 @@
+.form-select__dropdown-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.form-select__dropdown {
+    position: relative;
+    width: 100%;
+    height: var(--theme-form-field-large-height);
+    padding: 0 var(--space-x4) 0 var(--space-x2);
+    color: inherit;
+    font-size: var(--settings-font-size-base, var(--theme-font-size-base));
+    line-height: var(--theme-line-height-base);
+    background: transparent;
+    border: 1px solid var(--theme-form-field-border);
+    border-radius: var(--theme-border-radius);
+}
+
+.form-select--small .form-select__dropdown {
+    height: var(--theme-form-field-small-height);
+}
+
+.form-select__dropdown:hover {
+    border-color: var(--theme-form-field-border-hover);
+}
+
+.form-select__dropdown[disabled] {
+    cursor: not-allowed;
+}
+
+.form-select__dropdown:invalid,
+.form-select__dropdown[disabled] {
+    color: var(--theme-form-field-text-placeholder);
+}
+
+.form-select--invalid .form-select__dropdown {
+    border-color: var(--theme-form-field-border-error);
+}
+
+.form-select__icon {
+    position: absolute;
+    top: 0;
+    right: var(--space-x1_5);
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: var(--theme-form-field-text-inner);
+    cursor: pointer;
+}
+
+.form-select .form-fieldset__error--visible {
+    margin-top: var(--space-half);
+}

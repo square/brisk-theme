@@ -1,0 +1,124 @@
+{
+    "info_links": [
+        {
+            "label": "Footer Info Link 1",
+            "type": "external",
+            "href": "/"
+        },
+        {
+            "label": "Footer Info Link 2",
+            "type": "external",
+            "href": "/"
+        }
+    ],
+    "menu_links": [
+        {
+            "label": "Footer Submenu 1",
+            "type": "external",
+            "href": "/",
+            "children": [
+                {
+                    "label": "Footer Nav Link 1",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 2",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 3",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 4",
+                    "href": "/",
+                    "type": "external"
+                }
+            ]
+        },
+        {
+            "label": "Footer Submenu 2",
+            "type": "external",
+            "href": "/",
+            "children": [
+                {
+                    "label": "Footer Nav Link 1",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 2",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 3",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 4",
+                    "href": "/",
+                    "type": "external"
+                }
+            ]
+        },
+        {
+            "label": "Footer Submenu 3",
+            "type": "external",
+            "href": "/",
+            "children": [
+                {
+                    "label": "Footer Nav Link 1",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 2",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 3",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 4",
+                    "href": "/",
+                    "type": "external"
+                }
+            ]
+        },
+        {
+            "label": "Footer Submenu 4",
+            "type": "external",
+            "href": "/",
+            "children": [
+                {
+                    "label": "Footer Nav Link 1",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 2",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 3",
+                    "href": "/",
+                    "type": "external"
+                },
+                {
+                    "label": "Footer Nav Link 4",
+                    "href": "/",
+                    "type": "external"
+                }
+            ]
+        }
+    ]
+}

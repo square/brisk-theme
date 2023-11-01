@@ -1,0 +1,21 @@
+{% set min = 1 %}
+{% set max = product.per_order_max %}
+
+{% embed 'partials/form/stepper' with {
+    label: 'partials.components.store.item.quantity.label'|localize,
+    min,
+    max,
+    isRequired: true,
+} %}
+    {% block data %}
+        init() {
+            this.$watch('model', (value) => {
+                this.formData.quantity.value = value;
+            });
+            // Toggle error message
+            this.$watch('invalidQuantity', (isInvalid) => {
+                this.isInvalid = isInvalid;
+            });
+        },
+    {% endblock %}
+{% endembed %}

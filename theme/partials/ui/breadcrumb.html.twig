@@ -1,0 +1,17 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/breadcrumb.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/breadcrumb.css') }}
+{% endif %}
+
+<ul class="ui-breadcrumb">
+    {% for crumb in breadcrumb %}
+    <li class="ui-breadcrumb__link">
+        {% if crumb.link|length  %}
+            <a href="{{ crumb.link }}">{{ crumb.title }}</a>
+        {% else %}
+            <span>{{ crumb.title }}</span>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>

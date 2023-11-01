@@ -1,0 +1,43 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/tooltip.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/tooltip.css') }}
+{% endif %}
+
+{% if variant == 'menu' %}
+    {% if request.async == true %}
+        <script src="{{ 'js/ui/menu.js' | asset_url }}"></script>
+    {% else %}
+        {{ register_asset('js/ui/menu.js', { defer: false }) }}
+    {% endif %}
+    <div
+        id="{{ id|default(random()) }}"
+        x-ref="tooltip"
+        x-data="{ model: null, {% block data %}{% endblock %} }"
+        {% if parentModel %}x-modelable="model"{% endif %}
+        x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
+        class="ui-tooltip--menu"
+    >
+        {% if asyncTemplateName and asyncProps is not empty %}
+            {{ async('tooltip-menu', asyncTemplateName, { props: asyncProps }) }}
+        {% else %}
+            {% embed 'partials/ui/menu' with { items, menuTriggerRef } %}
+                {% block data %}
+                    init() {
+                        this.menuValue = this.model;
+                        this.$watch('menuValue', value => model = value);
+                    },
+                {% endblock %}
+            {% endembed %}
+        {% endif %}
+    </div>
+{% else %}
+    <span
+        id="{{ id|default(random()) }}"
+        x-ref="tooltip"
+        role="tooltip"
+        class="ui-tooltip {% if isDropdown %}ui-tooltip--dropdown{% endif %} {% if tooltipContrast %}ui-tooltip--contrast{% endif %}"
+    >
+        {% block content %}{% endblock %}
+    </span>
+{% endif %}
