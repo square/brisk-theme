@@ -8,7 +8,11 @@
 {% set sortedByNewest = reviews|sort((a, b) => b.updated_at|date('U') - a.updated_at|date('U')) %}
 {% set perPage = 5 %}
 {% set currentPage = 1 %}
-{% set totalPages =  max(((reviews|length) / perPage)|round, 1) %}
+{% set totalPages =  max(((reviews|length) / perPage)|round(0, 'ceil'), 1) %}
+
+{% if reviews|length <= perPage %}
+    {% set totalPages =  1 %}
+{% endif %}
 
 <script id="item-reviews-data" type="application/json">
     {{ {
