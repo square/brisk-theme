@@ -1,0 +1,26 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": ["airbnb-base"],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "ignorePatterns": ["theme/assets/square-online-web-sdk/*"],
+    "rules": {
+        "indent": ["error", 4],
+        "max-len": "off",
+        "prefer-destructuring": "off",
+        "arrow-parens": [2, "always"]
+    },
+    "globals": {
+        "Alpine": "readonly",
+        "Popper": "readonly",
+        "Square": "readonly",
+        "Utils": "readonly",
+        "Constants": "readonly",
+        "SquareWebSDK": "readonly"
+    }
+}

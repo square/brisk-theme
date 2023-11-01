@@ -1,0 +1,18 @@
+{
+    "extends": [
+        "stylelint-config-standard",
+        "stylelint-config-rational-order-fix"
+    ],
+    "rules": {
+        "selector-class-pattern": null,
+        "custom-property-pattern": null,
+        "color-hex-length": null,
+        "color-function-notation": "legacy",
+        "selector-combinator-space-before": "always",
+        "selector-combinator-space-after": "always",
+        "length-zero-no-unit": null,
+        "media-query-no-invalid": null,
+        "media-feature-range-notation": null,
+        "indentation": 4
+    }
+}
