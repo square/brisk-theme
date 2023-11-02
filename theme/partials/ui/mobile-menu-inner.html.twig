@@ -3,38 +3,38 @@
 {% set defaultPaneId = 'id_top_pane' %}
 
 {% for topLink in nav_links %}
-    {% set topLinkId = 'id_' ~ topLink.label %}
-    {% set topLinkOptions = topLinkOptions|merge([{ label: topLink.label, href: link(topLink), paneId: topLinkId, hasChildren: topLink.children|length > 0 }]) %}
+    {% set topLinkId = 'id_' ~ topLink.title %}
+    {% set topLinkOptions = topLinkOptions|merge([{ label: topLink.title, href: topLink.url, paneId: topLinkId, hasChildren: topLink.children|length > 0 }]) %}
 
     {% if topLink.children|length %}
         {% set subLinkOptions = [] %}
         {% for subLink in topLink.children %}
-            {% set subLinkId = topLinkId ~ '_' ~ subLink.label %}
-            {% set subLinkOptions = subLinkOptions|merge([{ label: subLink.label, href: link(subLink), parentId: topLinkId, paneId: subLinkId, hasChildren: subLink.children|length > 0 }]) %}
+            {% set subLinkId = topLinkId ~ '_' ~ subLink.title %}
+            {% set subLinkOptions = subLinkOptions|merge([{ label: subLink.title, href: subLink.url, parentId: topLinkId, paneId: subLinkId, hasChildren: subLink.children|length > 0 }]) %}
 
             {% set childOptions = [] %}
             {% for child in subLink.children %}
-                {% set childId = subLinkId ~ '_' ~ child.label %}
-                {% set childOptions = childOptions|merge([{ label: child.label, href: link(child), parentId: subLinkId, paneId: childId, hasChildren: child.children|length > 0 }]) %}
+                {% set childId = subLinkId ~ '_' ~ child.title %}
+                {% set childOptions = childOptions|merge([{ label: child.title, href: child.url, parentId: subLinkId, paneId: childId, hasChildren: child.children|length > 0 }]) %}
 
                 {% set grandChildOptions = [] %}
                 {% for grandChild in child.children %}
-                    {% set grandChildId = childId ~ '_' ~ grandChild.label %}
-                    {% set grandChildOptions = grandChildOptions|merge([{ label: grandChild.label, href: link(grandChild), parentId: childId, paneId: grandChildId, hasChildren: grandChild.children|length > 0 }]) %}
+                    {% set grandChildId = childId ~ '_' ~ grandChild.title %}
+                    {% set grandChildOptions = grandChildOptions|merge([{ label: grandChild.title, href: grandChild.url, parentId: childId, paneId: grandChildId, hasChildren: grandChild.children|length > 0 }]) %}
                 {% endfor %}
 
                 {% if grandChildOptions|length %}
-                    {% set navPanes = navPanes|merge([{ level: 2, children: grandChildOptions, parentId: childId, parentLabel: child.label }]) %}
+                    {% set navPanes = navPanes|merge([{ level: 2, children: grandChildOptions, parentId: childId, parentLabel: child.title }]) %}
                 {% endif %}
             {% endfor %}
 
             {% if childOptions|length %}
-                {% set navPanes = navPanes|merge([{ level: 1, children: childOptions, parentId: subLinkId, parentLabel: subLink.label }]) %}
+                {% set navPanes = navPanes|merge([{ level: 1, children: childOptions, parentId: subLinkId, parentLabel: subLink.title }]) %}
             {% endif %}
         {% endfor %}
 
         {% if subLinkOptions|length %}
-            {% set navPanes = navPanes|merge([{ level: 0, children: subLinkOptions, parentId: topLinkId, parentLabel: topLink.label }]) %}
+            {% set navPanes = navPanes|merge([{ level: 0, children: subLinkOptions, parentId: topLinkId, parentLabel: topLink.title }]) %}
         {% endif %}
     {% endif %}
 {% endfor %}

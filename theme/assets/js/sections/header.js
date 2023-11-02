@@ -127,7 +127,7 @@ document.addEventListener('alpine:init', () => {
          * @return {Boolean} whether the Megamenu should be displayed or not
          */
         isMegaMenuVisible() {
-            return Boolean(this.currentlyDisplayedLink?.children || this.currentlyDisplayedLink?.menu_image_url);
+            return Boolean(this.currentlyDisplayedLink?.children);
         },
         /**
          * @return {Array[]} - array of columns, each of which is an array containing Nav Link Submenus

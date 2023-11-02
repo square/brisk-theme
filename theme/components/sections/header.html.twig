@@ -8,54 +8,63 @@
 
 {% set formattedLinks = [] %}
 
-{% if nav_links is not defined or nav_links is empty %}
-    {% set nav_links = config.header.placeholder_nav_links %}
+{% set links = category_list({ pagination: { page_size: 3 } })|merge(nav_links) %}
+
+{% if links is empty %}
+    {% set links = config.header.placeholder_nav_links %}
 {% endif %}
 
-{% for link in nav_links %}
+{% for link in links %}
+    {% set megaImageUrl = link.images[0].absolute_url %}
+    {% if link.menu_image_url %}
+        {% set megaImageUrl = link.menu_image_url|asset_url %}
+    {% endif %}
+
     {% set topLevelLink = {
-        title: link.label,
-        url: link(link),
-        isOpen: false
+        menu_image_url: megaImageUrl,
+        title: link.name,
+        url: link.square_online_id ? category_link(link.square_online_id) : link(link),
     } %}
 
-    {% if link.menu_image_url is not empty %}
-        {% set topLevelLink = topLevelLink|merge({ menu_image_url: link.menu_image_url|asset_url }) %}
-    {% endif %}
-    {% if link.children is not empty %}
-        {% set children = {} %}
-
-        {% for child_link in link.children %}
-            {% set formattedChildLink = {
-                title: child_link.label,
-                url: link(child_link),
-                isOpen: false,
-            } %}
-
-            {% if child_link.children is not empty %}
-                {% set grandchildren = {} %}
-                {% for grandchild_link in child_link.children %}
-                    {% set formattedGrandchildLink = {
-                        (grandchild_link.label): {
-                            title: grandchild_link.label,
-                            url: link(grandchild_link),
-                            isOpen: false,
-                        }
-                    } %}
-                    {% set grandchildren = grandchildren|merge(formattedGrandchildLink) %}
-                {% endfor %}
-
-                {% set formattedChildLink = formattedChildLink|merge({ children: grandchildren }) %}
-            {% endif %}
-
-            {% set children = children|merge({ (child_link.label): formattedChildLink }) %}
-        {% endfor %}
-
-        {% set topLevelLink = topLevelLink|merge({ children: children }) %}
-
+    {% if megaImageUrl is not empty %}
+        {% set topLevelLink = topLevelLink|merge({ menu_image_url: megaImageUrl }) %}
     {% endif %}
 
-    {% set formattedLinks = formattedLinks|merge({ (link.label): topLevelLink }) %}
+    {% if link.square_online_id %}
+        {% set subCategories = category_hierarchy(null, link.square_online_id) %}
+        {% if subCategories is not empty %}
+            {% set children = {} %}
+
+            {% for child_link in subCategories %}
+                {% set formattedChildLink = {
+                    title: child_link.name,
+                    url: child_link.square_online_id ? category_link(child_link.square_online_id) : link(child_link),
+                } %}
+
+                {% if child_link.children is not empty %}
+                    {% set grandchildren = {} %}
+                    {% for grandchild_link in child_link.children %}
+                        {% set formattedGrandchildLink = {
+                            (grandchild_link.name): {
+                                title: grandchild_link.name,
+                                url: grandchild_link.square_online_id ? category_link(grandchild_link.square_online_id) : link(grandchild_link),
+                            }
+                        } %}
+                        {% set grandchildren = grandchildren|merge(formattedGrandchildLink) %}
+                    {% endfor %}
+
+                    {% set formattedChildLink = formattedChildLink|merge({ children: grandchildren }) %}
+                {% endif %}
+
+                {% set children = children|merge({ (child_link.name): formattedChildLink }) %}
+            {% endfor %}
+
+            {% set topLevelLink = topLevelLink|merge({ children: children }) %}
+
+        {% endif %}
+    {% endif %}
+
+    {% set formattedLinks = formattedLinks|merge({ (link.name): topLevelLink }) %}
 {% endfor %}
 
 <script id="nav-links-data" type="application/json">
@@ -64,9 +73,9 @@
     }
 </script>
 
-{{ include('partials/ui/mobile-menu', { nav_links }) }}
+{{ include('partials/ui/mobile-menu', { nav_links: formattedLinks }) }}
 
-<div 
+<div
     x-data="header('nav-links-data')"
     class="site-header"
     :class="headerClasses"
@@ -86,8 +95,8 @@
                 <span class="site-topbar__message">
                     {{ announcement_bar_text }}
                     {% if announcement_bar_link %}
-                        <a 
-                            class="site-topbar__link" 
+                        <a
+                            class="site-topbar__link"
                             href="{{ link(announcement_bar_link) }}"
                         >
                             {{ announcement_bar_link.label }}
@@ -100,9 +109,9 @@
                             x-show="$store.global.customerLocale.postal_code"
                         {% endblock %}
                     {% endembed %}
-                    <span 
-                        class="site-topbar__zipcode" 
-                        x-show="$store.global.customerLocale.postal_code" 
+                    <span
+                        class="site-topbar__zipcode"
+                        x-show="$store.global.customerLocale.postal_code"
                         x-text="$store.global.customerLocale.postal_code"
                     ></span>
                 </div>
@@ -128,10 +137,10 @@
 
         <nav class="site-header__nav site-header__nav--desktop">
             <ul class="site-header__nav-linklist">
-                {% for link in nav_links %}
-                    <li @mouseenter.native="onMouseEnter('{{ link.label }}')" @mouseleave.native="onMouseLeave">
-                        <a class="site-header__nav-link" :class="currentlyDisplayedLink?.title === '{{link.label}}' && 'is-active' " href="{{ link(link) }}">
-                            {{ link.label }}
+                {% for link in formattedLinks %}
+                    <li @mouseenter.native="onMouseEnter('{{ link.title }}')" @mouseleave.native="onMouseLeave">
+                        <a class="site-header__nav-link" :class="currentlyDisplayedLink?.title === '{{ link.title }}' && 'is-active' " href="{{ link.url }}">
+                            {{ link.title }}
                         </a>
                     </li>
                 {% endfor %}
@@ -147,7 +156,7 @@
                 action: 'openSearch',
                 buttonClasses: 'site-header__utility-button site-header__utility-button--search',
             })}}
-            
+
             {# required for Search Dialog #}
             <template x-if="!dialogExists()">
                 <template x-teleport="body">
@@ -237,7 +246,7 @@
 
 <template x-teleport="body">
     <div
-        x-show="$store.global.isMegaMenuVisible" 
+        x-show="$store.global.isMegaMenuVisible"
         class="ui-megamenu-overlay"
         x-transition:enter="fade-enter-active"
         x-transition:enter-start="fade-enter-from"
