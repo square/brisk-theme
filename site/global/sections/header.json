@@ -8,13 +8,11 @@
         },
         "nav_links": [
             {
-                "name": "Gifts",
                 "label": "Gifts",
                 "type": "external",
                 "href": "/gifts"
             },
             {
-                "name": "Sale",
                 "label": "Sale",
                 "type": "external",
                 "href": "/sale"

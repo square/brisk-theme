@@ -20,7 +20,11 @@
             {% if categories is not empty %}
                 {% set children = [] %}
                 {% for category in categories %}
-                    {% set children = children|merge([{ label: category.name, href: category_link(category.square_online_id) }]) %}
+                    {% set children = children|merge([{
+                        label: category.name,
+                        type: 'category',
+                        id: category.square_online_id,
+                    }]) %}
                 {% endfor %}
                 {% set categoryLinks = {
                     label: "Shop",
@@ -39,7 +43,7 @@
                             <li class="footer-menu__submenu-item">
                                 <a
                                     class="footer-menu__link"
-                                    href="{{ child_link.href ? child_link.href : link(child_link) }}"
+                                    href="{{ link(child_link) }}"
                                 >
                                     {{ child_link.label }}
                                 </a>

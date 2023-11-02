@@ -8,63 +8,100 @@
 
 {% set formattedLinks = [] %}
 
-{% set links = category_list({ pagination: { page_size: 3 } })|merge(nav_links) %}
+{# Create category links #}
+{% set categoryLinks = [] %}
+{% for category in category_list({ pagination: { page_size: 3 } }) %}
+    {% set categoryLinks = categoryLinks|merge([{
+        label: category.name,
+        type: 'category',
+        id: category.square_online_id,
+        menu_image_url: category.images[0].absolute_url,
+    }]) %}
+{% endfor %}
+
+{% set links = categoryLinks|merge(nav_links) %}
 
 {% if links is empty %}
     {% set links = config.header.placeholder_nav_links %}
 {% endif %}
 
 {% for link in links %}
-    {% set megaImageUrl = link.images[0].absolute_url %}
-    {% if link.menu_image_url %}
-        {% set megaImageUrl = link.menu_image_url|asset_url %}
+    {% set menuImageUrl = link.menu_image_url %}
+    {% if link.type != 'category' and link.menu_image_url %}
+        {% set menuImageUrl = link.menu_image_url|asset_url %}
     {% endif %}
 
     {% set topLevelLink = {
-        menu_image_url: megaImageUrl,
-        title: link.name,
-        url: link.square_online_id ? category_link(link.square_online_id) : link(link),
+        menu_image_url: menuImageUrl,
+        title: link.label,
+        url: link(link),
     } %}
 
-    {% if megaImageUrl is not empty %}
-        {% set topLevelLink = topLevelLink|merge({ menu_image_url: megaImageUrl }) %}
+    {% if menuImageUrl is not empty %}
+        {% set topLevelLink = topLevelLink|merge({ menu_image_url: menuImageUrl }) %}
     {% endif %}
 
-    {% if link.square_online_id %}
-        {% set subCategories = category_hierarchy(null, link.square_online_id) %}
-        {% if subCategories is not empty %}
-            {% set children = {} %}
+    {% set linkChildren = link.children %}
 
-            {% for child_link in subCategories %}
-                {% set formattedChildLink = {
-                    title: child_link.name,
-                    url: child_link.square_online_id ? category_link(child_link.square_online_id) : link(child_link),
-                } %}
+    {# Create sub category links #}
+    {% if link.type == 'category' %}
+        {% set subCategoryLinks = [] %}
+        {% set subCategories = category_hierarchy(null, link.id) %}
 
-                {% if child_link.children is not empty %}
-                    {% set grandchildren = {} %}
-                    {% for grandchild_link in child_link.children %}
-                        {% set formattedGrandchildLink = {
-                            (grandchild_link.name): {
-                                title: grandchild_link.name,
-                                url: grandchild_link.square_online_id ? category_link(grandchild_link.square_online_id) : link(grandchild_link),
-                            }
-                        } %}
-                        {% set grandchildren = grandchildren|merge(formattedGrandchildLink) %}
-                    {% endfor %}
+        {% for subCategory in subCategories %}
+            {% set subCategoryChildren = [] %}
 
-                    {% set formattedChildLink = formattedChildLink|merge({ children: grandchildren }) %}
-                {% endif %}
-
-                {% set children = children|merge({ (child_link.name): formattedChildLink }) %}
+            {% for grandSubCategory in subCategory.children %}
+                {% set subCategoryChildren = subCategoryChildren|merge([{
+                    label: grandSubCategory.name,
+                    type: 'category',
+                    id: grandSubCategory.square_online_id,
+                }]) %}
             {% endfor %}
 
-            {% set topLevelLink = topLevelLink|merge({ children: children }) %}
+            {% set subCategoryLinks = subCategoryLinks|merge([{
+                label: subCategory.name,
+                type: 'category',
+                id: subCategory.square_online_id,
+                children: subCategoryChildren,
+            }]) %}
+        {% endfor %}
 
-        {% endif %}
+        {% set linkChildren = subCategoryLinks %}
     {% endif %}
 
-    {% set formattedLinks = formattedLinks|merge({ (link.name): topLevelLink }) %}
+    {% if linkChildren is not empty %}
+        {% set children = {} %}
+
+        {% for child_link in linkChildren %}
+            {% set formattedChildLink = {
+                title: child_link.label,
+                url: link(child_link),
+            } %}
+
+            {% if child_link.children is not empty %}
+                {% set grandchildren = {} %}
+                {% for grandchild_link in child_link.children %}
+                    {% set formattedGrandchildLink = {
+                        (grandchild_link.label): {
+                            title: grandchild_link.label,
+                            url: link(grandchild_link),
+                        }
+                    } %}
+                    {% set grandchildren = grandchildren|merge(formattedGrandchildLink) %}
+                {% endfor %}
+
+                {% set formattedChildLink = formattedChildLink|merge({ children: grandchildren }) %}
+            {% endif %}
+
+            {% set children = children|merge({ (child_link.label): formattedChildLink }) %}
+        {% endfor %}
+
+        {% set topLevelLink = topLevelLink|merge({ children: children }) %}
+
+    {% endif %}
+
+    {% set formattedLinks = formattedLinks|merge({ (link.label): topLevelLink }) %}
 {% endfor %}
 
 <script id="nav-links-data" type="application/json">
