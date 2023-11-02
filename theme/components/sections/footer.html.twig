@@ -3,8 +3,8 @@
 
 <div class="footer container">
     <div class="footer__logo-wrapper">
-        <a 
-            class="site-logo" 
+        <a
+            class="site-logo"
             href="/"
         >
             {{ square.site.title }}
@@ -15,20 +15,33 @@
             {% set accordion_menus = [] %}
             {% set accordionAllowedTags = '<p><strong><em><ul><li><ol><a>' %}
 
-            {% for link in footer_menu_links|default(config.footer.menu_links) %}
+            {% set categories = category_list({ pagination: { page_size: 4 } }) %}
+            {% set categoryLinks = {} %}
+            {% if categories is not empty %}
+                {% set children = [] %}
+                {% for category in categories %}
+                    {% set children = children|merge([{ label: category.name, href: category_link(category.square_online_id) }]) %}
+                {% endfor %}
+                {% set categoryLinks = {
+                    label: "Shop",
+                    children,
+                } %}
+            {% endif %}
+
+            {% for link in ([categoryLinks]|merge(footer_menu_links))|default(config.footer.menu_links) %}
 
                 {# Set content for both Mobile Accordion and Desktop Menu #}
                 {% set submenu_links %}
-                    <ul 
+                    <ul
                         class="footer-menu__submenu"
                     >
                         {% for child_link in link.children %}
                             <li class="footer-menu__submenu-item">
-                                <a 
+                                <a
                                     class="footer-menu__link"
-                                    href="{{ link(child_link) }}"
-                                > 
-                                    {{ child_link.label }} 
+                                    href="{{ child_link.href ? child_link.href : link(child_link) }}"
+                                >
+                                    {{ child_link.label }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -46,7 +59,7 @@
                 <li class="footer-menu__item">
                     <div
                         class="footer-menu__submenu-title"
-                    > 
+                    >
                         {{ link.label }}
                     </div>
                     {{ submenu_links }}
@@ -56,13 +69,13 @@
             {# Render Mobile Footer Menu Accordion #}
         </ul>
         <div class="footer-menu footer-menu--mobile">
-            {{ include('partials/ui/accordion', { 
+            {{ include('partials/ui/accordion', {
                     variant: 'footer',
                     accordionItems: accordion_menus,
                     allowedTags: accordionAllowedTags,
                     expandIcon: 'add',
-                    collapseIcon: 'remove' 
-                }) 
+                    collapseIcon: 'remove'
+                })
             }}
         </div>
     </div>
@@ -72,7 +85,7 @@
                 <input type="hidden" name="optIn" value="true">
                 <div class="signup-form">
                     <p class="signup-form__title">{{ 'components.footer.newsletter.title'|localize }}</p>
-                    
+
                     {% if response.success.form %}
                         <p class="signup-form__message">
                             {{ 'components.footer.newsletter.success'|localize }}

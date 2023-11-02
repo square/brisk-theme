@@ -14,33 +14,6 @@
         ],
         "footer_menu_links": [
             {
-                "label": "Shop",
-                "type": "external",
-                "href": "/",
-                "children": [
-                    {
-                        "label": "Womens",
-                        "id": 1,
-                        "type": "category"
-                    },
-                    {
-                        "label": "Mens",
-                        "id": 2,
-                        "type": "category"
-                    },
-                    {
-                        "label": "Accessories",
-                        "id": 1,
-                        "type": "category"
-                    },
-                    {
-                        "label": "Gifts",
-                        "id": 1,
-                        "type": "category"
-                    }
-                ]
-            },
-            {
                 "label": "Learn",
                 "type": "external",
                 "href": "/",
