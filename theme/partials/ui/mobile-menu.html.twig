@@ -10,10 +10,6 @@
     {{ register_asset('js/components/mobile-menu.js', { defer: false }) }}
 {% endif %}
 
-{% if nav_links is not defined or nav_links is empty %}
-    {% set nav_links = config.header.placeholder_nav_links %}
-{% endif %}
-
 <div
     x-data="mobileMenu('nav-links-data')"
     class="drawer"
