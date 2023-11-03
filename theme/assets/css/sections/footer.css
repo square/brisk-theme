@@ -6,8 +6,8 @@
 
 @media (min-width: 700px) {
     .footer {
-        padding-right: var(--space-x5);
-        padding-left: var(--space-x5);
+        padding-right: 0;
+        padding-left: 0;
     }
 }
 
