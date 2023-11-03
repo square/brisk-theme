@@ -9,6 +9,7 @@
 }
 
 .mobile-menu__nav-heading {
+    margin-left: var(--space);
     margin-bottom: var(--space-x3);
     font-size: var(--theme-mobile-menu-heading-font-size);
 }
@@ -40,6 +41,8 @@
 
 .mobile-menu__pane-wrapper {
     position: relative;
+    margin-left: calc(var(--space) * -1);
+    margin-right: calc(var(--space-x2) * -1);
 }
 
 .mobile-menu__nav-pane {

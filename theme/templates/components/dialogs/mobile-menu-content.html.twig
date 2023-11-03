@@ -1,3 +1,5 @@
+<link href="{{ 'css/components/mobile-menu.css' | asset_url }}" rel="stylesheet" />
+
 {% set navPanes = [] %}
 {% set topLinkOptions = [] %}
 {% set defaultPaneId = 'id_top_pane' %}
@@ -68,7 +70,7 @@
             size: 'medium',
             variant: 'neutral',
             buttonClasses: 'mobile-menu__close-button',
-            action: 'closeMobileMenu()'
+            action: '$store.dialog.closeDialog()'
         } %}
             {% block attributes %}
                 x-show="!isBackButtonVisible"
@@ -126,3 +128,11 @@
         {% endfor %}
     </div>
 </nav>
+
+{% schema %}
+{
+    "nav_links": {
+        "type": "array"
+    }
+}
+{% endschema %}
