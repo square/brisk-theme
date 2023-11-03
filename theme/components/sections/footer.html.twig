@@ -1,165 +1,167 @@
 {{ register_asset('css/sections/footer.css') }}
 {{ forms_script() }}
 
-<div class="footer container">
-    <div class="footer__logo-wrapper">
-        <a
-            class="site-logo"
-            href="/"
-        >
-            {{ square.site.title }}
-        </a>
-    </div>
-    <div class="footer__menu-wrapper">
-        <ul class="footer-menu footer-menu--desktop">
-            {% set accordion_menus = [] %}
-            {% set accordionAllowedTags = '<p><strong><em><ul><li><ol><a>' %}
+<div class="footer">
+    <div class="container">
+        <div class="footer__logo-wrapper">
+            <a
+                class="site-logo"
+                href="/"
+            >
+                {{ square.site.title }}
+            </a>
+        </div>
+        <div class="footer__menu-wrapper">
+            <ul class="footer-menu footer-menu--desktop">
+                {% set accordion_menus = [] %}
+                {% set accordionAllowedTags = '<p><strong><em><ul><li><ol><a>' %}
 
-            {% set categories = category_list({ pagination: { page_size: 4 } }) %}
-            {% set categoryLinks = {} %}
-            {% if categories is not empty %}
-                {% set children = [] %}
-                {% for category in categories %}
-                    {% set children = children|merge([{
-                        label: category.name,
-                        type: 'category',
-                        id: category.square_online_id,
-                    }]) %}
+                {% set categories = category_list({ pagination: { page_size: 4 } }) %}
+                {% set categoryLinks = {} %}
+                {% if categories is not empty %}
+                    {% set children = [] %}
+                    {% for category in categories %}
+                        {% set children = children|merge([{
+                            label: category.name,
+                            type: 'category',
+                            id: category.square_online_id,
+                        }]) %}
+                    {% endfor %}
+                    {% set categoryLinks = {
+                        label: "Shop",
+                        children,
+                    } %}
+                {% endif %}
+
+                {% for link in ([categoryLinks]|merge(footer_menu_links))|default(config.footer.menu_links) %}
+
+                    {# Set content for both Mobile Accordion and Desktop Menu #}
+                    {% set submenu_links %}
+                        <ul
+                            class="footer-menu__submenu"
+                        >
+                            {% for child_link in link.children %}
+                                <li class="footer-menu__submenu-item">
+                                    <a
+                                        class="footer-menu__link"
+                                        href="{{ link(child_link) }}"
+                                    >
+                                        {{ child_link.label }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endset %}
+
+                    {% set new_accordion_menu = {
+                        label: link.label,
+                        content: submenu_links
+                    } %}
+
+                    {% set accordion_menus = accordion_menus|merge([new_accordion_menu]) %}
+
+                    {# render Desktop Submenu #}
+                    <li class="footer-menu__item">
+                        <div
+                            class="footer-menu__submenu-title"
+                        >
+                            {{ link.label }}
+                        </div>
+                        {{ submenu_links }}
+                    </li>
                 {% endfor %}
-                {% set categoryLinks = {
-                    label: "Shop",
-                    children,
-                } %}
-            {% endif %}
 
-            {% for link in ([categoryLinks]|merge(footer_menu_links))|default(config.footer.menu_links) %}
+                {# Render Mobile Footer Menu Accordion #}
+            </ul>
+            <div class="footer-menu footer-menu--mobile">
+                {{ include('partials/ui/accordion', {
+                        variant: 'footer',
+                        accordionItems: accordion_menus,
+                        allowedTags: accordionAllowedTags,
+                        expandIcon: 'add',
+                        collapseIcon: 'remove'
+                    })
+                }}
+            </div>
+        </div>
+        <div class="footer__sub-footer">
+            <div class="footer__signup-wrapper">
+                {% form "newsletter_signup" %}
+                    <input type="hidden" name="optIn" value="true">
+                    <div class="signup-form">
+                        <p class="signup-form__title">{{ 'components.footer.newsletter.title'|localize }}</p>
 
-                {# Set content for both Mobile Accordion and Desktop Menu #}
-                {% set submenu_links %}
-                    <ul
-                        class="footer-menu__submenu"
-                    >
-                        {% for child_link in link.children %}
-                            <li class="footer-menu__submenu-item">
-                                <a
-                                    class="footer-menu__link"
-                                    href="{{ link(child_link) }}"
-                                >
-                                    {{ child_link.label }}
+                        {% if response.success.form %}
+                            <p class="signup-form__message">
+                                {{ 'components.footer.newsletter.success'|localize }}
+                            </p>
+
+                        {% else %}
+                            {% if response.errors.form %}
+                                <p class="signup-form__message signup-form__message--error">
+                                    {{ 'components.footer.newsletter.errors'|localize }}
+                                </p>
+                            {% endif %}
+
+                            <div class="signup-form__input-wrapper">
+                                {% embed 'partials/form/text' with {
+                                    label: "email",
+                                    type: "text",
+                                    hideLabel: true,
+                                    size: 'medium',
+                                    wrapperClasses: 'signup-form__input',
+                                    placeholder: 'components.footer.newsletter.placeholder'|localize,
+                                    isRequired: true,
+                                } %}
+                                {% endembed %}
+                                {% embed 'partials/ui/button' with {
+                                        label: 'components.footer.newsletter.button'|localize,
+                                        size: 'medium',
+                                        buttonType: 'submit',
+                                        variant: 'primary',
+                                        buttonClasses: 'signup-form__submit-button',
+                                } %}
+                                {% endembed %}
+                            </div>
+                        {% endif %}
+
+                        <p class="signup-form__disclaimer">{{ 'components.footer.newsletter.disclaimer'|localize }}</p>
+
+                    </div>
+                {% endform %}
+            </div>
+            <div class="footer__info-wrapper">
+                <ul class="payments">
+                    <li class="payments__logo">
+                        <img src="{{ 'images/payment-icons/mastercard.png'| asset_url }}">
+                    </li>
+                    <li class="payments__logo">
+                        <img src="{{ 'images/payment-icons/square.png'| asset_url }}">
+                    </li>
+                    <li class="payments__logo">
+                        <img src="{{ 'images/payment-icons/visa.png'| asset_url }}">
+                    </li>
+                    <li class="payments__logo">
+                        <img src="{{ 'images/payment-icons/amex.png'| asset_url }}">
+                    </li>
+                    <li class="payments__logo">
+                        <img src="{{ 'images/payment-icons/discover.png'| asset_url }}">
+                    </li>
+                </ul>
+                <div class="footer__info-links-wrapper">
+                    <ul class="footer-info-links">
+                        {% for info_link in footer_info_links|default(config.footer.info_links)  %}
+                            <li class="footer-info-links__item">
+                                <a class="footer-info-links__link" href="{{ link(info_link) }}">
+                                    {{ info_link.label }}
                                 </a>
                             </li>
                         {% endfor %}
-                    </ul>
-                {% endset %}
-
-                {% set new_accordion_menu = {
-                    label: link.label,
-                    content: submenu_links
-                } %}
-
-                {% set accordion_menus = accordion_menus|merge([new_accordion_menu]) %}
-
-                {# render Desktop Submenu #}
-                <li class="footer-menu__item">
-                    <div
-                        class="footer-menu__submenu-title"
-                    >
-                        {{ link.label }}
-                    </div>
-                    {{ submenu_links }}
-                </li>
-            {% endfor %}
-
-            {# Render Mobile Footer Menu Accordion #}
-        </ul>
-        <div class="footer-menu footer-menu--mobile">
-            {{ include('partials/ui/accordion', {
-                    variant: 'footer',
-                    accordionItems: accordion_menus,
-                    allowedTags: accordionAllowedTags,
-                    expandIcon: 'add',
-                    collapseIcon: 'remove'
-                })
-            }}
-        </div>
-    </div>
-    <div class="footer__sub-footer">
-        <div class="footer__signup-wrapper">
-            {% form "newsletter_signup" %}
-                <input type="hidden" name="optIn" value="true">
-                <div class="signup-form">
-                    <p class="signup-form__title">{{ 'components.footer.newsletter.title'|localize }}</p>
-
-                    {% if response.success.form %}
-                        <p class="signup-form__message">
-                            {{ 'components.footer.newsletter.success'|localize }}
-                        </p>
-
-                    {% else %}
-                        {% if response.errors.form %}
-                            <p class="signup-form__message signup-form__message--error">
-                                {{ 'components.footer.newsletter.errors'|localize }}
-                            </p>
-                        {% endif %}
-
-                        <div class="signup-form__input-wrapper">
-                            {% embed 'partials/form/text' with {
-                                label: "email",
-                                type: "text",
-                                hideLabel: true,
-                                size: 'medium',
-                                wrapperClasses: 'signup-form__input',
-                                placeholder: 'components.footer.newsletter.placeholder'|localize,
-                                isRequired: true,
-                            } %}
-                            {% endembed %}
-                            {% embed 'partials/ui/button' with {
-                                    label: 'components.footer.newsletter.button'|localize,
-                                    size: 'medium',
-                                    buttonType: 'submit',
-                                    variant: 'primary',
-                                    buttonClasses: 'signup-form__submit-button',
-                            } %}
-                            {% endembed %}
-                        </div>
-                    {% endif %}
-
-                    <p class="signup-form__disclaimer">{{ 'components.footer.newsletter.disclaimer'|localize }}</p>
-
-                </div>
-            {% endform %}
-        </div>
-        <div class="footer__info-wrapper">
-            <ul class="payments">
-                <li class="payments__logo">
-                    <img src="{{ 'images/payment-icons/mastercard.png'| asset_url }}">
-                </li>
-                <li class="payments__logo">
-                    <img src="{{ 'images/payment-icons/square.png'| asset_url }}">
-                </li>
-                <li class="payments__logo">
-                    <img src="{{ 'images/payment-icons/visa.png'| asset_url }}">
-                </li>
-                <li class="payments__logo">
-                    <img src="{{ 'images/payment-icons/amex.png'| asset_url }}">
-                </li>
-                <li class="payments__logo">
-                    <img src="{{ 'images/payment-icons/discover.png'| asset_url }}">
-                </li>
-            </ul>
-            <div class="footer__info-links-wrapper">
-                <ul class="footer-info-links">
-                    {% for info_link in footer_info_links|default(config.footer.info_links)  %}
                         <li class="footer-info-links__item">
-                            <a class="footer-info-links__link" href="{{ link(info_link) }}">
-                                {{ info_link.label }}
-                            </a>
+                            {{ 'components.footer.info.copyright'|localize }} {{ 'now' | date('Y') }}
                         </li>
-                    {% endfor %}
-                    <li class="footer-info-links__item">
-                        {{ 'components.footer.info.copyright'|localize }} {{ 'now' | date('Y') }}
-                    </li>
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
