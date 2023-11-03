@@ -30,7 +30,7 @@ document.addEventListener('alpine:init', () => {
         },
         openSearch() {
             this.$store.dialog.openPrimaryDialog('templates/components/dialogs/search-content', {
-                size: 'halfsheet',
+                variant: 'halfsheet',
                 transition: 'down',
                 scrollable: true,
                 showCloseButton: false,
@@ -179,7 +179,12 @@ document.addEventListener('alpine:init', () => {
          * Open the Mobile Menu flyout
          */
         openMobileMenu() {
-            this.$store.flyout.openFlyout('mobile-menu');
+            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/mobile-menu-content', {
+                variant: 'flyout',
+                transition: 'left',
+                scrollable: true,
+                showCloseButton: false,
+            }, { nav_links: this.navLinks });
         },
     });
 
