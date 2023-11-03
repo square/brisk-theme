@@ -1,5 +1,5 @@
 {
-    "shouldUseThemeStyles": true,
+    "shouldUseSiteStyles": false,
     "mapSizeToLocalizeKey": {
         "xx-small": "shared.sizes.xx_small",
         "x-small": "shared.sizes.x_small",
