@@ -22,11 +22,11 @@ const M = {
 }), O = "/s/api/v1/cart", v = "Something went wrong", A = (r, e) => {
   const t = D(e.error || e.message || r.statusText), i = new Error(t);
   if (e.errors) {
-    const o = {};
+    const s = {};
     Object.keys(e.errors).forEach((n) => {
-      const s = e.errors[n].map((c) => D(c));
-      o[D(n)] = s;
-    }), i.errors = o;
+      const o = e.errors[n].map((c) => D(c));
+      s[D(n)] = o;
+    }), i.errors = s;
   }
   return e.fields && (i.fields = e.fields), r.status && (i.status = r.status, i.status === 200 && (i.status = 500)), i;
 }, k = async (r) => {
@@ -64,8 +64,8 @@ const M = {
   }), e;
 }, X = (r) => {
   const e = r + "=", i = decodeURIComponent(document.cookie).split(";");
-  for (let o = 0; o < i.length; o++) {
-    let n = i[o];
+  for (let s = 0; s < i.length; s++) {
+    let n = i[s];
     for (; n.charAt(0) == " "; )
       n = n.substring(1);
     if (n.indexOf(e) == 0)
@@ -85,17 +85,17 @@ const M = {
   const e = b(r.fulfillment);
   return e.fulfillmentType === M.PICKUP && ((t = e.pickupDetails) == null ? void 0 : t.scheduleType) === j.ASAP;
 }, V = (r) => {
-  var o;
+  var s;
   const e = JSON.parse(JSON.stringify(r.lineItem));
   e.quantity || (e.quantity = 1);
   const t = w(e);
-  if ((o = t.modifiers) != null && o.length) {
+  if ((s = t.modifiers) != null && s.length) {
     const n = {};
-    t.modifiers.forEach((s) => {
-      if (s.type) {
-        n[s.type] || (n[s.type] = {});
-        const c = JSON.parse(JSON.stringify(s));
-        delete c.id, delete c.type, n[s.type][s.id] = c;
+    t.modifiers.forEach((o) => {
+      if (o.type) {
+        n[o.type] || (n[o.type] = {});
+        const c = JSON.parse(JSON.stringify(o));
+        delete c.id, delete c.type, n[o.type][o.id] = c;
       }
     }), t.modifiers = n;
   } else
@@ -158,8 +158,8 @@ class J {
       method: "POST",
       body: JSON.stringify(t),
       headers: I()
-    }), o = await k(i);
-    return C(e) && await this.patchAsapPickupTime(e), o;
+    }), s = await k(i);
+    return C(e) && await this.patchAsapPickupTime(e), s;
   }
   /**
    * Adds an item to a new order and redirects to checkout (/s/checkout) on success.
@@ -324,7 +324,7 @@ class J {
   async patchAsapPickupTime(e) {
     var t;
     if (C(e)) {
-      const o = await (await fetch("/s/api/v1/resource", {
+      const s = await (await fetch("/s/api/v1/resource", {
         method: "POST",
         headers: I(),
         body: JSON.stringify({
@@ -338,12 +338,12 @@ class J {
           }
         })
       })).json();
-      if ((t = o.schedule) != null && t.earliest_time.time_unix) {
-        const n = new Date(o.schedule.earliest_time.time_unix * 1e3).toISOString().split(".")[0] + "Z", s = {
+      if ((t = s.schedule) != null && t.earliest_time.time_unix) {
+        const n = new Date(s.schedule.earliest_time.time_unix * 1e3).toISOString().split(".")[0] + "Z", o = {
           orderId: E(e),
           fulfillment: JSON.parse(JSON.stringify(e.fulfillment))
         };
-        return s.fulfillment.pickupDetails || (s.fulfillment.pickupDetails = {}), s.fulfillment.pickupDetails.pickupAt = n, this.patchFulfillment(s);
+        return o.fulfillment.pickupDetails || (o.fulfillment.pickupDetails = {}), o.fulfillment.pickupDetails.pickupAt = n, this.patchFulfillment(o);
       }
     }
     return {
@@ -357,8 +357,8 @@ class K {
   async getResource(e) {
     const t = {};
     for (const n in e) {
-      const s = e[n];
-      t[n] = s;
+      const o = e[n];
+      t[n] = o;
     }
     return await (await fetch("/s/api/v1/resource", {
       method: "POST",
@@ -375,15 +375,15 @@ class B {
     this.initConfig = e;
   }
   async autocompletePlaces(e) {
-    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain, n = e.address, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places?types=geocode&input=${n}`;
-    return await (await fetch(s, {
+    const t = this.initConfig.userId, i = this.initConfig.siteId, s = this.initConfig.cdnDomain, n = e.address, o = `${s}/app/store/api/v28/pub/users/${t}/sites/${i}/places?types=geocode&input=${n}`;
+    return await (await fetch(o, {
       method: "GET",
       headers: I()
     })).json();
   }
   async getPlace(e) {
-    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain, n = e.placeId, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places/${n}`;
-    return await (await fetch(s, {
+    const t = this.initConfig.userId, i = this.initConfig.siteId, s = this.initConfig.cdnDomain, n = e.placeId, o = `${s}/app/store/api/v28/pub/users/${t}/sites/${i}/places/${n}`;
+    return await (await fetch(o, {
       method: "GET",
       headers: I()
     })).json();
@@ -427,11 +427,11 @@ const T = {
 }, W = (r) => {
   const e = r.product_type_details.end_date, t = r.product_type_details.end_time;
   let i = e + "T";
-  const o = t.split(" "), n = o[0].split(":");
-  let s = parseInt(n[0]) + (o[1] === "PM" ? 12 : 0);
-  s -= n[0] === "12" ? 12 : 0;
+  const s = t.split(" "), n = s[0].split(":");
+  let o = parseInt(n[0]) + (s[1] === "PM" ? 12 : 0);
+  o -= n[0] === "12" ? 12 : 0;
   const c = n[1];
-  return s.toString().length === 1 && (i += "0"), i += `${s}:${c}:00${r.product_type_details.timezone_info.utc_offset_string}`, new Date(i);
+  return o.toString().length === 1 && (i += "0"), i += `${o}:${c}:00${r.product_type_details.timezone_info.utc_offset_string}`, new Date(i);
 };
 class Y {
   getVariations(e) {
@@ -452,29 +452,29 @@ class Y {
   isItemSoldOut(e) {
     return e.variations.every((t) => this.isVariationSoldOut(t));
   }
-  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: i = "", skipStockCheck: o = !1 }) {
-    return this.getVariations(e).reduce((n, s) => {
-      if (!i && s.item_option_values) {
-        const c = R(s);
+  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: i = "", skipStockCheck: s = !1 }) {
+    return this.getVariations(e).reduce((n, o) => {
+      if (!i && o.item_option_values) {
+        const c = R(o);
         if (!t.every((a) => c.find((d) => d.itemOptionId === a.itemOptionId && d.choice === a.choice)))
           return n;
-      } else if (e.variations.length > 1 && s.id !== i)
+      } else if (e.variations.length > 1 && o.id !== i)
         return n;
-      return !o && this.isVariationSoldOut(s) || n.push(s), n;
+      return !s && this.isVariationSoldOut(o) || n.push(o), n;
     }, []);
   }
-  isOptionChoiceDisabledForSelectedOptions(e, t, i, o = !0) {
-    o && (i = i.filter((c) => c.itemOptionId !== t.itemOptionId));
+  isOptionChoiceDisabledForSelectedOptions(e, t, i, s = !0) {
+    s && (i = i.filter((c) => c.itemOptionId !== t.itemOptionId));
     const n = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: i });
-    let s = !1;
+    let o = !1;
     return n.forEach((c) => {
-      R(c).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (s = !0);
-    }), !s;
+      R(c).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (o = !0);
+    }), !o;
   }
   isModifierListForSelectedModifiersValid(e, t) {
     var c, a;
-    const i = t.find((d) => d.id == e.id), o = e.min_selected_modifiers, n = e.max_selected_modifiers;
-    let s = ((c = i == null ? void 0 : i.textEntry) == null ? void 0 : c.length) || 0;
+    const i = t.find((d) => d.id == e.id), s = e.min_selected_modifiers, n = e.max_selected_modifiers;
+    let o = ((c = i == null ? void 0 : i.textEntry) == null ? void 0 : c.length) || 0;
     if ((a = i == null ? void 0 : i.choiceSelections) != null && a.length) {
       const d = i.choiceSelections.find((y) => {
         var h;
@@ -485,32 +485,32 @@ class Y {
       });
       if (d || p)
         return !1;
-      s = i.choiceSelections.length;
+      o = i.choiceSelections.length;
     }
-    return o && n && o === n ? s === o : o && n ? s >= o && s <= n : n ? s <= n : o ? s >= o : !0;
+    return s && n && s === n ? o === s : s && n ? o >= s && o <= n : n ? o <= n : s ? o >= s : !0;
   }
-  getDisabledOptionChoicesForSelectedOptions(e, t, i, o = !0) {
+  getDisabledOptionChoicesForSelectedOptions(e, t, i, s = !0) {
     const n = t.choices.map((c) => ({
       itemOptionId: t.id,
       choice: c
-    })), s = [];
-    return o && (i = i.filter((c) => c.itemOptionId !== t.id)), n.forEach((c) => {
-      this.isOptionChoiceDisabledForSelectedOptions(e, c, i, o) && s.push(c.choice);
-    }), s;
+    })), o = [];
+    return s && (i = i.filter((c) => c.itemOptionId !== t.id)), n.forEach((c) => {
+      this.isOptionChoiceDisabledForSelectedOptions(e, c, i, s) && o.push(c.choice);
+    }), o;
   }
-  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: i = [], selectedVariationId: o = "", quantity: n = void 0, skipStockCheck: s = !1, skipModifierCheck: c = !1 }) {
+  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: i = [], selectedVariationId: s = "", quantity: n = void 0, skipStockCheck: o = !1, skipModifierCheck: c = !1 }) {
     var S, g;
     const a = [];
     let d = !1, p = "", y = T.SOLD_OUT;
     const h = [];
-    (S = e.item_options) != null && S.length && !o ? e.item_options.forEach((l) => {
+    (S = e.item_options) != null && S.length && !s ? e.item_options.forEach((l) => {
       t != null && t.find((f) => f.itemOptionId === l.id && l.choices.includes(f.choice)) || a.push(l.id);
-    }) : !e.item_options && e.variations.length > 1 && !o && (d = !0);
+    }) : !e.item_options && e.variations.length > 1 && !s && (d = !0);
     let m = null;
     if (a.length === 0 && !d) {
-      const l = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: s });
+      const l = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: s, skipStockCheck: o });
       if (l.length === 0) {
-        const f = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: !0 });
+        const f = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: s, skipStockCheck: !0 });
         f.length > 0 && (p = f[0].id);
       } else if (m = l[0], n != null) {
         const f = this.getItemQuantityError(e, m, n);
@@ -530,11 +530,11 @@ class Y {
     };
     return n && (u.quantity = n), u;
   }
-  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: i = "", selectedModifiers: o = [], skipStockCheck: n = !1, skipModifierCheck: s = !1, formattedLocale: c = void 0 }) {
+  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: i = "", selectedModifiers: s = [], skipStockCheck: n = !1, skipModifierCheck: o = !1, formattedLocale: c = void 0 }) {
     var d;
     let a = null;
     try {
-      a = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: i, selectedModifiers: o, skipStockCheck: n, skipModifierCheck: s });
+      a = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: i, selectedModifiers: s, skipStockCheck: n, skipModifierCheck: o });
     } catch {
     }
     if (a) {
@@ -585,7 +585,7 @@ class Y {
 }
 class z {
   constructor(e) {
-    _(this, "version", "0.0.0-semantic-release");
+    _(this, "version", "4.3.2");
     _(this, "cart");
     _(this, "places");
     _(this, "resource");
