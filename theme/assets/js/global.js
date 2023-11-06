@@ -148,7 +148,15 @@ document.addEventListener('alpine:init', () => {
          */
         async reloadMiniCart() {
             if (Square.async.templates?.['mini-cart']) {
-                Square.async.refreshAsyncTemplate('mini-cart', {}, { replaceContent: true });
+                await SquareWebSDK.resource.getResource({
+                    cart: {
+                        type: 'cart',
+                    },
+                })
+                    .then(async ({ cart }) => {
+                        this.miniCartItemsTotal = cart.order.total_quantity;
+                        Square.async.refreshAsyncTemplate('mini-cart', {}, { replaceContent: true });
+                    });
             }
         },
     });
