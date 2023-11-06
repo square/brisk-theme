@@ -238,7 +238,7 @@
                     isDropdown: true,
                 } %}
                     {% block content %}
-                        {{ async('mini-cart', 'mini-cart', { props: { cart: cart() } }) }}
+                        {{ async('mini-cart', 'mini-cart', { props: { cart: [] } }) }}
                     {% endblock %}
                 {% endembed %}
             </div>
