@@ -1,6 +1,6 @@
 var U = Object.defineProperty;
-var $ = (i, e, t) => e in i ? U(i, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[e] = t;
-var _ = (i, e, t) => ($(i, typeof e != "symbol" ? e + "" : e, t), t);
+var $ = (r, e, t) => e in r ? U(r, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : r[e] = t;
+var _ = (r, e, t) => ($(r, typeof e != "symbol" ? e + "" : e, t), t);
 const M = {
   SHIPMENT: "SHIPMENT",
   PICKUP: "PICKUP",
@@ -12,81 +12,81 @@ const M = {
   TEXT: "TEXT",
   GIFT_WRAP: "GIFT_WRAP",
   GIFT_MESSAGE: "GIFT_MESSAGE"
-}, L = () => {
-  var i;
-  return (i = document.querySelector('meta[name="csrf-token"]')) == null ? void 0 : i.content;
+}, x = () => {
+  var r;
+  return (r = document.querySelector('meta[name="csrf-token"]')) == null ? void 0 : r.content;
 }, I = () => ({
   Accept: "application/json",
   "content-type": "application/json; charset=UTF-8",
-  "X-CSRF-TOKEN": L()
-}), O = "/s/api/v1/cart", v = "Something went wrong", A = (i, e) => {
-  const t = D(e.error || e.message || i.statusText), r = new Error(t);
+  "X-CSRF-TOKEN": x()
+}), O = "/s/api/v1/cart", v = "Something went wrong", A = (r, e) => {
+  const t = D(e.error || e.message || r.statusText), i = new Error(t);
   if (e.errors) {
     const s = {};
     Object.keys(e.errors).forEach((n) => {
       const o = e.errors[n].map((c) => D(c));
       s[D(n)] = o;
-    }), r.errors = s;
+    }), i.errors = s;
   }
-  return e.fields && (r.fields = e.fields), i.status && (r.status = i.status, r.status === 200 && (r.status = 500)), r;
-}, k = async (i) => {
-  const e = await i.json();
-  if (!i.ok)
-    throw A(i, e);
+  return e.fields && (i.fields = e.fields), r.status && (i.status = r.status, i.status === 200 && (i.status = 500)), i;
+}, k = async (r) => {
+  const e = await r.json();
+  if (!r.ok)
+    throw A(r, e);
   return {
-    response: i,
+    response: r,
     data: e.data
   };
-}, X = async (i) => {
+}, L = async (r) => {
   var e;
-  if (i.redirected) {
-    if (window.location.href === i.url) {
-      const t = await i.json();
-      throw (e = t == null ? void 0 : t.response) != null && e.errors ? A(i, t.response.errors) : new Error(v);
+  if (r.redirected) {
+    if (window.location.href === r.url) {
+      const t = await r.json();
+      throw (e = t == null ? void 0 : t.response) != null && e.errors ? A(r, t.response.errors) : new Error(v);
     }
-    window.location.href = i.url;
+    window.location.href = r.url;
     return;
-  } else if (!i.ok) {
-    const t = await i.json();
-    throw A(i, t);
+  } else if (!r.ok) {
+    const t = await r.json();
+    throw A(r, t);
   }
   throw new Error(v);
-}, D = (i) => i.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), C = (i) => i.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), w = (i) => {
+}, D = (r) => r.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), P = (r) => r.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), w = (r) => {
   const e = {};
-  return Object.keys(i).forEach((t) => {
-    const r = i[t];
-    Array.isArray(r) ? e[C(t)] = F(r) : r && typeof r == "object" ? e[C(t)] = w(r) : e[C(t)] = r;
+  return Object.keys(r).forEach((t) => {
+    const i = r[t];
+    Array.isArray(i) ? e[P(t)] = F(i) : i && typeof i == "object" ? e[P(t)] = w(i) : e[P(t)] = i;
   }), e;
-}, F = (i) => {
+}, F = (r) => {
   const e = [];
-  return i.forEach((t) => {
+  return r.forEach((t) => {
     Array.isArray(t) ? e.push(F(t)) : t && typeof t == "object" ? e.push(w(t)) : e.push(t);
   }), e;
-}, x = (i) => {
-  const e = i + "=", r = decodeURIComponent(document.cookie).split(";");
-  for (let s = 0; s < r.length; s++) {
-    let n = r[s];
+}, X = (r) => {
+  const e = r + "=", i = decodeURIComponent(document.cookie).split(";");
+  for (let s = 0; s < i.length; s++) {
+    let n = i[s];
     for (; n.charAt(0) == " "; )
       n = n.substring(1);
     if (n.indexOf(e) == 0)
       return n.substring(e.length, n.length);
   }
   return null;
-}, G = (i) => {
-  const e = V(i);
+}, G = (r) => {
+  const e = V(r);
   return delete e.order_id, e;
-}, b = (i) => {
-  const e = JSON.parse(JSON.stringify(i));
+}, b = (r) => {
+  const e = JSON.parse(JSON.stringify(r));
   return e.fulfillmentType === "PICKUP" && (e.pickupDetails || (e.pickupDetails = {}), e.pickupDetails.scheduleType || (e.pickupDetails.scheduleType = "ASAP"), e.pickupDetails.curbsidePickupRequested == null && (e.pickupDetails.curbsidePickupRequested = !1), e.pickupDetails.curbsidePickupDetails || (e.pickupDetails.curbsidePickupDetails = {
     curbsideDetails: ""
   }), e.pickupDetails.pickupAt || (e.pickupDetails.pickupAt = (/* @__PURE__ */ new Date()).toISOString().split(".")[0] + "Z")), e;
-}, P = (i) => {
+}, C = (r) => {
   var t;
-  const e = b(i.fulfillment);
+  const e = b(r.fulfillment);
   return e.fulfillmentType === M.PICKUP && ((t = e.pickupDetails) == null ? void 0 : t.scheduleType) === j.ASAP;
-}, V = (i) => {
+}, V = (r) => {
   var s;
-  const e = JSON.parse(JSON.stringify(i.lineItem));
+  const e = JSON.parse(JSON.stringify(r.lineItem));
   e.quantity || (e.quantity = 1);
   const t = w(e);
   if ((s = t.modifiers) != null && s.length) {
@@ -102,12 +102,12 @@ const M = {
     t.modifiers && delete t.modifiers;
   return {
     line_item: t,
-    fulfillment: w(b(i.fulfillment)),
-    location_id: i.locationId,
+    fulfillment: w(b(r.fulfillment)),
+    location_id: r.locationId,
     // JSON.stringify will remove if undefined
-    order_id: E(i)
+    order_id: E(r)
   };
-}, E = (i) => i.orderId !== void 0 ? i.orderId : x("com_cart_id") || void 0;
+}, E = (r) => r.orderId !== void 0 ? r.orderId : X("com_cart_id") || void 0;
 class J {
   /**
    * Adds an item to the current order.
@@ -154,12 +154,12 @@ class J {
    * ```
    */
   async addItem(e) {
-    const t = V(e), r = await fetch(`${O}/add`, {
+    const t = V(e), i = await fetch(`${O}/add`, {
       method: "POST",
       body: JSON.stringify(t),
       headers: I()
-    }), s = await k(r);
-    return P(e) && await this.patchAsapPickupTime(e), s;
+    }), s = await k(i);
+    return C(e) && await this.patchAsapPickupTime(e), s;
   }
   /**
    * Adds an item to a new order and redirects to checkout (/s/checkout) on success.
@@ -206,12 +206,12 @@ class J {
    * ```
    */
   async buyNowItem(e) {
-    const t = G(e), r = await fetch(`${O}/buy`, {
+    const t = G(e), i = await fetch(`${O}/buy`, {
       method: "POST",
       body: JSON.stringify(t),
       headers: I()
     });
-    return !e.lineItem.subscriptionPlanVariationId && P(e) && await this.patchAsapPickupTime(e), X(r);
+    return !e.lineItem.subscriptionPlanVariationId && C(e) && await this.patchAsapPickupTime(e), L(i);
   }
   /**
    * Updates the quantity of an item in the order. Quantity must be greater than 0.
@@ -323,7 +323,7 @@ class J {
    */
   async patchAsapPickupTime(e) {
     var t;
-    if (P(e)) {
+    if (C(e)) {
       const s = await (await fetch("/s/api/v1/resource", {
         method: "POST",
         headers: I(),
@@ -375,19 +375,40 @@ class B {
     this.initConfig = e;
   }
   async autocompletePlaces(e) {
-    const t = this.initConfig.userId, r = this.initConfig.siteId, s = this.initConfig.cdnDomain, n = e.address, o = e.types;
-    let c = `${s}/app/store/api/v28/pub/users/${t}/sites/${r}/places?input=${n}`;
-    return o && (c = `${c}&types=${o}`), await (await fetch(c, {
+    const t = this.initConfig.userId, i = this.initConfig.siteId, s = this.initConfig.cdnDomain, n = e.address, o = `${s}/app/store/api/v28/pub/users/${t}/sites/${i}/places?types=geocode&input=${n}`;
+    return await (await fetch(o, {
       method: "GET",
       headers: I()
     })).json();
   }
   async getPlace(e) {
-    const t = this.initConfig.userId, r = this.initConfig.siteId, s = this.initConfig.cdnDomain, n = e.placeId, o = `${s}/app/store/api/v28/pub/users/${t}/sites/${r}/places/${n}`;
+    const t = this.initConfig.userId, i = this.initConfig.siteId, s = this.initConfig.cdnDomain, n = e.placeId, o = `${s}/app/store/api/v28/pub/users/${t}/sites/${i}/places/${n}`;
     return await (await fetch(o, {
       method: "GET",
       headers: I()
     })).json();
+  }
+}
+class H extends Error {
+  constructor(t, i) {
+    super(t);
+    _(this, "template");
+    this.template = i;
+  }
+}
+class Q {
+  async getTemplate(e) {
+    const t = await fetch("/s/api/v1/template", {
+      method: "POST",
+      body: JSON.stringify({
+        template: e.template,
+        props: e.props
+      }),
+      headers: I()
+    }), i = await t.text();
+    if (t.ok === !1)
+      throw new H("Unable to render template", i);
+    return i;
   }
 }
 const T = {
@@ -395,24 +416,24 @@ const T = {
   SOLD_OUT: "SOLD_OUT",
   STOCK_EXCEEDED: "STOCK_EXCEEDED",
   PER_ORDER_MAX_EXCEEDED: "PER_ORDER_MAX_EXCEEDED"
-}, R = (i) => {
+}, R = (r) => {
   const e = [];
-  return i.item_option_values && Object.keys(i.item_option_values).forEach((t) => {
+  return r.item_option_values && Object.keys(r.item_option_values).forEach((t) => {
     e.push({
       itemOptionId: t,
-      choice: i.item_option_values[t].choice
+      choice: r.item_option_values[t].choice
     });
   }), e;
-}, H = (i) => {
-  const e = i.product_type_details.end_date, t = i.product_type_details.end_time;
-  let r = e + "T";
+}, W = (r) => {
+  const e = r.product_type_details.end_date, t = r.product_type_details.end_time;
+  let i = e + "T";
   const s = t.split(" "), n = s[0].split(":");
   let o = parseInt(n[0]) + (s[1] === "PM" ? 12 : 0);
   o -= n[0] === "12" ? 12 : 0;
   const c = n[1];
-  return o.toString().length === 1 && (r += "0"), r += `${o}:${c}:00${i.product_type_details.timezone_info.utc_offset_string}`, new Date(r);
+  return o.toString().length === 1 && (i += "0"), i += `${o}:${c}:00${r.product_type_details.timezone_info.utc_offset_string}`, new Date(i);
 };
-class Q {
+class Y {
   getVariations(e) {
     return e.variations;
   }
@@ -425,26 +446,26 @@ class Q {
   isVariationSoldOut(e) {
     return e.sold_out || e.inventory_tracking_enabled && e.inventory === 0;
   }
-  getItemQuantityError(e, t, r) {
-    return r <= 0 ? T.INVALID_QUANTITY : this.isVariationSoldOut(t) ? T.SOLD_OUT : t.inventory_tracking_enabled && r > t.inventory ? T.STOCK_EXCEEDED : e.per_order_max && r > e.per_order_max ? T.PER_ORDER_MAX_EXCEEDED : null;
+  getItemQuantityError(e, t, i) {
+    return i <= 0 ? T.INVALID_QUANTITY : this.isVariationSoldOut(t) ? T.SOLD_OUT : t.inventory_tracking_enabled && i > t.inventory ? T.STOCK_EXCEEDED : e.per_order_max && i > e.per_order_max ? T.PER_ORDER_MAX_EXCEEDED : null;
   }
   isItemSoldOut(e) {
     return e.variations.every((t) => this.isVariationSoldOut(t));
   }
-  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: r = "", skipStockCheck: s = !1 }) {
+  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: i = "", skipStockCheck: s = !1 }) {
     return this.getVariations(e).reduce((n, o) => {
-      if (!r && o.item_option_values) {
+      if (!i && o.item_option_values) {
         const c = R(o);
         if (!t.every((a) => c.find((d) => d.itemOptionId === a.itemOptionId && d.choice === a.choice)))
           return n;
-      } else if (e.variations.length > 1 && o.id !== r)
+      } else if (e.variations.length > 1 && o.id !== i)
         return n;
       return !s && this.isVariationSoldOut(o) || n.push(o), n;
     }, []);
   }
-  isOptionChoiceDisabledForSelectedOptions(e, t, r, s = !0) {
-    s && (r = r.filter((c) => c.itemOptionId !== t.itemOptionId));
-    const n = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: r });
+  isOptionChoiceDisabledForSelectedOptions(e, t, i, s = !0) {
+    s && (i = i.filter((c) => c.itemOptionId !== t.itemOptionId));
+    const n = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: i });
     let o = !1;
     return n.forEach((c) => {
       R(c).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (o = !0);
@@ -452,32 +473,32 @@ class Q {
   }
   isModifierListForSelectedModifiersValid(e, t) {
     var c, a;
-    const r = t.find((d) => d.id == e.id), s = e.min_selected_modifiers, n = e.max_selected_modifiers;
-    let o = ((c = r == null ? void 0 : r.textEntry) == null ? void 0 : c.length) || 0;
-    if ((a = r == null ? void 0 : r.choiceSelections) != null && a.length) {
-      const d = r.choiceSelections.find((y) => {
+    const i = t.find((d) => d.id == e.id), s = e.min_selected_modifiers, n = e.max_selected_modifiers;
+    let o = ((c = i == null ? void 0 : i.textEntry) == null ? void 0 : c.length) || 0;
+    if ((a = i == null ? void 0 : i.choiceSelections) != null && a.length) {
+      const d = i.choiceSelections.find((y) => {
         var h;
         return !((h = e.modifiers) != null && h.find((m) => m.id === y));
-      }), p = r.choiceSelections.find((y) => {
+      }), p = i.choiceSelections.find((y) => {
         var h, m;
         return (m = (h = e.modifiers) == null ? void 0 : h.find((u) => u.id === y)) == null ? void 0 : m.sold_out;
       });
       if (d || p)
         return !1;
-      o = r.choiceSelections.length;
+      o = i.choiceSelections.length;
     }
     return s && n && s === n ? o === s : s && n ? o >= s && o <= n : n ? o <= n : s ? o >= s : !0;
   }
-  getDisabledOptionChoicesForSelectedOptions(e, t, r, s = !0) {
+  getDisabledOptionChoicesForSelectedOptions(e, t, i, s = !0) {
     const n = t.choices.map((c) => ({
       itemOptionId: t.id,
       choice: c
     })), o = [];
-    return s && (r = r.filter((c) => c.itemOptionId !== t.id)), n.forEach((c) => {
-      this.isOptionChoiceDisabledForSelectedOptions(e, c, r, s) && o.push(c.choice);
+    return s && (i = i.filter((c) => c.itemOptionId !== t.id)), n.forEach((c) => {
+      this.isOptionChoiceDisabledForSelectedOptions(e, c, i, s) && o.push(c.choice);
     }), o;
   }
-  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: r = [], selectedVariationId: s = "", quantity: n = void 0, skipStockCheck: o = !1, skipModifierCheck: c = !1 }) {
+  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: i = [], selectedVariationId: s = "", quantity: n = void 0, skipStockCheck: o = !1, skipModifierCheck: c = !1 }) {
     var S, g;
     const a = [];
     let d = !1, p = "", y = T.SOLD_OUT;
@@ -497,7 +518,7 @@ class Q {
       }
     }
     if ((g = e.modifier_lists) != null && g.length && !c && e.modifier_lists.forEach((l) => {
-      this.isModifierListForSelectedModifiersValid(l, r) || h.push(l.id);
+      this.isModifierListForSelectedModifiersValid(l, i) || h.push(l.id);
     }), !m || a.length || p || h.length) {
       const l = new Error("Failed to validate item.");
       throw a.length && (l.itemOptionIds = a), d && (l.flatVariationSelectionMissing = !0), p && (l.variationId = p, l.quantityErrorType = y), h.length && (l.modifierListIds = h), l;
@@ -505,15 +526,15 @@ class Q {
     const u = {
       itemId: e.id,
       variationId: m.id,
-      modifiers: r
+      modifiers: i
     };
     return n && (u.quantity = n), u;
   }
-  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: r = "", selectedModifiers: s = [], skipStockCheck: n = !1, skipModifierCheck: o = !1, formattedLocale: c = void 0 }) {
+  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: i = "", selectedModifiers: s = [], skipStockCheck: n = !1, skipModifierCheck: o = !1, formattedLocale: c = void 0 }) {
     var d;
     let a = null;
     try {
-      a = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: r, selectedModifiers: s, skipStockCheck: n, skipModifierCheck: o });
+      a = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: i, selectedModifiers: s, skipStockCheck: n, skipModifierCheck: o });
     } catch {
     }
     if (a) {
@@ -553,7 +574,7 @@ class Q {
     return null;
   }
   isEventItemInThePast(e) {
-    return e.square_online_type !== "EVENT" ? !1 : H(e) <= /* @__PURE__ */ new Date();
+    return e.square_online_type !== "EVENT" ? !1 : W(e) <= /* @__PURE__ */ new Date();
   }
   isPreorderItemCutoffInThePast(e) {
     if (!e.preordering.PICKUP)
@@ -562,12 +583,13 @@ class Q {
     return new Date(t) <= /* @__PURE__ */ new Date();
   }
 }
-class Y {
+class z {
   constructor(e) {
-    _(this, "version", "0.0.0-semantic-release");
+    _(this, "version", "4.3.2");
     _(this, "cart");
     _(this, "places");
     _(this, "resource");
+    _(this, "template");
     _(this, "helpers");
     if (!e.userId)
       throw new Error("missing user id");
@@ -577,11 +599,11 @@ class Y {
       throw new Error("invalid user id");
     if (!Number.isInteger(Number(e.siteId)))
       throw new Error("invalid site id");
-    this.cart = new J(), this.places = new B(e), this.resource = new K(), this.helpers = {
-      item: new Q()
+    this.cart = new J(), this.places = new B(e), this.resource = new K(), this.template = new Q(), this.helpers = {
+      item: new Y()
     };
   }
 }
 export {
-  Y as default
+  z as default
 };
