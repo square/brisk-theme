@@ -124,26 +124,13 @@ document.addEventListener('alpine:init', () => {
                 Alpine.store('global').onOverlayToggle(true, '[role="dialog"]');
             }
 
-            return fetch('/s/api/v1/template', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    template: templateUrl,
-                    props: templateProps,
-                }),
+            const node = document.querySelector(isPrimary ? '.ui-dialog__primary-dialog [x-ref="dialogContent"]' : '.ui-dialog__secondary-dialog [x-ref="dialogContent"]');
+
+            return SquareWebSDK.template.getTemplate({
+                template: templateUrl,
+                props: templateProps,
             })
-                .then(async (response) => {
-                    const node = document.querySelector(isPrimary ? '.ui-dialog__primary-dialog [x-ref="dialogContent"]' : '.ui-dialog__secondary-dialog [x-ref="dialogContent"]');
-
-                    if (!response.ok) {
-                        node.innerHTML = '<p>Something went wrong. Please try again.</p>';
-                        this.isDialogLoading = false;
-                        return;
-                    }
-
-                    const text = await response.text();
+                .then(async (text) => {
                     // Temporarily wrap the content with <template> so Alpine doesn't initialize x-data attributes
                     node.innerHTML = `<template>${text}<div id="async-template-wrapper"></div></template>`;
                     // Wait until the dialog content is ready
@@ -157,25 +144,15 @@ document.addEventListener('alpine:init', () => {
 
                     // Finds all script tags from async templates
                     asyncTemplates.forEach((templateNode) => {
-                        asyncPromises.push(fetch('/s/api/v1/template', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': document.head.querySelector("meta[name='csrf-token']")?.content,
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                template: templateNode.dataset.asyncTemplate,
-                                props: JSON.parse(atob(templateNode.dataset.asyncProps)),
-                                loading: null,
-                            }),
-                        }).then(async (asyncResponse) => {
-                            if (asyncResponse.ok) {
-                                const asyncText = await asyncResponse.text();
-                                templateContent.querySelector('#async-template-wrapper').innerHTML = asyncText;
-                                const asyncTemplateScripts = templateContent.querySelectorAll('#async-template-wrapper script');
-                                if (asyncTemplateScripts.length) {
-                                    scripts = [...scripts, ...asyncTemplateScripts];
-                                }
+                        asyncPromises.push(SquareWebSDK.template.getTemplate({
+                            template: templateNode.dataset.asyncTemplate,
+                            props: JSON.parse(atob(templateNode.dataset.asyncProps)),
+                            loading: null,
+                        }).then(async (asyncText) => {
+                            templateContent.querySelector('#async-template-wrapper').innerHTML = asyncText;
+                            const asyncTemplateScripts = templateContent.querySelectorAll('#async-template-wrapper script');
+                            if (asyncTemplateScripts.length) {
+                                scripts = [...scripts, ...asyncTemplateScripts];
                             }
                         }));
                     });
@@ -201,6 +178,10 @@ document.addEventListener('alpine:init', () => {
 
                     document.body.setAttribute('dialog-size', this.options.size);
                     document.body.setAttribute('dialog-variant', this.options.variant);
+                })
+                .catch(() => {
+                    node.innerHTML = '<p>Something went wrong. Please try again.</p>';
+                    this.isDialogLoading = false;
                 });
         },
         /**
