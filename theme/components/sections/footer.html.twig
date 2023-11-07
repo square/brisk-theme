@@ -2,7 +2,10 @@
 {{ forms_script() }}
 
 <div class="footer">
-    <div class="container">
+    <div
+        class="container"
+        :class="{ 'container--fullwidth': $store.global.isMobile }"
+    >
         <div class="footer__logo-wrapper">
             <a
                 class="site-logo"
@@ -12,7 +15,7 @@
             </a>
         </div>
         <div class="footer__menu-wrapper">
-            <ul class="footer-menu footer-menu--desktop">
+            <ul class="footer-menu footer-menu--desktop row">
                 {% set accordion_menus = [] %}
                 {% set accordionAllowedTags = '<p><strong><em><ul><li><ol><a>' %}
 
@@ -61,7 +64,10 @@
                     {% set accordion_menus = accordion_menus|merge([new_accordion_menu]) %}
 
                     {# render Desktop Submenu #}
-                    <li class="footer-menu__item">
+                    <li
+                        class="footer-menu__item col"
+                        col-sm-6 col-md-3
+                    >
                         <div
                             class="footer-menu__submenu-title"
                         >

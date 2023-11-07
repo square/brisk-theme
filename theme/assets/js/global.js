@@ -177,6 +177,7 @@ document.addEventListener('alpine:init', () => {
         customerLocale: Alpine.$persist({}),
         suggestedPlaceItem: Alpine.$persist({}),
         isMobile: true,
+        isTablet: false,
         isPageScrollDisabled: false,
         isPageScrollbarVisible: false,
         isMegaMenuVisible: false,
@@ -217,6 +218,9 @@ document.addEventListener('alpine:init', () => {
                     document.body.style.top = 0;
                 }
             });
+        },
+        isDesktop() {
+            return !this.isMobile && !this.isTablet;
         },
         /**
          * Triggers when the dialog is open or close
@@ -439,14 +443,13 @@ document.addEventListener('alpine:init', () => {
         locale: Constants.DEFAULT_LOCALE,
         currency: Constants.DEFAULT_CURRENCY,
         defaultFulfillment: Constants.FULFILLMENT_SHIPPING,
-        isMobile: true,
         pageHeight: 0,
         pageWidth: 0,
         bodyStyles: {},
         /**
          * Initial events
          */
-        async init() {
+        init() {
             Utils.loadJsonDataIntoComponent.call(this, dataId);
 
             const store = Alpine.store('global');
@@ -477,6 +480,7 @@ document.addEventListener('alpine:init', () => {
             this.pageHeight = window.innerHeight;
             this.pageWidth = window.innerWidth;
             store.isMobile = this.pageWidth < 700;
+            store.isTablet = this.pageWidth < 992;
             store.isPageScrollbarVisible = this.pageHeight <= document.body.offsetHeight;
         },
     }));

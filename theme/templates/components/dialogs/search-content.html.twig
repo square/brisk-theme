@@ -1,14 +1,20 @@
 <div class="search-dialog" x-data="search()">
-    <div class="search-dialog__header">
-        <div class="search-dialog__logo">
-            <a 
-                class="site-logo" 
+    <div class="search-dialog__header row">
+        <div
+            class="search-dialog__logo col"
+            col-xs-6 col-sm-6 col-md-4
+        >
+            <a
+                class="site-logo"
                 href="/"
             >
                 {{ square.site.title }}
             </a>
         </div>
-        <div class="search-dialog__close">
+        <div
+            class="search-dialog__close col"
+            col-xs-6 col-sm-6 col-md-4
+        >
             {{ include('partials/ui/button', {
                 variant: 'neutral',
                 style: 'fill',
@@ -18,7 +24,10 @@
                 buttonClasses: 'search-dialog__close-button'
             } ) }}
         </div>
-        <div class="search-dialog__searchbar">
+        <div
+            class="search-dialog__searchbar col"
+            col-xs-12 col-sm-12 col-md-4
+        >
             {{ include('partials/ui/search-bar') }}
         </div>
     </div>

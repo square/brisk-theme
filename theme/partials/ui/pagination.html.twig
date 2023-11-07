@@ -53,7 +53,7 @@
         } %}
             {% block attributes %}
                 x-ref="paginationButton"
-                :fullwidth="isMobile"
+                :fullwidth="$store.global.isMobile"
                 @click.outside="toggleDropdown(false)"
                 @keydown.down="isDropdownVisible = true"
                 @keydown.tab="isDropdownVisible = false"
@@ -101,7 +101,7 @@
             } %}
                 {% block attributes %}
                     x-ref="paginationButton"
-                    :fullwidth="isMobile"
+                    :fullwidth="$store.global.isMobile"
                     @click.outside="toggleDropdown(false)"
                     @keydown.down="isDropdownVisible = true"
                     @keydown.tab="isDropdownVisible = false"
