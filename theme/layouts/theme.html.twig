@@ -27,7 +27,7 @@
 
             <!-- Must be included before alpine -->
             <script type="module">
-                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v4.3.2') | asset_url }}";
+                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v4.4.0') | asset_url }}";
                 window.SquareWebSDK = new SDK({{ sdk_init_config() }});
             </script>
 
@@ -69,7 +69,6 @@
     >
         <script id="global-data" type="application/json">
             {{ {
-                userId: square.site.user_id,
                 locale: square.store.locale,
                 currency: square.store.currency,
                 defaultFulfillment,

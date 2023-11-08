@@ -163,7 +163,6 @@ document.addEventListener('alpine:init', () => {
 
     // Global store
     Alpine.store('global', {
-        userId: '',
         locale: Constants.DEFAULT_JS_SAFE_LOCALE, // JS safe locale
         currency: Constants.DEFAULT_CURRENCY,
         currencySymbol: Constants.DEFAULT_CURRENCY_SYMBOL,
@@ -298,19 +297,12 @@ document.addEventListener('alpine:init', () => {
         async getCustomerCoordinates() {
             const { customerLocale } = Alpine.store('global');
 
-            if (!this.userId || Utils.hasValidCoordinates(customerLocale)) {
+            if (Utils.hasValidCoordinates(customerLocale)) {
                 return Promise.resolve();
             }
 
-            return fetch(`/app/website/cms/api/v1/users/${this.userId}/customers/coordinates`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(async (response) => (response.ok ? response.text() : '{}'))
-                .then(async (text) => {
-                    const data = JSON.parse(text);
+            return SquareWebSDK.customers.getCoordinates()
+                .then(async (data) => {
                     if (data?.postal_code && data?.latitude && data?.longitude) {
                         Alpine.store('global').updateProperty('customerLocale', data);
                     }
@@ -435,7 +427,6 @@ document.addEventListener('alpine:init', () => {
     });
 
     Alpine.data('global', (dataId) => ({
-        userId: null,
         locale: Constants.DEFAULT_LOCALE,
         currency: Constants.DEFAULT_CURRENCY,
         defaultFulfillment: Constants.FULFILLMENT_SHIPPING,
@@ -446,12 +437,11 @@ document.addEventListener('alpine:init', () => {
         /**
          * Initial events
          */
-        async init() {
+        init() {
             Utils.loadJsonDataIntoComponent.call(this, dataId);
 
             const store = Alpine.store('global');
             store.updateProperty('locale', this.locale.replace(/_/g, '-'));
-            store.updateProperty('userId', this.userId);
             store.updateProperty('fulfillment', this.defaultFulfillment);
             store.setCurrency(this.currency);
 

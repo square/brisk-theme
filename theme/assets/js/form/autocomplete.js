@@ -11,20 +11,6 @@ if (!window.onAutocompleteFormReady) {
             itemHoverIndex: 0,
             items: [],
             isDropdownOpen: false,
-            suggestionApiConfig: {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.head.querySelector("meta[name='csrf-token']")?.content,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    input: {
-                        items: {
-                            type: 'item-list',
-                        },
-                    },
-                }),
-            },
             /**
              * Initial events (We can't use `init()` b/c it'll get overwritten by the block data)
              */
@@ -45,10 +31,24 @@ if (!window.onAutocompleteFormReady) {
                 this.toggleDropdown(false);
             },
             /**
-             * Generates the suggestion api url
+             * Get items by autocomplete input
              */
-            getSuggestionUrl() {
-                return '/s/api/v1/resource';
+            loadSuggestions() {
+                return SquareWebSDK.resource.getResource({
+                    items: {
+                        type: 'item-list',
+                        filters: {
+                            search: this.model,
+                        },
+                    },
+                })
+                    .then(async ({ items }) => {
+                        if (items) {
+                            this.items = this.formatSuggestions(items);
+                        } else {
+                            this.items = [];
+                        }
+                    });
             },
             /**
              * Gets the items suggestion
@@ -56,16 +56,8 @@ if (!window.onAutocompleteFormReady) {
              */
             async getSuggestions(showDropdown = true) {
                 this.isLoadingAutocomplete = true;
-                await fetch(this.getSuggestionUrl(), this.suggestionApiConfig)
-                    .then(async (response) => (response.ok ? response.text() : '{}'))
-                    .then(async (text) => {
-                        const { data, items } = JSON.parse(text);
-                        if (data || items) {
-                            this.items = this.formatSuggestions(data ?? items);
-                        } else {
-                            this.items = [];
-                        }
-
+                await this.loadSuggestions()
+                    .then(async () => {
                         await this.refreshDropdown();
                         this.toggleDropdown(showDropdown);
                         this.isLoadingAutocomplete = false;

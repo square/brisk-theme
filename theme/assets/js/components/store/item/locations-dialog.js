@@ -123,15 +123,9 @@ document.addEventListener('alpine:init', () => {
         },
     });
 
-    const createItemSuggestionsData = (userId, siteId) => ({
+    const createItemSuggestionsData = () => ({
         model: Alpine.$persist(''),
         items: Alpine.$persist([]),
-        suggestionApiConfig: {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        },
         /**
          * Initial events
          */
@@ -194,11 +188,19 @@ document.addEventListener('alpine:init', () => {
             this.hasFetchedLocations = true;
         },
         /**
-         * Generates the suggestion api url
-         * @return {String}
+         * Get locations by autocomplete input
          */
-        getSuggestionUrl() {
-            return `/app/store/api/v28/pub/users/${userId}/sites/${siteId}/places?types=geocode&input=${this.model}`;
+        loadSuggestions() {
+            return SquareWebSDK.places.autocompletePlaces({
+                address: this.model,
+            })
+                .then(async ({ data }) => {
+                    if (data) {
+                        this.items = this.formatSuggestions(data);
+                    } else {
+                        this.items = [];
+                    }
+                });
         },
         /**
          * Formats the suggestions with label and value
@@ -221,15 +223,8 @@ document.addEventListener('alpine:init', () => {
             if (Utils.hasValidCoordinates(this.getSuggestedPlaceItem()) && this.getSuggestedPlaceItem().place_id === placeId) {
                 return;
             }
-            await fetch(`/app/store/api/v28/pub/users/${userId}/sites/${siteId}/places/${placeId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(async (response) => (response.ok ? response.text() : '{}'))
-                .then(async (text) => {
-                    const { data } = JSON.parse(text);
+            await SquareWebSDK.places.getPlace({ placeId })
+                .then(async ({ data }) => {
                     if (Utils.hasValidCoordinates(data)) {
                         this.updateSuggestedPlaceItem({
                             ...this.getSuggestedPlaceItem(),
