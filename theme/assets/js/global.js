@@ -303,7 +303,6 @@ document.addEventListener('alpine:init', () => {
 
             return SquareWebSDK.customers.getCoordinates()
                 .then(async (data) => {
-                    console.log(data);
                     if (data?.postal_code && data?.latitude && data?.longitude) {
                         Alpine.store('global').updateProperty('customerLocale', data);
                     }
