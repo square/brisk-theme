@@ -130,40 +130,6 @@ document.addEventListener('alpine:init', () => {
             return Boolean(this.currentlyDisplayedLink?.children);
         },
         /**
-         * @return {Array[]} - array of columns, each of which is an array containing Nav Link Submenus
-        */
-        columns() {
-            if (!this.currentlyDisplayedLink?.children) {
-                return [];
-            }
-            // populate columns with submenus, creating columns as necessary (up to max)
-            const fullColumns = Object.values(this.currentlyDisplayedLink.children)
-                .reduce((columns, navItem, index) => {
-                    // Add to columns sequentially
-                    const columnIndex = index % this.maxColumns;
-                    if (!columns[columnIndex]) {
-                        // eslint-disable-next-line no-param-reassign
-                        columns[columnIndex] = [];
-                    }
-                    columns[columnIndex].push(navItem);
-                    return columns;
-                }, []);
-
-            return fullColumns;
-        },
-        /**
-         * @return {Object} a styles object that modifies the Grid Layout in the megamenu
-         */
-        gridStyles() {
-            const columns = this.columns();
-            const columnCount = columns.length || 1;
-            const rowCount = columns[0]?.length || 1;
-            return {
-                'grid-template-columns': `repeat(${columnCount}, 1fr)`,
-                'grid-template-rows': `repeat(${rowCount}, 1fr)`,
-            };
-        },
-        /**
          * generates a title for a navigation link, with truncation if necessary
          * @param {Object} link navigation link
          * @param {Boolean} truncate

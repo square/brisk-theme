@@ -380,7 +380,6 @@ body[dialog-variant="halfsheet"] main {
     font-weight: var(--theme-logo-font-weight);
     font-size: var(--theme-logo-font-size);
     line-height: var(--theme-logo-line-height);
-    text-align: center;
     text-transform: uppercase;
     text-decoration: none;
 }

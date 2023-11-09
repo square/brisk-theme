@@ -10,8 +10,11 @@
 {% set items = items|slice(0, 4) %}
 
 {% if query is not defined or (query is defined and items|length > 0) %}
-    <div class="search-results">
-        <div class="search-results__category-list-wrapper">
+    <div class="search-results row">
+        <div
+            class="search-results__category-list-wrapper col"
+            col-xs-12 col-sm-12 col-md-3
+        >
             <p class="search-results__category-list-header">
                 {% if query is not defined %}
                     {{ 'components.search.suggested_searches'|localize }}
@@ -34,7 +37,10 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="search-results__tiles-list-wrapper">
+        <div
+            class="search-results__tiles-list-wrapper col"
+            col-xs-12 col-sm-12 col-md-8 offset-md-1
+        >
             <p class="search-results__tiles-list-header">
                 {% if query is not defined %}
                     {{ 'components.search.popular_items'|localize }}
@@ -44,11 +50,11 @@
             </p>
             <div class="search-results__tiles-list">
                 {{ include('partials/components/collection/list',
-                    { 
-                        items, 
-                        layout: 'carousel', 
+                    {
+                        items,
+                        layout: 'carousel',
                         hideHover: true
-                    }) 
+                    })
                 }}
             </div>
         </div>

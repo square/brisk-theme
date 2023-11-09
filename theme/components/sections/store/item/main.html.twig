@@ -18,6 +18,7 @@
 
 <div
     x-init="setInitialProductStore()"
+    class="row"
     :class="{ 'container--fullwidth item-page__main': $store.global.isMobile, 'row': !$store.global.isMobile }"
 >
     {# Product images #}

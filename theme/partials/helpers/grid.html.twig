@@ -9,6 +9,7 @@
     display: flex;
     flex-wrap: wrap;
     max-width: calc(100vw + var(--gutter-column));
+    height: max-content;
     margin-right: calc(var(--gutter-column) / -2);
     margin-left: calc(var(--gutter-column) / -2);
     row-gap: var(--gutter-column);
@@ -30,7 +31,7 @@
     max-width: calc(var(--max-grid-width) / 12 * var(--column));
     padding-right: calc(var(--gutter-column) / 2);
     padding-left: calc(var(--gutter-column) / 2);
-    transition: 0.3s ease-out;
+    transition: 0.1s ease-out;
 }
 
 {% for column in range(1, 12) %}
@@ -56,7 +57,7 @@
     {% endif %}
 {% endfor %}
 
-{% set breakpoints = { xs: 699, sm: 700, md: 840, lg: 1200, xl: 1600 } %}
+{% set breakpoints = { xs: 699, sm: 700, md: 992, lg: 1200, xl: 1600 } %}
 {% for breakpoint in breakpoints|keys %}
     {% set mediaWidth = 'min-width' %}
     {% if breakpoint == 'xs' %}

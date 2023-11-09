@@ -22,7 +22,6 @@
 
 .footer-menu--desktop {
     display: none;
-    gap: var(--space-x2);
 }
 
 @media (min-width: 700px) {

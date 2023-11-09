@@ -172,7 +172,7 @@
     }
 }
 
-@media (min-width: 840px) {
+@media (min-width: 992px) {
     .product-reviews__sort .form-select {
         max-width: 50%;
     }
