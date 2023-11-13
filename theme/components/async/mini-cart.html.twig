@@ -2,6 +2,7 @@
     <div
         x-data="miniCart({{ cart.order.total_quantity }})"
         class="mini-cart"
+        :class="{ 'is-interacting': $store.cart.isInteractingMiniCart }"
         @mouseenter="$store.cart.isInteractingMiniCart = true"
         @mouseleave="onMiniCartBlur"
     >

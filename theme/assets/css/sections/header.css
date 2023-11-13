@@ -129,7 +129,7 @@
 }
 
 .site-header__utility-button--cart.is-updated {
-    -webkit-animation: wobble-hor-bottom 0.8s both;
+    -webkit-animation: wobble-hor-bottom 0.8s both; /* stylelint-disable */
     animation: wobble-hor-bottom 0.8s both;
 }
 
@@ -264,12 +264,30 @@
 }
 
 /* mini cart */
+#mini-cart {
+    height: auto;
+    background: none;
+    box-shadow: none;
+}
 
 .mini-cart {
     position: relative;
     width: 375px;
     min-height: 100px;
     padding: calc(var(--space-x2) + var(--space-half)) var(--space-x2);
+    background: var(--theme-tooltip-dropdown-color);
+    border-radius: inherit;
+    box-shadow: 0px 4px 32px 0px var(--theme-tooltip-shadow-color), 0px 8px 16px 0px var(--theme-tooltip-shadow-color);
+}
+
+#mini-cart:not([data-show]) .mini-cart {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* Adding a custom animation to the mini-cart */
+#mini-cart[data-show] .mini-cart:not(.is-interacting) {
+    animation: scale-in-tr 0.5s;
 }
 
 .mini-cart .row {
