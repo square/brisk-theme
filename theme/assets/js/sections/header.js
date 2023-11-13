@@ -172,6 +172,14 @@ document.addEventListener('alpine:init', () => {
             this.$watch('$store.cart.isMiniCartOpen', (isOpen) => {
                 UITooltip.toggleTooltip(this.dropdown, isOpen);
             });
+
+            this.$watch('$store.cart.miniCartItemsTotal', () => {
+                this.$refs.miniCartTrigger.classList.add('is-updated');
+
+                Utils.delay(5000).then(() => {
+                    this.$refs.miniCartTrigger.classList.remove('is-updated');
+                });
+            });
         },
         onMiniCartFocus() {
             if (!this.isMiniCartClicked && this.$store.cart.miniCartItemsTotal > 0) {

@@ -128,6 +128,11 @@
     margin-left: auto;
 }
 
+.site-header__utility-button--cart.is-updated {
+    -webkit-animation: wobble-hor-bottom 0.8s both;
+    animation: wobble-hor-bottom 0.8s both;
+}
+
 .site-header__utility-button--cart.ui-button {
     display: inline-flex;
     gap: 0;
