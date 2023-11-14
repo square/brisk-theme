@@ -368,4 +368,19 @@ window.Utils = {
         }
         return new Promise((resolve) => { setTimeout(resolve, ms); });
     },
+    /**
+     * Scroll window with ease-in
+     * @param {Number} topPos
+     * @param {Function} callback
+     */
+    async scrollToEaseIn(topPos, callback) {
+        for (let y = 0; y <= topPos; y += 100) {
+            window.scrollTo({ top: y, behavior: 'smooth' });
+            // eslint-disable-next-line no-await-in-loop
+            await Utils.delay(30);
+            if (y + 100 > topPos && typeof callback === 'function') {
+                callback();
+            }
+        }
+    },
 };
