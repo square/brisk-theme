@@ -430,7 +430,7 @@ document.addEventListener('alpine:init', () => {
          * Reload the page with the filters query
          */
         applyFilters() {
-            document.location.href = this.getPageUrl(this.getPageQuery());
+            Alpine.store('global').goToPage(this.getPageUrl(this.getPageQuery()));
         },
         /**
          * Category option hover event

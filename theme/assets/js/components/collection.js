@@ -127,7 +127,7 @@ window.onCollectionReady = () => {
                 // Remember the last clicked item id to skip the focus event
                 this.clickedItemId = id;
             } else if (!event.target.closest('.collection__tile-quick-add')) {
-                document.location.href = this.$el.getAttribute('data-href');
+                Alpine.store('global').goToPage(this.$el.getAttribute('data-href'));
             }
         },
         /**

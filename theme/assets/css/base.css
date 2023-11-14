@@ -24,10 +24,57 @@ body.has-scrollbar {
     --theme-scrollbar-offset: var(--theme-scrollbar-width);
 }
 
+body:not(.fade-out) > *:not(.site-header) {
+    -webkit-animation-name: fade-in;
+    animation-name: fade-in;
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+    -webkit-animation-timing-function: ease;
+    animation-timing-function: ease;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+}
+
 body.is-scrolling-disabled {
     position: fixed; /* keep scrollbar to avoid width reflow */
     inline-size: 100%;
     overflow-y: scroll;
+}
+
+body.faded > *:not(.site-header) {
+    opacity: 0;
+}
+
+body.fade-out > *:not(.site-header) {
+    -webkit-animation-name: fade-out;
+    animation-name: fade-out;
+    will-change: opacity;
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-timing-function: ease;
+    animation-timing-function: ease;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 body a {

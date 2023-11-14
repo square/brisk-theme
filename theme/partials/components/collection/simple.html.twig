@@ -1,5 +1,5 @@
 {% set isCategory = item.type == 'CATEGORY' %}
-{% set isItem = item.type == 'CATEGORY' %}
+{% set isItem = item.type == 'ITEM' %}
 {% set linkHref = '' %}
 
 {% if isCategory %}
@@ -26,7 +26,7 @@
     </div>
     <div class="collection__tile-details">
         <div
-            x-data="{ onButtonClick() { document.location.href = '{{ linkHref }}' } }"
+            x-data="{ onButtonClick() { $store.global.goToPage('{{ linkHref }}') } }"
             class="collection__tile-button-wrapper"
         >
             {{ include('partials/ui/button', {

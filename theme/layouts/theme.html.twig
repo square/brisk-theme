@@ -65,7 +65,6 @@
         class="has-header-padding"
         :class="{ 'is-mobile': $store.global.isMobile, 'is-scrolling-disabled': $store.global.isPageScrollDisabled }"
         :style="bodyStyles"
-        @pageshow.window="$store.global.isLoadingPage = false"
         @resize.window="onWindowResize"
     >
         <script id="global-data" type="application/json">
@@ -85,10 +84,6 @@
         </main>
 
         {{ global_section('footer') }}
-
-        <div x-show="$store.global.isLoadingPage" class="page-loader">
-            <div class="ui-loader--overlay">{{ include('partials/ui/loader') }}</div>
-        </div>
 
         {{ body_trackers() }}
 

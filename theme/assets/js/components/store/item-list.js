@@ -201,20 +201,21 @@ document.addEventListener('alpine:init', () => {
             this.perPage = this.pagination.perPage;
             this.currentPage = this.pagination.currentPage;
             this.totalPages = this.pagination.totalPages;
+            const globalStore = Alpine.store('global');
 
             this.$watch('currentPage', ({ value }) => {
                 if (this.paginate.current_page === (value - 1) && this.paginate.next) {
-                    document.location.href = this.paginate.next;
+                    globalStore.goToPage(this.paginate.next);
                 } else if (this.paginate.current_page === (value + 1) && this.paginate.previous) {
-                    document.location.href = this.paginate.previous;
+                    globalStore.goToPage(this.paginate.previous);
                 } else if (value <= this.paginate.total_pages) {
-                    document.location.href = this.getPageUrl({ ...this.getCurrentPageQuery(), page: value });
+                    globalStore.goToPage(this.getPageUrl({ ...this.getCurrentPageQuery(), page: value }));
                 }
             });
 
             this.$watch('perPage', ({ value }) => {
                 this.pagination.perPage.value = parseInt(value, 10);
-                document.location.href = this.getPageUrl({ ...this.getCurrentPageQuery(), page: 1, limit: value });
+                globalStore.goToPage(this.getPageUrl({ ...this.getCurrentPageQuery(), page: 1, limit: value }));
             });
         },
     });

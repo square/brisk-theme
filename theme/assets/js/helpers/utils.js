@@ -53,6 +53,14 @@ window.Utils = {
             || (navigator.msMaxTouchPoints > 0);
     },
     /**
+     * Is it apple safari browser
+     * @return {boolean}
+     */
+    isSafari() {
+        return (typeof window !== 'undefined') && window.navigator.userAgent.includes('Safari')
+		&& !window.navigator.userAgent.includes('Chrome');
+    },
+    /**
      * Gets a value from deep nested object
      * @param {Object} obj
      * @param {String} property
