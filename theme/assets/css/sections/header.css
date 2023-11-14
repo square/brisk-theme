@@ -286,7 +286,7 @@
 }
 
 /* Adding a custom animation to the mini-cart */
-#mini-cart[data-show] .mini-cart:not(.is-interacting) {
+#mini-cart[data-show] .mini-cart:not(.is-interacting):not(.is-loading) {
     animation: scale-in-tr 0.5s;
 }
 

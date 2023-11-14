@@ -2,6 +2,7 @@ document.addEventListener('alpine:init', () => {
     // Cart store
     Alpine.store('cart', {
         isMiniCartOpen: false,
+        isMiniCartLoading: false,
         isInteractingMiniCart: false,
         timeout: null,
         miniCartItemsTotal: 0,
@@ -155,7 +156,9 @@ document.addEventListener('alpine:init', () => {
                 })
                     .then(async ({ cart }) => {
                         this.miniCartItemsTotal = cart.order.total_quantity;
-                        Square.async.refreshAsyncTemplate('mini-cart', {}, { replaceContent: true });
+                        Alpine.store('cart').isMiniCartLoading = true;
+                        await Square.async.refreshAsyncTemplate('mini-cart', {}, { replaceContent: true });
+                        Alpine.store('cart').isMiniCartLoading = false;
                     });
             }
         },
