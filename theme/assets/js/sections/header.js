@@ -40,8 +40,10 @@ document.addEventListener('alpine:init', () => {
          * Store the height of the header element in the global store for reference
          */
         storeOwnHeight() {
-            const headerHeight = this.$el.offsetHeight;
-            Alpine.store('global').updateProperty('headerHeight', headerHeight);
+            this.$nextTick(() => {
+                const headerHeight = this.$el.offsetHeight;
+                Alpine.store('global').updateProperty('headerHeight', headerHeight);
+            });
         },
         /**
          * Fires when the window is scrolled down (at a throttled interval)

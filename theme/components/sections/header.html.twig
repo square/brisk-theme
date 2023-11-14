@@ -122,6 +122,7 @@
     x-transition:leave-start="slide-down-leave-from"
     x-transition:leave-end="slide-down-leave-to"
     @scroll.window.throttle.50ms="onScroll"
+    @resize.window="storeOwnHeight"
 >
     {% if announcement_bar_show %}
         <div class="site-topbar">
