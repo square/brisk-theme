@@ -129,7 +129,8 @@
 }
 
 .site-header__utility-button--cart.is-updated {
-    -webkit-animation: wobble-hor-bottom 0.8s both; /* stylelint-disable */
+    /* stylelint-disable-next-line */
+    -webkit-animation: wobble-hor-bottom 0.8s both;
     animation: wobble-hor-bottom 0.8s both;
 }
 
@@ -200,6 +201,7 @@
     background-color: var(--theme-body-color);
 }
 
+/* stylelint-disable property-no-vendor-prefix */
 .mega-menu .mega-menu__inner {
     -webkit-animation-name: fade-out;
     animation-name: fade-out;
@@ -212,9 +214,10 @@
 }
 
 .mega-menu.is-visible .mega-menu__inner {
-   -webkit-animation-name: fade-in;
+    -webkit-animation-name: fade-in;
     animation-name: fade-in;
 }
+/* stylelint-enable property-no-vendor-prefix */
 
 .mega-menu-scrollbar {
     position: relative;
@@ -296,10 +299,12 @@
 }
 
 /* Adding a custom animation to the mini-cart */
+/* stylelint-disable-next-line */
 #mini-cart[data-show] .mini-cart:not(.is-interacting):not(.is-loading) {
     animation: scale-in-tr 0.5s;
 }
 
+/* stylelint-disable-next-line */
 #mini-cart:not([data-show]) .mini-cart:not(.is-interacting):not(.is-loading) {
     animation: scale-down-tr 0.5s;
 }
@@ -359,7 +364,7 @@
     margin: var(--space) 0;
 }
 
-/* stylelint-disable-next-line no-descending-specificity */
+/* stylelint-disable-next-line */
 .mini-cart__item-name,
 .mini-cart__item-name a {
     font-weight: var(--theme-font-weight-normal);

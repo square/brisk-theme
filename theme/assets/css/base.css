@@ -24,6 +24,7 @@ body.has-scrollbar {
     --theme-scrollbar-offset: var(--theme-scrollbar-width);
 }
 
+/* stylelint-disable property-no-vendor-prefix */
 body:not(.fade-out) > *:not(.site-header) {
     -webkit-animation-name: fade-in;
     animation-name: fade-in;
@@ -33,6 +34,7 @@ body:not(.fade-out) > *:not(.site-header) {
     animation-timing-function: ease;
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
+    will-change: opacity;
 }
 
 body.is-scrolling-disabled {
@@ -48,19 +50,21 @@ body.faded > *:not(.site-header) {
 body.fade-out > *:not(.site-header) {
     -webkit-animation-name: fade-out;
     animation-name: fade-out;
-    will-change: opacity;
     -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
     -webkit-animation-timing-function: ease;
     animation-timing-function: ease;
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
+    will-change: opacity;
 }
+/* stylelint-enable property-no-vendor-prefix */
 
 body a {
     color: inherit;
 }
 
+/* stylelint-disable-next-line */
 *,
 *::before,
 *::after {
@@ -113,6 +117,7 @@ textarea {
 }
 
 /* outline when focused with keyboard */
+/* stylelint-disable-next-line */
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,

@@ -62,11 +62,13 @@ window.UITooltip = {
         if (shouldShow) {
             if (delay > 0) {
                 this.tooltipTimeout = setTimeout(() => {
+                    // eslint-disable-next-line
                     tooltip.style.height = 'auto';
                     tooltip.setAttribute('data-show', '');
                     tooltipInstance.update();
                 }, delay);
             } else {
+                // eslint-disable-next-line
                 tooltip.style.height = 'auto';
                 tooltip.setAttribute('data-show', '');
                 tooltipInstance.update();
@@ -74,6 +76,7 @@ window.UITooltip = {
         } else {
             tooltip.removeAttribute('data-show');
             this.tooltipTimeout = setTimeout(() => {
+                // eslint-disable-next-line
                 tooltip.style.height = '0';
             }, 1000);
         }

@@ -58,7 +58,7 @@ window.Utils = {
      */
     isSafari() {
         return (typeof window !== 'undefined') && window.navigator.userAgent.includes('Safari')
-		&& !window.navigator.userAgent.includes('Chrome');
+            && !window.navigator.userAgent.includes('Chrome');
     },
     /**
      * Gets a value from deep nested object
