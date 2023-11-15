@@ -2,9 +2,14 @@
     "scripts": {
         "lint:js": "eslint --format=pretty ./**/*.js",
         "lint:css": "stylelint ./**/*.css",
-        "lint:fix": "npm run lint:js -- --fix && npm run lint:css -- --fix"
+        "lint:fix": "npm run lint:js -- --fix && npm run lint:css -- --fix",
+        "babelwatch": "./node_modules/.bin/babel --watch ./react-components --out-dir ./theme/assets/js/react-components"
     },
     "devDependencies": {
+        "@babel/cli": "^7.23.0",
+        "@babel/core": "^7.23.3",
+        "@babel/preset-env": "^7.23.3",
+        "@babel/preset-react": "^7.23.3",
         "eslint": "^8.47.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-formatter-pretty": "^5.0.0",
