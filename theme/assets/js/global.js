@@ -198,7 +198,7 @@ document.addEventListener('alpine:init', () => {
             }
 
             if (Utils.isSafari()) {
-                // Workaround to get the page transition out work on Safari
+                // Workaround to get the page transition out work on Safari b/c Safari stops animations on page unload
                 document.addEventListener('DOMNodeInserted', (event) => {
                     this.attachPageAnimation(event.target.parentElement);
                 }, false);
