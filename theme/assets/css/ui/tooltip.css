@@ -19,7 +19,6 @@
 .ui-tooltip--dropdown {
     --theme-tooltip-shadow-color: var(--theme-color-neutral-10-alpha);
 
-    height: 0;
     overflow: hidden;
     color: var(--theme-tooltip-dropdown-text-color);
     background: var(--theme-tooltip-dropdown-color);
@@ -35,7 +34,7 @@
     z-index: -1;
     visibility: hidden;
     opacity: 0;
-    transition: opacity 0.2s ease-out, visibility 0.2s linear 0.2s;
+    transition: opacity 0.2s ease-out, visibility 0s linear 0.5s;
 }
 
 .ui-tooltip--menu {
@@ -51,6 +50,7 @@
     overflow: initial;
     visibility: visible;
     opacity: 1;
+    transition: opacity 0.2s ease-out;
 }
 
 .ui-tooltip--dropdown,

@@ -62,19 +62,19 @@ window.UITooltip = {
         if (shouldShow) {
             if (delay > 0) {
                 this.tooltipTimeout = setTimeout(() => {
-                    tooltip.removeAttribute('hidden');
+                    tooltip.style.height = 'auto';
                     tooltip.setAttribute('data-show', '');
                     tooltipInstance.update();
                 }, delay);
             } else {
-                tooltip.removeAttribute('hidden');
+                tooltip.style.height = 'auto';
                 tooltip.setAttribute('data-show', '');
                 tooltipInstance.update();
             }
         } else {
             tooltip.removeAttribute('data-show');
             this.tooltipTimeout = setTimeout(() => {
-                tooltip.setAttribute('hidden', true);
+                tooltip.style.height = '0';
             }, 1000);
         }
     },
