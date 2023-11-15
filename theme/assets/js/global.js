@@ -1,6 +1,7 @@
 document.addEventListener('alpine:init', () => {
     // Cart store
     Alpine.store('cart', {
+        isReady: false,
         isMiniCartOpen: false,
         isMiniCartLoading: false,
         isInteractingMiniCart: false,

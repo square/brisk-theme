@@ -197,6 +197,9 @@
                         init() {
                             document.dispatchEvent(new CustomEvent('async:alpine:init'));
                             this.$store.cart.miniCartItemsTotal = total;
+                            this.$nextTick(() => {
+                                this.$store.cart.isReady = true;
+                            });
                         },
                         onMiniCartBlur() {
                             if (!this.isReloadingMiniCartTemplate && !this.isShiftKeyPressed) {
