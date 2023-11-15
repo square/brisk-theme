@@ -200,6 +200,22 @@
     background-color: var(--theme-body-color);
 }
 
+.mega-menu .mega-menu__inner {
+    -webkit-animation-name: fade-out;
+    animation-name: fade-out;
+    -webkit-animation-duration: 0.8s;
+    animation-duration: 0.8s;
+    -webkit-animation-timing-function: ease;
+    animation-timing-function: ease;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+}
+
+.mega-menu.is-visible .mega-menu__inner {
+   -webkit-animation-name: fade-in;
+    animation-name: fade-in;
+}
+
 .mega-menu-scrollbar {
     position: relative;
     max-height: 70vh;

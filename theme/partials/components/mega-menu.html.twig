@@ -1,6 +1,7 @@
 <div
     x-show="isMegaMenuVisible"
     class="mega-menu container"
+    :class="{ 'is-visible': isMegaMenuVisible }"
     x-transition:enter="slide-down-enter-active"
     x-transition:enter-start="slide-down-enter-from"
     x-transition:enter-end="slide-down-enter-to"
