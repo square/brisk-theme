@@ -8,14 +8,54 @@
         },
         "nav_links": [
             {
-                "label": "Gifts",
+                "label": "Link 1",
+                "href": "/",
                 "type": "external",
-                "href": "/gifts"
+                "menu_image_url": "images/placeholder.jpeg",
+                "children": [
+                    {
+                        "label": "Child Link 1",
+                        "type": "external",
+                        "href": "/",
+                        "children": [
+                            {
+                                "label": "Grandchild Link 1",
+                                "type": "external",
+                                "href": "/"
+                            },
+                            {
+                                "label": "Grandchild Link 2",
+                                "type": "external",
+                                "href": "/"
+                            }
+                        ]
+                    }
+                ]
             },
             {
-                "label": "Sale",
+                "label": "Link 2",
+                "href": "/",
                 "type": "external",
-                "href": "/sale"
+                "menu_image_url": "images/placeholder.jpeg",
+                "children": [
+                    {
+                        "label": "Child Link 2",
+                        "type": "external",
+                        "href": "/",
+                        "children": [
+                            {
+                                "label": "Grandchild Link 3",
+                                "type": "external",
+                                "href": "/"
+                            },
+                            {
+                                "label": "Grandchild Link 4",
+                                "type": "external",
+                                "href": "/"
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }

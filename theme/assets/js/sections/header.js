@@ -18,14 +18,10 @@ document.addEventListener('alpine:init', () => {
             Utils.loadJsonDataIntoComponent.call(this, optionalConfigId);
             Alpine.store('global').getCustomerCoordinates();
             this.storeOwnHeight();
-            this.$watch('isMegaMenuVisible()', (value) => {
-                Alpine.store('global').isMegaMenuVisible = value;
-            });
         },
         headerClasses() {
             return {
                 'is-scrolled': this.isScrolledDown,
-                'is-showing-megamenu': this.isMegaMenuVisible(),
             };
         },
         openSearch() {
@@ -79,56 +75,7 @@ document.addEventListener('alpine:init', () => {
                 }, 250);
             }
         },
-        /**
-         * When a link is hovered, show the children from that nav in the megamenu
-         * @param {String} linkTitle - the 'title' property of the nav link
-        */
-        onMouseEnter(linkTitle) {
-            // Get the children of the link that was hovered, display them
-            const link = this.navLinks[linkTitle];
-            this.displayLinkInMegaMenu(link);
-        },
-        /**
-         * When a link is no longer hovered, close the megamenu
-        */
-        onMouseLeave() {
-            this.closeMegaMenuWithDelay();
-        },
-        /**
-         * Display the data for a given Nav Link in the Megamenu
-         * @param {Object} link - the nav link
-        */
-        displayLinkInMegaMenu(link) {
-            this.cancelDelayedMegaMenuClose();
-            this.currentlyDisplayedLink = link;
-        },
-        /**
-         * Close the mega menu
-        */
-        closeMegaMenu() {
-            this.displayLinkInMegaMenu(null);
-        },
-        /**
-         * Close the mega menu after a delay
-        */
-        closeMegaMenuWithDelay() {
-            this.cancelDelayedMegaMenuClose();
-            this.megamenuCloseTimer = setTimeout(() => this.closeMegaMenu(), 600);
-        },
-        /**
-         * If the megamenu is about to be closed, cancels the upcoming close
-         */
-        cancelDelayedMegaMenuClose() {
-            if (this.megamenuCloseTimer) {
-                clearTimeout(this.megamenuCloseTimer);
-            }
-        },
-        /**
-         * @return {Boolean} whether the Megamenu should be displayed or not
-         */
-        isMegaMenuVisible() {
-            return Boolean(this.currentlyDisplayedLink?.children);
-        },
+
         /**
          * generates a title for a navigation link, with truncation if necessary
          * @param {Object} link navigation link
