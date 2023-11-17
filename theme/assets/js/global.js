@@ -251,16 +251,15 @@ document.addEventListener('alpine:init', () => {
          * Apply a page animation before page url changes
          */
         goToPage(href) {
+            if (!href) {
+                return;
+            }
             if (Utils.isSafari()) {
                 const body = document.body;
 
                 const listener = () => {
                     document.body.classList.add('faded');
-
-                    if (href) {
-                        document.location.href = href;
-                    }
-
+                    document.location.href = href;
                     body.removeEventListener('animationend', listener);
                 };
                 body.addEventListener('animationend', listener);
@@ -268,7 +267,7 @@ document.addEventListener('alpine:init', () => {
                 document.body.classList.add('fade-out');
 
                 this.disablePageScroll();
-            } else if (href) {
+            } else {
                 document.location.href = href;
             }
         },
