@@ -1,7 +1,9 @@
 document.addEventListener('alpine:init', () => {
     // Cart store
     Alpine.store('cart', {
+        isReady: false,
         isMiniCartOpen: false,
+        isMiniCartLoading: false,
         isInteractingMiniCart: false,
         timeout: null,
         miniCartItemsTotal: 0,
@@ -155,7 +157,9 @@ document.addEventListener('alpine:init', () => {
                 })
                     .then(async ({ cart }) => {
                         this.miniCartItemsTotal = cart.order.total_quantity;
-                        Square.async.refreshAsyncTemplate('mini-cart', {}, { replaceContent: true });
+                        Alpine.store('cart').isMiniCartLoading = true;
+                        await Square.async.refreshAsyncTemplate('mini-cart', {}, { replaceContent: true });
+                        Alpine.store('cart').isMiniCartLoading = false;
                     });
             }
         },
@@ -167,7 +171,6 @@ document.addEventListener('alpine:init', () => {
         currency: Constants.DEFAULT_CURRENCY,
         currencySymbol: Constants.DEFAULT_CURRENCY_SYMBOL,
         currencySymbolPosition: 'before',
-        isLoadingPage: true,
         history: Alpine.$persist({}),
         locations: [],
         isLoadingLocations: false,
@@ -187,8 +190,6 @@ document.addEventListener('alpine:init', () => {
          * Initial events
          */
         init() {
-            this.isLoadingPage = false;
-
             const scrollbarWidth = window.innerWidth - document.body.clientWidth;
             document.documentElement.style.setProperty('--browser-scrollbar-width', `${scrollbarWidth}px`);
 
@@ -196,28 +197,84 @@ document.addEventListener('alpine:init', () => {
                 document.body.classList.add('is-touch-device');
             }
 
-            window.onbeforeunload = () => {
-                const pageLoader = document.querySelector('.page-loader');
+            if (Utils.isSafari()) {
+                // Workaround to get the page transition out work on Safari b/c Safari stops animations on page unload
+                document.addEventListener('DOMNodeInserted', (event) => {
+                    this.attachPageAnimation(event.target.parentElement);
+                }, false);
+            }
 
-                if (pageLoader && document.body) {
-                    this.isLoadingPage = true;
-                    this.isPageScrollDisabled = true;
-                    const pageScrollY = window.scrollY;
-                    // Keeps the body scroll position
-                    document.body.style.top = `-${pageScrollY}`;
-                    pageLoader.style.top = `${pageScrollY}px`;
+            window.onbeforeunload = () => {
+                if (document.body) {
+                    this.disablePageScroll();
+                    document.body.classList.add('fade-out');
+                    document.body.addEventListener('animationend', () => {
+                        document.body.classList.add('faded');
+                    });
                 }
             };
 
             // Browser back button is clicked
             window.addEventListener('pageshow', () => {
                 if (this.isPageScrollDisabled && !Alpine.store('dialog')?.isDialogOpen) {
-                    this.isLoadingPage = false;
                     this.isPageScrollDisabled = false;
                     document.body.style.top = 0;
+                    document.body.classList.remove('fade-out');
                 }
             });
         },
+        /**
+         * Attach a page animation to anchors
+         */
+        attachPageAnimation(parentElement) {
+            if (!window.AnimationEvent || !parentElement) { return; }
+
+            const anchors = parentElement.getElementsByTagName('a');
+
+            for (let idx = 0; idx < anchors.length; idx += 1) {
+                anchors[idx].addEventListener('click', (event) => {
+                    event.preventDefault();
+                    this.goToPage(event.currentTarget.href);
+                });
+            }
+        },
+        /**
+         * Disable page scroll
+         */
+        disablePageScroll() {
+            this.isPageScrollDisabled = true;
+            const pageScrollY = window.scrollY;
+            // Keeps the body scroll position
+            document.body.style.top = `-${pageScrollY}`;
+        },
+        /**
+         * Apply a page animation before page url changes
+         */
+        goToPage(href) {
+            if (!href) {
+                return;
+            }
+            if (Utils.isSafari()) {
+                const body = document.body;
+
+                const listener = () => {
+                    document.body.classList.add('faded');
+                    document.location.href = href;
+                    body.removeEventListener('animationend', listener);
+                };
+                body.addEventListener('animationend', listener);
+
+                document.body.classList.add('fade-out');
+
+                this.disablePageScroll();
+            } else {
+                document.location.href = href;
+            }
+        },
+        /**
+         * Check if current viewport is desktop
+         * @return {Boolean}
+         */
         isDesktop() {
             return !this.isMobile && !this.isTablet;
         },

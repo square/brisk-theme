@@ -53,6 +53,14 @@ window.Utils = {
             || (navigator.msMaxTouchPoints > 0);
     },
     /**
+     * Is it apple safari browser
+     * @return {boolean}
+     */
+    isSafari() {
+        return (typeof window !== 'undefined') && window.navigator.userAgent.includes('Safari')
+            && !window.navigator.userAgent.includes('Chrome');
+    },
+    /**
      * Gets a value from deep nested object
      * @param {Object} obj
      * @param {String} property
@@ -367,5 +375,22 @@ window.Utils = {
             return Promise.resolve();
         }
         return new Promise((resolve) => { setTimeout(resolve, ms); });
+    },
+    /**
+     * Scroll window with ease-in
+     * @param {Number} topPos
+     * @param {Function} callback
+     */
+    async scrollToEaseIn(topPos, callback) {
+        const yPosPerScroll = 100;
+        const scrollDelay = 30;
+        for (let y = 0; y <= topPos; y += yPosPerScroll) {
+            window.scrollTo({ top: y, behavior: 'smooth' });
+            // eslint-disable-next-line no-await-in-loop
+            await Utils.delay(scrollDelay);
+            if (y + yPosPerScroll > topPos && typeof callback === 'function') {
+                callback();
+            }
+        }
     },
 };
