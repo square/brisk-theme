@@ -382,11 +382,13 @@ window.Utils = {
      * @param {Function} callback
      */
     async scrollToEaseIn(topPos, callback) {
-        for (let y = 0; y <= topPos; y += 100) {
+        const yPosPerScroll = 100;
+        const scrollDelay = 30;
+        for (let y = 0; y <= topPos; y += yPosPerScroll) {
             window.scrollTo({ top: y, behavior: 'smooth' });
             // eslint-disable-next-line no-await-in-loop
-            await Utils.delay(30);
-            if (y + 100 > topPos && typeof callback === 'function') {
+            await Utils.delay(scrollDelay);
+            if (y + yPosPerScroll > topPos && typeof callback === 'function') {
                 callback();
             }
         }
