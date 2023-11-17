@@ -25,6 +25,10 @@
             <link href="{{ 'css/transitions.css' | asset_url }}" rel="stylesheet" />
             <link href="{{ 'css/form/shared.css' | asset_url }}" rel="stylesheet" />
 
+            <script defer src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+            <script defer src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+            <script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
+
             <!-- Must be included before alpine -->
             <script type="module">
                 import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v4.4.0') | asset_url }}";

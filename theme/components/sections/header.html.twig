@@ -1,6 +1,7 @@
 {{ register_asset('css/sections/header.css') }}
 {{ register_asset('css/components/search.css') }}
 {{ register_asset('js/sections/header.js', { defer: false }) }}
+{{ register_asset('js/react-components/nav.js') }}
 {{ register_asset('js/ui/nested-menu.js', { defer: false }) }}
 {{ register_asset('js/components/search.js', { defer: false }) }}
 
@@ -182,21 +183,10 @@
             </div>
 
             <nav
-                x-show="$store.global.isDesktop()"
-                x-transition:enter.delay.100ms
-                x-transition:leave.delay.0ms
+                id="react-nav"
                 class="site-header__nav col"
                 col-sm-1 col-md-8 col-lg-8
             >
-                <ul class="site-header__nav-linklist">
-                    {% for link in formattedLinks %}
-                        <li @mouseenter.native="onMouseEnter('{{ link.title }}')" @mouseleave.native="onMouseLeave">
-                            <a class="site-header__nav-link" :class="currentlyDisplayedLink?.title === '{{ link.title }}' && 'is-active' " href="{{ link.url }}">
-                                {{ link.title }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
             </nav>
 
             <div
