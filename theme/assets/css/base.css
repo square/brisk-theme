@@ -26,14 +26,11 @@ body.has-scrollbar {
 
 /* stylelint-disable property-no-vendor-prefix */
 body:not(.fade-out) > *:not(.site-header) {
+    animation: fade-in 1.5s ease 0 1;
     -webkit-animation-name: fade-in;
-    animation-name: fade-in;
     -webkit-animation-duration: 1.5s;
-    animation-duration: 1.5s;
     -webkit-animation-timing-function: ease;
-    animation-timing-function: ease;
     -webkit-animation-iteration-count: 1;
-    animation-iteration-count: 1;
     will-change: opacity;
 }
 
@@ -48,14 +45,11 @@ body.faded > *:not(.site-header) {
 }
 
 body.fade-out > *:not(.site-header) {
+    animation: fade-out 0.5s ease 0 1;
     -webkit-animation-name: fade-out;
-    animation-name: fade-out;
     -webkit-animation-duration: 0.5s;
-    animation-duration: 0.5s;
     -webkit-animation-timing-function: ease;
-    animation-timing-function: ease;
     -webkit-animation-iteration-count: 1;
-    animation-iteration-count: 1;
     will-change: opacity;
 }
 /* stylelint-enable property-no-vendor-prefix */
@@ -64,7 +58,7 @@ body a {
     color: inherit;
 }
 
-/* stylelint-disable-next-line */
+/* stylelint-disable-next-line no-descending-specificity */
 *,
 *::before,
 *::after {
@@ -117,7 +111,7 @@ textarea {
 }
 
 /* outline when focused with keyboard */
-/* stylelint-disable-next-line */
+/* stylelint-disable-next-line no-descending-specificity */
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
