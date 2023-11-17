@@ -1,5 +1,5 @@
-{% set isCategory = item.type == 'CATEGORY' %}
-{% set isItem = item.type == 'CATEGORY' %}
+{% set isCategory = item.resource_type == 'CATEGORY' %}
+{% set isItem = item.resource_type == 'ITEM' %}
 {% set linkHref = '' %}
 
 {% if isCategory %}
