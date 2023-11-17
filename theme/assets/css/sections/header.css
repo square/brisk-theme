@@ -280,7 +280,7 @@
 }
 
 /* mini cart */
-#mini-cart {
+#mini-cart-tooltip {
     background: none;
     box-shadow: none;
 }
@@ -296,11 +296,11 @@
 }
 
 /* Adding a custom animation to the mini-cart */
-#mini-cart[data-show] .mini-cart:not(.is-interacting, .is-loading) {
+#mini-cart-tooltip[data-show] .mini-cart:not(.is-interacting, .is-loading) {
     animation: scale-in-tr 0.5s;
 }
 
-#mini-cart:not([data-show]) .mini-cart:not(.is-interacting, .is-loading) {
+#mini-cart-tooltip:not([data-show]) .mini-cart:not(.is-interacting, .is-loading) {
     animation: scale-down-tr 0.5s;
 }
 
