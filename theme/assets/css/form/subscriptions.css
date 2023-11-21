@@ -43,14 +43,14 @@
 
 .form-subscription__single-option {
     margin: var(--space) 0 var(--space-half) 0;
-    font-weight: var(--theme-font-weight-normal);
     font-size: var(--theme-font-size-plus-1);
+    font-weight: var(--theme-font-weight-normal);
     line-height: var(--theme-font-size-plus-1-line-height);
 }
 
 .form-subscription__info {
-    font-weight: var(--theme-font-weight-normal);
     font-size: var(--theme-font-size-minus-1);
+    font-weight: var(--theme-font-weight-normal);
     line-height: var(--theme-font-size-minus-1-line-height);
 }
 

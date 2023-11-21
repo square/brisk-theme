@@ -65,8 +65,8 @@
 }
 
 .filters__advanced-dropdown-scrollbar {
-    margin-right: calc((var(--space-x2) + var(--browser-scrollbar-width)) * -1);
     padding-right: var(--space-x2);
+    margin-right: calc((var(--space-x2) + var(--browser-scrollbar-width)) * -1);
 }
 
 .filters__advanced-options-row,
@@ -91,9 +91,9 @@
 }
 
 .filters__dialog .filters__dialog-options-row--categories {
+    padding-bottom: 0;
     margin-right: calc(var(--space-x2) * -1);
     margin-left: 0;
-    padding-bottom: 0;
     border-bottom: 0;
 }
 
@@ -103,8 +103,8 @@
 
 .filters__advanced-options-row .form-fieldset__label,
 .filters__dialog-options-row--categories .form-fieldset__label {
-    font-weight: var(--theme-font-weight-medium);
     font-size: var(--theme-font-size-base);
+    font-weight: var(--theme-font-weight-medium);
     line-height: var(--theme-line-height-base);
 }
 

@@ -69,11 +69,11 @@
 .form-fieldset__label {
     max-width: 100%;
     overflow: hidden;
-    font-weight: var(--theme-form-field-label-weight);
     font-family: var(--theme-form-field-label-family);
-    white-space: nowrap;
-    text-transform: capitalize;
+    font-weight: var(--theme-form-field-label-weight);
     text-overflow: ellipsis;
+    text-transform: capitalize;
+    white-space: nowrap;
 }
 
 .form-fieldset__sublabel {
@@ -92,8 +92,8 @@
 
 .form-fieldset__label--secondary,
 .form-fieldset__label--row .form-fieldset__sublabel {
-    color: var(--theme-form-field-sublabel-color);
-    font-weight: var(--theme-font-weight-light);
     font-size: var(--theme-font-size-minus-1);
+    font-weight: var(--theme-font-weight-light);
     line-height: var(--theme-font-size-minus-1-line-height);
+    color: var(--theme-form-field-sublabel-color);
 }

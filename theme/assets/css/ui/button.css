@@ -69,13 +69,13 @@
     display: flex;
     gap: var(--space);
     align-items: center;
-    font-weight: var(--theme-font-weight-normal);
-    font-size: var(--theme-font-size-base);
     font-family: var(--theme-font-family-label);
+    font-size: var(--theme-font-size-base);
+    font-weight: var(--theme-font-weight-normal);
     line-height: var(--theme-line-height-base);
+    cursor: pointer;
     border: none;
     border-radius: var(--theme-border-radius-button);
-    cursor: pointer;
     transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
@@ -437,8 +437,8 @@
     display: initial;
     height: auto;
     padding: 0;
-    color: inherit;
     font-weight: inherit;
+    color: inherit;
     background: none;
 }
 
@@ -487,8 +487,8 @@
     justify-content: space-between;
     height: auto;
     padding: var(--space-x2) 0;
-    color: inherit;
     font-weight: inherit;
+    color: inherit;
     background: none;
     border-bottom: 1px solid var(--theme-border-color);
     border-radius: 0;
@@ -507,11 +507,11 @@
     display: block;
     width: calc(100% + calc(var(--space-x1_5) * 2));
     height: 100%;
+    content: '';
     background-color: var(--theme-form-field-row-hover);
     border-radius: var(--theme-border-radius);
     opacity: 0;
     transition: opacity 0.3s ease;
-    content: '';
 }
 
 .ui-button--row:hover,
