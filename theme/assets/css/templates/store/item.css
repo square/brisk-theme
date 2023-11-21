@@ -4,6 +4,12 @@
     gap: var(--space-x8);
 }
 
+@media (max-width: 699px) {
+    .item-page {
+        padding-top: 0;
+    }
+}
+
 .item-page__main-images {
     position: relative;
     width: 100%;

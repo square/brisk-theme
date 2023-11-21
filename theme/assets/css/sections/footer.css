@@ -154,3 +154,8 @@
 .signup-form__input input {
     margin-top: 0;
 }
+
+/* badge automatically added by Google recaptcha script */
+.grecaptcha-badge {
+    visibility: hidden;
+}

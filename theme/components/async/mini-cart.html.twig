@@ -2,6 +2,7 @@
     <div
         x-data="miniCart({{ cart.order.total_quantity }})"
         class="mini-cart"
+        :class="{ 'is-interacting': $store.cart.isInteractingMiniCart, 'is-loading': $store.cart.isMiniCartLoading }"
         @mouseenter="$store.cart.isInteractingMiniCart = true"
         @mouseleave="onMiniCartBlur"
     >
@@ -196,6 +197,9 @@
                         init() {
                             document.dispatchEvent(new CustomEvent('async:alpine:init'));
                             this.$store.cart.miniCartItemsTotal = total;
+                            this.$nextTick(() => {
+                                this.$store.cart.isReady = true;
+                            });
                         },
                         onMiniCartBlur() {
                             if (!this.isReloadingMiniCartTemplate && !this.isShiftKeyPressed) {

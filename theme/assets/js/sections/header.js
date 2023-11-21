@@ -40,8 +40,10 @@ document.addEventListener('alpine:init', () => {
          * Store the height of the header element in the global store for reference
          */
         storeOwnHeight() {
-            const headerHeight = this.$el.offsetHeight;
-            Alpine.store('global').updateProperty('headerHeight', headerHeight);
+            this.$nextTick(() => {
+                const headerHeight = this.$el.offsetHeight;
+                Alpine.store('global').updateProperty('headerHeight', headerHeight);
+            });
         },
         /**
          * Fires when the window is scrolled down (at a throttled interval)
@@ -171,6 +173,16 @@ document.addEventListener('alpine:init', () => {
             }
             this.$watch('$store.cart.isMiniCartOpen', (isOpen) => {
                 UITooltip.toggleTooltip(this.dropdown, isOpen);
+            });
+
+            this.$watch('$store.cart.miniCartItemsTotal', () => {
+                if (Alpine.store('cart').isReady) {
+                    this.$refs.miniCartTrigger.classList.add('is-updated');
+
+                    Utils.delay(5000).then(() => {
+                        this.$refs.miniCartTrigger.classList.remove('is-updated');
+                    });
+                }
             });
         },
         onMiniCartFocus() {

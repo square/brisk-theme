@@ -86,7 +86,7 @@ document.addEventListener('alpine:init', () => {
             this.model = this.sortValue;
             this.$store.dialog.onClose = (isConfirmed) => {
                 if (isConfirmed) {
-                    document.location.href = this.getPageUrl({ ...this.getCurrentPageQuery(), page: 1 });
+                    Alpine.store('global').goToPage(this.getPageUrl({ ...this.getCurrentPageQuery(), page: 1 }));
                 } else {
                     this.sortValue = this.model;
                 }
@@ -100,7 +100,7 @@ document.addEventListener('alpine:init', () => {
             if (this.$store.dialog.isDialogOpen) {
                 Alpine.store('dialog').updateDialogOptions('disablePrimaryButton', this.model === value);
             } else {
-                document.location.href = this.getPageUrl({ ...this.getCurrentPageQuery(), page: 1 });
+                Alpine.store('global').goToPage(this.getPageUrl({ ...this.getCurrentPageQuery(), page: 1 }));
             }
         },
     });

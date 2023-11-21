@@ -51,14 +51,14 @@ document.addEventListener('alpine:init', () => {
         goToProductReviews() {
             const productReviewsEl = document.querySelector('.product-reviews');
             if (productReviewsEl) {
-                window.scrollTo({ top: productReviewsEl.offsetTop, behavior: 'smooth' });
-
-                const nextFocusableElement = Utils.getNextFocusableElement('.product-reviews');
-                if (nextFocusableElement) {
-                    setTimeout(() => {
-                        this.$nextTick(nextFocusableElement.focus({ focusVisible: true }));
-                    }, 500);
-                }
+                Utils.scrollToEaseIn(productReviewsEl.offsetTop, () => {
+                    const nextFocusableElement = Utils.getNextFocusableElement('.product-reviews');
+                    if (nextFocusableElement) {
+                        setTimeout(() => {
+                            this.$nextTick(nextFocusableElement.focus({ focusVisible: true }));
+                        }, 1000);
+                    }
+                });
             }
         },
         /**

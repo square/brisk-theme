@@ -1,3 +1,5 @@
+{# Brisk Theme version 0.1.0-alpha #}
+
 <html lang="{{ square.site.language }}">
     <head>
         {% block head %}
@@ -23,6 +25,7 @@
             <link href="{{ 'css/variables.css' | asset_url }}" rel="stylesheet" />
             <link href="{{ 'css/base.css' | asset_url }}" rel="stylesheet" />
             <link href="{{ 'css/transitions.css' | asset_url }}" rel="stylesheet" />
+            <link href="{{ 'css/animations.css' | asset_url }}" rel="stylesheet" />
             <link href="{{ 'css/form/shared.css' | asset_url }}" rel="stylesheet" />
 
             <!-- Must be included before alpine -->
@@ -64,7 +67,6 @@
         class="has-header-padding"
         :class="{ 'is-mobile': $store.global.isMobile, 'is-scrolling-disabled': $store.global.isPageScrollDisabled }"
         :style="bodyStyles"
-        @pageshow.window="$store.global.isLoadingPage = false"
         @resize.window="onWindowResize"
     >
         <script id="global-data" type="application/json">
@@ -84,10 +86,6 @@
         </main>
 
         {{ global_section('footer') }}
-
-        <div x-show="$store.global.isLoadingPage" class="page-loader">
-            <div class="ui-loader--overlay">{{ include('partials/ui/loader') }}</div>
-        </div>
 
         {{ body_trackers() }}
 

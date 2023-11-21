@@ -47,7 +47,7 @@ window.UITooltip = {
      * @param {Object} tooltip
      * @param {Boolean} shouldShow
      */
-    toggleTooltip(tooltip, shouldShow = true, delay = 0) {
+    async toggleTooltip(tooltip, shouldShow = true, delay = 0) {
         const tooltipId = tooltip.getAttribute('id');
         const tooltipInstance = this.tooltipInstances[tooltipId];
 
@@ -62,15 +62,23 @@ window.UITooltip = {
         if (shouldShow) {
             if (delay > 0) {
                 this.tooltipTimeout = setTimeout(() => {
+                    // eslint-disable-next-line no-param-reassign
+                    tooltip.style.height = 'auto';
                     tooltip.setAttribute('data-show', '');
                     tooltipInstance.update();
                 }, delay);
             } else {
+                // eslint-disable-next-line no-param-reassign
+                tooltip.style.height = 'auto';
                 tooltip.setAttribute('data-show', '');
                 tooltipInstance.update();
             }
         } else {
             tooltip.removeAttribute('data-show');
+            this.tooltipTimeout = setTimeout(() => {
+                // eslint-disable-next-line no-param-reassign
+                tooltip.style.height = '0';
+            }, 1000);
         }
     },
 };

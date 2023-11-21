@@ -2,6 +2,11 @@
     --gutter-column: var(--space-x2);
 }
 
+body:not(.is-touch-device) .collection__tile--tiles:hover {
+    transform: translateY(-4px);
+    transition: all 0.2s ease-in;
+}
+
 .collection__tile {
     position: relative;
     display: block;

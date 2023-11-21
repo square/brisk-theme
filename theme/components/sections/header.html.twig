@@ -122,6 +122,7 @@
     x-transition:leave-start="slide-down-leave-from"
     x-transition:leave-end="slide-down-leave-to"
     @scroll.window.throttle.50ms="onScroll"
+    @resize.window="storeOwnHeight"
 >
     {% if announcement_bar_show %}
         <div class="site-topbar">
@@ -221,7 +222,7 @@
                 <script id="header-mini-cart-data" type="application/json">
                     {{ {
                         cartUrl: link({ type: 'cart' }),
-                        dropdownId: 'mini-cart',
+                        dropdownId: 'mini-cart-tooltip',
                     }|json_encode }}
                 </script>
 
@@ -253,11 +254,11 @@
                         {% endblock %}
                     {% endembed %}
                     {% embed 'partials/ui/tooltip' with {
-                        id: 'mini-cart',
+                        id: 'mini-cart-tooltip',
                         isDropdown: true,
                     } %}
                         {% block content %}
-                            {{ async('mini-cart', 'mini-cart', { props: { cart: cart() } }) }}
+                            {{ async('mini-cart', 'mini-cart') }}
                         {% endblock %}
                     {% endembed %}
                 </div>
