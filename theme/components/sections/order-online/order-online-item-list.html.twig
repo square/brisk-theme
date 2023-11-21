@@ -1,0 +1,26 @@
+{% set categories = [] %}
+{% for item in categoryList %}
+    {% set categories = categories|merge([{ item, template: 'simple' }]) %}
+{% endfor %}
+{% if categories|length %}
+    <div class="container home-page__container">
+        {% for category in categories %}
+            <div class="home-page__featured-tiles-wrapper">
+                <h3 class="heading-3 heading-with-margin home-page__heading">{{ category.item.name }}</h3>
+                {% set featuredItems = [] %}
+                {% for item in category.item.items %}
+                    {% set featuredItems = featuredItems|merge([{ item, template: 'item' }]) %}
+                {% endfor %}
+                {{ include('partials/components/collection/list', { items: featuredItems, layout: 'tiles' }) }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "categoryList": {
+        "type": "category-list"
+    }
+}
+{% endschema %}

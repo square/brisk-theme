@@ -1,0 +1,24 @@
+{
+    "props": {
+        "main": [
+            {
+                "props": {
+                    "location": {
+                        "filters": {
+                            "id": "request_data(path.location_id)"
+                        }
+                    },
+                    "schedule": {
+                        "filters": {
+                            "location_id": "request_data(path.location_id)",
+                            "fulfillment": "pickup"
+                        }
+                    }
+                },
+                "template": "order-online/swf"
+            }
+        ]
+    },
+    "template": "templates/pages/order-online-with-location",
+    "route": "order-online/:location_id"
+}

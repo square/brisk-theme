@@ -1,0 +1,16 @@
+{
+    "props": {
+        "main": [
+            {
+                "props": {
+                    "categoryList": {
+                        "type": "category-list"
+                    }
+                },
+                "template": "order-online/order-online-item-list"
+            }
+        ]
+    },
+    "template": "templates/pages/order-online",
+    "route": "order-online"
+}
