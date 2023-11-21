@@ -105,9 +105,9 @@ const M = {
     fulfillment: T(b(r.fulfillment)),
     location_id: r.locationId,
     // JSON.stringify will remove if undefined
-    order_id: g(r)
+    order_id: S(r)
   };
-}, g = (r) => r.orderId !== void 0 ? r.orderId : X("com_cart_id") || void 0;
+}, S = (r) => r.orderId !== void 0 ? r.orderId : X("com_cart_id") || void 0;
 class J {
   /**
    * Adds an item to the current order.
@@ -234,7 +234,7 @@ class J {
       body: JSON.stringify({
         order_item_id: e.orderItemId,
         quantity: e.quantity,
-        order_id: g(e)
+        order_id: S(e)
       }),
       headers: I()
     });
@@ -259,7 +259,7 @@ class J {
       method: "POST",
       body: JSON.stringify({
         order_item_id: e.orderItemId,
-        order_id: g(e)
+        order_id: S(e)
       }),
       headers: I()
     });
@@ -288,7 +288,7 @@ class J {
    * ```
    */
   async patchFulfillment(e) {
-    const t = await fetch(`${O}/${g(e)}/fulfillment`, {
+    const t = await fetch(`${O}/${S(e)}/fulfillment`, {
       method: "PATCH",
       body: JSON.stringify({
         fulfillment: T(b(e.fulfillment))
@@ -340,7 +340,7 @@ class J {
       })).json();
       if ((t = o.schedule) != null && t.earliest_time.time_unix) {
         const n = new Date(o.schedule.earliest_time.time_unix * 1e3).toISOString().split(".")[0] + "Z", s = {
-          orderId: g(e),
+          orderId: S(e),
           fulfillment: JSON.parse(JSON.stringify(e.fulfillment))
         };
         return s.fulfillment.pickupDetails || (s.fulfillment.pickupDetails = {}), s.fulfillment.pickupDetails.pickupAt = n, this.patchFulfillment(s);
@@ -348,7 +348,7 @@ class J {
     }
     return {
       data: {
-        cart: g(e) || ""
+        cart: S(e) || ""
       }
     };
   }
@@ -375,14 +375,14 @@ class B {
     this.initConfig = e;
   }
   async autocompletePlaces(e) {
-    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain, n = e.address, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places?types=geocode&input=${n}`;
+    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : "", n = e.address, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places?types=geocode&input=${n}`;
     return await (await fetch(s, {
       method: "GET",
       headers: I()
     })).json();
   }
   async getPlace(e) {
-    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain, n = e.placeId, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places/${n}`, c = await (await fetch(s, {
+    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : "", n = e.placeId, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places/${n}`, c = await (await fetch(s, {
       method: "GET",
       headers: I()
     })).json();
@@ -499,11 +499,11 @@ class Y {
     }), s;
   }
   validateItem({ item: e, selectedOptions: t = [], selectedModifiers: i = [], selectedVariationId: o = "", quantity: n = void 0, skipStockCheck: s = !1, skipModifierCheck: a = !1 }) {
-    var S, E;
+    var g, E;
     const c = [];
     let d = !1, p = "", _ = w.SOLD_OUT;
     const h = [];
-    (S = e.item_options) != null && S.length && !o ? e.item_options.forEach((l) => {
+    (g = e.item_options) != null && g.length && !o ? e.item_options.forEach((l) => {
       t != null && t.find((f) => f.itemOptionId === l.id && l.choices.includes(f.choice)) || c.push(l.id);
     }) : !e.item_options && e.variations.length > 1 && !o && (d = !0);
     let m = null;
@@ -541,9 +541,9 @@ class Y {
       const p = e.variations.find((u) => u.id === c.variationId);
       let _ = p.price.regular, h = p.price.sale;
       (d = c.modifiers) == null || d.forEach((u) => {
-        var S, E;
+        var g, E;
         if (u.type === v.CHOICE || u.type === v.GIFT_WRAP) {
-          const l = (S = e.modifier_lists) == null ? void 0 : S.find((f) => f.id === u.id);
+          const l = (g = e.modifier_lists) == null ? void 0 : g.find((f) => f.id === u.id);
           l && ((E = l.modifiers) == null || E.forEach((f) => {
             u.choiceSelections.includes(f.id) && f.price_money && (_ += f.price_money.amount, h += f.price_money.amount);
           }));
@@ -589,7 +589,7 @@ class Z {
     this.initConfig = e;
   }
   async getCoordinates() {
-    const e = this.initConfig.userId, i = `${this.initConfig.cdnDomain}/app/website/cms/api/v1/users/${e}/customers/coordinates`;
+    const e = this.initConfig.userId, i = `${this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : ""}/app/website/cms/api/v1/users/${e}/customers/coordinates`;
     let n = await (await fetch(i, {
       method: "GET",
       headers: I()
@@ -599,7 +599,7 @@ class Z {
 }
 class q {
   constructor(e) {
-    y(this, "version", "4.4.0");
+    y(this, "version", "4.4.1");
     y(this, "cart");
     y(this, "places");
     y(this, "resource");
