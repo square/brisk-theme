@@ -1,6 +1,12 @@
 {% set formattedImages = images %}
 <div class="home-page__featured-images-container">
-    {% embed 'partials/ui/carousel' with { carouselVariant: 'full-bleed', navPosition: 'indicator', navigationItems: images } %}
+    {% embed 'partials/ui/carousel' with {
+        carouselVariant: 'full-bleed',
+        navPosition: 'indicator',
+        navigationItems: images,
+        title: 'components.sections.home.text_and_images.label'|localize,
+        hideTitle: true,
+    } %}
         {% block carouselItems %}
             {% for image in formattedImages %}
                 <div class="ui-carousel__item--full-bleed">

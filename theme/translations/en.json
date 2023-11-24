@@ -77,6 +77,7 @@
         },
         "sections.home": {
             "banner.marquee": "Stay dry this spring",
+            "text_and_images.label": "Featured images",
             "text_and_images.button": "Shop spring collection"
         },
         "sections.store.item.main": {

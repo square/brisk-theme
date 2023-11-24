@@ -23,7 +23,7 @@
          :class="{ 'container--fullwidth-padding': $store.global.isMobile }"
       >
          {% if title %}
-            <div id="{{ carouselId }}__title">{{ title }}</div>
+            <div id="{{ carouselId }}__title" {% if hideTitle %}hidden{% endif %}>{{ title }}</div>
          {% endif %}
          {% if carouselNavPosition == 'top' %}
             <div class="ui-carousel__navigation--top">

@@ -7,7 +7,7 @@
         <div class="home-page__featured-tiles-wrapper">
             <h3 class="heading-3 heading-with-margin home-page__heading">{{ heading }}</h3>
 
-            {{ include('partials/components/collection/list', { items: featuredCategories, layout: 'carousel' }) }}
+            {{ include('partials/components/collection/list', { items: featuredCategories, layout: 'carousel', title: heading }) }}
         </div>
     </div>
 {% endif %}
