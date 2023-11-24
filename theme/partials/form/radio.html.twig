@@ -34,7 +34,6 @@
                 x-data="radioForm('{{ option.value }}')"
                 x-effect="updateRadioOption()"
                 for="radio-{{ optionId }}"
-                aria-describedby="radio-{{ optionId }}__tooltip"
                 class="form-radio__option"
                 :class="{ 'form-radio__option--disabled': isDisabled, {{ option.classes|default('') }} }"
                 {% if showDivider %}
