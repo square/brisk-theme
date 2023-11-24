@@ -32,6 +32,7 @@
     <span class="form-text__input-wrapper">
         <input
             id="{{ labelId }}__input"
+            {% if hideLabel %}aria-label="{{ label }}"{% endif %}
             x-model="model"
             type="{{ type|default('text') }}"
             name="{{ inputName|default(label) }}"
