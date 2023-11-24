@@ -98,7 +98,7 @@
     --theme-border-radius-card: var(--settings-border-radius-card, 6px);
 
     /* Contextual text color variables */
-    --theme-info-text-color: var(--settings-color-info-text, var(--theme-body-text-color-subtle));
+    --theme-info-text-color: var(--settings-color-info-text, var(--theme-color-neutral-60));
     --theme-emphasis-text-color: var(--settings-color-emphasis-text, #005ad9);
     --theme-success-text-color: var(--settings-color-success-text, #007d2a);
     --theme-warning-text-color: var(--settings-color-warning-text, #945c25);
