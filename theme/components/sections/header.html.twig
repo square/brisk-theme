@@ -190,8 +190,18 @@
             >
                 <ul class="site-header__nav-linklist">
                     {% for link in formattedLinks %}
-                        <li @mouseenter.native="onMouseEnter('{{ link.title }}')" @mouseleave.native="onMouseLeave">
-                            <a class="site-header__nav-link" :class="currentlyDisplayedLink?.title === '{{ link.title }}' && 'is-active' " href="{{ link.url }}">
+                        <li
+                            @mouseenter="onMouseEnter('{{ link.title }}')"
+                            @mouseleave="onMouseLeave"
+                        >
+                            <a
+                                class="site-header__nav-link"
+                                :class="currentlyDisplayedLink?.title === '{{ link.title }}' && 'is-active' "
+                                href="{{ link.url }}"
+                                @focus="onMouseEnter('{{ link.title }}')"
+                                @blur="onMouseLeave"
+                                @keydown.tab="onKeyboardTab"
+                            >
                                 {{ link.title }}
                             </a>
                         </li>
