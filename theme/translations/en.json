@@ -113,7 +113,8 @@
             "buttons": {
                 "filters": "Filters",
                 "categories": "Category",
-                "sort": "Sort by: {{sortValue}}"
+                "sort": "Sort by: {{sortValue}}",
+                "sort.label": "Sort filter"
             },
             "options": {
                 "categories_selector": {
@@ -201,7 +202,8 @@
                 "label": "Donation amount"
             },
             "price_range": {
-                "divider": "to"
+                "divider": "to",
+                "label": "Price range"
             },
             "stepper": {
                 "increase.label": "Remove",
