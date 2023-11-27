@@ -4,14 +4,34 @@
             {
                 "props": {
                     "location": {
+                        "type": "location",
                         "filters": {
                             "id": "request_data(path.location_id)"
                         }
                     },
                     "schedule": {
+                        "type": "schedule",
                         "filters": {
                             "location_id": "request_data(path.location_id)",
                             "fulfillment": "pickup"
+                        }
+                    },
+                    "categoryList": {
+                        "type": "category-list"
+                    },
+                    "itemList": {
+                        "type": "item-list"
+                    },
+                    "item": {
+                        "type": "item",
+                        "filters": {
+                            "id": "EINDU3NLVQCMO4RWUKDQ34BF"
+                        }
+                    },
+                    "category": {
+                        "type": "category",
+                        "filters": {
+                            "id": "20"
                         }
                     }
                 },
