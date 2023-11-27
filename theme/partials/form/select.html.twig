@@ -12,12 +12,14 @@
     {% if parentModel %}x-modelable="model"{% endif %}
     {% if isRequired %}aria-required=true{% endif %}
     :aria-invalid="isInvalid"
-    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    :aria-describedby="isInvalid ? '{{ labelId }} {{ labelId }}__error' : '{{ labelId }}'"
     role="radiogroup"
     class="form-fieldset form-select form-select--{{ size|default('large') }}"
     :class="{'form-select--invalid': isInvalid }"
 >
-    {% if hideLabel == false %}
+    {% if hideLabel %}
+        <span id="{{ labelId }}" hidden>{{ label }}</span>
+    {% else %}
         {{ include('partials/form/fieldset-label', { exludeError: true }) }}
         {% block secondaryLabel %}{% endblock %}
     {% endif %}
@@ -29,6 +31,7 @@
             {{ include('partials/ui/icon', { name: 'expand_more' }) }}
         </div>
         <select
+            aria-label="{{ label }}"
             x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
             class="form-select__dropdown"
             :disabled="isDisabled"

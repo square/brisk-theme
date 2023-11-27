@@ -13,7 +13,11 @@
     x-data="{ isInvalid: false, error: { min: false, max: false }, disabled: { min: false, max: false }, model: { min: '', max: '' }, {% block data %}{% endblock %} }"
     {% if isMinRequired or isMaxRequired %}aria-required="true"{% endif %}
     :aria-invalid="isInvalid"
-    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    {% if label %}
+        :aria-describedby="isInvalid ? '{{ labelId }} {{ labelId }}__error' : '{{ labelId }}'"
+    {% else %}
+        aria-describedby="{{ labelId }}"
+    {% endif %}
     role="group"
     class="form-fieldset"
     :class="{'form-price-range--invalid': isInvalid }"
@@ -21,8 +25,10 @@
     {% if label %}
         <div class="form-fieldset__label">
             <span id="{{ labelId }}">{{ label }}</span>
-            {{ include('partials/form/fieldset-error', { errorMessage: 'partials.form.error'|localize({ label: 'Price range' }) }) }}
+            {{ include('partials/form/fieldset-error', { errorMessage: 'partials.form.error'|localize({ label }) }) }}
         </div>
+    {% else %}
+        <span id="{{ labelId }}" hidden>{{ 'partials.form.price_range.label'|localize }}</span>
     {% endif %}
 
     <div
