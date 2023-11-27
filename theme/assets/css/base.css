@@ -8,11 +8,11 @@ html {
 body {
     position: relative;
     overflow-x: hidden; /* used to correctly center sticky elements and dialogs when the scrollbar is visible */
-    color: var(--theme-body-text-color);
-    font-weight: var(--theme-font-weight-normal);
-    font-size: var(--theme-font-size-base);
     font-family: var(--theme-font-family-body);
+    font-size: var(--theme-font-size-base);
+    font-weight: var(--theme-font-weight-normal);
     line-height: var(--theme-line-height-base);
+    color: var(--theme-body-text-color);
     background-color: var(--theme-body-color);
 }
 
@@ -85,8 +85,8 @@ fieldset,
 input,
 button,
 figure {
-    margin: 0;
     padding: 0;
+    margin: 0;
 }
 
 figure img {
@@ -102,8 +102,8 @@ input[type='radio'],
 input[type='checkbox'] {
     font-family: inherit;
     text-shadow: none;
-    outline: none;
     appearance: none;
+    outline: none;
 }
 
 textarea {
@@ -136,9 +136,9 @@ button,
 [role="button"] {
     display: inline-block;
     text-decoration: none;
-    border: none;
-    cursor: pointer;
     appearance: none;
+    cursor: pointer;
+    border: none;
 }
 
 fieldset {
@@ -151,9 +151,9 @@ fieldset {
     width: 1px;
     height: 1px;
     overflow: hidden;
-    white-space: nowrap;
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 div[hidden] {
@@ -170,29 +170,29 @@ div[hidden] {
 .heading-4,
 .heading-5,
 .heading-6 {
-    color: var(--theme-title-color);
     font-family: var(--theme-font-family-headline);
+    color: var(--theme-title-color);
 }
 
 .heading-2 {
-    font-weight: calc(var(--theme-font-weight-headline) + 100);
     font-size: var(--theme-h3-font-size);
+    font-weight: calc(var(--theme-font-weight-headline) + 100);
     line-height: var(--theme-h3-line-height);
     letter-spacing: var(--theme-h2-letter-spacing-mobile);
 }
 
 @media (min-width: 700px) {
     .heading-2 {
-        font-weight: var(--theme-font-weight-headline);
         font-size: var(--theme-h2-font-size);
+        font-weight: var(--theme-font-weight-headline);
         line-height: var(--theme-h2-line-height);
         letter-spacing: var(--theme-h2-letter-spacing);
     }
 }
 
 .heading-3 {
-    font-weight: calc(var(--theme-font-weight-headline) + 200);
     font-size: var(--theme-h4-font-size);
+    font-weight: calc(var(--theme-font-weight-headline) + 200);
     line-height: var(--theme-h4-line-height);
     letter-spacing: var(--theme-h3-letter-spacing);
 }
@@ -205,8 +205,8 @@ div[hidden] {
 }
 
 .heading-4 {
-    font-weight: calc(var(--theme-font-weight-headline) + 200);
     font-size: var(--theme-h5-font-size);
+    font-weight: calc(var(--theme-font-weight-headline) + 200);
     line-height: var(--theme-h5-line-height);
 }
 
@@ -218,8 +218,8 @@ div[hidden] {
 }
 
 .heading-5 {
-    font-weight: calc(var(--theme-font-weight-headline) + 200);
     font-size: var(--theme-h6-font-size);
+    font-weight: calc(var(--theme-font-weight-headline) + 200);
     line-height: var(--theme-h6-line-height);
 }
 
@@ -231,8 +231,8 @@ div[hidden] {
 }
 
 .heading-6 {
-    font-weight: calc(var(--theme-font-weight-headline) - 200);
     font-size: var(--theme-font-size-base);
+    font-weight: calc(var(--theme-font-weight-headline) - 200);
     line-height: var(--theme-line-height-base);
 }
 
@@ -244,8 +244,8 @@ div[hidden] {
 }
 
 .title {
-    font-weight: var(--theme-font-weight-title);
     font-family: var(--theme-font-family-title);
+    font-weight: var(--theme-font-weight-title);
 }
 
 p {
@@ -286,10 +286,10 @@ p {
 .container {
     box-sizing: content-box;
     max-width: var(--theme-max-container);
-    margin-right: auto;
-    margin-left: auto;
     padding-right: var(--theme-container-padding);
     padding-left: var(--theme-container-padding);
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .container--fullwidth {
@@ -397,15 +397,15 @@ body[dialog-variant="halfsheet"] main {
     width: 8px;
     height: 8px;
     margin-left: calc(var(--space-x3) * -1);
+    content: "";
     background-color: var(--theme-bulleted-list-icon-color);
     border-radius: 50%;
-    content: "";
 }
 
 .site-logo {
-    font-weight: var(--theme-logo-font-weight);
     font-size: var(--theme-logo-font-size);
+    font-weight: var(--theme-logo-font-weight);
     line-height: var(--theme-logo-line-height);
-    text-transform: uppercase;
     text-decoration: none;
+    text-transform: uppercase;
 }

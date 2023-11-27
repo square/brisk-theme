@@ -8,9 +8,9 @@
 
     position: absolute;
     padding: var(--space-half) var(--space);
-    color: var(--theme-tooltip-text-color);
     font-size: var(--theme-font-size-minus-1);
     line-height: var(--theme-font-size-minus-1-line-height);
+    color: var(--theme-tooltip-text-color);
     white-space: nowrap;
     background: var(--theme-tooltip-color);
     border-radius: var(--theme-border-radius);

@@ -1,6 +1,6 @@
 .footer {
-    margin-top: var(--space-x5);
     padding: var(--space-x3);
+    margin-top: var(--space-x5);
     background-color: var(--theme-color-neutral-10);
 }
 
@@ -40,17 +40,17 @@
 }
 
 .footer-menu__submenu-title {
-    margin-top: var(--space-x2);
     padding: var(--space) 0;
-    font-weight: var(--theme-font-weight-medium);
+    margin-top: var(--space-x2);
     font-size: var(--theme-font-size-plus-1);
+    font-weight: var(--theme-font-weight-medium);
     line-height: var(--theme-font-size-plus-1-line-height);
 }
 
 .footer-menu__submenu-title--mobile {
     width: 100%;
-    color: inherit;
     font-family: var(--theme-font-family-body);
+    color: inherit;
     background: none;
 }
 

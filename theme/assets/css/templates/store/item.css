@@ -145,9 +145,9 @@
     width: 4px;
     height: 4px;
     margin-left: calc(var(--space-x2) * -1);
+    content: "";
     background-color: var(--theme-bulleted-list-icon-color);
     border-radius: 50%;
-    content: "";
 }
 
 .item-page__description ol li {
