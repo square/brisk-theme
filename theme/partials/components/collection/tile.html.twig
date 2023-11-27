@@ -11,6 +11,7 @@
 {% set swatchOptions = [] %}
 {% set choiceOptions = [] %}
 {% set swatchOptionLabel = '' %}
+{% set choiceOptionLabel = '' %}
 {% set swatchOptionKey = quickAddSwatchRenderer[0] %}
 {% set choiceOptionKey = quickAddChoiceRenderer[0] %}
 {% set requiredFields = [] %}
@@ -26,6 +27,7 @@
                 {% set swatchOptions = swatchOptions|merge([{ label: choice, value: choice, color: option.colors[loop.index0] }]) %}
             {% endfor %}
         {% elseif option.name|lower in quickAddChoiceRenderer %}
+            {% set choiceOptionLabel = option.name %}
             {% set choiceOptionKey = option.name|lower %}
             {% set quickAddRendererToOptionId = quickAddRendererToOptionId|merge({ (option.name|lower): option.id }) %}
 
@@ -122,6 +124,7 @@
                     <p>{{ 'partials.components.collection.item.quick_add.label'|localize }}</p>
 
                     {% embed 'partials/form/choice-carousel' with {
+                        label: choiceOptionLabel,
                         variant: 'grid',
                         options: choiceOptions,
                         itemWidth: 48,

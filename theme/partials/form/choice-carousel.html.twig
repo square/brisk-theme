@@ -13,7 +13,7 @@
 <div
     x-data="{ isInvalid: false, model: '', {% block data %}{% endblock %} }"
 >
-    {% embed 'partials/ui/carousel' with { navPosition: 'overlay' } %}
+    {% embed 'partials/ui/carousel' with { navPosition: 'overlay', title: label } %}
         {% block data %}
             itemCount: 3,
             itemWidth: {{ itemWidth|default(0) }}
