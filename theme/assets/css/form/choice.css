@@ -22,10 +22,10 @@
     height: 100%;
     padding: 0 var(--space-x1_5);
     color: var(--theme-form-field-button-text);
+    cursor: pointer;
     background-color: var(--theme-form-field-button);
     border: 1px solid transparent;
     border-radius: var(--theme-border-radius);
-    cursor: pointer;
     transition: color 0.3s ease, background-color 0.3s ease;
 }
 
@@ -44,8 +44,8 @@
     height: 100%;
     font-size: var(--theme-font-size-base);
     line-height: var(--theme-line-height-base);
-    border-radius: var(--theme-border-radius);
     cursor: pointer;
+    border-radius: var(--theme-border-radius);
 }
 
 .form-choice__label:hover {
@@ -78,8 +78,8 @@
 /* grid */
 .form-choice--grid .form-choice__options {
     display: grid;
-    grid-auto-rows: 1fr;
     grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
 }
 
 @media (min-width: 700px) {

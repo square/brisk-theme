@@ -98,19 +98,19 @@
 .site-header__nav-linklist {
     display: flex;
     gap: var(--space-x2);
-    margin: 0;
     padding: 0;
+    margin: 0;
     text-transform: uppercase;
     list-style: none;
 }
 
 .site-header__nav-link {
-    font-weight: var(--theme-font-weight-medium);
     font-size: var(--theme-font-size-minus-1);
-    letter-spacing: 0.3px;
+    font-weight: var(--theme-font-weight-medium);
+    text-decoration-thickness: 2px;
     text-decoration-color: transparent;
     text-underline-offset: 0;
-    text-decoration-thickness: 2px;
+    letter-spacing: 0.3px;
     transition: text-decoration-color 0.3s ease-in-out, text-underline-offset 0.3s ease-in-out;
 }
 
@@ -232,8 +232,7 @@
     flex: 1;
     grid-auto-rows: auto;
     grid-auto-flow: row;
-    column-gap: var(--space-x6);
-    row-gap: var(--space-x7);
+    gap: var(--space-x7) var(--space-x6);
 }
 
 .mega-menu__submenu {
@@ -257,8 +256,8 @@
 }
 
 .mega-menu__child-nav-links {
-    margin: var(--space-x2) 0 0;
     padding: 0;
+    margin: var(--space-x2) 0 0;
     list-style: none;
 }
 
@@ -314,8 +313,8 @@
 
 .mini-cart__items-scrollbar {
     max-height: 50vh;
-    margin-right: calc(var(--browser-scrollbar-width) * -1);
     padding-right: var(--browser-scrollbar-width);
+    margin-right: calc(var(--browser-scrollbar-width) * -1);
 }
 
 .mini-cart__item {
@@ -362,11 +361,11 @@
 /* stylelint-disable-next-line no-descending-specificity */
 .mini-cart__item-name,
 .mini-cart__item-name a {
-    font-weight: var(--theme-font-weight-normal);
     font-size: var(--theme-font-size-base);
+    font-weight: var(--theme-font-weight-normal);
     line-height: var(--theme-line-height-base);
-    white-space: initial;
     text-decoration: none;
+    white-space: initial;
 }
 
 .mini-cart__item-name a:hover {
@@ -374,10 +373,10 @@
 }
 
 .mini-cart .mini-cart__item-variation {
-    color: var(--theme-color-neutral-55);
-    font-weight: var(--theme-font-weight-light);
     font-size: var(--theme-font-size-minus-1);
+    font-weight: var(--theme-font-weight-light);
     line-height: var(--theme-font-size-minus-1-line-height);
+    color: var(--theme-color-neutral-55);
     text-transform: capitalize;
 }
 
@@ -388,8 +387,8 @@
 .mini-cart__item-price {
     display: flex;
     justify-content: flex-end;
-    font-weight: var(--theme-font-weight-light);
     font-size: var(--theme-font-size-base);
+    font-weight: var(--theme-font-weight-light);
     line-height: var(--theme-line-height-base);
 }
 

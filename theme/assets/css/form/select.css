@@ -8,9 +8,9 @@
     width: 100%;
     height: var(--theme-form-field-large-height);
     padding: 0 var(--space-x4) 0 var(--space-x2);
-    color: inherit;
     font-size: var(--settings-font-size-base, var(--theme-font-size-base));
     line-height: var(--theme-line-height-base);
+    color: inherit;
     background: transparent;
     border: 1px solid var(--theme-form-field-border);
     border-radius: var(--theme-border-radius);

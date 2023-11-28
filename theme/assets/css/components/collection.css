@@ -3,8 +3,8 @@
 }
 
 body:not(.is-touch-device) .collection__tile--tiles:hover {
-    transform: translateY(-4px);
     transition: all 0.2s ease-in;
+    transform: translateY(-4px);
 }
 
 .collection__tile {
@@ -16,8 +16,8 @@ body:not(.is-touch-device) .collection__tile--tiles:hover {
 }
 
 .collection__tile-name {
-    font-weight: var(--theme-font-weight-light);
     font-size: var(--theme-h6-font-size);
+    font-weight: var(--theme-font-weight-light);
     line-height: var(--theme-h6-line-height);
     transition: opacity 0.2s ease-in;
 }
@@ -214,9 +214,9 @@ body:not(.is-touch-device) .collection__tile--tiles:hover {
 /* masonry */
 .collection--masonry {
     display: grid;
-    grid-gap: var(--space-x2);
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(8, 1fr);
+    grid-gap: var(--space-x2);
 }
 
 .collection__tile--masonry:nth-child(6n+1),

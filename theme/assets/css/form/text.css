@@ -9,10 +9,10 @@
 .form-text__input {
     width: 100%;
     height: var(--theme-form-field-large-height);
-    margin-top: calc(var(--space-x2) - var(--space-half));
     padding: var(--space-x2);
-    color: var(--theme-form-field-text-inner);
+    margin-top: calc(var(--space-x2) - var(--space-half));
     font-size: inherit;
+    color: var(--theme-form-field-text-inner);
     background-color: var(--theme-form-field-background);
     border: 1px solid var(--theme-form-field-border);
     border-radius: var(--theme-border-radius);
@@ -39,9 +39,9 @@
 }
 
 .form-text__input[disabled] {
+    cursor: not-allowed;
     background-color: var(--theme-form-field-background-disabled);
     border-color: var(--theme-form-field-border-disabled);
-    cursor: not-allowed;
 }
 
 .form-text__input::placeholder {

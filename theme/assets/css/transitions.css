@@ -56,15 +56,15 @@
 .slide-right-leave-to {
     position: absolute;
     top: 0;
-    transform: translate(-100%, 0);
     opacity: 0;
+    transform: translate(-100%, 0);
 }
 
 .slide-right-enter-to,
 .slide-right-leave-from {
     position: initial;
-    transform: translate(0%, 0);
     opacity: 1;
+    transform: translate(0%, 0);
 }
 
 .slide-right-enter-active {
@@ -79,15 +79,15 @@
 .slide-left-leave-to {
     position: absolute;
     top: 0;
-    transform: translate(100%, 0);
     opacity: 0;
+    transform: translate(100%, 0);
 }
 
 .slide-left-enter-to,
 .slide-left-leave-from {
     position: initial;
-    transform: translate(0%, 0);
     opacity: 1;
+    transform: translate(0%, 0);
 }
 
 .slide-left-enter-active {

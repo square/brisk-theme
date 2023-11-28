@@ -27,8 +27,8 @@
     align-items: center;
     min-height: var(--theme-badge-height);
     padding: 0 var(--space-x1_5);
-    font-weight: var(--theme-font-weight-medium);
     font-size: var(--theme-font-size-minus-1);
+    font-weight: var(--theme-font-weight-medium);
     text-transform: uppercase;
     border-radius: var(--theme-badge-radius-pill);
 }
