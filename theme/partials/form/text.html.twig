@@ -9,17 +9,17 @@
 
 <div
     x-data="{ isInvalid: false, model: '', clearInput() { this.model = ''; this.$dispatch('input:clear'); },{% block data %}{% endblock %} }"
-    class="form-fieldset form-text form-text--{{ size|default('large') }} {{ wrapperClasses }}"
+    class="form-element form-text form-text--{{ size|default('large') }} {{ wrapperClasses }}"
     :class="{'form-text--invalid': isInvalid }"
 >
     {% if hideLabel == false %}
         <label
             for="{{ labelId }}__input"
-            class="form-fieldset__label"
+            class="form-element__label"
         >
-            <span class="form-fieldset__label--primary">
+            <span class="form-element__label--primary">
                 <span>{{ label }}</span>
-                <span class="form-fieldset__label--secondary">
+                <span class="form-element__label--secondary">
                     {% if isRequired %}
                         {{ 'partials.form.required'|localize }}
                     {% elseif isOptional %}
@@ -55,5 +55,5 @@
             }, with_context = false ) }}
         {% endif %}
     </span>
-    {{ include('partials/form/fieldset-error') }}
+    {{ include('partials/form/element-error') }}
 </div>

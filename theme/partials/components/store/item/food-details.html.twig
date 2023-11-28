@@ -1,8 +1,8 @@
 {% set foodDetails = product.product_type_details %}
 
 {% if foodDetails.dietary_preferences|length %}
-    <div class="form-fieldset product-detail__dietary-preferences">
-        <div class="form-fieldset__label">{{ 'partials.components.store.item.food_details.dietary.label'|localize }}</div>
+    <div class="form-element product-detail__dietary-preferences">
+        <div class="form-element__label">{{ 'partials.components.store.item.food_details.dietary.label'|localize }}</div>
         <div class="ui-badges-container">
             {% for preference in foodDetails.dietary_preferences %}
                 {{ include('partials/ui/badge', { label: preference, type: 'info' }) }}
@@ -12,8 +12,8 @@
 {% endif %}
 
 {% if foodDetails.ingredients|length %}
-    <div class="form-fieldset">
-        <div class="form-fieldset__label">{{ 'partials.components.store.item.food_details.ingredients.label'|localize }}</div>
+    <div class="form-element">
+        <div class="form-element__label">{{ 'partials.components.store.item.food_details.ingredients.label'|localize }}</div>
         {% set formattedIngredients = [] %}
         {% for preference in foodDetails.ingredients %}
             {% set formattedIngredients = formattedIngredients|merge([preference|capitalize]) %}

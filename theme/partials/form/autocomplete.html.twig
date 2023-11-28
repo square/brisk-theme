@@ -14,16 +14,16 @@
 <div
     x-data="{ ...autocompleteForm('{{ labelId }}__dropdown'), {% block data %}{% endblock %} }"
     x-init="initAutocomplete()"
-    class="form-fieldset form-text form-text--{{ size|default('large') }} form-text--standalone"
+    class="form-element form-text form-text--{{ size|default('large') }} form-text--standalone"
     :class="{'form-text--invalid': isInvalid }"
     @click.outside="toggleDropdown(false)"
 >
     {% if hideLabel == false %}
     <label
         for="{{ labelId }}__input"
-        class="form-fieldset__label"
+        class="form-element__label"
     >
-        <span class="form-fieldset__label--primary">
+        <span class="form-element__label--primary">
             <span>{{ label }}</span>
         </span>
     </label>
@@ -77,5 +77,5 @@
         {% endembed %}
     </span>
 
-    {{ include('partials/form/fieldset-error') }}
+    {{ include('partials/form/element-error') }}
 </div>

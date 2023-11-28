@@ -7,20 +7,20 @@
 {% set placeholderText = 'partials.form.placeholder'|localize %}
 {% set labelId = 'select-label-' ~ random() %}
 
-<fieldset
+<div
     x-data="{ isDisabled: false, isInvalid: false, model: '', {% block data %}{% endblock %} }"
     {% if parentModel %}x-modelable="model"{% endif %}
     {% if isRequired %}aria-required=true{% endif %}
     :aria-invalid="isInvalid"
     :aria-describedby="isInvalid ? '{{ labelId }} {{ labelId }}__error' : '{{ labelId }}'"
     role="radiogroup"
-    class="form-fieldset form-select form-select--{{ size|default('large') }}"
+    class="form-element form-select form-select--{{ size|default('large') }}"
     :class="{'form-select--invalid': isInvalid }"
 >
     {% if hideLabel %}
         <span id="{{ labelId }}" hidden>{{ label }}</span>
     {% else %}
-        {{ include('partials/form/fieldset-label', { exludeError: true }) }}
+        {{ include('partials/form/element-label', { exludeError: true }) }}
         {% block secondaryLabel %}{% endblock %}
     {% endif %}
 
@@ -48,6 +48,6 @@
                 </option>
             {% endfor %}
         </select>
-        {{ include('partials/form/fieldset-error') }}
+        {{ include('partials/form/element-error') }}
     </div>
-</fieldset>
+</div>

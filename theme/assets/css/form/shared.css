@@ -60,13 +60,13 @@
     --theme-textarea-height: 96px;
 }
 
-.form-fieldset {
+.form-element {
     display: flex;
     flex-flow: column;
     gap: var(--space-x2);
 }
 
-.form-fieldset__label {
+.form-element__label {
     max-width: 100%;
     overflow: hidden;
     font-weight: var(--theme-form-field-label-weight);
@@ -76,22 +76,22 @@
     text-overflow: ellipsis;
 }
 
-.form-fieldset__sublabel {
+.form-element__sublabel {
     font-weight: var(--theme-font-weight-light);
 }
 
-.form-fieldset__label--row {
+.form-element__label--row {
     display: flex;
     flex-flow: column;
 }
 
-.form-fieldset__label--primary {
+.form-element__label--primary {
     display: flex;
     justify-content: space-between;
 }
 
-.form-fieldset__label--secondary,
-.form-fieldset__label--row .form-fieldset__sublabel {
+.form-element__label--secondary,
+.form-element__label--row .form-element__sublabel {
     color: var(--theme-form-field-sublabel-color);
     font-weight: var(--theme-font-weight-light);
     font-size: var(--theme-font-size-minus-1);

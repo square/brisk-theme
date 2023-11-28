@@ -12,7 +12,7 @@
 {% set placeholderText = 'partials.form.placeholder'|localize %}
 {% set labelId = 'radio-label-' ~ random() %}
 
-<fieldset
+<div
     x-data="{ isInvalid: false, model: '', onRadioInputChange() {}, {% block data %}{% endblock %} }"
     {% if parentModel %}x-modelable="model"{% endif %}
     {% if isRequired %}aria-required="true"{% endif %}
@@ -23,14 +23,14 @@
         :aria-describedby="isInvalid ? '{{ labelId }} {{ labelId }}__error' : '{{ labelId }}'"
     {% endif %}
     role="radiogroup"
-    class="form-fieldset form-radio--{{ variant|default('normal') }} form-radio--{{ size|default('medium') }} form-radio--{{ align|default('left') }} {% if showDivider %}form-radio--{{ variant|default('normal') }}-divider{% endif %} {{ radioClasses }}"
+    class="form-element form-radio--{{ variant|default('normal') }} form-radio--{{ size|default('medium') }} form-radio--{{ align|default('left') }} {% if showDivider %}form-radio--{{ variant|default('normal') }}-divider{% endif %} {{ radioClasses }}"
     :class="{'form-radio--invalid': isInvalid }"
     {% block attributes %}{% endblock %}
 >
     {% if hideLabel %}
         <span id="{{ labelId }}" hidden>{{ label }}</span>
     {% else %}
-        {{ include('partials/form/fieldset-label') }}
+        {{ include('partials/form/element-label') }}
     {% endif %}
 
     <div class="form-radio__options">
@@ -86,4 +86,4 @@
         {% endfor %}
         {% block after %}{% endblock %}
     </div>
-</fieldset>
+</div>

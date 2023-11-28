@@ -1,8 +1,8 @@
 {% set eventDetails = product.product_type_details %}
 
 {% if eventDetails.start_date is not empty or eventDetails.end_date is not empty %}
-<div class="form-fieldset">
-    <div class="form-fieldset__label">{{ 'partials.components.store.item.event_details.date_time.label'|localize }}</div>
+<div class="form-element">
+    <div class="form-element__label">{{ 'partials.components.store.item.event_details.date_time.label'|localize }}</div>
     <div>
         {% set hasEndDate = eventDetails.start_date != eventDetails.end_date %}
         {% if hasEndDate %}
@@ -28,8 +28,8 @@
 {% endif %}
 
 {% if eventDetails.address is iterable and (eventDetails.address|filter(address => address|length))|length %}
-<div class="form-fieldset">
-    <div class="form-fieldset__label">{{ 'partials.components.store.item.event_details.location.label'|localize }}</div>
+<div class="form-element">
+    <div class="form-element__label">{{ 'partials.components.store.item.event_details.location.label'|localize }}</div>
     <div>
         {% set locationAddress = {
             'street': eventDetails.address.street,

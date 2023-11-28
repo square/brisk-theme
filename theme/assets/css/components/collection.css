@@ -108,6 +108,10 @@ body:not(.is-touch-device) .collection__tile--tiles:hover {
     color: var(--theme-critical-text-color);
 }
 
+.collection__tile-quick-add .ui-carousel__header {
+    display: none;
+}
+
 .collection__tile-details {
     position: relative;
     display: flex;
@@ -149,7 +153,7 @@ body:not(.is-touch-device) .collection__tile--tiles:hover {
     transition: opacity 0.2s ease-in;
 }
 
-.collection__tile-swatches .form-fieldset__label {
+.collection__tile-swatches .form-element__label {
     font-weight: calc(var(--theme-font-weight-light) - 100);
 }
 

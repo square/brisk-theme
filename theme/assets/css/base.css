@@ -143,6 +143,7 @@ button,
 
 fieldset {
     border: none;
+    min-inline-size: auto;
 }
 
 /* Hiding class, making content visible only to screen readers but not visually */

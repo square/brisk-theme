@@ -97,12 +97,12 @@
     border-bottom: 0;
 }
 
-.filters__advanced-options-row .form-fieldset {
+.filters__advanced-options-row .form-element {
     gap: var(--space);
 }
 
-.filters__advanced-options-row .form-fieldset__label,
-.filters__dialog-options-row--categories .form-fieldset__label {
+.filters__advanced-options-row .form-element__label,
+.filters__dialog-options-row--categories .form-element__label {
     font-weight: var(--theme-font-weight-medium);
     font-size: var(--theme-font-size-base);
     line-height: var(--theme-line-height-base);

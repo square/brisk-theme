@@ -28,6 +28,7 @@
          {% if carouselNavPosition == 'top' %}
             <div class="ui-carousel__navigation--top">
                {% embed 'partials/ui/button' with {
+                  label: '',
                   variant: 'text',
                   size: 'small',
                   icon: 'navigate_before',
@@ -39,6 +40,7 @@
                      {% endblock %}
                   {% endembed %}
                {% embed 'partials/ui/button' with {
+                  label: '',
                   variant: 'text',
                   size: 'small',
                   icon: 'navigate_next',
@@ -63,6 +65,7 @@
             :hidden="$store.global.isMobile"
          >
             {% embed 'partials/ui/button' with {
+               label: '',
                variant: 'text',
                size: 'small',
                icon: 'navigate_before',
@@ -74,6 +77,7 @@
                   {% endblock %}
                {% endembed %}
             {% embed 'partials/ui/button' with {
+               label: '',
                variant: 'text',
                size: 'small',
                icon: 'navigate_next',
