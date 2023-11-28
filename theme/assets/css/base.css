@@ -142,8 +142,8 @@ button,
 }
 
 fieldset {
-    border: none;
     min-inline-size: auto;
+    border: none;
 }
 
 /* Hiding class, making content visible only to screen readers but not visually */
