@@ -107,7 +107,8 @@
         "components.collection.item": {
             "quick_add.label": "Quick add",
             "quick_add.status.add": "Adding",
-            "quick_add.status.success": "Added to cart!"
+            "quick_add.status.success": "Added to cart!",
+            "image.alt": "{{name}} image"
         },
         "components.store.filters": {
             "buttons": {

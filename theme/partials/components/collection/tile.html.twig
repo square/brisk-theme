@@ -89,7 +89,7 @@
         {% endif %}
     >
         {% if productImage %}
-            {{ include('partials/ui/image', { image: { uri: productImage.absolute_uri, urls: productImage.absolute_urls }, imageSizes, altText: product.name, showPlaceholder: true }) }}
+            {{ include('partials/ui/image', { image: { uri: productImage.absolute_uri, urls: productImage.absolute_urls }, imageSizes, altText: 'partials.components.collection.item.image.alt'|localize({ name: product.name }), showPlaceholder: true }) }}
         {% else %}
             {{ include('partials/ui/placeholder') }}
         {% endif %}
@@ -102,7 +102,7 @@
                 class="collection__tile-image-hover {% if hoverImage %}collection__tile-has-secondary-image{% endif %}"
             >
                 {% if hoverImage %}
-                    {{ include('partials/ui/image', { image: { uri: hoverImage.absolute_uri, urls: hoverImage.absolute_urls }, imageSizes, altText: product.name }) }}
+                    {{ include('partials/ui/image', { image: { uri: hoverImage.absolute_uri, urls: hoverImage.absolute_urls }, imageSizes, altText: 'partials.components.collection.item.image.alt'|localize({ name: product.name }) }) }}
                 {% endif %}
 
                 {% if choiceOptions|length %}
