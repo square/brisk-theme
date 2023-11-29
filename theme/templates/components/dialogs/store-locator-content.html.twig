@@ -29,7 +29,7 @@
         {% set formattedAddressArray = location.address|address_format_multiline|slice(0,-1) %}
         {% set openToday = '' %}
         {% set today = 'now'|date('D', location.timezone)|lower %}
-        {% for key, value in location.pickup.hours %}
+        {% for key, value in location.square_business_hours %}
             {% if (key|lower) == today and value is not empty %}
                 {% set openToday = 'templates.components.dialogs.store_locator.open_today'|localize({ time: value[0].open_formatted ~ ' - ' ~ value[0].close_formatted }) %}
             {% endif %}
@@ -80,7 +80,7 @@
                 {% set currentDate = '+' ~ day ~ ' day' %}
                 {% set weekdaysOrder = weekdaysOrder|merge({ (currentDate|date('D', location.timezone)|lower): day }) %}
             {% endfor %}
-            {% set businessHours = location.pickup.hours|keys|sort((a, b) => weekdaysOrder[a|lower] - weekdaysOrder[b|lower])|map((key) => { day: key|lower, hours: location.pickup.hours[key] }) %}
+            {% set businessHours = location.square_business_hours|keys|sort((a, b) => weekdaysOrder[a|lower] - weekdaysOrder[b|lower])|map((key) => { day: key|lower, hours: location.square_business_hours[key] }) %}
         <div class="row store-locator-dialog__hours-row">
             {% for businessInfo in businessHours %}
             <div

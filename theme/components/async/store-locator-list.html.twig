@@ -6,7 +6,7 @@
         {% for location in locations %}
             {% set sublabels = location.address|address_format_multiline|slice(0,-1) %}
             {% set today = 'now'|date('D', location.timezone)|lower %}
-            {% for key, value in location.pickup.hours %}
+            {% for key, value in location.square_business_hours %}
                 {% if (key|lower) == today and value is not empty %}
                     {% set sublabels = sublabels|merge(['templates.components.dialogs.store_locator.open_today'|localize({ time: value[0].open_formatted ~ ' - ' ~ value[0].close_formatted })]) %}
                 {% endif %}
