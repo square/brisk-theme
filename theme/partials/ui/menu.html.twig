@@ -1,6 +1,6 @@
 
 {% if request.async == true %}
-    <link href="{{ 'css/ui/menu.css' | asset_url }}" rel="stylesheet" />
+    <link href="{{ 'css/ui/menu.css' | asset_url }}" rel="stylesheet" onload="document.dispatchEvent(new CustomEvent('asset:ready'))" />
     <script src="{{ 'js/ui/menu.js' | asset_url }}"></script>
 {% else %}
     {{ register_asset('css/ui/menu.css') }}
@@ -16,12 +16,22 @@
 </script>
 
 <div
-    x-data="{ ...menuUI('{{ menuUIDataId }}'), {% block data %}{% endblock %} }"
+    x-data="{ isReady: !Boolean({{ request.async }}), ...menuUI('{{ menuUIDataId }}'), {% block data %}{% endblock %} }"
     x-init="initMenuUI()"
     class="ui-menu {{ menuClasses }}"
+    @asset:ready.document="isReady = true"
     {% block attributes %}{% endblock %}
 >
-    <div class="ui-menu--scrollbar custom-scrollbar">
+    <div
+        x-show="isReady"
+        x-transition:enter="fade-enter-active"
+        x-transition:enter-start="fade-enter-from"
+        x-transition:enter-end="fade-enter-to"
+        x-transition:leave="fade-leave-active"
+        x-transition:leave-start="fade-leave-from"
+        x-transition:leave-end="fade-leave-to"
+        class="ui-menu--scrollbar custom-scrollbar"
+    >
         <ul
             x-ref="menu"
             tabindex="0"

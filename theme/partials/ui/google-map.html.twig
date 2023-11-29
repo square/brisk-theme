@@ -1,11 +1,18 @@
+{{ register_asset('css/ui/google-map.css') }}
+
+{% set pincolor = config.theme.shouldUseSiteStyles ? square.site.styles.colors.primary|replace({'#': ''}) : '000000' %}
+{% set pincontrastcolor = config.theme.shouldUseSiteStyles ? square.site.styles.colors.primary_contrast|replace({'#': ''}) : 'ffffff' %}
+{% set googleMapConfig = { pincolor, pincontrastcolor }|merge(mapConfig) %}
+
 <iframe
-    ref="iframe"
-    src="{{ mapConfig|embed_map_url }}"
+    class="ui-google-map"
+    src="{{ googleMapConfig|embed_map_url }}"
     allowtransparency="true"
     frameborder="0"
     scrolling="no"
     loading="lazy"
     width="100%"
-    height="{{ mapConfig.height|default('230px') }}"
+    height="{{ googleMapConfig.height|default('230px') }}"
+    {% block attributes %}{% endblock %}
 >
 </iframe>
