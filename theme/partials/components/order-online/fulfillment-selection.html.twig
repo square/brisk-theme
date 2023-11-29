@@ -1,0 +1,32 @@
+{{ register_asset('js/components/order-online/fulfillment-selection.js', { defer: false }) }}
+
+{% set options = [] %}
+{% if fulfillments.PICKUP %}
+    {% set options = options|merge([{ label: 'partials.components.store.item.fulfillment.buttons.pickup'|localize, value: 'PICKUP' }]) %}
+{% endif %}
+{% if fulfillments.DELIVERY %}
+    {% set options = options|merge([{ label: 'partials.components.store.item.fulfillment.buttons.delivery'|localize, value: 'DELIVERY' }]) %}
+{% endif %}
+
+{% if options|length %}
+
+<div
+    class="fulfillment-select-container"
+>
+    {% embed 'partials/form/choice' with {
+        variant: 'grid',
+        options,
+        hideLabel: true,
+        hideSublabel: true,
+        isRequired: true,
+    } %}
+        {% block data %}
+            ...fulfillmentSelection()
+        {% endblock %}
+        {% block attributes %}
+            columns="{{ options|length }}"
+        {% endblock %}
+    {% endembed %}
+</div>
+    
+{% endif %}

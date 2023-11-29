@@ -491,6 +491,7 @@ document.addEventListener('alpine:init', () => {
         locale: Constants.DEFAULT_LOCALE,
         currency: Constants.DEFAULT_CURRENCY,
         defaultFulfillment: Constants.FULFILLMENT_SHIPPING,
+        defaultLocationId: '',
         pageHeight: 0,
         pageWidth: 0,
         bodyStyles: {},
@@ -503,6 +504,7 @@ document.addEventListener('alpine:init', () => {
             const store = Alpine.store('global');
             store.updateProperty('locale', this.locale.replace(/_/g, '-'));
             store.updateProperty('fulfillment', this.defaultFulfillment);
+            store.updateProperty('locationId', this.defaultLocationId);
             store.setCurrency(this.currency);
 
             // add whitespace at top to fit header
@@ -511,6 +513,19 @@ document.addEventListener('alpine:init', () => {
                     '--header-height': `${height}px`,
                 };
             });
+            
+            this.$watch('$store.global.fulfillment', (value) => {
+                const url = new URL(window.location.href);
+                url.searchParams.set('fulfillment', value);
+                window.history.pushState(null, document.title, url.toString());
+            });
+
+            this.$watch('$store.global.locationId', (value) => {
+                const url = new URL(window.location.href);
+                url.searchParams.set('fulfillment', value);
+                window.history.pushState(null, document.title, url.toString());
+            });
+
             this.onWindowResize();
         },
         /**

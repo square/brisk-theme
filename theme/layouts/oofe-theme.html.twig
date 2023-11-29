@@ -53,7 +53,8 @@
     {% endblock %}
 </head>
 
-{% set defaultFulfillment = (square.store.default_item_fulfillment|split(',')[0])|default('SHIPMENT') %}
+{% set defaultFulfillment = request.query.fulfillment|default('PICKUP') %}
+{% set defaultLocationId = request.query.location_id %}
 
 {% if config.theme.shouldUseSiteStyles %}
     {% set themeContainerWidth = max(square.site.styles.spacing.site_width, 1200) %}
@@ -70,12 +71,13 @@
     @resize.window="onWindowResize"
 >
 <script id="global-data" type="application/json">
-            {{ {
+    {{ {
         locale: square.store.locale,
         currency: square.store.currency,
         defaultFulfillment,
+        defaultLocationId,
     }|json_encode }}
-        </script>
+</script>
 
 {{ include('partials/helpers/snippets') }}
 {{ global_section('header') }}

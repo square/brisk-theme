@@ -1,16 +1,30 @@
-{{ register_asset('js/templates/order-online/fulfillment.js', { defer: false }) }}
+{{ register_asset('css/components/order-online/swf.css') }}
+{{ register_asset('js/templates/order-online/swf.js', { defer: false }) }}
+
+<script id="swf-data" type="application/json">
+    {{ {
+        defaultSchedule: schedule,
+    }|json_encode }}
+</script>
+
+<script>
+    const test = JSON.stringify({{ {
+        cart,
+    }|json_encode }});
+    console.log(test);
+</script>
 
 <div
-    class="swf-container"
+    x-data="swf('swf-data')"
+    class="container"
 >
-    <h3 class="heading-3">{{ location.name }}</h3>
     <div
-        x-data="datePickerData()"
-        class="swf-contents"
+        class="swf-section__container"
     >
-        <template x-for="entry in Object.entries(firstData.available_times || {})">
-            <h3 class="heading-3" x-text="entry[1].label">{{ location.name }}</h3>
-        </template>
+        {{ include('partials/components/order-online/fulfillment-selection', {
+            fulfillments: square.store.fulfillment_support,
+            defaultFulfillment,
+        }) }}
     </div>
 </div>
 
@@ -22,18 +36,8 @@
     "schedule": {
         "type": "schedule"
     },
-    "categoryList": {
-        "type": "category-list"
-    },
-    "category": {
-        "type": "category"
-    },
-    "item": {
-        "type": "item"
-    },
-    "itemList": {
-        "type": "item-list"
+    "cart": {
+        "type": "cart"
     }
-    
 }
 {% endschema %}

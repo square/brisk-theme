@@ -1,0 +1,6 @@
+
+.swf-section__container {
+    border: 1px solid var(--theme-color-neutral-10);
+    border-radius: 15px;
+    padding: var(--space) var(--space-x3);
+}

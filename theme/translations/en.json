@@ -164,7 +164,8 @@
             "fulfillment": {
                 "label": "How to get it",
                 "buttons.shipping": "Ship",
-                "buttons.pickup": "Pickup"
+                "buttons.pickup": "Pickup",
+                "buttons.delivery": "Delivery"
             },
             "modifiers": {
                 "choices_allowed": {

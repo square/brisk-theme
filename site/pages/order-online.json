@@ -3,8 +3,32 @@
         "main": [
             {
                 "props": {
+                    "location": {
+                        "type": "location",
+                        "filters": {
+                            "id": "request_data(query.location_id)"
+                        }
+                    },
+                    "schedule": {
+                        "type": "schedule",
+                        "filters": {
+                            "location_id": "request_data(query.location_id)",
+                            "fulfillment": "request_data(query.fulfillment, square.store.seller_perferred_fulfillment)"
+                        }
+                    },
+                    "cart": {
+                        "type": "cart"
+                    }
+                },
+                "template": "order-online/swf"
+            },
+            {
+                "props": {
                     "categoryList": {
                         "type": "category-list"
+                    },
+                    "categoryHierarchy": {
+                        "type": "category-hierarchy"
                     }
                 },
                 "template": "order-online/order-online-item-list"
