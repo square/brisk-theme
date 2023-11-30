@@ -1,4 +1,4 @@
-{% set bannerSrc = image.src|asset_url %}
+{% set bannerSrc = image.src %}
 {{ include('partials/components/banner', {
     fullwidth: true,
     bannerImage: { uri: bannerSrc, urls: { 640: bannerSrc ~ '?width=640', 1280: bannerSrc ~ '?width=1280' } },
