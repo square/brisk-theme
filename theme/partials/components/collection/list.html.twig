@@ -16,6 +16,8 @@
 {% embed 'partials/ui/carousel' with {
     navPosition: 'overlay',
     carouselClasses: 'collection collection--' ~ collectionLayout,
+    title,
+    hideTitle: true,
 } %}
     {% block data %}
         ...collection(),

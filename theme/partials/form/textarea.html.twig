@@ -12,15 +12,15 @@
     {% if parentModel %}x-modelable="model"{% endif %}
     aria-invalid="isInvalid"
     {% if isLabelVisible %}aria-describedby="{{ textareaId }}__label"{% endif %}
-    class="form-fieldset form-textarea"
+    class="form-element form-textarea"
     :class="{'form-textarea--label-visible': '{{ isLabelVisible }}', 'form-textarea--invalid': isInvalid }"
 >
     {% if isLabelVisible %}
     <label
         id="{{ textareaId }}__label"
         for="textarea-{{ textareaId }}"
-        class="form-fieldset__label"
-    >  
+        class="form-element__label"
+    >
         {{ label }}
     </label>
     {% endif %}
@@ -32,6 +32,6 @@
         class="form-textarea__input"
     ></textarea>
 
-    {{ include('partials/form/fieldset-error') }}
+    {{ include('partials/form/element-error') }}
 
 </div>

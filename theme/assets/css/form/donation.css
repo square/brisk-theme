@@ -1,12 +1,12 @@
-.form-fieldset__donation .form-choice__button--custom .form-choice__label {
+.form-element__donation .form-choice__button--custom .form-choice__label {
     background-color: transparent;
 }
 
-.form-fieldset__donation .form-choice__button {
+.form-element__donation .form-choice__button {
     width: 20%;
 }
 
-.form-fieldset__donation .form-choice__input {
+.form-element__donation .form-choice__input {
     width: 100%;
     height: 100%;
     padding: 0 var(--space-x2) 0 calc(var(--space-x3) + var(--space-half));
@@ -15,18 +15,18 @@
     border-radius: var(--theme-border-radius);
 }
 
-.form-fieldset__donation--currency-after .form-choice__input {
+.form-element__donation--currency-after .form-choice__input {
     padding-right: calc(var(--space-x3) + var(--space-half));
     padding-left: var(--space-x2);
     text-align: right;
 }
 
-.form-fieldset__donation .form-choice__input-suffix {
+.form-element__donation .form-choice__input-suffix {
     position: absolute;
     left: var(--space-x2);
 }
 
-.form-fieldset__donation--currency-after .form-choice__input-suffix {
+.form-element__donation--currency-after .form-choice__input-suffix {
     right: var(--space-x2);
     left: auto;
 }

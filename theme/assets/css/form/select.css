@@ -48,6 +48,6 @@
     cursor: pointer;
 }
 
-.form-select .form-fieldset__error--visible {
+.form-select .form-element__error--visible {
     margin-top: var(--space-half);
 }

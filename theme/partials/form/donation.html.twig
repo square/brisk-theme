@@ -25,7 +25,7 @@
 
 <div
     x-data="donationForm('{{ donationFormDataId }}')"
-    :class="'form-fieldset__donation form-fieldset__donation--currency-' + $store.global.currencySymbolPosition"
+    :class="'form-element__donation form-element__donation--currency-' + $store.global.currencySymbolPosition"
 >
     {% embed 'partials/form/choice' with {
         label: 'partials.form.donation.label'|localize,

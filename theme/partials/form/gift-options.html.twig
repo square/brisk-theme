@@ -6,15 +6,15 @@
 
 {% set labelId = 'gift-options-label-' ~ random() %}
 
-<fieldset
+<div
     x-data="{ isGiftOptionsVisible: false, giftMessageModel: '', giftWrapModel: false, {% block data %}{% endblock %} }"
     aria-describedby="{{ labelId }}"
     role="group"
-    class="form-fieldset"
+    class="form-element"
 >
     <label
         id="{{ labelId }}"
-        class="form-fieldset__label"
+        class="form-element__label"
     >
         {{ option.name }}
     </label>
@@ -69,4 +69,4 @@
             {% endif %}
         {% endfor %}
     </div>
-</fieldset>
+</div>

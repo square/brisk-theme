@@ -20,20 +20,26 @@
 >
 {% endif %}
 
-<fieldset
+<div
     x-data="{ ...stepperForm({{ minValue }}, '{{ defaultValue }}'), {% block data %}{% endblock %} }"
     x-effect="updateStepperInput()"
     {% if isRequired %}aria-required="true"{% endif %}
     :aria-invalid="isInvalid"
-    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    {% if hideLabel %}
+        aria-describedby="{{ labelId }}"
+    {% else %}
+        :aria-describedby="isInvalid ? '{{ labelId }} {{ labelId }}__error' : '{{ labelId }}'"
+    {% endif %}
     role="radiogroup"
-    class="form-fieldset form-stepper--{{ size|default('normal') }}"
+    class="form-element form-stepper--{{ size|default('normal') }}"
     :class="{'form-stepper--invalid': isInvalid }"
 >
-    {% if hideLabel == false %}
-        <div class="form-fieldset__label">
+    {% if hideLabel %}
+        <span id="{{ labelId }}" hidden>{{ label }}</span>
+    {% else %}
+        <div class="form-element__label">
             <span id="{{ labelId }}">{{ label }}</span>
-            {{ include('partials/form/fieldset-error') }}
+            {{ include('partials/form/element-error') }}
         </div>
     {% endif %}
 
@@ -79,7 +85,7 @@
             </a>
         </label>
     </div>
-</fieldset>
+</div>
 
 {% if request.async == true %}
 </template>
