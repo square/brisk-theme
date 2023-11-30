@@ -20,13 +20,13 @@ const M = {
   "content-type": "application/json; charset=UTF-8",
   "X-CSRF-TOKEN": x()
 }), O = "/s/api/v1/cart", N = "Something went wrong", A = (r, e) => {
-  const t = D(e.error || e.message || r.statusText), i = new Error(t);
+  const t = k(e.error || e.message || r.statusText), i = new Error(t);
   if (e.errors) {
-    const o = {};
-    Object.keys(e.errors).forEach((n) => {
-      const s = e.errors[n].map((a) => D(a));
-      o[D(n)] = s;
-    }), i.errors = o;
+    const n = {};
+    Object.keys(e.errors).forEach((s) => {
+      const o = e.errors[s].map((a) => k(a));
+      n[k(s)] = o;
+    }), i.errors = n;
   }
   return e.fields && (i.fields = e.fields), r.status && (i.status = r.status, i.status === 200 && (i.status = 500)), i;
 }, C = async (r) => {
@@ -51,11 +51,11 @@ const M = {
     throw A(r, t);
   }
   throw new Error(N);
-}, D = (r) => r.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), k = (r) => r.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), T = (r) => {
+}, k = (r) => r.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), P = (r) => r.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), T = (r) => {
   const e = {};
   return Object.keys(r).forEach((t) => {
     const i = r[t];
-    Array.isArray(i) ? e[k(t)] = F(i) : i && typeof i == "object" ? e[k(t)] = T(i) : e[k(t)] = i;
+    Array.isArray(i) ? e[P(t)] = F(i) : i && typeof i == "object" ? e[P(t)] = T(i) : e[P(t)] = i;
   }), e;
 }, F = (r) => {
   const e = [];
@@ -64,12 +64,12 @@ const M = {
   }), e;
 }, X = (r) => {
   const e = r + "=", i = decodeURIComponent(document.cookie).split(";");
-  for (let o = 0; o < i.length; o++) {
-    let n = i[o];
-    for (; n.charAt(0) == " "; )
-      n = n.substring(1);
-    if (n.indexOf(e) == 0)
-      return n.substring(e.length, n.length);
+  for (let n = 0; n < i.length; n++) {
+    let s = i[n];
+    for (; s.charAt(0) == " "; )
+      s = s.substring(1);
+    if (s.indexOf(e) == 0)
+      return s.substring(e.length, s.length);
   }
   return null;
 }, G = (r) => {
@@ -80,24 +80,24 @@ const M = {
   return e.fulfillmentType === "PICKUP" && (e.pickupDetails || (e.pickupDetails = {}), e.pickupDetails.scheduleType || (e.pickupDetails.scheduleType = "ASAP"), e.pickupDetails.curbsidePickupRequested == null && (e.pickupDetails.curbsidePickupRequested = !1), e.pickupDetails.curbsidePickupDetails || (e.pickupDetails.curbsidePickupDetails = {
     curbsideDetails: ""
   }), e.pickupDetails.pickupAt || (e.pickupDetails.pickupAt = (/* @__PURE__ */ new Date()).toISOString().split(".")[0] + "Z")), e;
-}, P = (r) => {
+}, D = (r) => {
   var t;
   const e = b(r.fulfillment);
   return e.fulfillmentType === M.PICKUP && ((t = e.pickupDetails) == null ? void 0 : t.scheduleType) === j.ASAP;
 }, V = (r) => {
-  var o;
+  var n;
   const e = JSON.parse(JSON.stringify(r.lineItem));
   e.quantity || (e.quantity = 1);
   const t = T(e);
-  if ((o = t.modifiers) != null && o.length) {
-    const n = {};
-    t.modifiers.forEach((s) => {
-      if (s.type) {
-        n[s.type] || (n[s.type] = {});
-        const a = JSON.parse(JSON.stringify(s));
-        delete a.id, delete a.type, n[s.type][s.id] = a;
+  if ((n = t.modifiers) != null && n.length) {
+    const s = {};
+    t.modifiers.forEach((o) => {
+      if (o.type) {
+        s[o.type] || (s[o.type] = {});
+        const a = JSON.parse(JSON.stringify(o));
+        delete a.id, delete a.type, s[o.type][o.id] = a;
       }
-    }), t.modifiers = n;
+    }), t.modifiers = s;
   } else
     t.modifiers && delete t.modifiers;
   return {
@@ -105,12 +105,12 @@ const M = {
     fulfillment: T(b(r.fulfillment)),
     location_id: r.locationId,
     // JSON.stringify will remove if undefined
-    order_id: S(r)
+    order_id: E(r)
   };
-}, S = (r) => r.orderId !== void 0 ? r.orderId : X("com_cart_id") || void 0;
+}, E = (r) => r.orderId !== void 0 ? r.orderId : X("com_cart_id") || void 0;
 class J {
   /**
-   * Adds an item to the current order.
+   * Adds an item to your cart order.
    *
    * ```ts
    *	const addItemRequest = {
@@ -147,22 +147,23 @@ class J {
    *		locationId: 'L36RW9ABXQTEE'
    *	};
    *	try {
-   *		let response = await sdk.Cart.addItem(addItemRequest);
+   *		const response = await sdk.cart.addItem(addItemRequest);
    *	} catch (error) {
    *		// Handle errors
    *	}
    * ```
+   * @throws {@link CartError}
    */
   async addItem(e) {
     const t = V(e), i = await fetch(`${O}/add`, {
       method: "POST",
       body: JSON.stringify(t),
       headers: I()
-    }), o = await C(i);
-    return P(e) && await this.patchAsapPickupTime(e), o;
+    }), n = await C(i);
+    return D(e) && await this.patchAsapPickupTime(e), n;
   }
   /**
-   * Adds an item to a new order and redirects to checkout (/s/checkout) on success.
+   * Adds an item to a new order and redirects to checkout on success.
    *
    * ```ts
    *	const buyNowItemRequest = {
@@ -199,11 +200,12 @@ class J {
    *		locationId: 'L36RW9ABXQTEE'
    *	};
    *	try {
-   *		await sdk.Cart.buyNowItem(buyNowItemRequest);
+   *		await sdk.cart.buyNowItem(buyNowItemRequest);
    *	} catch (error) {
    *		// Handle errors
    *	}
    * ```
+   * @throws {@link CartError}
    */
   async buyNowItem(e) {
     const t = G(e), i = await fetch(`${O}/buy`, {
@@ -211,10 +213,10 @@ class J {
       body: JSON.stringify(t),
       headers: I()
     });
-    return !e.lineItem.subscriptionPlanVariationId && P(e) && await this.patchAsapPickupTime(e), L(i);
+    return !e.lineItem.subscriptionPlanVariationId && D(e) && await this.patchAsapPickupTime(e), L(i);
   }
   /**
-   * Updates the quantity of an item in the order. Quantity must be greater than 0.
+   * Updates the quantity of an item on an order. Quantity must be greater than 0.
    *
    * ```ts
    *	const updateItemQuantityRequest = {
@@ -222,11 +224,12 @@ class J {
    *		quantity: 2
    *	};
    *	try {
-   *		let response = await SDK.Cart.updateItemQuantity(updateItemQuantityRequest);
+   *		const response = await SDK.cart.updateItemQuantity(updateItemQuantityRequest);
    *	} catch (error) {
    *		// Handle errors
    *	}
    * ```
+   * @throws {@link CartError}
    */
   async updateItemQuantity(e) {
     const t = await fetch(`${O}/update-quantity`, {
@@ -234,39 +237,40 @@ class J {
       body: JSON.stringify({
         order_item_id: e.orderItemId,
         quantity: e.quantity,
-        order_id: S(e)
+        order_id: E(e)
       }),
       headers: I()
     });
     return C(t);
   }
   /**
-   * Removes the line item from the order.
+   * Removes a line item from an order.
    *
    * ```ts
    *	const removeItemRequest = {
    *		orderItemId: '11ee2722e42886d182fa089e019fd17a'
    *	};
    *	try {
-   *		let response = await SDK.Cart.removeItem(removeItemRequest);
+   *		const response = await SDK.cart.removeItem(removeItemRequest);
    *	} catch (error) {
    *		// Handle errors
    *	}
    * ```
+   * @throws {@link CartError}
    */
   async removeItem(e) {
     const t = await fetch(`${O}/remove-item`, {
       method: "POST",
       body: JSON.stringify({
         order_item_id: e.orderItemId,
-        order_id: S(e)
+        order_id: E(e)
       }),
       headers: I()
     });
     return C(t);
   }
   /**
-   * Updates the order fulfillment. At the moment must update all properties.
+   * Updates the fulfillment on an order. At the moment must update all properties as it acts like a POST.
    *
    * ```ts
    *	const patchFulfillmentRequest = {
@@ -281,14 +285,15 @@ class J {
    *		}
    *	};
    *	try {
-   *		let response = await sdk.Cart.patchFulfillment(patchFulfillmentRequest);
+   *		const response = await sdk.cart.patchFulfillment(patchFulfillmentRequest);
    *	} catch (error) {
    *		// Handle errors
    *	}
    * ```
+   * @throws {@link CartError}
    */
   async patchFulfillment(e) {
-    const t = await fetch(`${O}/${S(e)}/fulfillment`, {
+    const t = await fetch(`${O}/${E(e)}/fulfillment`, {
       method: "PATCH",
       body: JSON.stringify({
         fulfillment: T(b(e.fulfillment))
@@ -298,8 +303,8 @@ class J {
     return C(t);
   }
   /**
-   * Updates the order fulfillment's `fulfillment.pickupDetails.pickupAt` with the ASAP time.
-   * At the moment must provide all other existing fulfillment properties. Note that if
+   * Updates your ASAP pickup order to the earliest available pickup time based on your order items and store settings (e.g. prep times).
+   * At the moment must provide all other existing fulfillment properties as it acts like a POST. Note that if
    * you provide `fulfillment.pickupDetails.pickupAt`, it will just be ignored.
    *
    * ```ts
@@ -315,16 +320,17 @@ class J {
    *		}
    *	};
    *	try {
-   *		let response = await sdk.Cart.patchAsapPickupTime(patchAsapPickupTimeRequest);
+   *		const response = await sdk.cart.patchAsapPickupTime(patchAsapPickupTimeRequest);
    *	} catch (error) {
    *		// Handle errors
    *	}
    * ```
+   * @throws {@link CartError}
    */
   async patchAsapPickupTime(e) {
     var t;
-    if (P(e)) {
-      const o = await (await fetch("/s/api/v1/resource", {
+    if (D(e)) {
+      const n = await (await fetch("/s/api/v1/resource", {
         method: "POST",
         headers: I(),
         body: JSON.stringify({
@@ -338,27 +344,66 @@ class J {
           }
         })
       })).json();
-      if ((t = o.schedule) != null && t.earliest_time.time_unix) {
-        const n = new Date(o.schedule.earliest_time.time_unix * 1e3).toISOString().split(".")[0] + "Z", s = {
-          orderId: S(e),
+      if ((t = n.schedule) != null && t.earliest_time.time_unix) {
+        const s = new Date(n.schedule.earliest_time.time_unix * 1e3).toISOString().split(".")[0] + "Z", o = {
+          orderId: E(e),
           fulfillment: JSON.parse(JSON.stringify(e.fulfillment))
         };
-        return s.fulfillment.pickupDetails || (s.fulfillment.pickupDetails = {}), s.fulfillment.pickupDetails.pickupAt = n, this.patchFulfillment(s);
+        return o.fulfillment.pickupDetails || (o.fulfillment.pickupDetails = {}), o.fulfillment.pickupDetails.pickupAt = s, this.patchFulfillment(o);
       }
     }
     return {
       data: {
-        cart: S(e) || ""
+        cart: E(e) || ""
       }
     };
   }
 }
 class K {
+  /**
+   * Used to load up to 5 resources.
+   *
+   * ```ts
+   *  const resourceRequest = {
+   *      'categoryListResource': {
+   *          type: 'category-list'
+   *      },
+   *      'categoryOptionsResource': {
+   *          type: 'category-options',
+   *          filters: {
+   *              category_id: '2'
+   *          }
+   *      },
+   *      'itemListResource': {
+   *          type: 'item-list',
+   *          filters: {
+   *              'option_choices': [ "11ee258c913644169c41a2491ad79fa8" ],
+   *              'square_online_id': true
+   *          }
+   *      },
+   *      'cartResource': {
+   *          type: 'cart',
+   *      },
+   *      'itemResource': {
+   *          type: 'item',
+   *          filters: {
+   *              'id': "47HCEE6ZQUFFY3Y7X52CRVCO"
+   *          }
+   *      }
+   *  };
+   *	try {
+   *		const resources = await sdk.resource.getResource(resourceRequest);
+   *	} catch (error) {
+   *		// Handle errors
+   *	}
+   * ```
+   * @throws {@link Error}
+   */
   async getResource(e) {
     const t = {};
-    for (const n in e) {
-      const s = e[n];
-      t[n] = s;
+    for (const s in e) {
+      const o = e[s];
+      t[s] = o;
     }
     return await (await fetch("/s/api/v1/resource", {
       method: "POST",
@@ -374,29 +419,82 @@ class B {
     y(this, "initConfig");
     this.initConfig = e;
   }
+  /**
+   * Used to get a list of places autocompleted from an address (or partial address).
+   *
+   * ```ts
+   *  const autocompletePlacesRequest = {
+   *      address: '4 Pennsylvania Plaza'
+   *  };
+   *	try {
+   *		const response = await sdk.places.autocompletePlaces(autocompletePlacesRequest);
+   *	} catch (error) {
+   *		// Handle errors
+   *	}
+   * ```
+   * @throws {@link Error}
+   */
   async autocompletePlaces(e) {
-    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : "", n = e.address, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places?types=geocode&input=${n}`;
+    const t = this.initConfig.userId, i = this.initConfig.siteId, n = e.address, s = `/app/store/api/v28/pub/users/${t}/sites/${i}/places?types=geocode&input=${n}`;
     return await (await fetch(s, {
       method: "GET",
       headers: I()
     })).json();
   }
+  /**
+   * Used to get the full details for a place using a `place_id` from autocompletePlaces.
+   *
+   * ```ts
+   *  const getPlaceRequest = {
+   *      placeId: 'G:ChIJFcXEG65ZwokRLH0n5pmtMIQ'
+   *  };
+   *	try {
+   *		const response = await sdk.places.getPlace(getPlaceRequest);
+   *	} catch (error) {
+   *		// Handle errors
+   *	}
+   * ```
+   * @throws {@link Error}
+   */
   async getPlace(e) {
-    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : "", n = e.placeId, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places/${n}`, c = await (await fetch(s, {
+    const t = this.initConfig.userId, i = this.initConfig.siteId, n = e.placeId, s = `/app/store/api/v28/pub/users/${t}/sites/${i}/places/${n}`, a = await (await fetch(s, {
       method: "GET",
       headers: I()
     })).json();
-    return Array.isArray(c.data) && (c.data = {}), c;
+    return Array.isArray(a.data) && (a.data = {}), a;
   }
 }
 class H extends Error {
   constructor(t, i) {
     super(t);
+    /** Provides the generic rendered HTML error template that would be rendered via the page on a failure. You can choose to use this to display a rendered error, or handle it how you see fit. */
     y(this, "template");
     this.template = i;
   }
 }
 class Q {
+  /**
+   * Used to load a Twig template via the API.
+   *
+   * ```ts
+   *  const templateRequest = {
+   *      template: 'sections/item-modal',
+   *      props: {
+   *          item: {
+   *              filters: {
+   *                  id: item.id
+   *              }
+   *          }
+   *      }
+   *  };
+   *	try {
+   *		const template = await sdk.template.getTemplate(templateRequest);
+   *	} catch (error) {
+   *		// Handle errors
+   *	}
+   * ```
+   * @throws {@link TemplateError}
+   */
   async getTemplate(e) {
     const t = await fetch("/s/api/v1/template", {
       method: "POST",
@@ -427,55 +525,82 @@ const w = {
 }, W = (r) => {
   const e = r.product_type_details.end_date, t = r.product_type_details.end_time;
   let i = e + "T";
-  const o = t.split(" "), n = o[0].split(":");
-  let s = parseInt(n[0]) + (o[1] === "PM" ? 12 : 0);
-  s -= n[0] === "12" ? 12 : 0;
-  const a = n[1];
-  return s.toString().length === 1 && (i += "0"), i += `${s}:${a}:00${r.product_type_details.timezone_info.utc_offset_string}`, new Date(i);
+  const n = t.split(" "), s = n[0].split(":");
+  let o = parseInt(s[0]) + (n[1] === "PM" ? 12 : 0);
+  o -= s[0] === "12" ? 12 : 0;
+  const a = s[1];
+  return o.toString().length === 1 && (i += "0"), i += `${o}:${a}:00${r.product_type_details.timezone_info.utc_offset_string}`, new Date(i);
 };
 class Y {
+  /**
+   * Returns the variations for an item resource.
+   */
   getVariations(e) {
     return e.variations;
   }
+  /**
+   * Returns the item options for an item resource.
+   */
   getItemOptions(e) {
     return e.item_options;
   }
+  /**
+   * Returns the modifier lists for an item resource.
+   */
   getModifierLists(e) {
     return e.modifier_lists;
   }
+  /**
+   * Returns whether a particular variation is sold out.
+   */
   isVariationSoldOut(e) {
     return e.sold_out || e.inventory_tracking_enabled && e.inventory === 0;
   }
+  /**
+   * Returns the QuantityErrorType if there's an item quantity error with the item varation, otherwise null.
+   */
   getItemQuantityError(e, t, i) {
     return i <= 0 ? w.INVALID_QUANTITY : this.isVariationSoldOut(t) ? w.SOLD_OUT : t.inventory_tracking_enabled && i > t.inventory ? w.STOCK_EXCEEDED : e.per_order_max && i > e.per_order_max ? w.PER_ORDER_MAX_EXCEEDED : null;
   }
+  /**
+   * Returns whether all variations of an item are sold out.
+   */
   isItemSoldOut(e) {
     return e.variations.every((t) => this.isVariationSoldOut(t));
   }
-  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: i = "", skipStockCheck: o = !1 }) {
-    return this.getVariations(e).reduce((n, s) => {
-      if (!i && s.item_option_values) {
-        const a = R(s);
-        if (!t.every((c) => a.find((d) => d.itemOptionId === c.itemOptionId && d.choice === c.choice)))
-          return n;
-      } else if (e.variations.length > 1 && s.id !== i)
-        return n;
-      return !o && this.isVariationSoldOut(s) || n.push(s), n;
+  /**
+   * Returns all variations in stock for the selected options or variation.
+   */
+  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: i = "", skipStockCheck: n = !1 }) {
+    return this.getVariations(e).reduce((s, o) => {
+      if (!i && o.item_option_values) {
+        const a = R(o);
+        if (!t.every((l) => a.find((d) => d.itemOptionId === l.itemOptionId && d.choice === l.choice)))
+          return s;
+      } else if (e.variations.length > 1 && o.id !== i)
+        return s;
+      return !n && this.isVariationSoldOut(o) || s.push(o), s;
     }, []);
   }
-  isOptionChoiceDisabledForSelectedOptions(e, t, i, o = !0) {
-    o && (i = i.filter((a) => a.itemOptionId !== t.itemOptionId));
-    const n = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: i });
-    let s = !1;
-    return n.forEach((a) => {
-      R(a).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (s = !0);
-    }), !s;
+  /**
+   * Returns whether an item's option choice is disabled based on the selected options.
+   */
+  isOptionChoiceDisabledForSelectedOptions(e, t, i, n = !0) {
+    n && (i = i.filter((a) => a.itemOptionId !== t.itemOptionId));
+    const s = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: i });
+    let o = !1;
+    return s.forEach((a) => {
+      R(a).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (o = !0);
+    }), !o;
   }
+  /**
+   * Returns whether a modifier list is valid for the selected modifiers.
+   */
   isModifierListForSelectedModifiersValid(e, t) {
-    var a, c;
-    const i = t.find((d) => d.id == e.id), o = e.min_selected_modifiers, n = e.max_selected_modifiers;
-    let s = ((a = i == null ? void 0 : i.textEntry) == null ? void 0 : a.length) || 0;
-    if ((c = i == null ? void 0 : i.choiceSelections) != null && c.length) {
+    var a, l;
+    const i = t.find((d) => d.id == e.id), n = e.min_selected_modifiers, s = e.max_selected_modifiers;
+    let o = ((a = i == null ? void 0 : i.textEntry) == null ? void 0 : a.length) || 0;
+    if ((l = i == null ? void 0 : i.choiceSelections) != null && l.length) {
       const d = i.choiceSelections.find((_) => {
         var h;
         return !((h = e.modifiers) != null && h.find((m) => m.id === _));
@@ -485,66 +610,76 @@ class Y {
       });
       if (d || p)
         return !1;
-      s = i.choiceSelections.length;
+      o = i.choiceSelections.length;
     }
-    return o && n && o === n ? s === o : o && n ? s >= o && s <= n : n ? s <= n : o ? s >= o : !0;
+    return n && s && n === s ? o === n : n && s ? o >= n && o <= s : s ? o <= s : n ? o >= n : !0;
   }
-  getDisabledOptionChoicesForSelectedOptions(e, t, i, o = !0) {
-    const n = t.choices.map((a) => ({
+  /**
+   * Returns the disabled option choices for an item based on the selected options.
+   */
+  getDisabledOptionChoicesForSelectedOptions(e, t, i, n = !0) {
+    const s = t.choices.map((a) => ({
       itemOptionId: t.id,
       choice: a
-    })), s = [];
-    return o && (i = i.filter((a) => a.itemOptionId !== t.id)), n.forEach((a) => {
-      this.isOptionChoiceDisabledForSelectedOptions(e, a, i, o) && s.push(a.choice);
-    }), s;
+    })), o = [];
+    return n && (i = i.filter((a) => a.itemOptionId !== t.id)), s.forEach((a) => {
+      this.isOptionChoiceDisabledForSelectedOptions(e, a, i, n) && o.push(a.choice);
+    }), o;
   }
-  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: i = [], selectedVariationId: o = "", quantity: n = void 0, skipStockCheck: s = !1, skipModifierCheck: a = !1 }) {
-    var g, E;
-    const c = [];
+  /**
+   * Returns whether an item with any combination of selected options, modifiers, variationId, and quantity is valid.
+   * @throws {@link ValidateItemError}
+   */
+  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: i = [], selectedVariationId: n = "", quantity: s = void 0, skipStockCheck: o = !1, skipModifierCheck: a = !1 }) {
+    var S, g;
+    const l = [];
     let d = !1, p = "", _ = w.SOLD_OUT;
     const h = [];
-    (g = e.item_options) != null && g.length && !o ? e.item_options.forEach((l) => {
-      t != null && t.find((f) => f.itemOptionId === l.id && l.choices.includes(f.choice)) || c.push(l.id);
-    }) : !e.item_options && e.variations.length > 1 && !o && (d = !0);
+    (S = e.item_options) != null && S.length && !n ? e.item_options.forEach((c) => {
+      t != null && t.find((f) => f.itemOptionId === c.id && c.choices.includes(f.choice)) || l.push(c.id);
+    }) : !e.item_options && e.variations.length > 1 && !n && (d = !0);
     let m = null;
-    if (c.length === 0 && !d) {
-      const l = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: s });
-      if (l.length === 0) {
-        const f = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: !0 });
+    if (l.length === 0 && !d) {
+      const c = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: n, skipStockCheck: o });
+      if (c.length === 0) {
+        const f = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: n, skipStockCheck: !0 });
         f.length > 0 && (p = f[0].id);
-      } else if (m = l[0], n != null) {
-        const f = this.getItemQuantityError(e, m, n);
+      } else if (m = c[0], s != null) {
+        const f = this.getItemQuantityError(e, m, s);
         f && (_ = f, p = m.id);
       }
     }
-    if ((E = e.modifier_lists) != null && E.length && !a && e.modifier_lists.forEach((l) => {
-      this.isModifierListForSelectedModifiersValid(l, i) || h.push(l.id);
-    }), !m || c.length || p || h.length) {
-      const l = new Error("Failed to validate item.");
-      throw c.length && (l.itemOptionIds = c), d && (l.flatVariationSelectionMissing = !0), p && (l.variationId = p, l.quantityErrorType = _), h.length && (l.modifierListIds = h), l;
+    if ((g = e.modifier_lists) != null && g.length && !a && e.modifier_lists.forEach((c) => {
+      this.isModifierListForSelectedModifiersValid(c, i) || h.push(c.id);
+    }), !m || l.length || p || h.length) {
+      const c = new Error("Failed to validate item.");
+      throw l.length && (c.itemOptionIds = l), d && (c.flatVariationSelectionMissing = !0), p && (c.variationId = p, c.quantityErrorType = _), h.length && (c.modifierListIds = h), c;
     }
     const u = {
       itemId: e.id,
       variationId: m.id,
       modifiers: i
     };
-    return n && (u.quantity = n), u;
+    return s && (u.quantity = s), u;
   }
-  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: i = "", selectedModifiers: o = [], skipStockCheck: n = !1, skipModifierCheck: s = !1, formattedLocale: a = void 0 }) {
+  /**
+   * Returns the price of an item based on the selected options, modifiers, and/or variation id.
+   */
+  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: i = "", selectedModifiers: n = [], skipStockCheck: s = !1, skipModifierCheck: o = !1, formattedLocale: a = void 0 }) {
     var d;
-    let c = null;
+    let l = null;
     try {
-      c = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: i, selectedModifiers: o, skipStockCheck: n, skipModifierCheck: s });
+      l = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: i, selectedModifiers: n, skipStockCheck: s, skipModifierCheck: o });
     } catch {
     }
-    if (c) {
-      const p = e.variations.find((u) => u.id === c.variationId);
+    if (l) {
+      const p = e.variations.find((u) => u.id === l.variationId);
       let _ = p.price.regular, h = p.price.sale;
-      (d = c.modifiers) == null || d.forEach((u) => {
-        var g, E;
+      (d = l.modifiers) == null || d.forEach((u) => {
+        var S, g;
         if (u.type === v.CHOICE || u.type === v.GIFT_WRAP) {
-          const l = (g = e.modifier_lists) == null ? void 0 : g.find((f) => f.id === u.id);
-          l && ((E = l.modifiers) == null || E.forEach((f) => {
+          const c = (S = e.modifier_lists) == null ? void 0 : S.find((f) => f.id === u.id);
+          c && ((g = c.modifiers) == null || g.forEach((f) => {
             u.choiceSelections.includes(f.id) && f.price_money && (_ += f.price_money.amount, h += f.price_money.amount);
           }));
         }
@@ -573,9 +708,15 @@ class Y {
     }
     return null;
   }
+  /**
+   * Returns whether an item is an event and has ended.
+   */
   isEventItemInThePast(e) {
     return e.square_online_type !== "EVENT" ? !1 : W(e) <= /* @__PURE__ */ new Date();
   }
+  /**
+   * Returns whether an item is a preorder and the cutoff time has passed.
+   */
   isPreorderItemCutoffInThePast(e) {
     if (!e.preordering.PICKUP)
       return !1;
@@ -588,9 +729,21 @@ class Z {
     y(this, "initConfig");
     this.initConfig = e;
   }
+  /**
+   * Used to try and get the coordinates of the buyer based on their IP address.
+   *
+   * ```ts
+   *	try {
+   *		const coordinates = await sdk.customers.getCoordinates();
+   *	} catch (error) {
+   *		// Handle errors
+   *	}
+   * ```
+   * @throws {@link Error}
+   */
   async getCoordinates() {
-    const e = this.initConfig.userId, i = `${this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : ""}/app/website/cms/api/v1/users/${e}/customers/coordinates`;
-    let n = await (await fetch(i, {
+    const t = `/app/website/cms/api/v1/users/${this.initConfig.userId}/customers/coordinates`;
+    let n = await (await fetch(t, {
       method: "GET",
       headers: I()
     })).json();
@@ -599,7 +752,7 @@ class Z {
 }
 class q {
   constructor(e) {
-    y(this, "version", "4.4.1");
+    y(this, "version", "4.4.3");
     y(this, "cart");
     y(this, "places");
     y(this, "resource");
