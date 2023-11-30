@@ -31,9 +31,16 @@ document.addEventListener('alpine:init', () => {
 
             Alpine.store('product').updateProperty('locationId', location.id);
 
+            const formattedLocation = Utils.formatLocationWithDistance(location);
+
             await Square.async.refreshAsyncTemplate('fulfillment-detail', {
                 fulfillment,
-                location: Utils.formatLocationWithDistance(location),
+                location,
+                formatted_distance: formattedLocation.formatted_distance,
+            }, {
+                loaded: {
+                    location: 'location',
+                },
             });
 
             if (shouldFocusButton && this.$refs.fulfillmentDetail) {
