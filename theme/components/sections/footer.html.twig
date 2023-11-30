@@ -7,14 +7,12 @@
         :class="{ 'container--fullwidth': $store.global.isMobile }"
     >
         <div class="footer__logo-wrapper">
-            <h3>
-                <a
-                    class="site-logo"
-                    href="/"
-                >
-                    {{ square.site.title }}
-                </a>
-            </h3>
+            <a
+                class="site-logo"
+                href="/"
+            >
+                {{ square.site.title }}
+            </a>
         </div>
         <div class="footer__menu-wrapper">
             <ul class="footer-menu footer-menu--desktop row">
@@ -70,11 +68,11 @@
                         class="footer-menu__item col"
                         col-sm-6 col-md-3
                     >
-                        <h4
+                        <h3
                             class="footer-menu__submenu-title"
                         >
                             {{ link.label }}
-                        </h4>
+                        </h3>
                         {{ submenu_links }}
                     </li>
                 {% endfor %}

@@ -70,7 +70,7 @@
                 {{ include('partials/ui/breadcrumb', { breadcrumb: breadcrumb }) }}
 
                 {# Product name #}
-                <h2 class="heading-2">{{ product.name }}</h2>
+                <h1 class="heading-2">{{ product.name }}</h1>
 
                 {# Badges #}
                 {% set badges = product.badges|filter(value => value) %}
