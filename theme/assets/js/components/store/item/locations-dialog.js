@@ -20,6 +20,11 @@ document.addEventListener('alpine:init', () => {
                         Square.async.refreshAsyncTemplate('fulfillment-detail', {
                             fulfillment: this.fulfillment,
                             location,
+                            formatted_distance: location.formatted_distance,
+                        }, {
+                            loaded: {
+                                location: 'location',
+                            },
                         });
                     }
 
@@ -93,8 +98,15 @@ document.addEventListener('alpine:init', () => {
 
             try {
                 await Alpine.store('global').getLocations(input).then(async (locations) => {
+                    const formattedDistance = locations.map((loc) => loc.formatted_distance);
+
                     await Square.async.refreshAsyncTemplate('location-selector', {
                         locations,
+                        formatted_distance: formattedDistance,
+                    }, {
+                        loaded: {
+                            locations: 'location-list',
+                        },
                     });
 
                     const hasLocationSelected = this.hasLocations() && this.locationId?.length;
