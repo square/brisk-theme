@@ -14,7 +14,6 @@
                 "props": {
                     "heading": "Shop by category",
                     "categories": {
-                        "type": "category-list",
                         "pagination": {
                             "page_size": 4
                         }
@@ -54,7 +53,6 @@
                         "sort": {
                             "by": "popularity_score"
                         },
-                        "type": "item-list",
                         "pagination": {
                             "page_size": 4
                         }
