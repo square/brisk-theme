@@ -40,8 +40,8 @@
 
     /* Setting min-height to horizontally align with the tiles header */
     min-height: calc(var(--theme-font-size-base) * var(--theme-line-height-base));
-    font-weight: var(--theme-font-weight-light);
     font-size: var(--theme-font-size-minus-2);
+    font-weight: var(--theme-font-weight-light);
     text-transform: uppercase;
 }
 

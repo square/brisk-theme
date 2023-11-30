@@ -1,5 +1,6 @@
 <div
     x-show="isMegaMenuVisible"
+    tabindex="0"
     class="mega-menu container"
     :class="{ 'is-visible': isMegaMenuVisible }"
     x-transition:enter="slide-down-enter-active"
@@ -8,8 +9,8 @@
     x-transition:leave="slide-down-leave-active"
     x-transition:leave-start="slide-down-leave-from"
     x-transition:leave-end="slide-down-leave-to"
-    @mouseleave.native="onMouseLeave"
-    @mouseenter.native="cancelDelayedMegaMenuClose"
+    @mouseleave="onMouseLeave"
+    @mouseenter="cancelDelayedMegaMenuClose"
 >
     <div
         class="custom-scrollbar mega-menu-scrollbar"
@@ -31,7 +32,12 @@
                             <div
                                 class="mega-menu__child-nav">
                                 {# the title of the submenu #}
-                                <a class="mega-menu__child-nav-title" :href="navItem.url" x-text="generateTitle(navItem)"></a>
+                                <a
+                                    class="mega-menu__child-nav-title"
+                                    :href="navItem.url"
+                                    x-text="generateTitle(navItem)"
+                                    @keydown.tab="onMegaMenuItemTab"
+                                ></a>
                                 <ul
                                     class="mega-menu__child-nav-links">
                                     {# links in the submenu #}
@@ -47,7 +53,7 @@
                     </template>
                 </div>
             </div>
-            <template x-if="currentlyDisplayedLink?.menu_image_url">
+            <template x-if="currentlyDisplayedLink?.menu_image_url && currentlyDisplayedLink?.children">
                 <div
                     class="mega-menu__image-wrapper col"
                     col-5 offset-1

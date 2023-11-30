@@ -82,8 +82,8 @@
     width: 8px;
     border-color: var(--theme-form-field-button-text);
     border-right-width: 0;
-    transform: rotate(0);
     opacity: 1;
+    transform: rotate(0);
 }
 
 .filters__category-buttons {

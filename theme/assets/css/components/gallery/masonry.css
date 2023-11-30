@@ -12,9 +12,9 @@
     width: 100%;
     max-height: var(--single-item-max-height);
     overflow: hidden;
+    cursor: zoom-in;
     border: 1px solid var(--theme-border-color);
     border-radius: var(--theme-border-radius-image);
-    cursor: zoom-in;
 }
 
 .masonry__item:not(:last-child) {

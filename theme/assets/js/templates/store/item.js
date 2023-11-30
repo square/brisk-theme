@@ -329,7 +329,7 @@ document.addEventListener('alpine:init', () => {
             }
 
             this.$nextTick(() => {
-                const scrollTo = document.querySelector('.form-fieldset__error--visible')?.closest('fieldset');
+                const scrollTo = document.querySelector('.form-element__error--visible')?.closest('.form-element');
                 if (scrollTo) {
                     window.scrollTo({ top: scrollTo.offsetTop, behavior: 'smooth' });
                 }

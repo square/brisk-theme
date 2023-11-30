@@ -4,8 +4,8 @@
     align-items: center;
     width: 100%;
     padding: var(--space-x2) var(--space-half) var(--space) var(--space-half);
-    color: inherit;
     font-weight: var(--theme-font-weight-medium);
+    color: inherit;
     background-color: transparent;
     border-top: 1px solid var(--theme-border-color);
 }
@@ -26,8 +26,8 @@
 
 .ui-accordion__panel {
     padding: 0 calc(var(--space-x5) + var(--space-half)) var(--space) calc(var(--space-x5) + var(--space-half));
-    font-weight: var(--theme-font-weight-light);
     font-size: var(--theme-font-size-minus-1);
+    font-weight: var(--theme-font-weight-light);
     line-height: var(--theme-font-size-minus-1-line-height);
 }
 
@@ -39,8 +39,8 @@
 }
 
 .ui-accordion--footer .ui-accordion__trigger-label {
-    font-weight: var(--theme-font-weight-heavy);
     font-size: var(--theme-font-size-plus-1);
+    font-weight: var(--theme-font-weight-heavy);
     line-height: var(--theme-font-size-plus-1-line-height);
 }
 

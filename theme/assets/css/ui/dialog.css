@@ -7,13 +7,13 @@
     --theme-dialog-container-shadow: 0px 8px 16px var(--theme-color-neutral-10-alpha), 0px 4px 32px var(--theme-color-neutral-10-alpha);
 
     position: fixed;
+    inset: 0;
     z-index: var(--theme-z-index-overlay);
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     background-color: var(--theme-dialog-overlay-color);
-    inset: 0;
 }
 
 .ui-dialog__loader {
@@ -212,8 +212,8 @@
 }
 
 .ui-dialog__icon {
-    margin-right: auto;
     padding: var(--space);
+    margin-right: auto;
     background-color: var(--theme-color-neutral-05);
     border-radius: var(--theme-border-radius);
 }

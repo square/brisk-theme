@@ -2,7 +2,7 @@
     {% set options = [] %}
     {% for location in locations %}
         {% set formattedAddress = location.address|address_format_multiline %}
-        {% set options = options|merge([{ label: location.name, sublabel: formattedAddress[0], value: location.id }]) %}
+        {% set options = options|merge([{ label: location.name, sublabel: formattedAddress[0], value: location.id, distance: location_id_to_distance[location.id] }]) %}
     {% endfor %}
 
     {% embed 'partials/form/radio' with {
@@ -21,9 +21,9 @@
             },
         {% endblock %}
         {% block side %}
-            {% set option = locations[loop.index0] %}
-            {% if option.formatted_distance %}
-                {{ option.formatted_distance }}
+            {% set distance = formatted_distance[loop.index0] %}
+            {% if distance %}
+                {{ distance }}
             {% endif %}
         {% endblock %}
     {% endembed %}
@@ -36,6 +36,9 @@
 {% schema %}
 {
     "locations": {
+        "type": "array"
+    },
+    "formatted_distance": {
         "type": "array"
     }
 }

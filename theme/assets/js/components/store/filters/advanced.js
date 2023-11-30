@@ -203,6 +203,10 @@ document.addEventListener('alpine:init', () => {
                 Square.async.refreshAsyncTemplate(this.chooseLocationTemplateId, {
                     location,
                     action: 'openChooseLocation()',
+                }, {
+                    loaded: {
+                        location: 'location',
+                    },
                 });
             }
         },

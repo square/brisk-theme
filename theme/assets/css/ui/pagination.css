@@ -59,6 +59,6 @@
 }
 
 .ui-pagination__button-sublabel {
-    color: var(--theme-pagination-sublabel-color);
     font-weight: var(--theme-font-weight-medium);
+    color: var(--theme-pagination-sublabel-color);
 }

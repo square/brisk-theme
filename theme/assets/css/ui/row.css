@@ -22,8 +22,8 @@
 }
 
 .ui-row__sublabel {
-    color: var(--theme-body-text-color-subtle);
     font-weight: var(--theme-font-weight-light);
+    color: var(--theme-body-text-color-subtle);
 }
 
 .ui-row::before {
@@ -33,11 +33,11 @@
     display: block;
     width: calc(100% + calc(var(--space-x1_5) * 2));
     height: calc(100% + calc(var(--space-half) * 2));
+    content: '';
     background-color: var(--theme-color-neutral-05);
     border-radius: var(--theme-border-radius-card);
     opacity: 0;
     transition: opacity 0.3s ease;
-    content: '';
 }
 
 .ui-row:hover::before {

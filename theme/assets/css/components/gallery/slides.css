@@ -13,8 +13,8 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border: 1px solid var(--theme-border-color);
     cursor: zoom-in;
+    border: 1px solid var(--theme-border-color);
 }
 
 .slides__item[hidden] {
