@@ -35,9 +35,17 @@
             }
         },
         {
-            "option": "category-list-chooser",
+            "option": "group",
+            "label": "Categories",
             "value": {
-                "$ref": "#/schema/categories"
+                "controls": [
+                    {
+                        "option": "category-list-chooser",
+                        "value": {
+                            "$ref": "#/schema/categories"
+                        }
+                    }
+                ]
             }
         }
     ]
