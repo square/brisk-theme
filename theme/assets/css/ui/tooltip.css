@@ -1,0 +1,63 @@
+.ui-tooltip {
+    --theme-tooltip-color: var(--theme-color-neutral-90);
+    --theme-tooltip-contrast-color: var(--theme-color-neutral-100);
+    --theme-tooltip-text-color: var(--theme-color-neutral-05);
+    --theme-tooltip-contrast-text-color: var(--theme-color-neutral-05);
+    --theme-tooltip-dropdown-color: var(--theme-body-color);
+    --theme-tooltip-dropdown-text-color: var(--theme-body-text-color);
+
+    position: absolute;
+    padding: var(--space-half) var(--space);
+    font-size: var(--theme-font-size-minus-1);
+    line-height: var(--theme-font-size-minus-1-line-height);
+    color: var(--theme-tooltip-text-color);
+    white-space: nowrap;
+    background: var(--theme-tooltip-color);
+    border-radius: var(--theme-border-radius);
+}
+
+.ui-tooltip--dropdown {
+    --theme-tooltip-shadow-color: var(--theme-color-neutral-10-alpha);
+
+    overflow: hidden;
+    color: var(--theme-tooltip-dropdown-text-color);
+    background: var(--theme-tooltip-dropdown-color);
+}
+
+.ui-tooltip--contrast {
+    color: var(--theme-tooltip-contrast-text-color);
+    background: var(--theme-tooltip-contrast-color);
+}
+
+.ui-tooltip,
+.ui-tooltip--menu {
+    z-index: -1;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-out, visibility 0s linear 0.5s;
+}
+
+.ui-tooltip--menu {
+    --theme-tooltip-shadow-color: var(--theme-color-neutral-10-alpha);
+
+    width: 100%;
+}
+
+.ui-tooltip[data-show],
+.ui-tooltip--menu[data-show] {
+    z-index: var(--theme-z-index-hover);
+    height: auto;
+    overflow: initial;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.2s ease-out;
+}
+
+.ui-tooltip--dropdown,
+.ui-tooltip--menu .ui-menu {
+    box-shadow: 0px 4px 32px 0px var(--theme-tooltip-shadow-color), 0px 8px 16px 0px var(--theme-tooltip-shadow-color);
+}
+
+.ui-tooltip p {
+    font-weight: var(--theme-font-weight-light);
+}
