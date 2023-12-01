@@ -3,6 +3,9 @@
         "main": [
             {
                 "props": {
+                    "cart": {
+                        "type": "cart"
+                    },
                     "location": {
                         "type": "location",
                         "filters": {
@@ -12,12 +15,9 @@
                     "schedule": {
                         "type": "schedule",
                         "filters": {
-                            "location_id": "request_data(query.location_id)",
-                            "fulfillment": "request_data(query.fulfillment, square.store.seller_perferred_fulfillment)"
+                            "fulfillment": "request_data(query.fulfillment, square.store.seller_perferred_fulfillment)",
+                            "location_id": "request_data(query.location_id)"
                         }
-                    },
-                    "cart": {
-                        "type": "cart"
                     }
                 },
                 "template": "order-online/swf"

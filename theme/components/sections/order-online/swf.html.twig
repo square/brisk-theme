@@ -7,13 +7,6 @@
     }|json_encode }}
 </script>
 
-<script>
-    const test = JSON.stringify({{ {
-        cart,
-    }|json_encode }});
-    console.log(test);
-</script>
-
 <div
     x-data="swf('swf-data')"
     class="container"
@@ -25,16 +18,22 @@
             fulfillments: square.store.fulfillment_support,
             defaultFulfillment,
         }) }}
+
+        {{ include('partials/components/order-online/scheduling', {
+            schedule,
+        }) }}
     </div>
 </div>
 
 {% schema %}
 {
     "location": {
-        "type": "location"
+        "type": "location",
+        "optional": true
     },
     "schedule": {
-        "type": "schedule"
+        "type": "schedule",
+        "optional": true
     },
     "cart": {
         "type": "cart"

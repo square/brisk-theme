@@ -45,6 +45,7 @@
     position: relative;
     display: grid;
     grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr;
     gap: var(--space-x4);
     width: 100%;
     max-width: 90%;
@@ -167,6 +168,10 @@
 
 .ui-dialog__content-wrapper--scrollbar {
     margin-right: calc(var(--browser-scrollbar-width) * -1);
+    overflow: hidden;
+}
+
+.ui-dialog__content-wrapper {
     overflow: hidden;
 }
 

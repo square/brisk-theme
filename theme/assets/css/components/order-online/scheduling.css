@@ -1,0 +1,10 @@
+
+.scheduling__container {
+    display: flex;
+    margin-right: var(--space);
+    margin-top: var(--space-x2);
+}
+
+.scheduling__button {
+    margin-left: auto;
+}

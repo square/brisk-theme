@@ -27,6 +27,17 @@
             "x_large": "XL",
             "xx_large": "XXL",
             "xxx_large": "XXXL"
+        },
+        "week": {
+            "short": {
+                "sunday": "Sun",
+                "monday": "Mon",
+                "tuesday": "Tue",
+                "wednesday": "Wed",
+                "thursday": "Thu",
+                "friday": "Fri",
+                "saturday": "Sat"
+            }
         }
     },
     "components": {
@@ -110,6 +121,11 @@
             "quick_add.status.add": "Adding",
             "quick_add.status.success": "Added to cart!",
             "image.alt": "{{name}} image"
+        },
+        "components.order-online.scheduling": {
+            "buttons": {
+                "change": "Change"
+            }
         },
         "components.store.filters": {
             "buttons": {

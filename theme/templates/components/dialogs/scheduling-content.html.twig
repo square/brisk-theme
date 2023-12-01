@@ -1,0 +1,55 @@
+<script id="scheduling-dialog-data" type="application/json">
+    {{ {
+        dates,
+        selectedTimeId,
+        selectedDateId,
+        times,
+    }|json_encode }}
+</script>
+
+<div
+    x-data="schedulingDialog('scheduling-dialog-data')"
+    class="scheduling-dialog__content"
+>
+    <div class="scheduling-date-dialog__carousel">
+        {% set choiceOptions = [] %}
+        {% for date in dates %}
+            {% set choiceOptions = choiceOptions|merge([{ label: date.dayOfMonthLabel, overheadLabel: date.dayOfWeekLabel, value: date.key }]) %}
+        {% endfor %}
+        {% embed 'partials/form/choice-carousel' with {
+            options: choiceOptions,
+            itemWidth: 48,
+        } %}
+            {% block data %}
+                model: '{{ selectedDateId }}',
+                ...dateSelection(),
+            {% endblock %}
+        {% endembed %}
+    </div>
+    <div class="scheduling-dialog__options">
+        <div class="scheduling-dialog__options--scroll custom-scrollbar">
+            <div class="custom-scrollbar-inner">
+                {{ async('schedule-selector', 'schedule-selector', { props: { times } }) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+    {
+        "dates": {
+            "type": "array"
+        },
+        "selectedTimeId": {
+            "type": "string",
+            "optional": true
+        },
+        "selectedDateId": {
+            "type": "string",
+            "optional": true
+        },
+        "times": {
+            "type": "array"
+        }
+    }
+{% endschema %}

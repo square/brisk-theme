@@ -1,0 +1,26 @@
+.scheduling-dialog__content {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 1;
+    gap: var(--space-x2);
+    height: 100%;
+}
+
+.scheduling-dialog__options {
+    position: relative;
+    height: 100%;
+
+    /* adding negative margin so the row hover style doesn't cutoff and the scroll content will extend to the dialog edge */
+    margin: calc(var(--space-x2) * -1) calc((var(--space-x2) + var(--browser-scrollbar-width)) * -1) calc(var(--space-x4) * -1) calc(var(--space-x2) * -1);
+    overflow: hidden;
+}
+
+.scheduling-dialog__options--scroll {
+    height: 100%;
+    padding: var(--space-x2);
+}
+
+.scheduling-dialog__options .form-radio__input {
+    align-self: start;
+    margin-top: 2px;
+}
