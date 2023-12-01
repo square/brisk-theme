@@ -1,6 +1,8 @@
-{% set bannerSrc = image.src %}
+{% set bannerSrc = hero.image.src %}
+{% set bannerAlt = hero.alt %}
 {{ include('partials/components/banner', {
     fullwidth: true,
+    bannerAlt: bannerAlt,
     bannerImage: { uri: bannerSrc, urls: { 640: bannerSrc ~ '?width=640', 1280: bannerSrc ~ '?width=1280' } },
     bannerSizes: { sm: 640, lg: 1280 },
 }) }}
@@ -11,8 +13,8 @@
 
 {% schema %}
 {
-    "image": {
-        "type": "image"
+    "hero": {
+        "type": "array"
     }
 }
 {% endschema %}
@@ -22,9 +24,25 @@
     "name": "Banner",
     "controls": [
         {
-            "option": "image",
+            "option": "group",
+            "label": "Banner image",
             "value": {
-                "$ref": "#/schema/image"
+                "controls": [
+                    {
+                        "option": "image",
+                        "value": {
+                            "$ref": "#/schema/hero/image"
+                        }
+                    },
+                    {
+                        "option": "input",
+                        "label": "Image description",
+                        "placeholder": "Enter alt text for accessibility",
+                        "value": {
+                            "$ref": "#/schema/hero/alt"
+                        }
+                    }
+                ]
             }
         }
     ]
