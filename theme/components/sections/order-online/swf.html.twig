@@ -1,6 +1,26 @@
 {{ register_asset('css/components/order-online/swf.css') }}
 {{ register_asset('js/templates/order-online/swf.js', { defer: false }) }}
 
+{# TODO: figure out why the async components loading the radio component will have issues #}
+{{ register_asset('css/form/radio.css') }}
+{{ register_asset('js/form/radio.js', { defer: false }) }}
+
+{{ register_asset('css/components/order-online/scheduling.css') }}
+{{ register_asset('js/components/order-online/scheduling.js', { defer: false }) }}
+
+{# dialog assets #}
+{{ register_asset('js/components/gallery/dialog.js', { defer: false }) }}
+{{ register_asset('css/components/gallery/dialog.css') }}
+
+<template x-if="!dialogExists()">
+    <template x-teleport="body">
+        {{ include('partials/ui/dialog') }}
+    </template>
+</template>
+
+{{ register_asset('js/components/order-online/scheduling-dialog.js', { defer: false }) }}
+{{ register_asset('css/components/order-online/scheduling-dialog.css') }}
+
 <script id="swf-data" type="application/json">
     {{ {
         defaultSchedule: schedule,
@@ -14,14 +34,15 @@
     <div
         class="swf-section__container"
     >
+        
+        {# Fulfillment selector section #}
         {{ include('partials/components/order-online/fulfillment-selection', {
             fulfillments: square.store.fulfillment_support,
             defaultFulfillment,
         }) }}
 
-        {{ include('partials/components/order-online/scheduling', {
-            schedule,
-        }) }}
+        {# Scheduling section #}
+        {{ async('scheduling', 'scheduling', { props: { schedule } }) }}
     </div>
 </div>
 
@@ -34,9 +55,6 @@
     "schedule": {
         "type": "schedule",
         "optional": true
-    },
-    "cart": {
-        "type": "cart"
     }
 }
 {% endschema %}

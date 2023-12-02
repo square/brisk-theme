@@ -522,7 +522,7 @@ document.addEventListener('alpine:init', () => {
 
             this.$watch('$store.global.locationId', (value) => {
                 const url = new URL(window.location.href);
-                url.searchParams.set('fulfillment', value);
+                url.searchParams.set('location_id', value);
                 window.history.pushState(null, document.title, url.toString());
             });
 

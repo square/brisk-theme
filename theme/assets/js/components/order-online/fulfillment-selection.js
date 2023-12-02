@@ -5,8 +5,7 @@ document.addEventListener('alpine:init', () => {
             this.model = Alpine.store('global').fulfillment;
 
             this.$watch('model', (value) => {
-                Alpine.store('global').updateProperty('fulfillment', value);
-                
+                Alpine.store('swf').onFulfillmentSelected(value);
             });
         },
     });

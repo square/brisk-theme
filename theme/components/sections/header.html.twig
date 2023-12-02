@@ -4,11 +4,12 @@
 {{ register_asset('js/ui/nested-menu.js', { defer: false }) }}
 {{ register_asset('js/components/search.js', { defer: false }) }}
 
-{# <link href="{{ 'css/sections/header.css' | asset_url }}" rel="stylesheet" />
+{# TODO: remove this later once we figure out why the header has caching issues #}
+<link href="{{ 'css/sections/header.css' | asset_url }}" rel="stylesheet" />
 <link href="{{ 'css/components/search.css' | asset_url }}" rel="stylesheet" />
 <script src="{{ 'js/sections/header.js' | asset_url }}"></script>
 <script src="{{ 'js/ui/nested-menu.js' | asset_url }}"></script>
-<script src="{{ 'js/components/search.js' | asset_url }}"></script> #}
+<script src="{{ 'js/components/search.js' | asset_url }}"></script>
 
 {# Create the data that we'll use for the Alpine header component #}
 

@@ -4,6 +4,7 @@
         selectedTimeId,
         selectedDateId,
         times,
+        isLoadingAvailableTimes: false,
     }|json_encode }}
 </script>
 
@@ -26,9 +27,12 @@
             {% endblock %}
         {% endembed %}
     </div>
-    <div class="scheduling-dialog__options">
+    <div x-ref="scheduling-times" class="scheduling-dialog__options">
         <div class="scheduling-dialog__options--scroll custom-scrollbar">
             <div class="custom-scrollbar-inner">
+                <template x-if="isLoadingAvailableTimes">
+                    <div class="ui-loader--overlay">{{ include('partials/ui/loader') }}</div>
+                </template>
                 {{ async('schedule-selector', 'schedule-selector', { props: { times } }) }}
             </div>
         </div>
