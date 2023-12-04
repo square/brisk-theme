@@ -1,8 +1,8 @@
-{{ register_asset('css/sections/header.css') }}
-{{ register_asset('css/components/search.css') }}
-{{ register_asset('js/sections/header.js', { defer: false }) }}
-{{ register_asset('js/ui/nested-menu.js', { defer: false }) }}
-{{ register_asset('js/components/search.js', { defer: false }) }}
+{#{{ register_asset('css/sections/header.css') }}#}
+{#{{ register_asset('css/components/search.css') }}#}
+{#{{ register_asset('js/sections/header.js', { defer: false }) }}#}
+{#{{ register_asset('js/ui/nested-menu.js', { defer: false }) }}#}
+{#{{ register_asset('js/components/search.js', { defer: false }) }}#}
 
 {# TODO: remove this later once we figure out why the header has caching issues #}
 <link href="{{ 'css/sections/header.css' | asset_url }}" rel="stylesheet" />

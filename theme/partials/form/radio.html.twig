@@ -1,5 +1,5 @@
 {% if request.async == true %}
-    <link href="{{ 'css/form/radio.css' | asset_url }}" rel="stylesheet" />
+    <link href="{{ 'css/form/radio.css' | asset_url }}" rel="stylesheet" onload="document.dispatchEvent(new CustomEvent('asset:ready'))" />
     <script src="{{ 'js/form/radio.js' | asset_url }}"></script>
 {% else %}
     {{ register_asset('css/form/radio.css') }}
