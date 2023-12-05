@@ -1,0 +1,15 @@
+{% extends "layouts/oofe-theme" %}
+
+{% block main_content %}
+
+    <script type="application/json" id="header-optional-config">
+    {{ { showUnderline: false }|json_encode  }}
+</script>
+
+    {{ register_asset('css/templates/pages/home.css') }}
+
+    <div class="home-page">
+        {{ async('mini-cart', 'mini-cart') }}
+    </div>
+    
+{% endblock %}

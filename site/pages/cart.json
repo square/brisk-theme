@@ -1,0 +1,6 @@
+{
+    "props": {
+    },
+    "template": "templates/pages/cart",
+    "route": "cart"
+}
