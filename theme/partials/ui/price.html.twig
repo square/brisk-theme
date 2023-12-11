@@ -8,6 +8,8 @@
 {% set finalPrice = price.regular_low|default(0) %}
 {% set productVariations = variations|default([]) %}
 
+{% if regularPrice != 0 and finalPrice != 0 %}
+
 {% if productVariations|length == 1 and productVariations[0].price.regular and productVariations[0].price.sale %}
     {% set regularPrice = productVariations[0].price.regular %}
     {% set finalPrice = productVariations[0].price.sale %}
@@ -56,6 +58,8 @@
         <div class="ui-price__extra {% if isPriceRange and isOnSale %}ui-price__extra--hide-divider{% endif %}">{{ secondaryText }}</div>
     {% endif %}
 </div>
+
+{% endif %}
 
 {% schema %}
 {
