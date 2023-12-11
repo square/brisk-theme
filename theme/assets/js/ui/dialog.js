@@ -3,6 +3,7 @@ document.addEventListener('alpine:init', () => {
         isDialogOpen: false,
         isDialogLoading: true,
         isSecondaryDialogOpen: false,
+        isDialogContentReady: false,
         hidePrimaryDialog: false,
         isMultiPane: false,
         isButtonVisible: false,
@@ -28,7 +29,8 @@ document.addEventListener('alpine:init', () => {
     });
 
     Alpine.store('dialog', {
-        currentDialogConfig: {},
+        primaryDialogConfig: {},
+        secondaryDialogConfig: {},
         ...defaultState(),
         options: defaultOptions(),
         dialogHeading: '',
@@ -63,9 +65,10 @@ document.addEventListener('alpine:init', () => {
          * @param {Object} templateProps
          */
         openPrimaryDialog(...args) {
-            this.currentDialogConfig = args;
+            this.primaryDialogConfig = args;
             this.isDialogOpen = true;
             this.isDialogLoading = true;
+            this.isDialogContentReady = false;
 
             this.updateTransitionAttrs(...args);
 
@@ -82,15 +85,29 @@ document.addEventListener('alpine:init', () => {
          * @param {Object} templateProps
          */
         async openSecondaryDialog(...args) {
-            const store = Alpine.store('dialog');
-            store.isSecondaryDialogOpen = true;
-            store.isDialogLoading = true;
+            this.secondaryDialogConfig = args;
+            this.isSecondaryDialogOpen = true;
+            this.isDialogLoading = true;
+            this.isDialogContentReady = false;
 
             this.openDialogContent(...args, false).then(() => {
                 setTimeout(() => {
-                    store.isDialogLoading = false;
+                    this.isDialogLoading = false;
                 }, 500);
             });
+        },
+        /**
+         * Get current dialog options
+         * @return {Object}
+         */
+        currentDialogOptions() {
+            if (this.isSecondaryDialogOpen && this.isDialogLoading) {
+                return { ...defaultOptions(), ...this.primaryDialogConfig[1] };
+            }
+            if (this.isDialogOpen && !this.isSecondaryDialogOpen && this.isDialogLoading) {
+                return { ...defaultOptions(), ...this.secondaryDialogConfig[1] };
+            }
+            return this.options;
         },
         /**
          * Opens the dialog
@@ -105,21 +122,6 @@ document.addEventListener('alpine:init', () => {
                 ...dialogOptions,
             };
 
-            this.dialogHeading = this.options.title;
-            this.isMultiPane = this.options.variant === 'multi-pane';
-
-            if (this.isMultiPane) {
-                this.options.showPrimaryButton = true;
-                this.options.showSecondaryButton = true;
-            }
-
-            this.isButtonVisible = this.options.showPrimaryButton
-                || this.options.showSecondaryButton;
-            this.isHeaderVisible = (this.options.buttonPosition === 'header' && this.isButtonVisible)
-                || Boolean(this.dialogHeading)
-                || this.options.showCloseButton;
-            this.isFooterVisible = this.options.buttonPosition === 'footer' && this.isButtonVisible;
-
             if (!this.isSecondaryDialogOpen) {
                 Alpine.store('global').onOverlayToggle(true, '[role="dialog"]');
             }
@@ -131,6 +133,21 @@ document.addEventListener('alpine:init', () => {
                 props: templateProps,
             })
                 .then(async (text) => {
+                    this.dialogHeading = this.options.title;
+                    this.isMultiPane = this.options.variant === 'multi-pane';
+
+                    if (this.isMultiPane) {
+                        this.options.showPrimaryButton = true;
+                        this.options.showSecondaryButton = true;
+                    }
+
+                    this.isButtonVisible = this.options.showPrimaryButton
+                        || this.options.showSecondaryButton;
+                    this.isHeaderVisible = (this.options.buttonPosition === 'header' && this.isButtonVisible)
+                        || Boolean(this.dialogHeading)
+                        || this.options.showCloseButton;
+                    this.isFooterVisible = this.options.buttonPosition === 'footer' && this.isButtonVisible;
+
                     // Temporarily wrap the content with <template> so Alpine doesn't initialize x-data attributes
                     node.innerHTML = `<template>${text}<div id="async-template-wrapper"></div></template>`;
                     // Wait until the dialog content is ready
@@ -178,6 +195,8 @@ document.addEventListener('alpine:init', () => {
 
                     document.body.setAttribute('dialog-size', this.options.size);
                     document.body.setAttribute('dialog-variant', this.options.variant);
+
+                    this.isDialogContentReady = true;
                 })
                 .catch(() => {
                     node.innerHTML = '<p>Something went wrong. Please try again.</p>';
@@ -262,12 +281,13 @@ document.addEventListener('alpine:init', () => {
          */
         async closeDialog(isConfirmed) {
             const store = Alpine.store('dialog');
-            store.onClose(isConfirmed);
+            store.isDialogContentReady = false;
+            store.onClose(isConfirmed, store.isSecondaryDialogOpen);
 
             if (store.isSecondaryDialogOpen) {
                 store.isSecondaryDialogOpen = false;
                 store.isDialogLoading = true;
-                store.openDialogContent(...store.currentDialogConfig).then(() => {
+                store.openDialogContent(...store.primaryDialogConfig).then(() => {
                     setTimeout(() => {
                         store.isDialogLoading = false;
                     }, 500);
