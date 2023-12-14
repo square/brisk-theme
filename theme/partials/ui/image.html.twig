@@ -67,11 +67,6 @@
         {% embed 'partials/ui/placeholder' %}
                 {% block data %}
                     isLoading: true,
-                    init() {
-                        this.$watch('shouldLoadImages', (shouldLoad) => {
-                            this.isLoading = !shouldLoad;
-                        });
-                    },
                 {% endblock %}
         {% endembed %}
     </template>
