@@ -53,22 +53,26 @@ document.addEventListener('alpine:init', () => {
          * Opens the locations dialog
          */
         openLocationsDialog() {
-            const props = {
+            const templateProps = {
                 fulfillment: this.model,
                 locationId: Alpine.store('product').locationId,
                 locations: [],
                 alpine_store_name: 'product',
             };
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/locations-content', {
-                scrollable: false,
-                size: 'large',
-                showPrimaryButton: true,
-                showSecondaryButton: true,
-                disablePrimaryButton: true,
-                primaryButtonText: this.translations.buttonUpdate,
-                secondaryButtonText: this.translations.buttonCancel,
-                buttonPosition: 'header',
-            }, props);
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/locations-content',
+                dialogOptions: {
+                    scrollable: false,
+                    size: 'large',
+                    showPrimaryButton: true,
+                    showSecondaryButton: true,
+                    disablePrimaryButton: true,
+                    primaryButtonText: this.translations.buttonUpdate,
+                    secondaryButtonText: this.translations.buttonCancel,
+                    buttonPosition: 'header',
+                },
+                templateProps,
+            });
         },
     });
 

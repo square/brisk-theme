@@ -255,7 +255,7 @@ document.addEventListener('alpine:init', () => {
          * Opens locations dialog
          */
         openChooseLocation() {
-            const props = {
+            const templateProps = {
                 fulfillment: Constants.FULFILLMENT_PICKUP,
                 locationId: Alpine.store('shop').locationId,
                 locations: [],
@@ -267,15 +267,19 @@ document.addEventListener('alpine:init', () => {
                 this.cacheLastSelection();
             }
 
-            this.$store.dialog[dialogAction]('templates/components/dialogs/locations-content', {
-                scrollable: false,
-                size: 'large',
-                showPrimaryButton: true,
-                showSecondaryButton: true,
-                disablePrimaryButton: true,
-                primaryButtonText: 'Update',
-                buttonPosition: 'header',
-            }, props);
+            this.$store.dialog[dialogAction]({
+                templateUrl: 'templates/components/dialogs/locations-content',
+                dialogOptions: {
+                    scrollable: false,
+                    size: 'large',
+                    showPrimaryButton: true,
+                    showSecondaryButton: true,
+                    disablePrimaryButton: true,
+                    primaryButtonText: 'Update',
+                    buttonPosition: 'header',
+                },
+                templateProps,
+            });
         },
         /**
          * Gets currently applied filters count
@@ -508,16 +512,20 @@ document.addEventListener('alpine:init', () => {
          * Open the advanced filters dialog
          */
         openAdvancedFiltersDialog() {
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/advanced-filters-content', {
-                scrollable: false,
-                size: 'large',
-                showCloseButton: true,
-                showPrimaryButton: true,
-                showSecondaryButton: true,
-                disablePrimaryButton: true,
-                primaryButtonText: this.translations.buttonUpdate,
-                buttonPosition: 'header',
-            }, this.filtersDialogProps);
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/advanced-filters-content',
+                dialogOptions: {
+                    scrollable: false,
+                    size: 'large',
+                    showCloseButton: true,
+                    showPrimaryButton: true,
+                    showSecondaryButton: true,
+                    disablePrimaryButton: true,
+                    primaryButtonText: this.translations.buttonUpdate,
+                    buttonPosition: 'header',
+                },
+                templateProps: this.filtersDialogProps,
+            });
         },
     });
 

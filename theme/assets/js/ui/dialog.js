@@ -39,10 +39,9 @@ document.addEventListener('alpine:init', () => {
         clicked: false,
         /**
          * Manually updating transition attributes b/c it must be replaced before the dialog is initialized.
-         * @param {Object} _
          * @param {Object} dialogOptions
          */
-        updateTransitionAttrs(_, dialogOptions) {
+        updateTransitionAttrs(dialogOptions) {
             // Grabs all elements with `dialog-transition-override` attribute
             const elements = document.querySelectorAll('[dialog-transition-override]');
             const transitionClass = ['left', 'right', 'down'].includes(dialogOptions?.transition)
@@ -60,19 +59,20 @@ document.addEventListener('alpine:init', () => {
         },
         /**
          * Opens the primary dialog
-         * @param {String} templateUrl
-         * @param {Object} dialogOptions
-         * @param {Object} templateProps
+         * @param {Object} payload
+         * @param {String} payload.templateUrl
+         * @param {Object} payload.dialogOptions
+         * @param {Object} payload.templateProps
          */
-        openPrimaryDialog(...args) {
-            this.primaryDialogConfig = args;
+        openPrimaryDialog({ templateUrl, dialogOptions, templateProps } = {}) {
+            this.primaryDialogConfig = { templateUrl, dialogOptions, templateProps };
             this.isDialogOpen = true;
             this.isDialogLoading = true;
             this.isDialogContentReady = false;
 
-            this.updateTransitionAttrs(...args);
+            this.updateTransitionAttrs(dialogOptions);
 
-            this.openDialogContent(...args).then(() => {
+            this.openDialogContent({ templateUrl, dialogOptions, templateProps }).then(() => {
                 setTimeout(() => {
                     this.isDialogLoading = false;
                 }, 500);
@@ -80,17 +80,20 @@ document.addEventListener('alpine:init', () => {
         },
         /**
          * Opens the secondary dialog and hides the primary dialog
-         * @param {String} templateUrl
-         * @param {Object} dialogOptions
-         * @param {Object} templateProps
+         * @param {Object} payload
+         * @param {String} payload.templateUrl
+         * @param {Object} payload.dialogOptions
+         * @param {Object} payload.templateProps
          */
-        async openSecondaryDialog(...args) {
-            this.secondaryDialogConfig = args;
+        async openSecondaryDialog({ templateUrl, dialogOptions, templateProps } = {}) {
+            this.secondaryDialogConfig = { templateUrl, dialogOptions, templateProps };
             this.isSecondaryDialogOpen = true;
             this.isDialogLoading = true;
             this.isDialogContentReady = false;
 
-            this.openDialogContent(...args, false).then(() => {
+            this.openDialogContent({
+                templateUrl, dialogOptions, templateProps, isPrimary: false,
+            }).then(() => {
                 setTimeout(() => {
                     this.isDialogLoading = false;
                 }, 500);
@@ -111,12 +114,15 @@ document.addEventListener('alpine:init', () => {
         },
         /**
          * Opens the dialog
-         * @param {String} templateUrl
-         * @param {Object} dialogOptions
-         * @param {Object} templateProps
-         * @param {Boolean} isPrimary
+         * @param {Object} payload
+         * @param {String} payload.templateUrl
+         * @param {Object} payload.dialogOptions
+         * @param {Object} payload.templateProps
+         * @param {Boolean} payload.isPrimary
          */
-        openDialogContent(templateUrl, dialogOptions = {}, templateProps = {}, isPrimary = true) {
+        openDialogContent({
+            templateUrl, dialogOptions = {}, templateProps = {}, isPrimary = true,
+        }) {
             this.options = {
                 ...defaultOptions(),
                 ...dialogOptions,
@@ -287,7 +293,7 @@ document.addEventListener('alpine:init', () => {
             if (store.isSecondaryDialogOpen) {
                 store.isSecondaryDialogOpen = false;
                 store.isDialogLoading = true;
-                store.openDialogContent(...store.primaryDialogConfig).then(() => {
+                store.openDialogContent(store.primaryDialogConfig).then(() => {
                     setTimeout(() => {
                         store.isDialogLoading = false;
                     }, 500);
