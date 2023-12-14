@@ -105,10 +105,10 @@ document.addEventListener('alpine:init', () => {
          */
         currentDialogOptions() {
             if (this.isSecondaryDialogOpen && this.isDialogLoading) {
-                return { ...defaultOptions(), ...this.primaryDialogConfig[1] };
+                return { ...defaultOptions(), ...this.primaryDialogConfig.dialogOptions };
             }
             if (this.isDialogOpen && !this.isSecondaryDialogOpen && this.isDialogLoading) {
-                return { ...defaultOptions(), ...this.secondaryDialogConfig[1] };
+                return { ...defaultOptions(), ...this.secondaryDialogConfig.dialogOptions };
             }
             return this.options;
         },
