@@ -190,8 +190,17 @@ document.addEventListener('alpine:init', () => {
          * Initial events
          */
         init() {
-            const scrollbarWidth = window.innerWidth - document.body.clientWidth;
-            document.documentElement.style.setProperty('--browser-scrollbar-width', `${scrollbarWidth}px`);
+            // create an Observer instance
+            const resizeObserver = new ResizeObserver(() => {
+                const currentScrollbarWidth = getComputedStyle(document.documentElement).getPropertyValue('--browser-scrollbar-width');
+                if (!currentScrollbarWidth || parseInt(currentScrollbarWidth, 10) === 0) {
+                    const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+                    document.documentElement.style.setProperty('--browser-scrollbar-width', `${scrollbarWidth}px`);
+                }
+            });
+
+            // start observing a DOM node
+            resizeObserver.observe(document.body);
 
             if (Utils.isTouchDevice()) {
                 document.body.classList.add('is-touch-device');
