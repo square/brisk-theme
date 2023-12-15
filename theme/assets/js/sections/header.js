@@ -31,11 +31,14 @@ document.addEventListener('alpine:init', () => {
             };
         },
         openSearch() {
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/search-content', {
-                variant: 'halfsheet',
-                transition: 'down',
-                scrollable: true,
-                showCloseButton: false,
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/search-content',
+                dialogOptions: {
+                    variant: 'halfsheet',
+                    transition: 'down',
+                    scrollable: true,
+                    showCloseButton: false,
+                },
             });
         },
         /**
@@ -178,12 +181,16 @@ document.addEventListener('alpine:init', () => {
          * Open the Mobile Menu flyout
          */
         openMobileMenu() {
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/mobile-menu-content', {
-                variant: 'flyout',
-                transition: 'left',
-                scrollable: true,
-                showCloseButton: false,
-            }, { nav_links: this.navLinks });
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/mobile-menu-content',
+                dialogOptions: {
+                    variant: 'flyout',
+                    transition: 'left',
+                    scrollable: true,
+                    showCloseButton: false,
+                },
+                templateProps: { nav_links: this.navLinks },
+            });
         },
     });
 

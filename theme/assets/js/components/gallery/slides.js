@@ -86,17 +86,21 @@ document.addEventListener('alpine:init', () => {
          * @param {Number} activeIndex
          */
         openImagesDialog(activeIndex = 0) {
-            const props = {
+            const templateProps = {
                 images: this.images,
                 name: this.name,
                 activeIndex,
             };
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/gallery-content', {
-                variant: 'fullscreen',
-                transition: 'left',
-                scrollable: false,
-                showCloseButton: false,
-            }, props);
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/gallery-content',
+                dialogOptions: {
+                    variant: 'fullscreen',
+                    transition: 'left',
+                    scrollable: false,
+                    showCloseButton: false,
+                },
+                templateProps,
+            });
         },
     });
 
