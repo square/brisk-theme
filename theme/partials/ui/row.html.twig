@@ -1,10 +1,10 @@
 {% if request.async == true %}
-    <link href="{{ 'css/ui/row.css' | asset_url }}" rel="stylesheet" />
+    <link href="{{ 'css/ui/row.css' | asset_url }}" rel="stylesheet" onload="document.dispatchEvent(new CustomEvent('asset:ready'))" />
 {% else %}
     {{ register_asset('css/ui/row.css') }}
 {% endif %}
 
-<div class="ui-row">
+<div class="ui-row {{ rowClasses }}" {% block attributes %}{% endblock %}>
     {% if icon %}
         {{ include('partials/ui/icon', { name: icon, iconClasses: 'ui-row__icon' }) }}
     {% endif %}
@@ -18,6 +18,11 @@
         </div>
         {% endif %}
     </div>
+    {% if block('side') %}
+        <span class="ui-row__side">
+            {% block side %}{% endblock %}
+        </span>
+    {% endif %}
     {% if button %}
     <div class="ui-row__button">
         {{ include('partials/ui/button', { variant: 'text', size: 'small', label: button, icon: '', ariaRole, }) }}
