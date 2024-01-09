@@ -7,13 +7,13 @@
 } %}
     {% block heading %}
         <h2 class="visually-hidden">
-            {{ 'components.sections.home.banner.alt'|localize }}
+            {{ 'components.sections.home.banner.alt' }}
         </h2>
     {% endblock %}
 {% endembed %}
 
 <div class="home-page__marquee-wrapper">
-    {{ include('partials/ui/marquee', { content: 'components.sections.home.banner.marquee'|localize }) }}
+    {{ include('partials/ui/marquee', { content: marquee }) }}
 </div>
 
 {% schema %}
@@ -22,6 +22,9 @@
         "type": "image"
     },
     "alt": {
+        "type": "string"
+    },
+    "marquee": {
         "type": "string"
     }
 }
@@ -51,6 +54,14 @@
                         }
                     }
                 ]
+            }
+        },
+        {
+            "option": "input",
+            "label": "Marquee",
+            "placeholder": "Scrolling marquee text",
+            "value": {
+                "$ref": "#/schema/marquee"
             }
         }
     ]
