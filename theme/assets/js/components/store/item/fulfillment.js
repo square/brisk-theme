@@ -31,9 +31,16 @@ document.addEventListener('alpine:init', () => {
 
             Alpine.store('product').updateProperty('locationId', location.id);
 
+            const formattedLocation = Utils.formatLocationWithDistance(location);
+
             await Square.async.refreshAsyncTemplate('fulfillment-detail', {
                 fulfillment,
-                location: Utils.formatLocationWithDistance(location),
+                location,
+                formatted_distance: formattedLocation.formatted_distance,
+            }, {
+                loaded: {
+                    location: 'location',
+                },
             });
 
             if (shouldFocusButton && this.$refs.fulfillmentDetail) {
@@ -46,22 +53,26 @@ document.addEventListener('alpine:init', () => {
          * Opens the locations dialog
          */
         openLocationsDialog() {
-            const props = {
+            const templateProps = {
                 fulfillment: this.model,
                 locationId: Alpine.store('product').locationId,
                 locations: [],
                 alpine_store_name: 'product',
             };
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/locations-content', {
-                scrollable: false,
-                size: 'large',
-                showPrimaryButton: true,
-                showSecondaryButton: true,
-                disablePrimaryButton: true,
-                primaryButtonText: this.translations.buttonUpdate,
-                secondaryButtonText: this.translations.buttonCancel,
-                buttonPosition: 'header',
-            }, props);
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/locations-content',
+                dialogOptions: {
+                    scrollable: false,
+                    size: 'large',
+                    showPrimaryButton: true,
+                    showSecondaryButton: true,
+                    disablePrimaryButton: true,
+                    primaryButtonText: this.translations.buttonUpdate,
+                    secondaryButtonText: this.translations.buttonCancel,
+                    buttonPosition: 'header',
+                },
+                templateProps,
+            });
         },
     });
 

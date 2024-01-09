@@ -50,7 +50,7 @@
     {% endblock %}
     {% block after %}
         {% if locations|length > 0 %}
-            {{ async('fulfillment-detail', 'fulfillment-detail', { props: { location: defaultLocation|default([]), fulfillment: defaultFulfillment } }) }}
+            {{ async('fulfillment-detail', 'fulfillment-detail', { props: { location: defaultLocation|default([]), fulfillment: defaultFulfillment, formatted_distance: '' } }) }}
         {% endif %}
     {% endblock %}
 {% endembed %}

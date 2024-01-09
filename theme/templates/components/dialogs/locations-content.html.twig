@@ -34,7 +34,7 @@
     <div x-ref="locations" class="locations-dialog__options">
         <div class="locations-dialog__options--scroll custom-scrollbar">
             <div class="custom-scrollbar-inner">
-                {{ async('location-selector', 'location-selector', { props: { locations } }) }}
+                {{ async('location-selector', 'location-selector', { props: { locations, formatted_distance: [] } }) }}
             </div>
         </div>
     </div>

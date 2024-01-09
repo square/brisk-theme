@@ -10,10 +10,13 @@
 {% set labelId = 'choice-label-' ~ random() %}
 {% set isGridVariant = variant == 'grid' %}
 
-<div
+<fieldset
     x-data="{ isInvalid: false, model: '', {% block data %}{% endblock %} }"
 >
-    {% embed 'partials/ui/carousel' with { navPosition: 'overlay' } %}
+    <legend class="visually-hidden">
+        {{ label }}
+    </legend>
+    {% embed 'partials/ui/carousel' with { navPosition: 'overlay', title: label, hideTitle: true } %}
         {% block data %}
             itemCount: 3,
             itemWidth: {{ itemWidth|default(0) }}
@@ -55,4 +58,4 @@
             {% endfor %}
         {% endblock %}
     {% endembed %}
-</div>
+</fieldset>

@@ -17,9 +17,9 @@ document.addEventListener('alpine:init', () => {
             });
 
             this.$watch('customValue', (value) => {
-                if (value > 0 && this.$el.querySelector('.form-fieldset__sublabel')) {
+                if (value > 0 && this.$el.querySelector('.form-element__sublabel')) {
                     // Updates the sublabel with the formatted custom value
-                    this.$el.querySelector('.form-fieldset__sublabel').innerHTML = this.formatter.format(value);
+                    this.$el.querySelector('.form-element__sublabel').innerHTML = this.formatter.format(value);
                     this.formData.donation = { value };
                 }
             });
@@ -33,8 +33,8 @@ document.addEventListener('alpine:init', () => {
         init() {
             this.$watch('model', (value) => {
                 const selectedOption = this.options.find((o) => o.value === value);
-                if (selectedOption?.label && this.$el.querySelector('.form-fieldset__sublabel')) {
-                    this.$el.querySelector('.form-fieldset__sublabel').innerHTML = selectedOption.label;
+                if (selectedOption?.label && this.$el.querySelector('.form-element__sublabel')) {
+                    this.$el.querySelector('.form-element__sublabel').innerHTML = selectedOption.label;
                 }
                 this.formData.donation = { value };
             });

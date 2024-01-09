@@ -1,3 +1,9 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/image.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/image.css') }}
+{% endif %}
+
 {% set srcSet = [] %}
 {% set defaultImageSizes = { xs: 600, sm: 900, md: 1200 } %}
 {% set xs = imageSizes.xs|default(defaultImageSizes.xs) %}
@@ -20,24 +26,31 @@
 
 {% if showPlaceholder %}
 <figure
-    x-data="{ isLoadingImage: true, isFailedToLoad: false, onLoadSuccess() { this.isLoadingImage = false, this.onLoadComplete('{{ image.uri|default(image.urls|first) }}') }, onLoadError() { this.isFailedToLoad = true, this.isLoadingImage = false, this.onLoadComplete('{{ image.uri|default(image.urls|first) }}') }, onLoadComplete() {}, {% block data %}{% endblock %} }"
+    x-data="{ isLoadingImage: true, isFailedToLoad: false, shouldLoadImages: false, onLoadSuccess() { this.isLoadingImage = false, this.onLoadComplete('{{ image.uri|default(image.urls|first) }}') }, onLoadError() { this.isFailedToLoad = true, this.isLoadingImage = false, this.onLoadComplete('{{ image.uri|default(image.urls|first) }}') }, onLoadComplete() {}, {% block data %}{% endblock %} }"
+    x-intersect="shouldLoadImages = true"
     {% block attributes %}{% endblock %}
 >
-    <img
-        x-init="$watch('isFailedToLoad', () => $el.style.display = 'none')"
-        src="{{ image.uri }}"
-        srcset="{{ srcSet|join(', ') }}"
-        sizes="{{ sizes|join(', ') }}, {{ lg }}px"
-        alt="{{ altText }}"
-        x-bind:onload="onLoadSuccess"
-        @error="onLoadError"
-    />
-    <template x-if="isLoadingImage || isFailedToLoad">
+    <template x-if="shouldLoadImages">
+        <img
+            x-init="$watch('isFailedToLoad', () => $el.style.display = 'none')"
+            src="{{ image.uri }}"
+            srcset="{{ srcSet|join(', ') }}"
+            sizes="{{ sizes|join(', ') }}, {{ lg }}px"
+            alt="{{ altText }}"
+            x-bind:onload="onLoadSuccess"
+            @error="onLoadError"
+        />
+    </template>
+    <template x-if="isLoadingImage || isFailedToLoad || !shouldLoadImages">
         {% embed 'partials/ui/placeholder' %}
                 {% block data %}
+                    isLoading: !shouldLoadImages,
                     init() {
                         this.$watch('isLoadingImage', (isLoading) => {
                             this.isLoading = isLoading;
+                        });
+                        this.$watch('shouldLoadImages', (shouldLoad) => {
+                            this.isLoading = !shouldLoad;
                         });
                     },
                 {% endblock %}
@@ -45,12 +58,27 @@
     </template>
 </figure>
 {% else %}
-<img
-    src="{{ image.uri }}"
-    srcset="{{ srcSet|join(', ') }}"
-    sizes="{{ sizes|join(', ') }}, {{ lg }}px"
-    alt="{{ altText }}"
-    {% if loadCallback %}x-bind:onload="{{ loadCallback }}"{% endif %}
-    {% if errorCallback %}@error="{{ errorCallback }}"{% endif %}
-/>
+<span
+    x-data="{ shouldLoadImages: false }"
+    x-intersect="shouldLoadImages = true"
+    class="ui-image-wrapper"
+>
+    <template x-if="!shouldLoadImages">
+        {% embed 'partials/ui/placeholder' %}
+                {% block data %}
+                    isLoading: true,
+                {% endblock %}
+        {% endembed %}
+    </template>
+    <template x-if="shouldLoadImages">
+        <img
+            src="{{ image.uri }}"
+            srcset="{{ srcSet|join(', ') }}"
+            sizes="{{ sizes|join(', ') }}, {{ lg }}px"
+            alt="{{ altText }}"
+            {% if loadCallback %}x-bind:onload="{{ loadCallback }}"{% endif %}
+            {% if errorCallback %}@error="{{ errorCallback }}"{% endif %}
+        />
+    </template>
+</span>
 {% endif %}

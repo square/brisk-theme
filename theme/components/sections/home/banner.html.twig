@@ -1,11 +1,18 @@
-{% set bannerSrc = hero.image.src %}
+{% set bannerSrc = hero.image.src | asset_url %}
 {% set bannerAlt = hero.alt %}
-{{ include('partials/components/banner', {
+{% embed 'partials/components/banner' with {
     fullwidth: true,
     bannerAlt: bannerAlt,
     bannerImage: { uri: bannerSrc, urls: { 640: bannerSrc ~ '?width=640', 1280: bannerSrc ~ '?width=1280' } },
     bannerSizes: { sm: 640, lg: 1280 },
-}) }}
+    bannerAlt: 'components.sections.home.banner.alt'|localize,
+} %}
+    {% block heading %}
+        <h2 class="visually-hidden">
+            {{ 'components.sections.home.banner.alt'|localize }}
+        </h2>
+    {% endblock %}
+{% endembed %}
 
 <div class="home-page__marquee-wrapper">
     {{ include('partials/ui/marquee', { content: 'components.sections.home.banner.marquee'|localize }) }}

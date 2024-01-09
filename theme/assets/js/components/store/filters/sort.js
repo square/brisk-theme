@@ -62,18 +62,22 @@ document.addEventListener('alpine:init', () => {
          * Open the sort dialog
          */
         openSortDialog() {
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/sort-content', {
-                scrollable: false,
-                size: 'large',
-                showCloseButton: true,
-                showPrimaryButton: true,
-                showSecondaryButton: true,
-                disablePrimaryButton: true,
-                primaryButtonText: this.translations.buttonUpdate,
-                buttonPosition: 'header',
-            }, {
-                sort_options: this.sortOptions,
-                current_value: this.sortValue,
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/sort-content',
+                dialogOptions: {
+                    scrollable: false,
+                    size: 'large',
+                    showCloseButton: true,
+                    showPrimaryButton: true,
+                    showSecondaryButton: true,
+                    disablePrimaryButton: true,
+                    primaryButtonText: this.translations.buttonUpdate,
+                    buttonPosition: 'header',
+                },
+                templateProps: {
+                    sort_options: this.sortOptions,
+                    current_value: this.sortValue,
+                },
             });
         },
     });

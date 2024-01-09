@@ -3,6 +3,8 @@
     --theme-price-line-height: 1.69;
     --theme-price-font-size-small: var(--theme-font-size-base);
     --theme-price-line-height-small: var(--theme-price-font-size);
+    --theme-price-font-size-tiny: var(--theme-font-size-minus-1);
+    --theme-price-line-height-tiny: var(--theme-font-size-minus-1-line-height);
 
     display: inline-flex;
     gap: var(--space);
@@ -14,13 +16,13 @@
 .ui-price--small {
     font-size: var(--theme-price-font-size-small);
     font-weight: var(--theme-font-weight-normal);
-    line-height: var(--theme-price-font-size-small-line-height);
+    line-height: var(--theme-price-line-height-small);
 }
 
 .ui-price--tiny {
-    font-size: var(--theme-font-size-minus-1);
+    font-size: var(--theme-price-font-size-tiny);
     font-weight: var(--theme-font-weight-normal);
-    line-height: var(--theme-font-size-minus-1-line-height);
+    line-height: var(--theme-price-line-height-tiny);
 }
 
 .ui-price__regular {
@@ -47,6 +49,18 @@
     font-size: var(--theme-price-font-size);
     font-weight: var(--theme-font-weight-heavy);
     line-height: var(--theme-price-line-height);
+}
+
+.ui-price--small .ui-price__extra {
+    font-weight: var(--theme-font-weight-medium);
+    font-size: var(--theme-price-font-size-small);
+    line-height: var(--theme-price-line-height-small);
+}
+
+.ui-price--tiny .ui-price__extra {
+    font-weight: var(--theme-font-weight-medium);
+    font-size: var(--theme-price-font-size-tiny);
+    line-height: var(--theme-price-line-height-tiny);
 }
 
 .ui-price__extra:not(.ui-price__extra--hide-divider)::before {

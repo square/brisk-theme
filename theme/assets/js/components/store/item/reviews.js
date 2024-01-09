@@ -80,20 +80,24 @@ document.addEventListener('alpine:init', () => {
         openReviewImagesModal(activeIndex = 0, sortBy = SORT_OPTIONS.newest) {
             const { product } = Alpine.store('product');
             const reviews = this.getSortedReviews(sortBy).filter((review) => review.images?.length);
-            const props = {
+            const templateProps = {
                 reviews,
                 productName: product.name,
                 activeIndex,
             };
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/product-reviews-content', {
-                title: this.translations.imagesDialogTitle,
-                size: 'large',
-                variant: 'multi-pane',
-                currentPane: Number(activeIndex),
-                totalPane: reviews.length,
-                primaryButtonText: this.translations.imagesDialogNext,
-                secondaryButtonText: this.translations.imagesDialogPrev,
-            }, props);
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/product-reviews-content',
+                dialogOptions: {
+                    title: this.translations.imagesDialogTitle,
+                    size: 'large',
+                    variant: 'multi-pane',
+                    currentPane: Number(activeIndex),
+                    totalPane: reviews.length,
+                    primaryButtonText: this.translations.imagesDialogNext,
+                    secondaryButtonText: this.translations.imagesDialogPrev,
+                },
+                templateProps,
+            });
         },
     });
 

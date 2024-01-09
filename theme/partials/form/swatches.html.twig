@@ -10,18 +10,24 @@
 {% set labelId = 'swatches-label-' ~ random() %}
 {% set siteBackground = themeColors.background|default('#fff') %}
 
-<fieldset
+<div
     x-data="{ isInvalid: false, model: {% if multiSelect %}[]{% else %}''{% endif %}, {% block data %}{% endblock %} }"
     {% if parentModel %}x-modelable="model"{% endif %}
     {% if isRequired %}aria-required="true"{% endif %}
     :aria-invalid="isInvalid"
-    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    {% if hideLabel %}
+        aria-describedby="{{ labelId }}"
+    {% else %}
+        :aria-describedby="isInvalid ? '{{ labelId }} {{ labelId }}__error' : '{{ labelId }}'"
+    {% endif %}
     role="{% if multiSelect %}group{% else %}radiogroup{% endif %}"
-    class="form-fieldset"
+    class="form-element"
     :class="{'form-swatches--invalid': isInvalid }"
 >
-    {% if hideLabel == false %}
-        {{ include('partials/form/fieldset-label') }}
+    {% if hideLabel %}
+        <span id="{{ labelId }}" hidden>{{ label }}</span>
+    {% else %}
+        {{ include('partials/form/element-label') }}
     {% endif %}
 
     <div class="form-swatches__options">
@@ -60,4 +66,4 @@
             </label>
         {% endfor %}
     </div>
-</fieldset>
+</div>

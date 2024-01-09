@@ -176,9 +176,11 @@
                 class="site-header__logo-wrapper col"
                 col-xs-6 col-sm-6 col-md-2 col-lg-2
             >
-                <a class="site-logo" href="/">
-                    {{ square.site.title }}
-                </a>
+                <h1>
+                    <a class="site-logo" href="/">
+                        {{ square.site.title }}
+                    </a>
+                </h1>
             </div>
 
             <nav
@@ -190,8 +192,18 @@
             >
                 <ul class="site-header__nav-linklist">
                     {% for link in formattedLinks %}
-                        <li @mouseenter.native="onMouseEnter('{{ link.title }}')" @mouseleave.native="onMouseLeave">
-                            <a class="site-header__nav-link" :class="currentlyDisplayedLink?.title === '{{ link.title }}' && 'is-active' " href="{{ link.url }}">
+                        <li
+                            @mouseenter="onMouseEnter('{{ link.title }}')"
+                            @mouseleave="onMouseLeave"
+                        >
+                            <a
+                                class="site-header__nav-link"
+                                :class="currentlyDisplayedLink?.title === '{{ link.title }}' && 'is-active' "
+                                href="{{ link.url }}"
+                                @focus="onMouseEnter('{{ link.title }}')"
+                                @blur="onMouseLeave"
+                                @keydown.tab="onKeyboardTab"
+                            >
                                 {{ link.title }}
                             </a>
                         </li>

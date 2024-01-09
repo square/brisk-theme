@@ -53,6 +53,7 @@
     background-color: var(--theme-dialog-container-color);
     border-radius: var(--theme-dialog-container-radius);
     box-shadow: var(--theme-dialog-container-shadow);
+    overflow: hidden;
 }
 
 @media (min-width: 700px) {
@@ -118,6 +119,10 @@
 
 .ui-dialog__overlay--flush .ui-dialog__container-inner {
     padding: 0;
+}
+
+.ui-dialog__container-inner:not(.ui-dialog__container--header-visible):not(.ui-dialog__container--footer-visible) {
+    grid-template-rows: 100%;
 }
 
 .ui-dialog__header {

@@ -64,7 +64,7 @@ document.addEventListener('alpine:init', () => {
          */
         updateSelectLabelWidth() {
             const index = Object.keys(this.subscriptionCards).findIndex((id) => id === this.formData.subscription?.id);
-            const selectLabel = this.$el.querySelectorAll('.form-fieldset__label')[index];
+            const selectLabel = this.$el.querySelectorAll('.form-element__label')[index];
             const priceWidth = this.$el.querySelectorAll('.form-subscription__price')?.[index]?.offsetWidth;
 
             if (selectLabel && priceWidth) {

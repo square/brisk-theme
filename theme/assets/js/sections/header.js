@@ -9,6 +9,8 @@ document.addEventListener('alpine:init', () => {
         navLinks: {},
         lastScrollPosition: window.scrollY,
         isHeaderVisible: true,
+        isMegaMenuFocused: false,
+        lastFocusedNavItem: null,
         showUnderline: true,
         isScrolledDown: false,
         isMiniCartOpen: false,
@@ -29,11 +31,14 @@ document.addEventListener('alpine:init', () => {
             };
         },
         openSearch() {
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/search-content', {
-                variant: 'halfsheet',
-                transition: 'down',
-                scrollable: true,
-                showCloseButton: false,
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/search-content',
+                dialogOptions: {
+                    variant: 'halfsheet',
+                    transition: 'down',
+                    scrollable: true,
+                    showCloseButton: false,
+                },
             });
         },
         /**
@@ -89,12 +94,41 @@ document.addEventListener('alpine:init', () => {
             // Get the children of the link that was hovered, display them
             const link = this.navLinks[linkTitle];
             this.displayLinkInMegaMenu(link);
+            this.isMegaMenuFocused = false;
         },
         /**
          * When a link is no longer hovered, close the megamenu
         */
         onMouseLeave() {
-            this.closeMegaMenuWithDelay();
+            if (!this.isMegaMenuFocused) {
+                this.closeMegaMenuWithDelay();
+            }
+        },
+        /**
+         * When navigating with tabs, open the megamenu
+         * @param {Event} e
+         */
+        onKeyboardTab(e) {
+            if (this.isMegaMenuVisible()) {
+                this.lastFocusedNavItem = e.target;
+                this.isMegaMenuFocused = true;
+                document.querySelector('.mega-menu').focus({ focusVisible: true });
+            } else {
+                this.isMegaMenuFocused = false;
+            }
+        },
+        /**
+         * When navigating away from the last menu item, re-focus its parent nav item
+         * @param {Event} e
+         */
+        onMegaMenuItemTab(e) {
+            if (!e.shiftKey) {
+                const links = document.querySelectorAll('.mega-menu a');
+                // Focus the nav item
+                if (e.target === links[links.length - 1] && this.lastFocusedNavItem) {
+                    this.lastFocusedNavItem.focus({ focusVisible: true });
+                }
+            }
         },
         /**
          * Display the data for a given Nav Link in the Megamenu
@@ -147,12 +181,16 @@ document.addEventListener('alpine:init', () => {
          * Open the Mobile Menu flyout
          */
         openMobileMenu() {
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/mobile-menu-content', {
-                variant: 'flyout',
-                transition: 'left',
-                scrollable: true,
-                showCloseButton: false,
-            }, { nav_links: this.navLinks });
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/mobile-menu-content',
+                dialogOptions: {
+                    variant: 'flyout',
+                    transition: 'left',
+                    scrollable: true,
+                    showCloseButton: false,
+                },
+                templateProps: { nav_links: this.navLinks },
+            });
         },
     });
 

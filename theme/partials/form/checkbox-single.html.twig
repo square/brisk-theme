@@ -9,7 +9,7 @@
 <div
     x-data="{ isInvalid: false, isDisabled: false, model: false, {% block data %}{% endblock %} }"
     {% if parentModel %}x-modelable="model"{% endif %}
-    class="form-fieldset form-checkbox--single form-checkbox--{{ variant|default('normal') }} form-checkbox--{{ size|default('medium') }} form-checkbox--{{ align|default('left') }} {% if showDivider %}form-checkbox--{{ variant|default('normal') }}-divider{% endif %} {{ singleCheckboxClasses }}"
+    class="form-element form-checkbox--single form-checkbox--{{ variant|default('normal') }} form-checkbox--{{ size|default('medium') }} form-checkbox--{{ align|default('left') }} {% if showDivider %}form-checkbox--{{ variant|default('normal') }}-divider{% endif %} {{ singleCheckboxClasses }}"
     {% block attributes %}{% endblock %}
 >
     <div class="form-checkbox__options">
