@@ -1,11 +1,9 @@
-{% set bannerSrc = hero.image.src | asset_url %}
-{% set bannerAlt = hero.alt %}
+{% set bannerSrc = image.src | asset_url %}
 {% embed 'partials/components/banner' with {
     fullwidth: true,
-    bannerAlt: bannerAlt,
+    bannerAlt: alt,
     bannerImage: { uri: bannerSrc, urls: { 640: bannerSrc ~ '?width=640', 1280: bannerSrc ~ '?width=1280' } },
     bannerSizes: { sm: 640, lg: 1280 },
-    bannerAlt: 'components.sections.home.banner.alt'|localize,
 } %}
     {% block heading %}
         <h2 class="visually-hidden">
@@ -20,8 +18,11 @@
 
 {% schema %}
 {
-    "hero": {
-        "type": "array"
+    "image": {
+        "type": "image"
+    },
+    "alt": {
+        "type": "string"
     }
 }
 {% endschema %}
@@ -36,9 +37,9 @@
             "value": {
                 "controls": [
                     {
-                        "option": "image",
+                        "option": "image-chooser",
                         "value": {
-                            "$ref": "#/schema/hero/image"
+                            "$ref": "#/schema/image"
                         }
                     },
                     {
@@ -46,7 +47,7 @@
                         "label": "Image description",
                         "placeholder": "Enter alt text for accessibility",
                         "value": {
-                            "$ref": "#/schema/hero/alt"
+                            "$ref": "#/schema/alt"
                         }
                     }
                 ]

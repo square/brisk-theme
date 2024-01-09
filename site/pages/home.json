@@ -3,11 +3,9 @@
         "main": [
             {
                 "props": {
-                    "hero": {
-                        "alt": "Home page banner",
-                        "image": {
-                            "src": "images/home-banner.png"
-                        }
+                    "alt": "Home page banner",
+                    "image": {
+                        "src": "images/home-banner.png"
                     }
                 },
                 "template": "home/banner"
