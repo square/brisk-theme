@@ -1,7 +1,8 @@
 {% set bannerSrc = image.src|asset_url %}
+{% set altText = alt ? alt : 'components.sections.home.banner.alt'|localize %}
 {% embed 'partials/components/banner' with {
     fullwidth: true,
-    bannerAlt: alt,
+    bannerAlt: altText,
     bannerImage: { uri: bannerSrc, urls: { 640: bannerSrc ~ '?width=640', 1280: bannerSrc ~ '?width=1280' } },
     bannerSizes: { sm: 640, lg: 1280 },
 } %}
@@ -13,7 +14,8 @@
 {% endembed %}
 
 <div class="home-page__marquee-wrapper">
-    {{ include('partials/ui/marquee', { content: marquee }) }}
+    {% set content = marquee ? marquee : 'components.sections.home.banner.marquee'|localize %}
+    {{ include('partials/ui/marquee', { content: content }) }}
 </div>
 
 {% schema %}
@@ -22,10 +24,12 @@
         "type": "image"
     },
     "alt": {
-        "type": "string"
+        "type": "string",
+        "optional": true
     },
     "marquee": {
-        "type": "string"
+        "type": "string",
+        "optional": true
     }
 }
 {% endschema %}
@@ -48,7 +52,7 @@
                     {
                         "option": "input",
                         "label": "Image description",
-                        "placeholder": "Enter alt text for accessibility",
+                        "placeholder": "Alt text for accessibility",
                         "value": {
                             "$ref": "#/schema/alt"
                         }
@@ -58,8 +62,8 @@
         },
         {
             "option": "input",
-            "label": "Marquee",
-            "placeholder": "Scrolling marquee text",
+            "label": "Marquee text",
+            "placeholder": "Scrolling text",
             "value": {
                 "$ref": "#/schema/marquee"
             }
