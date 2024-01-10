@@ -12,3 +12,25 @@
     }
 }
 {% endschema %}
+
+{% editor %}
+{
+    "name": "Text",
+    "controls": [
+        {
+            "option": "input",
+            "label": "Heading",
+            "value": {
+                "$ref": "#/schema/heading"
+            }
+        },
+        {
+            "option": "textarea",
+            "label": "Text",
+            "value": {
+                "$ref": "#/schema/text"
+            }
+        }
+    ]
+}
+{% endeditor %}

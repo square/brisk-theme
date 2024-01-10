@@ -313,3 +313,32 @@
         }
     }
 {% endschema %}
+
+{% editor %}
+{
+    "name": "Header",
+    "controls": [
+        {
+            "type": "toggle",
+            "label": "Show announcement bar",
+            "value": {
+                "$ref": "#/schema/announcement_bar_show"
+            }
+        },
+        {
+            "type": "input",
+            "label": "Announcement bar",
+            "value": {
+                "$ref": "#/schema/announcement_bar_text"
+            }
+        },
+        {
+            "type": "link",
+            "label": "Announcement link",
+            "value": {
+                "$ref": "#/schema/announcement_bar_link"
+            }
+        }
+    ]
+}
+{% endeditor %}

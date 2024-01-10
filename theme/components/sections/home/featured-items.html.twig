@@ -22,3 +22,32 @@
     }
 }
 {% endschema %}
+
+{% editor %}
+{
+    "name": "Featured items",
+    "controls": [
+        {
+            "option": "input",
+            "label": "Heading",
+            "value": {
+                "$ref": "#/schema/heading"
+            }
+        },
+        {
+            "option": "group",
+            "label": "Items",
+            "value": {
+                "controls": [
+                    {
+                        "option": "item-list-chooser",
+                        "value": {
+                            "$ref": "#/schema/items"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
+{% endeditor %}
