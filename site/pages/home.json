@@ -4,9 +4,6 @@
             {
                 "props": {
                     "alt": "Home page banner",
-                    "image": {
-                        "src": "images/home-banner.png"
-                    },
                     "marquee": "Stay dry this spring"
                 },
                 "template": "home/banner"
