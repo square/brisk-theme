@@ -19,7 +19,7 @@
                 {% set imageFlex = 1 %}
                 {% if image.width and image.height %}
                     {% set imageFlex = isPortraitOrientation ? image.height / image.width : image.width / image.height %}
-                {% endif %}=
+                {% endif %}
                 {% set imageSizes = [559, 862, 580] %}
             {% else %}
                 {% set imageSizes = [559, 431, 290] %}
