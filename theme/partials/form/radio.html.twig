@@ -78,7 +78,7 @@
                     {% endif %}
                     {% if option.image.absolute_url %}
                     <span class="form-radio__input-image">
-                        {{ include('partials/ui/image', { image: { uri: option.image.absolute_url, urls: option.image.absolute_urls }, imageSizes: { xs: 80 }, altText: option.name }) }}
+                        {{ include('partials/ui/image', { image: { uri: option.image.absolute_url, urls: option.image.absolute_urls }, imageSizes: [80], altText: option.name }) }}
                     </span>
                     {% endif %}
                 {% endif %}

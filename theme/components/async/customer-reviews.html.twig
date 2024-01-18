@@ -15,7 +15,7 @@
                         role="region"
                         class="product-reviews__thumbnails"
                     >
-                    {% set imageSizes = { xs: 70 } %}
+                    {% set imageSizes = [70] %}
                         {% for image in review.images %}
                             {% set altText = productName ~ ' - ' ~ ('components.async.customer_reviews.photo_by'|localize({ name: review.reviewer_name })) ~ ' ' ~ loop.index %}
                             <figure
@@ -26,7 +26,7 @@
                                 @click.stop="openReviewImagesModal({{ imageIndex }})"
                                 @keydown.enter.prevent="openReviewImagesModal({{ imageIndex }})"
                             >
-                                {{ include('partials/ui/image', { image: { uri: image.absolute_uri, urls: image.absolute_urls }, imageSizes, altText }) }}
+                                {{ include('partials/ui/image', { image: { uri: image.absolute_url, urls: image.absolute_urls }, imageSizes, altText }) }}
                             </figure>
                         {% endfor %}
                     </div>
