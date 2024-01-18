@@ -4,25 +4,7 @@
     {{ register_asset('css/ui/image.css') }}
 {% endif %}
 
-{% set srcSet = [] %}
-{% set defaultImageSizes = { xs: 600, sm: 900, md: 1200 } %}
-{% set xs = imageSizes.xs|default(defaultImageSizes.xs) %}
-{% set sm = imageSizes.sm|default(imageSizes.xs)|default(defaultImageSizes.sm) %}
-{% set md = imageSizes.md|default(imageSizes.sm)|default(imageSizes.xs)|default(defaultImageSizes.md) %}
-{% set lg = imageSizes.lg|default(md) %}
-{% set sizes = [
-    '(max-width: 599px) ' ~ xs ~ 'px',
-    '(max-width: 839px) ' ~ sm ~ 'px',
-    '(max-width: 1199px) ' ~ md ~ 'px',
-    '(max-width: 1599px) ' ~ lg ~ 'px',
-] %}
-{% for key, url in image.urls %}
-    {% set dpr = '' %}
-    {% if image.format != 'spin' %}
-        {% set dpr = '&dpr=2' %}
-    {% endif %}
-    {% set srcSet = srcSet|merge([url ~ dpr ~ ' ' ~ key ~ 'w']) %}
-{% endfor %}
+{% set defaultImageSizes = [600, 900, 1200] %}
 
 {% if showPlaceholder %}
 <figure
@@ -34,8 +16,8 @@
         <img
             x-init="$watch('isFailedToLoad', () => $el.style.display = 'none')"
             src="{{ image.uri }}"
-            srcset="{{ srcSet|join(', ') }}"
-            sizes="{{ sizes|join(', ') }}, {{ lg }}px"
+            {% if image.uri %}{{ image.uri|srcset(imageSizes|default(defaultImageSizes)) }}{% endif %}
+            {{ { breakpoints: config.theme.breakpoints, sizes: imageSizes|default(defaultImageSizes) }|sizes }}
             alt="{{ altText }}"
             x-bind:onload="onLoadSuccess"
             @error="onLoadError"
@@ -73,8 +55,8 @@
     <template x-if="shouldLoadImages">
         <img
             src="{{ image.uri }}"
-            srcset="{{ srcSet|join(', ') }}"
-            sizes="{{ sizes|join(', ') }}, {{ lg }}px"
+            {% if image.uri %}{{ image.uri|srcset(imageSizes|default(defaultImageSizes)) }}{% endif %}
+            {{ { breakpoints: config.theme.breakpoints, sizes: imageSizes|default(defaultImageSizes) }|sizes }}
             alt="{{ altText }}"
             {% if loadCallback %}x-bind:onload="{{ loadCallback }}"{% endif %}
             {% if errorCallback %}@error="{{ errorCallback }}"{% endif %}

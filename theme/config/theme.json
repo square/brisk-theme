@@ -12,5 +12,6 @@
         "xxs": "shared.sizes.xx_small",
         "xxl": "shared.sizes.xx_large",
         "xxxl": "shared.sizes.xxx_large"
-    }
+    },
+    "breakpoints": [699, 700, 992, 1200, 1600]
 }

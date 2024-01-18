@@ -25,7 +25,7 @@
                                     {# Item image #}
                                     <div class="mini-cart__item-image">
                                         <a href="{{ item_link(item.square_online_product_id) }}">
-                                            {{ include('partials/ui/image', { image: { uri: item.image.absolute_url, urls: item.image.urls }, imageSizes: { xs: 64 }, altText: item.name, showPlaceholder: true }) }}
+                                            {{ include('partials/ui/image', { image: { uri: item.image.absolute_url, urls: item.image.urls }, imageSizes: [64], altText: item.name, showPlaceholder: true }) }}
                                         </a>
                                     </div>
                                 </div>

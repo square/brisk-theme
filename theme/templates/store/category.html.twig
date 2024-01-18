@@ -22,7 +22,7 @@
     {% set categoryImage = category.images[0] %}
     {% if categoryImage %}
         {{ include('partials/components/banner', {
-            bannerImage: { uri: categoryImage.absolute_uri, urls: categoryImage.absolute_urls },
+            bannerImage: { uri: categoryImage.absolute_url, urls: categoryImage.absolute_urls },
             bannerAlt: category.name,
         }) }}
     {% endif %}

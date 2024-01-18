@@ -21,13 +21,13 @@
             class="gallery-thumbnails"
         >
             {% for image in images %}
-                {% set uri = image.absolute_uri %}
+                {% set uri = image.absolute_url %}
                 {% if image.format == 'spin' %}
                     {% set uri = image.absolute_urls[160] %}
                 {% endif %}
                 {% embed 'partials/ui/image' with {
                     image: { uri, urls: image.absolute_urls, format: image.format },
-                    imageSizes: { xs: 80, sm: 160 },
+                    imageSizes: [80, 160],
                     altText: image.name|default(name ~ ' thumbnail ' ~ loop.index),
                     showPlaceholder: true,
                 } %}
@@ -56,14 +56,14 @@
                     {% if image.format == 'spin' %}
                         <figure class="gallery-images__figure">
                             {{ include('partials/ui/image-spin', {
-                                source: image.absolute_uri,
+                                source: image.absolute_url,
                                 altText: image.name|default(name ~ ' ' ~ loop.index),
                             }) }}
                         </figure>
                     {% else %}
                         {% embed 'partials/ui/image' with {
-                            image: { uri: image.absolute_uri, urls: image.absolute_urls },
-                            imageSizes: { xs: 600, sm: 600, md: 800, lg: 990 },
+                            image: { uri: image.absolute_url, urls: image.absolute_urls },
+                            imageSizes: [600, 600, 800, 990],
                             altText: image.name|default(name ~ ' ' ~ loop.index),
                             showPlaceholder: true,
                         } %}

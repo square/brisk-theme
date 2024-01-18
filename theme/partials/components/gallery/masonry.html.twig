@@ -19,10 +19,10 @@
                 {% set imageFlex = 1 %}
                 {% if image.width and image.height %}
                     {% set imageFlex = isPortraitOrientation ? image.height / image.width : image.width / image.height %}
-                {% endif %}
-                {% set imageSizes = { xs: 559, sm: 862, md: 580 } %}
+                {% endif %}=
+                {% set imageSizes = [559, 862, 580] %}
             {% else %}
-                {% set imageSizes = { xs: 559, sm: 431, md: 290 } %}
+                {% set imageSizes = [559, 431, 290] %}
             {% endif %}
 
             {% if isTwoColumn and (loop.index0 % 3 == 1) %}
@@ -31,11 +31,11 @@
 
             {% if image.format == 'spin' %}
                 <figure class="masonry__item">
-                    {{ include('partials/ui/image-spin', { source: image.absolute_uri, altText: galleryName ~ ' ' ~ loop.index }) }}
+                    {{ include('partials/ui/image-spin', { source: image.absolute_url, altText: galleryName ~ ' ' ~ loop.index }) }}
                 </figure>
             {% else %}
                 {% embed 'partials/ui/image' with {
-                    image: { uri: image.absolute_uri, urls: image.absolute_urls },
+                    image: { uri: image.absolute_url, urls: image.absolute_urls },
                     imageSizes,
                     altText: galleryName ~ ' ' ~ loop.index,
                     showPlaceholder: true,

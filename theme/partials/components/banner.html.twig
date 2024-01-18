@@ -4,7 +4,7 @@
     {% block heading %}{% endblock %}
     {{ include('partials/ui/image', {
         image: bannerImage,
-        imageSizes: bannerSizes|default({ xs: 599 }),
+        imageSizes: bannerSizes|default([599]),
         altText: bannerAlt,
     }) }}
 </div>
