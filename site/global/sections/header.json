@@ -1,7 +1,7 @@
 {
     "props": {
         "announcement_bar_show": true,
-        "announcement_bar_text": "FREE SHIPPING ON ALL ORDERS OVER $75*",
+        "announcement_bar_text": "Free shipping on all orders over $75*",
         "announcement_bar_link": {
             "label": "Shop All",
             "type": "shopAll"
