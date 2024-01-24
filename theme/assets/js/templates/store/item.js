@@ -254,6 +254,8 @@ document.addEventListener('alpine:init', () => {
                 }
             }
 
+            let hasSelectedodifiersWithPrice = false;
+
             // Update price with modifier selections
             formData.forEach(({ value }, i) => {
                 const property = Object.keys(this.formData)[i];
@@ -271,10 +273,19 @@ document.addEventListener('alpine:init', () => {
                         if (choice?.price_money) {
                             regularPriceAmount += choice.price_money.amount;
                             finalPriceAmount += choice.price_money.amount;
+
+                            if (!hasSelectedodifiersWithPrice) {
+                                hasSelectedodifiersWithPrice = true;
+                            }
                         }
                     });
                 }
             });
+
+            if (!hasSelectedodifiersWithPrice) {
+                // Don't refresh the badge and price if modifiers with price aren't selected
+                return;
+            }
 
             if (this.$refs.productBadges) {
                 Square.async.refreshAsyncTemplate('badges', {
