@@ -393,7 +393,7 @@ document.addEventListener('alpine:init', () => {
                             selection.choiceSelections = [value];
                         }
                     } else if (type === 'GIFT_WRAP') {
-                        selection.choiceSelections = [id];
+                        selection.choiceSelections = [value];
                     } else {
                         selection.textEntry = value;
                     }
