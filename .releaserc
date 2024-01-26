@@ -1,0 +1,21 @@
+{
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    {
+                        "label": "Brisk Theme",
+                        "path": [
+                            "site/",
+                            "theme/",
+                            "LICENSE"
+                        ]
+                    }
+                ]
+            }
+        ]
+    ]
+}
