@@ -1,7 +1,5 @@
 name: Lint title
-
 on: pull_request
-
 jobs:
   lint-title:
     name: Validate
