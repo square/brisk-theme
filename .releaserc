@@ -15,12 +15,9 @@
             {
                 "assets": [
                     {
-                        "label": "Brisk Theme",
-                        "path": [
-                            "site/",
-                            "theme/",
-                            "LICENSE"
-                        ]
+                        "label": "Brisk",
+                        "name": "brisk-${nextRelease.gitTag}.zip",
+                        "path": "brisk.zip"
                     }
                 ]
             }
