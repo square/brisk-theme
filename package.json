@@ -20,8 +20,8 @@
         "stylelint-config-standard": "^34.0.0"
     },
     "lint-staged": {
-        "*.{js}": "eslint --max-warnings=0",
-        "*.{css}": "stylelint --max-warnings=0"
+        "*.js": "eslint --max-warnings=0",
+        "*.css": "stylelint --max-warnings=0"
     },
     "husky": {
         "hooks": {
