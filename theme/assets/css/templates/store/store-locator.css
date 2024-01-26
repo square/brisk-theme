@@ -1,0 +1,75 @@
+.store-locator-page__heading {
+    margin-bottom: var(--space-x2);
+}
+
+.store-locator-input__wrapper {
+    margin-bottom: var(--space-x3);
+}
+
+.store-locator-list__item {
+    padding-top: var(--space-x2);
+    padding-bottom: var(--space-x2);
+    border-bottom: 1px solid var(--theme-border-color);
+    transition: border-color 0.1s ease;
+}
+
+.store-locator-list .store-locator-list__item:focus-visible {
+    outline: none;
+}
+
+.store-locator-list__item.is-active::before,
+.store-locator-list__item:focus-visible::before {
+    opacity: 1;
+}
+
+.store-locator-list__item-icon {
+    opacity: 0.4;
+}
+
+.store-locator-map {
+    position: sticky;
+    top: var(--header-height, 0);
+    align-self: start;
+    margin-bottom: 0;
+}
+
+.store-locator-list-async {
+    position: relative;
+    min-height: 30vh;
+}
+
+/* store locator dialog */
+
+.store-locator-dialog {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x3);
+    padding-bottom: var(--space-x3);
+}
+
+.store-locator-dialog p {
+    font-size: var(--theme-font-size-minus-1);
+    line-height: var(--theme-font-size-minus-1-line-height);
+    color: var(--theme-body-text-color-subtle);
+}
+
+.store-locator-dialog__heading {
+    font-weight: var(--theme-font-weight-normal);
+}
+
+.store-locator-dialog__detail {
+    margin-top: var(--space-x2);
+}
+
+.store-locator-dialog__buttons {
+    display: flex;
+    gap: var(--space-x2);
+    padding-top: var(--space-x2);
+    margin-top: var(--space-x2);
+    border-top: 1px solid var(--theme-border-color);
+}
+
+.store-locator-dialog__hours-row {
+    row-gap: var(--space-half);
+    margin-top: var(--space);
+}
