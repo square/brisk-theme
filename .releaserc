@@ -16,7 +16,7 @@
                 "assets": [
                     {
                         "label": "Brisk",
-                        "name": "brisk-${nextRelease.gitTag}.zip",
+                        "name": "brisk-${nextRelease.version}.zip",
                         "path": "brisk.zip"
                     }
                 ]
