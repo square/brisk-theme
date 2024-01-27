@@ -1,5 +1,11 @@
 {
     "props": {
+        "banner": {
+            "props": {
+                "alt": "Home page banner",
+                "marquee": "Stay dry this spring"
+            }
+        },
         "main": [
             {
                 "props": {
@@ -52,13 +58,7 @@
                 },
                 "template": "home/featured-items"
             }
-        ],
-        "banner": {
-            "props": {
-                "alt": "Home page banner",
-                "marquee": "Stay dry this spring"
-            }
-        }
+        ]
     },
     "template": "templates/pages/home",
     "route": "/"
