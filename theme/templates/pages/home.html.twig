@@ -9,6 +9,7 @@
 {{ register_asset('css/templates/pages/home.css') }}
 
 <div class="home-page">
+    {{ section('home/banner', banner) }}
     {{ section_container(main) }}
 </div>
 
@@ -17,6 +18,9 @@
 
 {% schema %}
 {
+    "banner": {
+        "type": "section"
+    },
     "main": {
         "type": "section-list"
     }
