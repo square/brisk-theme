@@ -1,13 +1,12 @@
 {
     "props": {
+        "banner": {
+            "props": {
+                "alt": "Home page banner",
+                "marquee": "Stay dry this spring"
+            }
+        },
         "main": [
-            {
-                "props": {
-                    "alt": "Home page banner",
-                    "marquee": "Stay dry this spring"
-                },
-                "template": "home/banner"
-            },
             {
                 "props": {
                     "heading": "Shop by category",
