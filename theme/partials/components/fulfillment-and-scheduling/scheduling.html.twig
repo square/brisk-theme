@@ -1,0 +1,17 @@
+<script id="scheduling-data" type="application/json">
+    {{ { schedule }|json_encode }}
+</script>
+
+<div
+    x-data="scheduling('scheduling-data')"
+    class="scheduling__container"
+>
+    <p x-text="$store.siteWideFulfillment.selectedScheduleTimeLabel()"></p>
+    {{ include('partials/ui/button', {
+            variant: 'neutral',
+            size: 'medium',
+            label: 'shared.buttons.change'|localize,
+            action: 'openSchedulingDialog'
+        })
+    }}
+</div>

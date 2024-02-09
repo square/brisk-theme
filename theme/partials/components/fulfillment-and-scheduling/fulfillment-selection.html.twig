@@ -1,0 +1,30 @@
+{{ register_asset('js/components/fulfillment-and-scheduling/fulfillment-selection.js', { defer: false }) }}
+
+{% set options = [] %}
+{% if fulfillments.PICKUP %}
+    {% set options = options|merge([{ label: 'partials.components.store.item.fulfillment.buttons.pickup'|localize, value: 'PICKUP' }]) %}
+{% endif %}
+{% if fulfillments.DELIVERY %}
+    {% set options = options|merge([{ label: 'partials.components.store.item.fulfillment.buttons.delivery'|localize, value: 'DELIVERY' }]) %}
+{% endif %}
+
+{% if options|length %}
+    {% set fulfillmentSelectionDataId = 'fulfillment-selection-data-' ~ random() %}
+    <script id="{{ fulfillmentSelectionDataId }}" type="application/json">
+        {{ {
+            options,
+        }|json_encode }}
+    </script>
+
+    <div
+        x-data="fulfillmentSelection('{{ fulfillmentSelectionDataId }}')"
+        class="fulfillment-select-container"
+        @segmented-control:click="(event) => onFulfillmentButtonClick(event.detail)"
+    >
+        {% embed 'partials/ui/segmented-control' with {
+            options,
+            fullWidth: true,
+        } %}
+        {% endembed %}
+    </div>
+{% endif %}

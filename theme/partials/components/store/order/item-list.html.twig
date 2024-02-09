@@ -1,0 +1,30 @@
+{{ register_asset('css/components/store/order/item-list.css') }}
+
+<div class="order-item-list">
+    {% for category in categories %}
+        {% if category.items|length %}
+            {% set availableCategoryItems = category.items|filter(item => item.fulfillment.methods[fulfillment]) %}
+            {% if availableCategoryItems|length %}
+                <div>
+                    <h2 class="heading-5 heading-with-margin">{{ category.name }}</h2>
+                    {% set orderingItems = [] %}
+                    {% for item in availableCategoryItems %}
+                        {% set orderingItems = orderingItems|merge([{ item }]) %}
+                    {% endfor %}
+                    {{ include('partials/components/collection/list', { items: orderingItems }) }}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% schema %}
+{
+    "categories": {
+        "type": "category-list"
+    },
+    "fulfillment": {
+        "type": "string"
+    }
+}
+{% endschema %}

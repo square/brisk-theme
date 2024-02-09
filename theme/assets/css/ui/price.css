@@ -52,14 +52,14 @@
 }
 
 .ui-price--small .ui-price__extra {
-    font-weight: var(--theme-font-weight-medium);
     font-size: var(--theme-price-font-size-small);
+    font-weight: var(--theme-font-weight-medium);
     line-height: var(--theme-price-line-height-small);
 }
 
 .ui-price--tiny .ui-price__extra {
-    font-weight: var(--theme-font-weight-medium);
     font-size: var(--theme-price-font-size-tiny);
+    font-weight: var(--theme-font-weight-medium);
     line-height: var(--theme-price-line-height-tiny);
 }
 

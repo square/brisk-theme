@@ -11,6 +11,10 @@
     margin-bottom: var(--space-x3);
 }
 
+.locations-dialog__input--second-line.form-text__input {
+    margin-top: 0;
+}
+
 .locations-dialog__content--empty .locations-dialog__input {
     margin-bottom: 0;
 }

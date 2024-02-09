@@ -1,0 +1,47 @@
+{{ register_asset('css/components/fulfillment-and-scheduling/site-wide-fulfillment.css') }}
+{{ register_asset('js/components/fulfillment-and-scheduling/site-wide-fulfillment.js', { defer: false }) }}
+
+{{ register_asset('css/components/fulfillment-and-scheduling/scheduling.css') }}
+{{ register_asset('js/components/fulfillment-and-scheduling/scheduling.js', { defer: false }) }}
+
+{{ register_asset('js/components/gallery/dialog.js', { defer: false }) }}
+{{ register_asset('css/components/gallery/dialog.css') }}
+
+{{ register_asset('js/components/fulfillment-and-scheduling/scheduling-dialog.js', { defer: false }) }}
+{{ register_asset('css/components/fulfillment-and-scheduling/scheduling-dialog.css') }}
+
+{# TODO: Registering here as a workaround for css not loading properly in async templates for scheduling #}
+{{ register_asset('css/form/radio.css') }}
+{{ register_asset('js/form/radio.js', { defer: false }) }}
+
+{% set location = defaultLocation %}
+
+<template x-if="!dialogExists()">
+    <template x-teleport="body">
+        {{ include('partials/ui/dialog') }}
+    </template>
+</template>
+
+<div x-data="siteWideFulfillment()">
+    <div
+        class="site-wide-fulfillment__container"
+    >
+        {# Fulfillment selector section #}
+        {{ include('partials/components/fulfillment-and-scheduling/fulfillment-selection', {
+            fulfillments: square.store.fulfillment_support,
+            defaultFulfillment,
+        }) }}
+
+        <div class="site-wide-fulfillment__buttons">
+            {# Scheduling section #}
+            <div x-show="$store.siteWideFulfillment.shouldShowSchedulingSelector()">
+                {{ include('partials/components/fulfillment-and-scheduling/scheduling') }}
+            </div>
+
+            {# Choose location section #}
+            <div id="chooseLocationSelector">
+                {{ include('partials/components/fulfillment-and-scheduling/choose-location', { location: defaultLocation }) }}
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,12 +22,21 @@
     transition: border-color 0.1s ease;
 }
 
+.form-radio--row-divider .form-radio__option {
+    padding-bottom: var(--space-x2);
+}
+
 .form-radio--row .form-radio__option {
     align-items: center;
 }
 
-.form-radio--row-divider .form-radio__option {
-    padding-bottom: var(--space-x2);
+.form-radio--row .form-radio__options-collapse {
+    margin-right: calc(var(--space-x1_5) * -1);
+    margin-left: calc(var(--space-x1_5) * -1);
+}
+
+.form-radio--row .form-radio__options-collapse .form-radio__option {
+    margin: var(--space-half) var(--space-x1_5);
 }
 
 .form-radio--normal-divider .form-radio__option:last-of-type {

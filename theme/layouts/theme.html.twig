@@ -30,8 +30,9 @@
 
             <!-- Must be included before alpine -->
             <script type="module">
-                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v4.4.3') | asset_url }}";
+                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v1.0.0-alpha.9') | asset_url }}";
                 window.SquareWebSDK = new SDK({{ sdk_init_config() }});
+                window.SquareTranslations = JSON.parse("{{ (config.theme.translations|default({}))|json_encode|escape('js') }}");
             </script>
 
             <!-- Must be included before core file -->
@@ -53,7 +54,16 @@
         {% endblock %}
     </head>
 
-    {% set defaultFulfillment = (square.store.default_item_fulfillment|split(',')[0])|default('SHIPMENT') %}
+    {% set defaultFulfillment = (square.store.default_item_fulfillment|split(',')[0])|default('PICKUP') %}
+
+    {# Set the default location from the query and fallback to the first location #}
+    {% set locations = location_list({}) %}
+    {% set queryLocation = locations|filter(location => location.id == request.query.location_id)|first %}
+    {% set defaultLocation = locations|filter(location => location[defaultFulfillment].enabled)|first %}
+    {% set firstLocation = locations|first %}
+    {% set queryOrDefaultLocation = queryLocation ? queryLocation : defaultLocation %}
+    {% set defaultLocation = queryOrDefaultLocation ? queryOrDefaultLocation : firstLocation %}
+    {% set defaultLocationId = defaultLocation.id %}
 
     {% if config.theme.shouldUseSiteStyles %}
         {% set themeContainerWidth = max(square.site.styles.spacing.site_width, 1200) %}
@@ -74,6 +84,8 @@
                 locale: square.store.locale,
                 currency: square.store.currency,
                 defaultFulfillment,
+                defaultLocationId,
+                defaultLocation,
             }|json_encode }}
         </script>
 
