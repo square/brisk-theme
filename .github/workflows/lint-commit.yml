@@ -11,4 +11,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: wagoid/commitlint-github-action@v5
-        helpURL: https://github.com/square/brisk-theme/blob/main/CONTRIBUTING.md
+        with:
+          helpURL: https://github.com/square/brisk-theme/blob/main/CONTRIBUTING.md
