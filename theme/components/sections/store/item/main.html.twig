@@ -76,7 +76,7 @@
                 {% set badges = product.badges|filter(value => value) %}
                 {% if badges|length > 0 %}
                 <div x-ref="productBadges">
-                    {{ async('badges', 'badges', { props: { badges, discounts: product.discounts, shouldAnnounce: true, } }) }}
+                    {{ include('partials/components/store/item/badges', { badges, discounts: product.discounts, shouldAnnounce: true } ) }}
                 </div>
                 {% endif %}
 

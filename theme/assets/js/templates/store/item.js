@@ -277,14 +277,18 @@ document.addEventListener('alpine:init', () => {
             });
 
             if (this.$refs.productBadges) {
-                Square.async.refreshAsyncTemplate('badges', {
-                    badges: {
-                        on_sale: regularPriceAmount > finalPriceAmount,
-                        low_stock: isLowStock,
-                        out_of_stock: isOutOfStock,
-                        is_new: isNew,
-                        has_discount: false,
+                Utils.refreshTemplate({
+                    template: 'partials/components/store/item/badges',
+                    props: {
+                        badges: {
+                            on_sale: regularPriceAmount > finalPriceAmount,
+                            low_stock: isLowStock,
+                            out_of_stock: isOutOfStock,
+                            is_new: isNew,
+                            has_discount: false,
+                        },
                     },
+                    el: this.$refs.productBadges,
                 });
             }
 

@@ -393,4 +393,24 @@ window.Utils = {
             }
         }
     },
+    /**
+     * Fetch template and update dom element
+     * @param {Object} payload
+     * @param {String} payload.template
+     * @param {Object} payload.props
+     * @param {Object} payload.el
+     * @return {Promise}
+     */
+    async refreshTemplate({ template, props, el }) {
+        if (!template || !props || !el) {
+            return Promise.resolve();
+        }
+        return SquareWebSDK.template.getTemplate({
+            template,
+            props,
+        }).then((text) => {
+            // eslint-disable-next-line no-param-reassign
+            el.innerHTML = text;
+        });
+    },
 };
