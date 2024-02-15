@@ -164,7 +164,7 @@ document.addEventListener('alpine:init', () => {
                         Alpine.store('cart').isMiniCartLoading = true;
 
                         await Utils.refreshTemplate({
-                            template: 'templates/components/mini-cart',
+                            template: 'partials/components/mini-cart',
                             props: { cart },
                             el: miniCart,
                         });

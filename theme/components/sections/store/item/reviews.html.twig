@@ -152,7 +152,7 @@
             </div>
         </div>
         <div x-ref="customerReviews">
-            {{ include('templates/components/customer-reviews', { reviews, perPage, currentPage, sortBy, productName: product.name }) }}
+            {{ include('partials/components/store/item/customer-reviews', { reviews, perPage, currentPage, sortBy, productName: product.name }) }}
         </div>
         {% embed 'partials/ui/pagination' with { currentPage: { value: currentPage }, totalPages } %}
             {% block data %}

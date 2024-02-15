@@ -34,7 +34,7 @@
     <div x-ref="locations" class="locations-dialog__options">
         <div class="locations-dialog__options--scroll custom-scrollbar">
             <div x-ref="locationSelector" class="custom-scrollbar-inner">
-                {{ include('templates/components/location-selector', { locations, formatted_distance: [] }) }}
+                {{ include('partials/components/store/item/location-selector', { locations, formatted_distance: [] }) }}
             </div>
         </div>
     </div>

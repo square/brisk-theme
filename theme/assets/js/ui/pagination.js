@@ -91,7 +91,7 @@ document.addEventListener('alpine:init', () => {
             const paginationDropdown = document.querySelector('#pagination-tooltip-menu');
             if (paginationDropdown) {
                 await Utils.refreshTemplate({
-                    template: 'templates/components/tooltip-menu',
+                    template: 'partials/components/tooltip-menu',
                     props: {
                         items,
                         selectedItem: this.currentPage,

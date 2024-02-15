@@ -19,7 +19,7 @@ document.addEventListener('alpine:init', () => {
 
                     if (fulfillmentDetail && this.fulfillment?.length) {
                         Utils.refreshTemplate({
-                            template: 'templates/components/fulfillment-detail',
+                            template: 'partials/components/store/item/fulfillment-detail',
                             props: {
                                 fulfillment: this.fulfillment,
                                 location,
@@ -105,7 +105,7 @@ document.addEventListener('alpine:init', () => {
 
                     if (this.$refs.locationSelector) {
                         await Utils.refreshTemplate({
-                            template: 'templates/components/location-selector',
+                            template: 'partials/components/store/item/location-selector',
                             props: {
                                 locations,
                                 formatted_distance: formattedDistance,

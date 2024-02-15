@@ -51,7 +51,7 @@
     {% block after %}
         {% if locations|length > 0 %}
             <div id="fulfillmentDetail">
-                {{ include('templates/components/fulfillment-detail', { location: defaultLocation|default([]), fulfillment: defaultFulfillment, formatted_distance: '' }) }}
+                {{ include('partials/components/store/item/fulfillment-detail', { location: defaultLocation|default([]), fulfillment: defaultFulfillment, formatted_distance: '' }) }}
             </div>
         {% endif %}
     {% endblock %}

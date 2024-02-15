@@ -202,7 +202,7 @@ document.addEventListener('alpine:init', () => {
             const chooseLocationLink = document.querySelector(`#${this.chooseLocationTemplateId}`);
             if (Object.values(location).length && chooseLocationLink) {
                 Utils.refreshTemplate({
-                    template: 'templates/components/choose-location-link',
+                    template: 'partials/components/store/filters/choose-location-link',
                     props: {
                         location,
                         action: 'openChooseLocation()',

@@ -38,7 +38,7 @@ document.addEventListener('alpine:init', () => {
         async refreshResults() {
             if (this.$refs.searchResults) {
                 Utils.refreshTemplate({
-                    template: 'templates/components/search-results',
+                    template: 'partials/components/search-results',
                     props: {
                         items: this.items,
                         query: this.model,

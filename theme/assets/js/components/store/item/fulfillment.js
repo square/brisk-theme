@@ -35,7 +35,7 @@ document.addEventListener('alpine:init', () => {
             if (fulfillmentDetail) {
                 const formattedLocation = Utils.formatLocationWithDistance(location);
                 await Utils.refreshTemplate({
-                    template: 'templates/components/fulfillment-detail',
+                    template: 'partials/components/store/item/fulfillment-detail',
                     props: {
                         fulfillment,
                         location,

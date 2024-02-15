@@ -70,7 +70,7 @@ document.addEventListener('alpine:init', () => {
 
             if (this.$refs.customerReviews) {
                 await Utils.refreshTemplate({
-                    template: 'templates/components/customer-reviews',
+                    template: 'partials/components/store/item/customer-reviews',
                     props: {
                         reviews: this.reviews,
                         currentPage: this.pagination.currentPage.value,

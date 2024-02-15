@@ -85,7 +85,7 @@ if (!window.onAutocompleteFormReady) {
                 const autocompleteDropdown = document.querySelector('#autocomplete-tooltip-menu');
                 if (autocompleteDropdown) {
                     await Utils.refreshTemplate({
-                        template: 'templates/components/tooltip-menu',
+                        template: 'partials/components/tooltip-menu',
                         props: {
                             items: this.items,
                             value: this.model,

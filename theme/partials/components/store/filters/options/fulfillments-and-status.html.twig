@@ -36,7 +36,7 @@
                 {% endblock %}
                 {% block sublabel %}
                     <span id="{{ chooseLocationTemplateId }}">
-                        {{ include('templates/components/choose-location-link', { button_size: 'medium', action: 'openChooseLocation()' } ) }}
+                        {{ include('partials/components/store/filters/choose-location-link', { button_size: 'medium', action: 'openChooseLocation()' } ) }}
                     </span>
                 {% endblock %}
             {% endembed %}
