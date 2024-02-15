@@ -18,8 +18,10 @@
         x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
         class="ui-tooltip--menu"
     >
-        {% if asyncTemplateName and asyncProps is not empty %}
-            {{ async('tooltip-menu', asyncTemplateName, { props: asyncProps }) }}
+        {% if menuTemplateId is not empty %}
+            <div id="{{ menuTemplateId }}">
+                {{ include('templates/components/tooltip-menu', { items, menuTriggerRef }) }}
+            </div>
         {% else %}
             {% embed 'partials/ui/menu' with { items, menuTriggerRef } %}
                 {% block data %}

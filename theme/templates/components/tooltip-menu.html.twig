@@ -1,5 +1,3 @@
-{% async:content %}
-
 {% if items|length %}
     {% embed 'partials/ui/menu' with { items, menuTriggerRef } %}
         {% block data %}
@@ -14,10 +12,6 @@
         {% endblock %}
     {% endembed %}
 {% endif %}
-{% endasync %}
-{% async:loading %}
-    {{ include('partials/ui/loader') }}
-{% endasync %}
 
 {% schema %}
 {
