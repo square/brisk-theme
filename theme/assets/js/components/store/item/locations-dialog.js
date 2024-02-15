@@ -14,17 +14,17 @@ document.addEventListener('alpine:init', () => {
             this.$store.dialog.onClose = (isConfirmed) => {
                 if (isConfirmed) {
                     const location = this.getLocations().find((loc) => loc.id === this.locationId) ?? this.getLocations()[0];
-                    const hasFulfillmentDetail = Boolean(Square.async.templates['fulfillment-detail']);
+                    const fulfillmentDetail = document.querySelector('#fulfillmentDetail');
 
-                    if (hasFulfillmentDetail && this.fulfillment?.length) {
-                        Square.async.refreshAsyncTemplate('fulfillment-detail', {
-                            fulfillment: this.fulfillment,
-                            location,
-                            formatted_distance: location.formatted_distance,
-                        }, {
-                            loaded: {
-                                location: 'location',
+                    if (fulfillmentDetail && this.fulfillment?.length) {
+                        Utils.refreshTemplate({
+                            template: 'templates/components/fulfillment-detail',
+                            props: {
+                                fulfillment: this.fulfillment,
+                                location,
+                                formatted_distance: location.formatted_distance,
                             },
+                            el: fulfillmentDetail,
                         });
                     }
 

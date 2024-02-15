@@ -65,12 +65,6 @@
             "delete_icon.alt": "Delete",
             "button": "Continue to cart"
         },
-        "async.fulfillment_detail": {
-            "location_label": "Location: {{name}}",
-            "buttons": {
-                "pickup": "Change store"
-            }
-        },
         "sections.home": {
             "banner.alt": "Home banner",
             "banner.marquee": "Stay dry this spring",
@@ -299,6 +293,12 @@
                 },
                 "product_reviews": {
                     "img_alt": "photo by {{name}}"
+                }
+            },
+            "fulfillment_detail": {
+                "location_label": "Location: {{name}}",
+                "buttons": {
+                    "pickup": "Change store"
                 }
             }
         },
