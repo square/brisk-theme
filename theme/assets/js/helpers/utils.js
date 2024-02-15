@@ -441,7 +441,7 @@ window.Utils = {
         }).then(async (text) => {
             await this.loadScriptsBeforeTemplateRender(el, text);
 
-            // Re-assign the dialog content without the <template> tag
+            // Re-assign the content without the <template> tag
             // eslint-disable-next-line no-param-reassign
             el.innerHTML = text;
         });
