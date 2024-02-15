@@ -160,7 +160,8 @@ document.addEventListener('alpine:init', () => {
                     },
                 })
                     .then(async ({ cart }) => {
-                        this.miniCartItemsTotal = cart.order.total_quantity;
+                        this.miniCartItemsTotal = cart.order?.total_quantity ?? 0;
+
                         Alpine.store('cart').isMiniCartLoading = true;
 
                         await Utils.refreshTemplate({
