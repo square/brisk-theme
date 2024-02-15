@@ -160,29 +160,8 @@ document.addEventListener('alpine:init', () => {
                     await Utils.waitUntil(() => node.querySelector('template')?.content);
                     // Finds all script tags
                     const templateContent = node.querySelector('template').content;
-                    let scripts = templateContent.querySelectorAll('script');
-                    const asyncTemplates = templateContent.querySelectorAll('[data-async-name]');
-                    const asyncPromises = [];
+                    const scripts = templateContent.querySelectorAll('script');
                     const scriptPromises = [];
-
-                    // Finds all script tags from async templates
-                    asyncTemplates.forEach((templateNode) => {
-                        asyncPromises.push(SquareWebSDK.template.getTemplate({
-                            template: templateNode.dataset.asyncTemplate,
-                            props: JSON.parse(atob(templateNode.dataset.asyncProps)),
-                            loading: null,
-                        }).then(async (asyncText) => {
-                            templateContent.querySelector('#async-template-wrapper').innerHTML = asyncText;
-                            const asyncTemplateScripts = templateContent.querySelectorAll('#async-template-wrapper script');
-                            if (asyncTemplateScripts.length) {
-                                scripts = [...scripts, ...asyncTemplateScripts];
-                            }
-                        }));
-                    });
-
-                    if (asyncPromises.length) {
-                        await Promise.all(asyncPromises);
-                    }
 
                     scripts.forEach((script) => {
                         if (script.src) {
