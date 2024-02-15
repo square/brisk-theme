@@ -48,9 +48,9 @@
                                 {% endif %}
 
                                 {# Regular and sale price #}
-                                {% set isOnSale = itemBasePriceFormatted != item.gross_price_money.formatted %}
+                                {% set isOnSale = itemBasePriceFormatted != item.base_price_money.formatted %}
                                 {% if isOnSale %}
-                                    {% set finalPrice = item.gross_price_money.formatted %}
+                                    {% set finalPrice = item.base_price_money.formatted %}
                                     {% if item.quantity > 1 %}
                                         {% set finalPrice = finalPrice ~ ' x ' ~ item.quantity %}
                                     {% endif %}
@@ -94,11 +94,11 @@
                             </div>
                             <div class="col mini-cart__item-price" col-3>
                                 {# Display just the final price #}
-                                {% set itemFinalPrice = item.gross_price_money.amount * item.quantity / 100 %}
+                                {% set itemFinalPrice = item.base_price_money.amount * item.quantity %}
                                 {{ include('partials/ui/price', { price: {
                                     regular_high: itemFinalPrice,
                                     regular_low: itemFinalPrice,
-                                    currency: cart.order.currency,
+                                    currency: cart.order.currency|default('USD'),
                                 }, size: 'small' }) }}
                             </div>
                         </div>
