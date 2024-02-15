@@ -394,6 +394,36 @@ window.Utils = {
         }
     },
     /**
+     * Load nested scripts before rendering a template
+     * @param {Object} el
+     * @param {Object} content
+     */
+    async loadScriptsBeforeTemplateRender(el, content) {
+        // Temporarily wrap the content with <template> so Alpine doesn't initialize x-data attributes
+        // eslint-disable-next-line no-param-reassign
+        el.innerHTML = `<template>${content}<div id="async-template-wrapper"></div></template>`;
+        // Wait until the dialog content is ready
+        await Utils.waitUntil(() => el.querySelector('template')?.content);
+
+        // Finds all nested script tags
+        const templateContent = el.querySelector('template').content;
+        const scripts = templateContent.querySelectorAll('script');
+        const scriptPromises = [];
+
+        scripts.forEach((script) => {
+            if (script.src) {
+                scriptPromises.push(this.loadScript(script.src));
+            }
+        });
+
+        if (scriptPromises.length) {
+            // Load scripts
+            await Promise.all(scriptPromises);
+            // Initiate Alpine after all scripts are loaded
+            document.dispatchEvent(new CustomEvent('async:alpine:init'));
+        }
+    },
+    /**
      * Fetch template and update dom element
      * @param {Object} payload
      * @param {String} payload.template
@@ -408,7 +438,10 @@ window.Utils = {
         return SquareWebSDK.template.getTemplate({
             template,
             props,
-        }).then((text) => {
+        }).then(async (text) => {
+            await this.loadScriptsBeforeTemplateRender(el, text);
+
+            // Re-assign the dialog content without the <template> tag
             // eslint-disable-next-line no-param-reassign
             el.innerHTML = text;
         });
