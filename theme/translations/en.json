@@ -59,7 +59,7 @@
             "cart_icon.alt": "Cart",
             "search_icon.alt": "Search"
         },
-        "async.mini_cart": {
+        "mini_cart": {
             "heading": "Your bag",
             "empty": "Your bag is empty",
             "delete_icon.alt": "Delete",
