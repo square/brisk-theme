@@ -5,6 +5,7 @@ document.addEventListener('alpine:init', () => {
         alpineStoreName: 'product',
         suggestions: [],
         hasFetchedLocations: false,
+        isLoadingLocationSelector: false,
         /**
          * Initial events
         */
@@ -100,14 +101,20 @@ document.addEventListener('alpine:init', () => {
                 await Alpine.store('global').getLocations(input).then(async (locations) => {
                     const formattedDistance = locations.map((loc) => loc.formatted_distance);
 
-                    await Square.async.refreshAsyncTemplate('location-selector', {
-                        locations,
-                        formatted_distance: formattedDistance,
-                    }, {
-                        loaded: {
-                            locations: 'location-list',
-                        },
-                    });
+                    this.isLoadingLocationSelector = true;
+
+                    if (this.$refs.locationSelector) {
+                        await Utils.refreshTemplate({
+                            template: 'templates/components/location-selector',
+                            props: {
+                                locations,
+                                formatted_distance: formattedDistance,
+                            },
+                            el: this.$refs.locationSelector,
+                        });
+                    }
+
+                    this.isLoadingLocationSelector = false;
 
                     const hasLocationSelected = this.hasLocations() && this.locationId?.length;
                     Alpine.store('dialog').updateDialogOptions('disablePrimaryButton', !hasLocationSelected);
