@@ -182,8 +182,8 @@
                         {% endif %}
 
                         {% if discount.discount_type == 'FIXED_PERCENTAGE' %}
-                            <div class="form-subscription__badge">
-                                {{ async('single-badge', 'subscription-badge-' ~ id, { props: { template: 'emphasis', label: discount.percentage ~ '% off', shouldAnnounce: true } }) }}
+                            <div id="subscriptionBadge-{{ id }}" class="form-subscription__badge">
+                                {{ include('partials/components/store/item/badges/emphasis', { label: discount.percentage ~ '% off', shouldAnnounce: true } ) }}
                             </div>
                         {% endif %}
 

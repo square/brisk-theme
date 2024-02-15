@@ -57,11 +57,16 @@ document.addEventListener('alpine:init', () => {
                     });
                 }
             }
-            if (card.phase?.pricing?.discounts?.[0] && selectedSubscriptionId) {
-                Square.async.refreshAsyncTemplate(`subscription-badge-${selectedSubscriptionId}`, {
-                    template: 'emphasis',
-                    label: `${card.phase.pricing.discounts[0].percentage}% off`,
-                    shouldAnnounce: true,
+
+            const subscriptionBadge = document.querySelector(`#subscriptionBadge-${selectedSubscriptionId}`);
+            if (card.phase?.pricing?.discounts?.[0] && subscriptionBadge) {
+                Utils.refreshTemplate({
+                    template: 'partials/components/store/item/badges/emphasis',
+                    props: {
+                        label: `${card.phase.pricing.discounts[0].percentage}% off`,
+                        shouldAnnounce: true,
+                    },
+                    el: subscriptionBadge,
                 });
             }
         },
