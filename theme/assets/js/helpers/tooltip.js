@@ -41,6 +41,10 @@ window.UITooltip = {
         }
 
         this.tooltipInstances[tooltipId] = Popper.createPopper(reference, tooltip, this.getTooltipOptions(config));
+        /* eslint-disable no-param-reassign */
+        tooltip.style.height = '0';
+        tooltip.style.overflow = 'hidden';
+        /* eslint-enable no-param-reassign */
     },
     /**
      * Toggles the tooltip
@@ -62,22 +66,28 @@ window.UITooltip = {
         if (shouldShow) {
             if (delay > 0) {
                 this.tooltipTimeout = setTimeout(() => {
-                    // eslint-disable-next-line no-param-reassign
+                    /* eslint-disable no-param-reassign */
                     tooltip.style.height = 'auto';
+                    tooltip.style.overflow = 'initial';
                     tooltip.setAttribute('data-show', '');
+                    /* eslint-enable no-param-reassign */
                     tooltipInstance.update();
                 }, delay);
             } else {
-                // eslint-disable-next-line no-param-reassign
+                /* eslint-disable no-param-reassign */
                 tooltip.style.height = 'auto';
+                tooltip.style.overflow = 'initial';
                 tooltip.setAttribute('data-show', '');
+                /* eslint-enable no-param-reassign */
                 tooltipInstance.update();
             }
         } else {
             tooltip.removeAttribute('data-show');
             this.tooltipTimeout = setTimeout(() => {
-                // eslint-disable-next-line no-param-reassign
+                /* eslint-disable no-param-reassign */
                 tooltip.style.height = '0';
+                tooltip.style.overflow = 'hidden';
+                /* eslint-enable no-param-reassign */
             }, 1000);
         }
     },
