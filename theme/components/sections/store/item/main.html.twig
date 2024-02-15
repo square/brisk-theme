@@ -86,7 +86,9 @@
                     {% if product.product_type_details.calorie_count %}
                         {% set caloriesText = 'componenets.sections.store.item.main.calories.label'|localize({ calories: item.product_type_details.calorie_count }) %}
                     {% endif %}
-                    {{ async('price', 'product-price', { props: { price: product.price, variations: product.variations, secondaryText: caloriesText } }) }}
+                    <div id="itemPrice">
+                        {{ include('partials/ui/price', { price: product.price, variations: product.variations, secondaryText: caloriesText }) }}
+                    </div>
                 </div>
 
                 {# Rating #}

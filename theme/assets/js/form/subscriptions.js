@@ -39,15 +39,21 @@ document.addEventListener('alpine:init', () => {
             const card = this.subscriptionCards[selectedSubscriptionId]?.options?.find((option) => option.value === this.subscriptionModel);
 
             if (card) {
-                const subscriptionPrice = {
+                const price = {
                     regular_high: card.phase.pricing.regular,
                     regular_low: card.phase.pricing.subscription,
                     currency: this.currency,
                 };
-                if (Square.async.templates[`subscription-price-${selectedSubscriptionId}`]) {
-                    Square.async.refreshAsyncTemplate(`subscription-price-${selectedSubscriptionId}`, {
-                        price: subscriptionPrice,
-                        size: 'small',
+                const subscriptionPrice = document.querySelector(`#subscriptionPrice-${selectedSubscriptionId}`);
+
+                if (subscriptionPrice) {
+                    Utils.refreshTemplate({
+                        template: 'partials/ui/price',
+                        props: {
+                            price,
+                            size: 'small',
+                        },
+                        el: subscriptionPrice,
                     });
                 }
             }

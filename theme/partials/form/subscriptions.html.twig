@@ -198,8 +198,8 @@
                             } %}
                                 {% block secondaryLabel %}
                                     {% if subscriptionPrice %}
-                                    <div class="form-subscription__price">
-                                        {{ async('price', 'subscription-price-' ~ id, { props: { price: subscriptionPrice, size: 'small' } }) }}
+                                    <div id="subscriptionPrice-{{ id }}" class="form-subscription__price">
+                                        {{ include('partials/ui/price', { price: subscriptionPrice, size: 'small' }) }}
                                     </div>
                                     {% endif %}
                                 {% endblock %}
@@ -208,7 +208,9 @@
                         {% else %}
                             <p class="form-subscription__single-option">{{ card.options[0].label }}</p>
                             {% if subscriptionPrice %}
-                            {{ async('price', 'subscription-price-' ~ id, { props: { price: subscriptionPrice, size: 'small' } }) }}
+                            <div id="subscriptionPrice-{{ id }}">
+                                {{ include('partials/ui/price', { price: subscriptionPrice, size: 'small' }) }}
+                            </div>
                             {% endif %}
                         {% endif %}
 
