@@ -35,7 +35,7 @@
                     ...advancedFilterOption('{{ filter.property }}'),
                 {% endblock %}
                 {% block sublabel %}
-                    {{ async('choose-location-link', chooseLocationTemplateId, { props: { button_size: 'medium', action: 'openChooseLocation()' } }) }}
+                    {{ include('templates/components/choose-location-link', { button_size: 'medium', action: 'openChooseLocation()' } ) }}
                 {% endblock %}
             {% endembed %}
         {% else %}
