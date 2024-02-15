@@ -16,7 +16,7 @@
                 >
                 {% set imageSizes = [70] %}
                     {% for image in review.images %}
-                        {% set altText = productName ~ ' - ' ~ ('templates.customer_reviews.photo_by'|localize({ name: review.reviewer_name })) ~ ' ' ~ loop.index %}
+                        {% set altText = productName ~ ' - ' ~ ('templates.components.customer_reviews.photo_by'|localize({ name: review.reviewer_name })) ~ ' ' ~ loop.index %}
                         <figure
                             role="button"
                             tabindex="0"

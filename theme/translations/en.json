@@ -268,36 +268,38 @@
         }
     },
     "templates": {
-        "choose_location_link": "Choose a location",
-        "customer_reviews": {
-            "photo_by": "photo by {{name}}"
-        },
-        "components.dialogs": {
-            "advanced_filters": {
-                "heading": "Filters",
-                "selected_count": "{{total}} selected",
-                "categories.heading": "Categories"
+        "components": {
+            "choose_location_link": "Choose a location",
+            "customer_reviews": {
+                "photo_by": "photo by {{name}}"
             },
-            "discount": {
-                "eligible_items.title": "Eligible items"
-            },
-            "gallery": {
-                "back_button": "Back to item"
-            },
-            "locations": {
-                "has_locations.label": "Change store",
-                "empty_locations.label": "Check zip code",
-                "input.label": "City, street, or zip code",
-                "input.placeholder": "Zip code",
-                "results.label": "Nearest stores"
-            },
-            "preorder": {
-                "heading": "Preorder available",
-                "order_at.title": "Last day to order",
-                "available_dates.title": "{{fulfillment}} dates"
-            },
-            "product_reviews": {
-                "img_alt": "photo by {{name}}"
+            "dialogs": {
+                "advanced_filters": {
+                    "heading": "Filters",
+                    "selected_count": "{{total}} selected",
+                    "categories.heading": "Categories"
+                },
+                "discount": {
+                    "eligible_items.title": "Eligible items"
+                },
+                "gallery": {
+                    "back_button": "Back to item"
+                },
+                "locations": {
+                    "has_locations.label": "Change store",
+                    "empty_locations.label": "Check zip code",
+                    "input.label": "City, street, or zip code",
+                    "input.placeholder": "Zip code",
+                    "results.label": "Nearest stores"
+                },
+                "preorder": {
+                    "heading": "Preorder available",
+                    "order_at.title": "Last day to order",
+                    "available_dates.title": "{{fulfillment}} dates"
+                },
+                "product_reviews": {
+                    "img_alt": "photo by {{name}}"
+                }
             }
         },
         "store": {
