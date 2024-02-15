@@ -371,6 +371,11 @@ body[dialog-variant="halfsheet"] main {
     filter: blur(3px);
 }
 
+.main-content {
+    position: relative;
+    z-index: var(--theme-z-index-main);
+}
+
 /* page loader */
 .page-loader {
     position: absolute;
