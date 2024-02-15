@@ -134,3 +134,7 @@
 .search-dialog__close-button {
     margin-left: auto;
 }
+
+.search-dialog__results {
+    position: relative;
+}

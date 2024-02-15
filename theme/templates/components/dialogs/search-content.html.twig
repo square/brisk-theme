@@ -32,6 +32,11 @@
         </div>
     </div>
 
-    {# search results here, it's async and will be refreshed #}
-    {{ async('search-results', 'search-results', { props: { items: [] } }) }}
+    {# search results here, it will be refreshed #}
+    <div
+        x-ref="searchResults"
+        class="search-dialog__results"
+    >
+        {{ include('templates/components/search-results') }}
+    </div>
 </div>
