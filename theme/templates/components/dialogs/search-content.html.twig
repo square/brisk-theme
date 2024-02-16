@@ -33,5 +33,5 @@
     </div>
 
     {# search results here, it's async and will be refreshed #}
-    {{ async('search-results', 'search-results', { props: { items: [] } }) }}
+    {{ include('partials/components/search-results', { items: [] }) }}
 </div>

@@ -1,6 +1,3 @@
-{% async:content %}
-
-
 {# If no query is passed, we'll default to popular items #}
 {% if query is not defined %}
     {% set items = popular_items({ pagination: { page_size: 4 } }) %}
@@ -65,11 +62,12 @@
     </div>
 {% endif %}
 
-{% endasync %}
-
-{% async:loading %}
-{{ include('partials/ui/loader') }}
-{% endasync %}
+<div
+    id="searchResults"
+    class="ui-loader--overlay"
+>
+    {{ include('partials/ui/loader') }}
+</div>
 
 {% schema %}
 {

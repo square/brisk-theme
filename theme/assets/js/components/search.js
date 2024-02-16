@@ -2,6 +2,7 @@ document.addEventListener('alpine:init', () => {
     const createSearchData = () => ({
         model: '',
         items: [],
+        isSearching: false,
         suggestionApiConfig: {
             method: 'POST',
             headers: {
@@ -59,8 +60,22 @@ document.addEventListener('alpine:init', () => {
         },
         async refreshResults() {
             if (Square.async.templates?.['search-results']) {
-                const props = { items: this.items, query: this.model };
-                Square.async.refreshAsyncTemplate('search-results', props, { replaceContent: true });
+                this.isSearching = true;
+
+                const searchResults = document.querySelector('#searchResults');
+
+                if (searchResults) {
+                    await Utils.refreshTemplate({
+                        template: 'partials/components/search-results',
+                        props: {
+                            items: this.items,
+                            query: this.model,
+                        },
+                        el: searchResults,
+                    });
+                }
+
+                this.isSearching = false;
             }
         },
     });
