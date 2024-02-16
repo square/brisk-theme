@@ -1,0 +1,5 @@
+.order-item-list {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x5);
+}

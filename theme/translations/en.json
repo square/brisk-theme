@@ -13,7 +13,9 @@
             "next": "Next",
             "prev": "Previous",
             "apply": "Apply",
-            "reset": "Reset"
+            "reset": "Reset",
+            "change": "Change",
+            "select": "Select"
         },
         "errors": {
             "general": "Something went wrong! Please try again."
@@ -27,6 +29,26 @@
             "x_large": "XL",
             "xx_large": "XXL",
             "xxx_large": "XXXL"
+        },
+        "week": {
+            "short": {
+                "sunday": "Sun",
+                "monday": "Mon",
+                "tuesday": "Tue",
+                "wednesday": "Wed",
+                "thursday": "Thu",
+                "friday": "Fri",
+                "saturday": "Sat"
+            },
+            "long": {
+                "sunday": "Sunday",
+                "monday": "Monday",
+                "tuesday": "Tuesday",
+                "wednesday": "Wednesday",
+                "thursday": "Thursday",
+                "friday": "Friday",
+                "saturday": "Saturday"
+            }
         }
     },
     "components": {
@@ -111,6 +133,9 @@
             "quick_add.status.success": "Added to cart!",
             "image.alt": "{{name}} image"
         },
+        "components.fulfillment-and-scheduling": {
+            "empty_label": "Choose location"
+        },
         "components.store.filters": {
             "buttons": {
                 "filters": "Filters",
@@ -172,7 +197,8 @@
             "fulfillment": {
                 "label": "How to get it",
                 "buttons.shipping": "Ship",
-                "buttons.pickup": "Pickup"
+                "buttons.pickup": "Pickup",
+                "buttons.delivery": "Delivery"
             },
             "modifiers": {
                 "label": "Modifiers",
@@ -289,7 +315,42 @@
                 "empty_locations.label": "Check zip code",
                 "input.label": "City, street, or zip code",
                 "input.placeholder": "Zip code",
-                "results.label": "Nearest stores"
+                "results.label": "Nearest stores",
+                "pickup": {
+                    "has_locations": {
+                        "label": "Pickup location"
+                    },
+                    "empty_locations": {
+                        "label": "Check zip code"
+                    },
+                    "input": {
+                        "label": "City, street, or zip code",
+                        "placeholder": "Zip code"
+                    },
+                    "results": {
+                        "label": "Nearest stores"
+                    }
+                },
+                "delivery": {
+                    "has_locations": {
+                        "label": "Delivery address"
+                    },
+                    "empty_locations": {
+                        "label": "Check address"
+                    },
+                    "input": {
+                        "label": "We need your address to deliver your order",
+                        "placeholder": "Enter your address"
+                    },
+                    "address_second_line": {
+                        "input": {
+                            "placeholder": "Apt or unit number"
+                        }
+                    },
+                    "results": {
+                        "label": "Nearest stores"
+                    }
+                }
             },
             "preorder": {
                 "heading": "Preorder available",

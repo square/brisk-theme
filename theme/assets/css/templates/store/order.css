@@ -1,0 +1,9 @@
+.order-page {
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-x5);
+}
+
+.order-page__item-loader {
+    max-height: 100vh;
+}

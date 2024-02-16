@@ -37,6 +37,11 @@
     width: 100%;
 }
 
+.form-choice__overhead-label-text {
+    padding-top: var(--space-half);
+    font-size: calc(var(--theme-font-size-minus-2) - 2px);
+}
+
 .form-choice__input {
     position: absolute;
     left: 0;

@@ -36,6 +36,11 @@
                         for="choice-{{ optionId }}"
                         class="form-choice__label"
                     >
+                        {% if option.overheadLabel %}
+                            <div class="form-choice__overhead-label-text">
+                                {{ option.overheadLabel }}
+                            </div>
+                        {% endif %}
                         <span class="form-choice__label-text">
                             {% if option.icon %}
                                 {{ include('partials/ui/icon', { name: option.icon, ariaHidden: true }) }}

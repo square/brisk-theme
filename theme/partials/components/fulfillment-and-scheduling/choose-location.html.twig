@@ -1,0 +1,27 @@
+{{ register_asset('css/components/fulfillment-and-scheduling/choose-location.css') }}
+
+<div
+    class="choose-location__container"
+>
+    {% if location %}
+        {% set formattedLocation = location.address|address_format_multiline %}
+        <p>{{ formattedLocation|first }}</p>
+    {% else %}
+        <p>{{ 'partials.components.fulfillment-and-scheduling.empty_label'|localize }}</p>
+    {% endif %}
+
+    {% set buttonLabel = location ? 'shared.buttons.change'|localize : 'shared.buttons.select'|localize %}
+    {{ include('partials/ui/button', {
+        label: buttonLabel,
+        size: 'medium',
+        variant: 'neutral',
+        action: '$store.siteWideFulfillment.openLocationsDialog()',
+    }) }}
+</div>
+
+<div
+    x-show="$store.siteWideFulfillment.isLoadingLocationSelector"
+    class="ui-loader--overlay"
+>
+    {{ include('partials/ui/loader') }}
+</div>

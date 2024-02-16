@@ -17,7 +17,7 @@
 
 {# Sets default location by fulfillment #}
 {% if locations|length %}
-    {% set defaultLocation = locations|filter(location => location[defaultFulfillment|lower].enabled)|first %}
+    {% set defaultLocation = locations|filter(location => location[defaultFulfillment].enabled)|first %}
     {% if defaultFulfillment == 'SHIPMENT' %}
         {% set defaultLocation = locations|filter(location => location.is_shipping_location)|first %}
     {% endif %}
@@ -30,7 +30,7 @@
     class="container page item-page"
     x-data="productPage('{{ defaultFulfillment }}', '{{ defaultLocationId }}')"
 >
-    {{ include('components/sections/store/item/main', { product: item, locations }) }}
+    {{ include('components/sections/store/item/main', { product: item, locations, defaultFulfillment, defaultLocation }) }}
 
     {# retrieve similar items, filter out the currently viewed item #}
     {% set similarItems = similar_items(item) | filter(sim_item => sim_item.id != item.id ) %}

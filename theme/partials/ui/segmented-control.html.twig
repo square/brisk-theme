@@ -1,0 +1,26 @@
+{% if request.async == true %}
+    <link href="{{ 'css/ui/segmented-control.css' | asset_url }}" rel="stylesheet" />
+{% else %}
+    {{ register_asset('css/ui/segmented-control.css') }}
+{% endif %}
+
+<div
+    class="ui-segmented-control"
+    :class="{ 'ui-segmented-control--fullwidth': Boolean({{ fullWidth }}) }"
+>
+    {% for option in options %}
+        {% embed 'partials/ui/button' with {
+            label: option.label,
+            size: 'medium',
+            fullWidth: true,
+            disableHoverStyles: true,
+            buttonClasses: 'ui-segmented-control__button',
+            action: "$dispatch('segmented-control:click', '" ~ option.value ~ "')",
+        } %}
+            {% block attributes %}
+                :variant="model === '{{ option.value }}' ? 'primary' : 'neutral'"
+                style="fill"
+            {% endblock %}
+        {% endembed %}
+    {% endfor %}
+</div>

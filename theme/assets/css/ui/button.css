@@ -135,12 +135,9 @@
     box-shadow: var(--theme-button-primary-shadow);
 }
 
-.ui-button--primary-fill:hover,
-.ui-button[variant="primary"][style="fill"]:hover {
-    color: var(--theme-button-primary-filled-text-hover);
-    background-color: var(--theme-button-primary-filled-bg-hover);
-    border-color: var(--theme-button-primary-outline-hover);
-    box-shadow: var(--theme-button-primary-shadow-hover);
+.ui-button--primary-fill-destructive {
+    color: var(--theme-button-primary-destructive-text);
+    background-color: var(--theme-button-primary-destructive-bg);
 }
 
 .ui-button--primary-fill:focus,
@@ -151,14 +148,10 @@
     box-shadow: var(--theme-button-primary-shadow-hover);
 }
 
-.ui-button--primary-fill-destructive {
-    color: var(--theme-button-primary-destructive-text);
-    background-color: var(--theme-button-primary-destructive-bg);
-}
-
-.ui-button--primary-fill-destructive:hover {
-    background-color: var(--theme-button-primary-destructive-bg-hover);
-    box-shadow: var(--theme-button-primary-shadow-hover);
+.ui-button--primary-fill:disabled,
+.ui-button[variant="primary"][style="fill"]:disabled,
+.ui-button--primary-fill-destructive:disabled {
+    opacity: 0.5;
 }
 
 .ui-button--primary-fill-destructive:focus {
@@ -166,10 +159,17 @@
     box-shadow: var(--theme-button-primary-shadow-hover);
 }
 
-.ui-button--primary-fill:disabled,
-.ui-button[variant="primary"][style="fill"]:disabled,
-.ui-button--primary-fill-destructive:disabled {
-    opacity: 0.5;
+.ui-button--primary-fill:not(.ui-button--disable-hover):hover,
+.ui-button[variant="primary"][style="fill"]:not(.ui-button--disable-hover):hover {
+    color: var(--theme-button-primary-filled-text-hover);
+    background-color: var(--theme-button-primary-filled-bg-hover);
+    border-color: var(--theme-button-primary-outline-hover);
+    box-shadow: var(--theme-button-primary-shadow-hover);
+}
+
+.ui-button--primary-fill-destructive:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-primary-destructive-bg-hover);
+    box-shadow: var(--theme-button-primary-shadow-hover);
 }
 
 /* Primary outline */
@@ -186,19 +186,6 @@
 .ui-button--primary-outline-destructive {
     color: var(--theme-button-primary-destructive-bg);
     border-color: var(--theme-button-primary-destructive-bg);
-}
-
-.ui-button--primary-outline:hover,
-.ui-button[variant="primary"][style="outline"]:hover,
-.ui-button--primary-outline-destructive:hover {
-    background-color: var(--theme-button-primary-outline-bg-hover);
-    box-shadow: var(--theme-button-primary-shadow-hover);
-}
-
-.ui-button--primary-outline:hover,
-.ui-button[variant="primary"][style="outline"]:hover {
-    color: var(--theme-button-primary-outline-hover);
-    border-color: var(--theme-button-primary-outline-hover);
 }
 
 .ui-button--primary-outline:focus,
@@ -220,6 +207,19 @@
     opacity: 0.5;
 }
 
+.ui-button--primary-outline:not(.ui-button--disable-hover):hover,
+.ui-button[variant="primary"][style="outline"]:not(.ui-button--disable-hover):hover,
+.ui-button--primary-outline-destructive:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-primary-outline-bg-hover);
+    box-shadow: var(--theme-button-primary-shadow-hover);
+}
+
+.ui-button--primary-outline:not(.ui-button--disable-hover):hover,
+.ui-button[variant="primary"][style="outline"]:not(.ui-button--disable-hover):hover {
+    color: var(--theme-button-primary-outline-hover);
+    border-color: var(--theme-button-primary-outline-hover);
+}
+
 /* Secondary fill */
 .ui-button--secondary-fill,
 .ui-button[variant="secondary"][style="fill"],
@@ -231,12 +231,10 @@
     box-shadow: var(--theme-button-secondary-shadow);
 }
 
-.ui-button--secondary-fill:hover,
-.ui-button[variant="secondary"][style="fill"]:hover {
-    color: var(--theme-button-secondary-filled-text-hover);
-    background-color: var(--theme-button-secondary-filled-bg-hover);
-    border-color: var(--theme-button-secondary-outline-hover);
-    box-shadow: var(--theme-button-secondary-shadow-hover);
+.ui-button--secondary-fill-destructive {
+    color: var(--theme-button-secondary-destructive-text);
+    background-color: var(--theme-button-secondary-destructive-bg);
+    border-color: var(--theme-button-secondary-destructive-outine);
 }
 
 .ui-button--secondary-fill:focus,
@@ -247,16 +245,6 @@
     box-shadow: var(--theme-button-secondary-shadow-hover);
 }
 
-.ui-button--secondary-fill-destructive {
-    color: var(--theme-button-secondary-destructive-text);
-    background-color: var(--theme-button-secondary-destructive-bg);
-    border-color: var(--theme-button-secondary-destructive-outine);
-}
-
-.ui-button--secondary-fill-destructive:hover {
-    background-color: var(--theme-button-secondary-destructive-bg-hover);
-}
-
 .ui-button--secondary-fill-destructive:focus {
     background-color: var(--theme-button-secondary-destructive-bg-active);
 }
@@ -265,6 +253,18 @@
 .ui-button[variant="secondary"][style="fill"]:disabled,
 .ui-button--secondary-fill-destructive:disabled {
     opacity: 0.5;
+}
+
+.ui-button--secondary-fill:not(.ui-button--disable-hover):hover,
+.ui-button[variant="secondary"][style="fill"]:not(.ui-button--disable-hover):hover {
+    color: var(--theme-button-secondary-filled-text-hover);
+    background-color: var(--theme-button-secondary-filled-bg-hover);
+    border-color: var(--theme-button-secondary-outline-hover);
+    box-shadow: var(--theme-button-secondary-shadow-hover);
+}
+
+.ui-button--secondary-fill-destructive:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-secondary-destructive-bg-hover);
 }
 
 /* Secondary outline */
@@ -284,17 +284,14 @@
     border-color: var(--theme-button-secondary-destructive-outine);
 }
 
-.ui-button--secondary-outline:hover,
-.ui-button[variant="secondary"][style="outline"]:hover,
-.ui-button--secondary-outline-destructive:hover {
-    background-color: var(--theme-button-secondary-outline-bg-hover);
-    box-shadow: var(--theme-button-secondary-shadow-hover);
+.ui-button--secondary-outline-destructive:focus {
+    background-color: var(--theme-button-secondary-destructive-bg-active);
 }
 
-.ui-button--secondary-outline:hover,
-.ui-button[variant="secondary"][style="outline"]:hover {
-    color: var(--theme-button-secondary-outline-text-hover);
-    border-color: var(--theme-button-secondary-outline-hover);
+.ui-button--secondary-outline:disabled,
+.ui-button[variant="secondary"][style="outline"]:disabled,
+.ui-button--secondary-outline-destructive:disabled {
+    opacity: 0.5;
 }
 
 .ui-button--secondary-outline:focus,
@@ -310,18 +307,21 @@
     border-color: var(--theme-button-secondary-outline-active);
 }
 
-.ui-button--secondary-outline-destructive:hover {
+.ui-button--secondary-outline:not(.ui-button--disable-hover):hover,
+.ui-button[variant="secondary"][style="outline"]:not(.ui-button--disable-hover):hover,
+.ui-button--secondary-outline-destructive:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-secondary-outline-bg-hover);
+    box-shadow: var(--theme-button-secondary-shadow-hover);
+}
+
+.ui-button--secondary-outline:not(.ui-button--disable-hover):hover,
+.ui-button[variant="secondary"][style="outline"]:not(.ui-button--disable-hover):hover {
+    color: var(--theme-button-secondary-outline-text-hover);
+    border-color: var(--theme-button-secondary-outline-hover);
+}
+
+.ui-button--secondary-outline-destructive:not(.ui-button--disable-hover):hover {
     background-color: var(--theme-button-secondary-destructive-bg-hover);
-}
-
-.ui-button--secondary-outline-destructive:focus {
-    background-color: var(--theme-button-secondary-destructive-bg-active);
-}
-
-.ui-button--secondary-outline:disabled,
-.ui-button[variant="secondary"][style="outline"]:disabled,
-.ui-button--secondary-outline-destructive:disabled {
-    opacity: 0.5;
 }
 
 /* Neutral fill */
@@ -332,23 +332,14 @@
     border-radius: var(--settings-button-primary-radius, var(--theme-border-radius-button));
 }
 
-.ui-button--neutral-fill:hover,
-.ui-button[variant="neutral"][style="fill"]:hover {
-    background-color: var(--theme-button-neutral-fill-bg-hover);
-}
-
-.ui-button--neutral-fill:focus,
-.ui-button[variant="neutral"][style="fill"]:focus {
-    background-color: var(--theme-button-neutral-fill-bg-active);
-}
-
 .ui-button--neutral-fill-destructive {
     color: var(--theme-button-primary-destructive-text);
     background-color: var(--theme-button-primary-destructive-bg);
 }
 
-.ui-button--neutral-fill-destructive:hover {
-    background-color: var(--theme-button-primary-destructive-bg-hover);
+.ui-button--neutral-fill:focus,
+.ui-button[variant="neutral"][style="fill"]:focus {
+    background-color: var(--theme-button-neutral-fill-bg-active);
 }
 
 .ui-button--neutral-fill-destructive:focus {
@@ -361,6 +352,15 @@
     opacity: 0.5;
 }
 
+.ui-button--neutral-fill:not(.ui-button--disable-hover):hover,
+.ui-button[variant="neutral"][style="fill"]:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-neutral-fill-bg-hover);
+}
+
+.ui-button--neutral-fill-destructive:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-primary-destructive-bg-hover);
+}
+
 /* Neutral outline */
 .ui-button--neutral-outline,
 .ui-button[variant="neutral"][style="outline"] {
@@ -370,23 +370,14 @@
     border-radius: var(--settings-button-secondary-radius, var(--theme-border-radius-button));
 }
 
-.ui-button--neutral-outline:hover,
-.ui-button[variant="neutral"][style="outline"]:hover {
-    background-color: var(--theme-button-neutral-outline-bg-hover);
-}
-
-.ui-button--neutral-outline:focus,
-.ui-button[variant="neutral"][style="outline"]:focus {
-    background-color: var(--theme-button-neutral-outline-bg-active);
-}
-
 .ui-button--neutral-outline-destructive {
     color: var(--theme-button-secondary-destructive-text);
     background-color: var(--theme-button-secondary-destructive-bg);
 }
 
-.ui-button--neutral-outline-destructive:hover {
-    background-color: var(--theme-button-secondary-destructive-bg-hover);
+.ui-button--neutral-outline:focus,
+.ui-button[variant="neutral"][style="outline"]:focus {
+    background-color: var(--theme-button-neutral-outline-bg-active);
 }
 
 .ui-button--neutral-outline-destructive:focus {
@@ -399,18 +390,19 @@
     opacity: 0.5;
 }
 
+.ui-button--neutral-outline:not(.ui-button--disable-hover):hover,
+.ui-button[variant="neutral"][style="outline"]:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-neutral-outline-bg-hover);
+}
+
+.ui-button--neutral-outline-destructive:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-secondary-destructive-bg-hover);
+}
+
 /* Tertiary */
 .ui-button--tertiary {
     color: var(--theme-button-tertiary-text);
     background-color: var(--theme-button-tertiary-bg);
-}
-
-.ui-button--tertiary:hover {
-    background-color: var(--theme-button-tertiary-bg-hover);
-}
-
-.ui-button--tertiary:focus {
-    background-color: var(--theme-button-tertiary-bg-active);
 }
 
 .ui-button--tertiary-destructive {
@@ -418,8 +410,8 @@
     background-color: var(--theme-button-tertiary-destructive-bg);
 }
 
-.ui-button--tertiary-destructive:hover {
-    background-color: var(--theme-button-tertiary-destructive-bg-hover);
+.ui-button--tertiary:focus {
+    background-color: var(--theme-button-tertiary-bg-active);
 }
 
 .ui-button--tertiary-destructive:focus {
@@ -429,6 +421,14 @@
 .ui-button--tertiary:disabled,
 .ui-button--tertiary-destructive:disabled {
     opacity: 0.5;
+}
+
+.ui-button--tertiary:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-tertiary-bg-hover);
+}
+
+.ui-button--tertiary-destructive:not(.ui-button--disable-hover):hover {
+    background-color: var(--theme-button-tertiary-destructive-bg-hover);
 }
 
 /* Text */

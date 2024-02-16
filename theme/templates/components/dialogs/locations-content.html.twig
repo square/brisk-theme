@@ -7,34 +7,50 @@
     }|json_encode }}
 </script>
 
+<link href="{{ 'css/components/store/item/locations-dialog.css' | asset_url }}" rel="stylesheet" />
+<script src="{{ 'js/components/store/item/locations-dialog.js' | asset_url }}"></script>
+
 <div
     x-data="locationsDialog('{{ locationsDialogDataId }}')"
     class="locations-dialog__content"
     :class="{ 'locations-dialog__content--empty': !hasSelectedItem() && !hasLocations() }"
 >
-    <h4 class="heading-4" x-text="hasSelectedItem() || hasLocations() ? '{{ 'templates.components.dialogs.locations.has_locations.label'|localize }}' : '{{ 'templates.components.dialogs.locations.empty_locations.label'|localize }}'"></h4>
+    {% set fulfillmentKey = fulfillment|lower %}
+    <h4
+        class="heading-4"
+        x-text="hasSelectedItem() || hasLocations() ? '{{ ('templates.components.dialogs.locations.' ~ fulfillmentKey ~ '.has_locations.label')|localize }}' : '{{ ('templates.components.dialogs.locations.' ~ fulfillmentKey ~ '.has_locations.label')|localize }}'"
+    ></h4>
 
     <div class="ui-dialog__section locations-dialog__input">
         {% embed 'partials/form/autocomplete' with {
-            label: 'templates.components.dialogs.locations.input.label'|localize,
-            placeholder: 'templates.components.dialogs.locations.input.placeholder'|localize,
+            label: ('templates.components.dialogs.locations.' ~ fulfillmentKey ~ '.input.label')|localize,
+            placeholder: ('templates.components.dialogs.locations.' ~ fulfillmentKey ~ '.input.placeholder')|localize,
         } %}
             {% block data %}
                 ...itemSuggestions(),
             {% endblock %}
         {% endembed %}
+        {% if fulfillment == 'DELIVERY' %}
+            <input
+                x-model="customerAddressLine2Model"
+                type="text"
+                placeholder="{{ 'templates.components.dialogs.locations.delivery.address_second_line.input.placeholder'|localize }}"
+                class="form-text__input locations-dialog__input--second-line"
+            >
+        {% endif %}
         <p
             x-show="hasSelectedItem()"
             class="locations-dialog__options-label"
         >
-            {{ 'templates.components.dialogs.locations.results.label'|localize }}: <span aria-live="polite" role="status" x-text="`${getLocationsCount()} found`" class="locations-dialog__options-sublabel"></span>
+            {{ ('templates.components.dialogs.locations.' ~ fulfillmentKey ~ '.results.label')|localize }}:
+            <span aria-live="polite" role="status" x-text="`${getLocationsCount()} found`" class="locations-dialog__options-sublabel"></span>
         </p>
     </div>
 
     <div x-ref="locations" class="locations-dialog__options">
         <div class="locations-dialog__options--scroll custom-scrollbar">
-            <div class="custom-scrollbar-inner">
-                {{ async('location-selector', 'location-selector', { props: { locations, formatted_distance: [] } }) }}
+            <div x-ref="locationSelector" class="custom-scrollbar-inner">
+                {{ include('partials/components/location-selector', { locations, formatted_distance: [] }) }}
             </div>
         </div>
     </div>

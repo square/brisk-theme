@@ -1,7 +1,16 @@
 window.Constants = {
     FULFILLMENT_SHIPPING: 'SHIPMENT',
     FULFILLMENT_PICKUP: 'PICKUP',
+    FULFILLMENT_DELIVERY: 'DELIVERY',
     FULFILLMENT_MANUAL: 'MANUAL',
+    AVAILABILITY_READY: 'ready',
+    AVAILABILITY_DELIVER: 'deliver',
+    AVAILABILITY_ORDERING: 'ordering',
+    AVAILABILITY_NOW: 'now',
+    SCHEDULE_TYPE_ASAP: 'ASAP',
+    SCHEDULE_TYPE_SCHEDULED: 'SCHEDULED',
+    AUTOCOMPLETE_TYPE_GEOCODE: 'geocode',
+    AUTOCOMPLETE_TYPE_ADDRESS: 'address',
     DEFAULT_CURRENCY: 'USD',
     DEFAULT_CURRENCY_SYMBOL: '$',
     DEFAULT_LOCALE: 'en_US',
@@ -201,6 +210,22 @@ window.Utils = {
             : locations.find((location) => location[fulfillment.toLowerCase()]?.enabled);
     },
     /**
+     * Checks if the place object type is non-specific location
+     * @param place
+     * @returns {boolean}
+     */
+    isPlaceTypeRegion(place = {}) {
+        const regionTypes = [
+            'locality',
+            'sublocality',
+            'postal_code',
+            'country',
+            'administrative_area_level_1',
+            'administrative_area_level_2',
+        ];
+        return place.api_specific_data.types.some((type) => regionTypes.includes(type));
+    },
+    /**
      * Loads script
      * @param {String} url
      * @return {Promise}
@@ -392,5 +417,71 @@ window.Utils = {
                 callback();
             }
         }
+    },
+    /**
+     * Fetch template and update dom element
+     * @param {Object} payload
+     * @param {String} payload.template
+     * @param {Object} payload.props
+     * @param {Object} payload.el
+     * @return {Promise}
+     */
+    async refreshTemplate({ template, props, el }) {
+        if (!template || !props || !el) {
+            return Promise.resolve();
+        }
+        return SquareWebSDK.template.getTemplate({
+            template,
+            props,
+        }).then((text) => {
+            // eslint-disable-next-line no-param-reassign
+            el.innerHTML = text;
+        });
+    },
+    /**
+     * Pre-render templates and append to the dom
+     * @param {Object} payload
+     * @param {String} payload.template
+     * @param {Object} payload.props
+     * @param {String} payload.id
+     * @return {Promise}
+     */
+    async prerenderTemplate({ template, props, id }) {
+        if (!template || !props || !id) {
+            return Promise.resolve();
+        }
+        return SquareWebSDK.template.getTemplate({
+            template,
+            props,
+        }).then(async (text) => {
+            const newTemplate = document.createElement('template');
+            const templateId = `template_${id}`;
+            const oldTemplate = document.querySelector(`#${templateId}`);
+
+            if (oldTemplate) {
+                oldTemplate.remove();
+            }
+
+            newTemplate.setAttribute('id', templateId);
+            newTemplate.innerHTML = text;
+            document.body.appendChild(newTemplate);
+
+            const templateContent = document.querySelector(`#${templateId}`)?.content;
+            const scripts = templateContent.querySelectorAll('script');
+            const scriptPromises = [];
+
+            scripts.forEach((script) => {
+                if (script.src) {
+                    scriptPromises.push(Utils.loadScript(script.src));
+                }
+            });
+
+            if (scriptPromises.length) {
+                // Load scripts
+                await Promise.all(scriptPromises);
+                // Initiate Alpine after all scripts are loaded
+                document.dispatchEvent(new CustomEvent('async:alpine:init'));
+            }
+        });
     },
 };

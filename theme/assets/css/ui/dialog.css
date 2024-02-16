@@ -121,7 +121,8 @@
     padding: 0;
 }
 
-.ui-dialog__container-inner:not(.ui-dialog__container--header-visible, .ui-dialog__container--footer-visible) {
+.ui-dialog__container-inner:not(.ui-dialog__container--header-visible,
+.ui-dialog__container--footer-visible) {
     grid-template-rows: 100%;
 }
 

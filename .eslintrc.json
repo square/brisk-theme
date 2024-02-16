@@ -21,6 +21,7 @@
         "Square": "readonly",
         "Utils": "readonly",
         "Constants": "readonly",
+        "SquareTranslations": "readonly",
         "SquareWebSDK": "readonly"
     }
 }

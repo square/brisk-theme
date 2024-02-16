@@ -173,11 +173,15 @@ document.addEventListener('alpine:init', () => {
         currencySymbolPosition: 'before',
         history: Alpine.$persist({}),
         locations: [],
+        defaultLocation: {},
         isLoadingLocations: false,
         locationId: Alpine.$persist(''),
         fulfillment: Alpine.$persist(''),
         customerLocale: Alpine.$persist({}),
         suggestedPlaceItem: Alpine.$persist({}),
+        customerAddress: Alpine.$persist({}),
+        customerAddressLine2: Alpine.$persist(''),
+        buyerIntent: Alpine.$persist({}),
         isMobile: true,
         isTablet: false,
         isPageScrollDisabled: false,
@@ -362,6 +366,18 @@ document.addEventListener('alpine:init', () => {
             this.currencySymbolPosition = Utils.getCurrencySymbolPosition(this.locale, this.currency);
         },
         /**
+         * Load locations by default location id, fulfillment and/or buyerIntent
+         */
+        async initLocations() {
+            const initialLocationId = this.buyerIntent[this.fulfillment] ?? this.defaultLocation.id;
+
+            if (initialLocationId) {
+                await this.getLocationsByPlaceId().then(() => {
+                    this.updateProperty('locationId', initialLocationId);
+                });
+            }
+        },
+        /**
          * Get the user's current location coordinates
          */
         async getCustomerCoordinates() {
@@ -461,9 +477,37 @@ document.addEventListener('alpine:init', () => {
                         this.locations = this.formatLocationsWithDistance(locations, sort.from) ?? [];
                     }
 
+                    this.updateHistory('locationsByFulfillment', {
+                        ...(this.getHistory('locationsByFulfillment') ?? {}),
+                        [this.fulfillment]: this.locations,
+                    });
+
                     this.isLoadingLocations = false;
                     return this.locations;
                 });
+        },
+        /**
+         * Load locations by current place id and fulfillment
+         * @return {Promise}
+         */
+        async getLocationsByPlaceId() {
+            const fulfillment = Alpine.store('global').fulfillment;
+            let sort = {};
+
+            if (fulfillment === Constants.FULFILLMENT_DELIVERY) {
+                const placeId = Alpine.store('global').suggestedPlaceItem?.place_id;
+                sort = placeId ? { from: { place_id: placeId } } : {};
+            }
+            if (!fulfillment) {
+                return Promise.resolve();
+            }
+            return this.getLocations({
+                sort,
+                filters: {
+                    fulfillments: [fulfillment],
+                },
+                limit: 10,
+            });
         },
         /**
          * Formats the locations with distance
@@ -494,12 +538,60 @@ document.addEventListener('alpine:init', () => {
             await store.getCustomerCoordinates();
             await store.getClosestLocation(fulfillment);
         },
+        /**
+         * @returns Delivery details for customer
+         */
+        getDeliveryDetails() {
+            const siteWideFulfillmentStore = Alpine.store('siteWideFulfillment');
+            return {
+                scheduleType: siteWideFulfillmentStore.getScheduleType(),
+                deliverAt: siteWideFulfillmentStore.selectedScheduleTime.time,
+                recipient: {
+                    address: {
+                        addressLine1: this.customerAddress.street ?? '',
+                        addressLine2: this.customerAddressLine2 ?? '',
+                        locality: this.customerAddress.city ?? '',
+                        postalCode: this.customerAddress.postal_code ?? '',
+                        country: this.customerAddress.country_code ?? '',
+                        administrativeDistrictLevel1: this.customerAddress.region_code ?? '',
+                    },
+                },
+                noContactDelivery: false,
+            };
+        },
+        /**
+         * @returns {Boolean} returns true if the customer has entered a delivery address;
+         */
+        hasDeliveryAddress() {
+            return this.customerAddress.street;
+        },
+        /**
+         * @returns Pickup details for customer
+         */
+        getPickupDetails() {
+            const siteWideFulfillmentStore = Alpine.store('siteWideFulfillment');
+            return {
+                scheduleType: siteWideFulfillmentStore.getScheduleType(),
+                pickupAt: siteWideFulfillmentStore.selectedScheduleTime.time,
+            };
+        },
+        /**
+         * Currently selected location has pickup enabled
+         * @param {String} fulfillment ["PICKUP", "DELIVERY"]
+         * @returns {boolean}
+         */
+        getCurrentLocationSupportsFulfillment(fulfillment) {
+            const location = this.locations.find((loc) => loc.id === this.locationId);
+            return location?.[(fulfillment)]?.enabled;
+        },
     });
 
     Alpine.data('global', (dataId) => ({
         locale: Constants.DEFAULT_LOCALE,
         currency: Constants.DEFAULT_CURRENCY,
         defaultFulfillment: Constants.FULFILLMENT_SHIPPING,
+        defaultLocationId: '',
+        defaultLocation: {},
         pageHeight: 0,
         pageWidth: 0,
         bodyStyles: {},
@@ -512,7 +604,10 @@ document.addEventListener('alpine:init', () => {
             const store = Alpine.store('global');
             store.updateProperty('locale', this.locale.replace(/_/g, '-'));
             store.updateProperty('fulfillment', this.defaultFulfillment);
+            store.updateProperty('locationId', this.defaultLocationId);
+            store.updateProperty('defaultLocation', this.defaultLocation);
             store.setCurrency(this.currency);
+            store.initLocations();
 
             // add whitespace at top to fit header
             this.$watch('$store.global.headerHeight', (height) => {

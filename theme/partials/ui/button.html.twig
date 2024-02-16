@@ -30,8 +30,9 @@
             ui-button
             ui-button--{{ size|default('medium') }}
             ui-button--{{ alignment|default('center') }}
-            ui-button--{{ buttonVariant }}{% if buttonVariant == 'primary' or buttonVariant == 'secondary' or buttonVariant == 'neutral' %}-{{ style|default(defaultStyle) }}{% endif %}{{ destructive ? '-destructive' : '' }} 
+            ui-button--{{ buttonVariant }}{% if buttonVariant == 'primary' or buttonVariant == 'secondary' or buttonVariant == 'neutral' %}-{{ style|default(defaultStyle) }}{% endif %}{{ destructive ? '-destructive' : '' }}
             {{ fullWidth ? 'ui-button--fullwidth' : '' }}
+            {{ disableHoverStyles ? 'ui-button--disable-hover' : '' }}
             {{ buttonClasses }}
         "
         {% if buttonType %}{{ buttonType }} {% else %} type="button" {% endif %}

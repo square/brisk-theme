@@ -1,0 +1,30 @@
+{% extends "layouts/theme" %}
+
+{% block main_content %}
+
+{{ register_asset('css/templates/store/order.css') }}
+
+<div class="container page order-page">
+    {{ include('partials/components/fulfillment-and-scheduling/site-wide-fulfillment', { defaultLocation }) }}
+
+    <div id="orderItemList">
+        {{ include('partials/components/store/order/item-list', { categories, fulfillment: defaultFulfillment }) }}
+    </div>
+
+    <div
+        x-show="$store.siteWideFulfillment.isLoadingItemList"
+        class="ui-loader--overlay order-page__item-loader"
+    >
+        {{ include('partials/ui/loader') }}
+    </div>
+</div>
+
+{% endblock %}
+
+{% schema %}
+{
+    "categories": {
+        "type": "category-list"
+    }
+}
+{% endschema %}
