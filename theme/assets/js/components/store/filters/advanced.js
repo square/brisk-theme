@@ -199,14 +199,15 @@ document.addEventListener('alpine:init', () => {
             if (locationId && !this.advancedFilterValues[Constants.FULFILLMENT_PICKUP]) {
                 this.advancedFilterValues[Constants.FULFILLMENT_PICKUP] = true;
             }
-            if (Object.values(location).length && Square.async.templates[this.chooseLocationTemplateId]) {
-                Square.async.refreshAsyncTemplate(this.chooseLocationTemplateId, {
-                    location,
-                    action: 'openChooseLocation()',
-                }, {
-                    loaded: {
-                        location: 'location',
+            const chooseLocationLink = document.querySelector(`#${this.chooseLocationTemplateId}`);
+            if (Object.values(location).length && chooseLocationLink) {
+                Utils.refreshTemplate({
+                    template: 'partials/components/store/filters/choose-location-link',
+                    props: {
+                        location,
+                        action: 'openChooseLocation()',
                     },
+                    el: chooseLocationLink,
                 });
             }
         },

@@ -39,23 +39,34 @@ document.addEventListener('alpine:init', () => {
             const card = this.subscriptionCards[selectedSubscriptionId]?.options?.find((option) => option.value === this.subscriptionModel);
 
             if (card) {
-                const subscriptionPrice = {
+                const price = {
                     regular_high: card.phase.pricing.regular,
                     regular_low: card.phase.pricing.subscription,
                     currency: this.currency,
                 };
-                if (Square.async.templates[`subscription-price-${selectedSubscriptionId}`]) {
-                    Square.async.refreshAsyncTemplate(`subscription-price-${selectedSubscriptionId}`, {
-                        price: subscriptionPrice,
-                        size: 'small',
+                const subscriptionPrice = document.querySelector(`#subscriptionPrice-${selectedSubscriptionId}`);
+
+                if (subscriptionPrice) {
+                    Utils.refreshTemplate({
+                        template: 'partials/ui/price',
+                        props: {
+                            price,
+                            size: 'small',
+                        },
+                        el: subscriptionPrice,
                     });
                 }
             }
-            if (card.phase?.pricing?.discounts?.[0] && selectedSubscriptionId) {
-                Square.async.refreshAsyncTemplate(`subscription-badge-${selectedSubscriptionId}`, {
-                    template: 'emphasis',
-                    label: `${card.phase.pricing.discounts[0].percentage}% off`,
-                    shouldAnnounce: true,
+
+            const subscriptionBadge = document.querySelector(`#subscriptionBadge-${selectedSubscriptionId}`);
+            if (card.phase?.pricing?.discounts?.[0] && subscriptionBadge) {
+                Utils.refreshTemplate({
+                    template: 'partials/components/store/item/badges/emphasis',
+                    props: {
+                        label: this.translations.percentage.replace('{{percentage}}', card.phase.pricing.discounts[0].percentage),
+                        shouldAnnounce: true,
+                    },
+                    el: subscriptionBadge,
                 });
             }
         },

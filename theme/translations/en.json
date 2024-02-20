@@ -59,21 +59,11 @@
             "cart_icon.alt": "Cart",
             "search_icon.alt": "Search"
         },
-        "async.mini_cart": {
+        "mini_cart": {
             "heading": "Your bag",
             "empty": "Your bag is empty",
             "delete_icon.alt": "Delete",
             "button": "Continue to cart"
-        },
-        "async.choose-location-link": "Choose a location",
-        "async.customer_reviews": {
-            "photo_by": "photo by {{name}}"
-        },
-        "async.fulfillment_detail": {
-            "location_label": "Location: {{name}}",
-            "buttons": {
-                "pickup": "Change store"
-            }
         },
         "sections.home": {
             "banner.alt": "Home banner",
@@ -243,7 +233,8 @@
                     "months": "Ends after {{months}} months",
                     "one_year": "Ends after a year",
                     "years": "Ends after {{years}} years"
-                }
+                },
+                "percentage": "{{percentage}}% off"
             },
             "swatches": {
                 "not_available.label": "Not currently available"
@@ -272,32 +263,44 @@
         }
     },
     "templates": {
-        "components.dialogs": {
-            "advanced_filters": {
-                "heading": "Filters",
-                "selected_count": "{{total}} selected",
-                "categories.heading": "Categories"
+        "components": {
+            "choose_location_link": "Choose a location",
+            "customer_reviews": {
+                "photo_by": "photo by {{name}}"
             },
-            "discount": {
-                "eligible_items.title": "Eligible items"
+            "dialogs": {
+                "advanced_filters": {
+                    "heading": "Filters",
+                    "selected_count": "{{total}} selected",
+                    "categories.heading": "Categories"
+                },
+                "discount": {
+                    "eligible_items.title": "Eligible items"
+                },
+                "gallery": {
+                    "back_button": "Back to item"
+                },
+                "locations": {
+                    "has_locations.label": "Change store",
+                    "empty_locations.label": "Check zip code",
+                    "input.label": "City, street, or zip code",
+                    "input.placeholder": "Zip code",
+                    "results.label": "Nearest stores"
+                },
+                "preorder": {
+                    "heading": "Preorder available",
+                    "order_at.title": "Last day to order",
+                    "available_dates.title": "{{fulfillment}} dates"
+                },
+                "product_reviews": {
+                    "img_alt": "photo by {{name}}"
+                }
             },
-            "gallery": {
-                "back_button": "Back to item"
-            },
-            "locations": {
-                "has_locations.label": "Change store",
-                "empty_locations.label": "Check zip code",
-                "input.label": "City, street, or zip code",
-                "input.placeholder": "Zip code",
-                "results.label": "Nearest stores"
-            },
-            "preorder": {
-                "heading": "Preorder available",
-                "order_at.title": "Last day to order",
-                "available_dates.title": "{{fulfillment}} dates"
-            },
-            "product_reviews": {
-                "img_alt": "photo by {{name}}"
+            "fulfillment_detail": {
+                "location_label": "Location: {{name}}",
+                "buttons": {
+                    "pickup": "Change store"
+                }
             }
         },
         "store": {

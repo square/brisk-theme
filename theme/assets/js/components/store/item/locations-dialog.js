@@ -5,6 +5,7 @@ document.addEventListener('alpine:init', () => {
         alpineStoreName: 'product',
         suggestions: [],
         hasFetchedLocations: false,
+        isLoadingLocationSelector: false,
         /**
          * Initial events
         */
@@ -14,17 +15,17 @@ document.addEventListener('alpine:init', () => {
             this.$store.dialog.onClose = (isConfirmed) => {
                 if (isConfirmed) {
                     const location = this.getLocations().find((loc) => loc.id === this.locationId) ?? this.getLocations()[0];
-                    const hasFulfillmentDetail = Boolean(Square.async.templates['fulfillment-detail']);
+                    const fulfillmentDetail = document.querySelector('#fulfillmentDetail');
 
-                    if (hasFulfillmentDetail && this.fulfillment?.length) {
-                        Square.async.refreshAsyncTemplate('fulfillment-detail', {
-                            fulfillment: this.fulfillment,
-                            location,
-                            formatted_distance: location.formatted_distance,
-                        }, {
-                            loaded: {
-                                location: 'location',
+                    if (fulfillmentDetail && this.fulfillment?.length) {
+                        Utils.refreshTemplate({
+                            template: 'partials/components/store/item/fulfillment-detail',
+                            props: {
+                                fulfillment: this.fulfillment,
+                                location,
+                                formatted_distance: location.formatted_distance,
                             },
+                            el: fulfillmentDetail,
                         });
                     }
 
@@ -100,14 +101,20 @@ document.addEventListener('alpine:init', () => {
                 await Alpine.store('global').getLocations(input).then(async (locations) => {
                     const formattedDistance = locations.map((loc) => loc.formatted_distance);
 
-                    await Square.async.refreshAsyncTemplate('location-selector', {
-                        locations,
-                        formatted_distance: formattedDistance,
-                    }, {
-                        loaded: {
-                            locations: 'location-list',
-                        },
-                    });
+                    this.isLoadingLocationSelector = true;
+
+                    if (this.$refs.locationSelector) {
+                        await Utils.refreshTemplate({
+                            template: 'partials/components/store/item/location-selector',
+                            props: {
+                                locations,
+                                formatted_distance: formattedDistance,
+                            },
+                            el: this.$refs.locationSelector,
+                        });
+                    }
+
+                    this.isLoadingLocationSelector = false;
 
                     const hasLocationSelected = this.hasLocations() && this.locationId?.length;
                     Alpine.store('dialog').updateDialogOptions('disablePrimaryButton', !hasLocationSelected);

@@ -6,7 +6,7 @@ document.addEventListener('alpine:init', () => {
     };
 
     const createItemReviewsData = (dataId) => ({
-        isLoadingReviews: true,
+        isLoadingReviews: false,
         pagination: {
             sortBy: SORT_OPTIONS.newest,
             perPage: { value: 2 },
@@ -65,14 +65,24 @@ document.addEventListener('alpine:init', () => {
         /**
          * Reload the customer reviews by the pagination or sort selection
          */
-        refreshReviews() {
-            Square.async.refreshAsyncTemplate('customer-reviews', {
-                reviews: this.reviews,
-                currentPage: this.pagination.currentPage.value,
-                perPage: this.pagination.perPage.value,
-                sortBy: this.pagination.sortBy,
-                productName: this.productName,
-            }, { replaceContent: true });
+        async refreshReviews() {
+            this.isLoadingReviews = true;
+
+            if (this.$refs.customerReviews) {
+                await Utils.refreshTemplate({
+                    template: 'partials/components/store/item/customer-reviews',
+                    props: {
+                        reviews: this.reviews,
+                        currentPage: this.pagination.currentPage.value,
+                        perPage: this.pagination.perPage.value,
+                        sortBy: this.pagination.sortBy,
+                        productName: this.productName,
+                    },
+                    el: this.$refs.customerReviews,
+                });
+            }
+
+            this.isLoadingReviews = false;
         },
         /**
          * Opens the dialog with all reviews with images

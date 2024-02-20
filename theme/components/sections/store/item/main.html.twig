@@ -76,7 +76,7 @@
                 {% set badges = product.badges|filter(value => value) %}
                 {% if badges|length > 0 %}
                 <div x-ref="productBadges">
-                    {{ async('badges', 'badges', { props: { badges, discounts: product.discounts, shouldAnnounce: true, } }) }}
+                    {{ include('partials/components/store/item/badges', { badges, discounts: product.discounts, shouldAnnounce: true } ) }}
                 </div>
                 {% endif %}
 
@@ -86,7 +86,9 @@
                     {% if product.product_type_details.calorie_count %}
                         {% set caloriesText = 'componenets.sections.store.item.main.calories.label'|localize({ calories: item.product_type_details.calorie_count }) %}
                     {% endif %}
-                    {{ async('price', 'product-price', { props: { price: product.price, variations: product.variations, secondaryText: caloriesText } }) }}
+                    <div id="itemPrice">
+                        {{ include('partials/ui/price', { price: product.price, variations: product.variations, secondaryText: caloriesText }) }}
+                    </div>
                 </div>
 
                 {# Rating #}
@@ -136,6 +138,7 @@
                         {{ include('partials/components/store/item/fulfillment', {
                             fulfillments: product.fulfillment.methods,
                             defaultFulfillment,
+                            defaultLocation,
                         }) }}
                     </fieldset>
                 {% endif %}

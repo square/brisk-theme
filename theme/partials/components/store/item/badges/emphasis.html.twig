@@ -3,3 +3,27 @@
 {% set badgeVariant = variant|default('fill') %}
 
 {{ include('partials/ui/badge', { label, type: 'emphasis', size: badgeSize, shape: badgeShape, variant: badgeVariant, badgeClasses, shouldAnnounce }) }}
+
+{% schema %}
+{
+    "label": {
+        "type": "string"
+    },
+    "size": {
+        "type": "string",
+        "optional": true
+    },
+    "shape": {
+        "type": "string",
+        "optional": true
+    },
+    "variant": {
+        "type": "string",
+        "optional": true
+    },
+    "shouldAnnounce": {
+        "type": "bool",
+        "optional": true
+    }
+}
+{% endschema %}

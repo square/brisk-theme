@@ -1,0 +1,62 @@
+{% set imageIndex = 0 %}
+{% set offset = perPage * (currentPage - 1) %}
+{% set sortedByNewest = reviews|sort((a, b) => b.updated_at|date('U') - a.updated_at|date('U')) %}
+{% if sortBy == 'rating_highest' %}
+    {% set sortedByNewest = sortedByNewest|sort((a, b) => b.rating - a.rating) %}
+{% elseif sortBy == 'rating_lowest' %}
+    {% set sortedByNewest = sortedByNewest|sort((a, b) => a.rating - b.rating) %}
+{% endif %}
+{% for review in sortedByNewest|slice(offset, perPage) %}
+    {% embed 'partials/components/store/item/review-item' with { review, firstColumnAttrs: 'col-xs-12 col-sm-5 col-md-3', secondColumnAttrs: 'col-xs-12 col-sm-6 col-md-8 offset-sm-1 offset-md-1' } %}
+        {% block images %}
+            {% if review.images|length > 0 %}
+                <div
+                    role="region"
+                    class="product-reviews__thumbnails"
+                >
+                {% set imageSizes = [70] %}
+                    {% for image in review.images %}
+                        {% set altText = productName ~ ' - ' ~ ('templates.components.customer_reviews.photo_by'|localize({ name: review.reviewer_name })) ~ ' ' ~ loop.index %}
+                        <figure
+                            role="button"
+                            tabindex="0"
+                            aria-haspopup="true"
+                            class="product-reviews__thumbnails-figure"
+                            @click.stop="openReviewImagesModal({{ imageIndex }})"
+                            @keydown.enter.prevent="openReviewImagesModal({{ imageIndex }})"
+                        >
+                            {{ include('partials/ui/image', { image: { uri: image.absolute_url, urls: image.absolute_urls }, imageSizes, altText }) }}
+                        </figure>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endblock %}
+    {% endembed %}
+    {% set imageIndex = review.images|length > 0 ? imageIndex + 1 : imageIndex %}
+{% endfor %}
+<div
+    x-show="isLoadingReviews"
+    class="ui-loader--overlay"
+>
+    {{ include('partials/ui/loader') }}
+</div>
+
+{% schema %}
+{
+    "reviews": {
+        "type": "array"
+    },
+    "currentPage": {
+        "type": "int"
+    },
+    "perPage": {
+        "type": "int"
+    },
+    "sortBy": {
+        "type": "string"
+    },
+    "productName": {
+        "type": "string"
+    }
+}
+{% endschema %}

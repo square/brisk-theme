@@ -154,48 +154,8 @@ document.addEventListener('alpine:init', () => {
                         || this.options.showCloseButton;
                     this.isFooterVisible = this.options.buttonPosition === 'footer' && this.isButtonVisible;
 
-                    // Temporarily wrap the content with <template> so Alpine doesn't initialize x-data attributes
-                    node.innerHTML = `<template>${text}<div id="async-template-wrapper"></div></template>`;
-                    // Wait until the dialog content is ready
-                    await Utils.waitUntil(() => node.querySelector('template')?.content);
-                    // Finds all script tags
-                    const templateContent = node.querySelector('template').content;
-                    let scripts = templateContent.querySelectorAll('script');
-                    const asyncTemplates = templateContent.querySelectorAll('[data-async-name]');
-                    const asyncPromises = [];
-                    const scriptPromises = [];
+                    await Utils.loadScriptsBeforeTemplateRender(node, text);
 
-                    // Finds all script tags from async templates
-                    asyncTemplates.forEach((templateNode) => {
-                        asyncPromises.push(SquareWebSDK.template.getTemplate({
-                            template: templateNode.dataset.asyncTemplate,
-                            props: JSON.parse(atob(templateNode.dataset.asyncProps)),
-                            loading: null,
-                        }).then(async (asyncText) => {
-                            templateContent.querySelector('#async-template-wrapper').innerHTML = asyncText;
-                            const asyncTemplateScripts = templateContent.querySelectorAll('#async-template-wrapper script');
-                            if (asyncTemplateScripts.length) {
-                                scripts = [...scripts, ...asyncTemplateScripts];
-                            }
-                        }));
-                    });
-
-                    if (asyncPromises.length) {
-                        await Promise.all(asyncPromises);
-                    }
-
-                    scripts.forEach((script) => {
-                        if (script.src) {
-                            scriptPromises.push(Utils.loadScript(script.src));
-                        }
-                    });
-
-                    if (scriptPromises.length) {
-                        // Load scripts
-                        await Promise.all(scriptPromises);
-                        // Initiate Alpine after all scripts are loaded
-                        document.dispatchEvent(new CustomEvent('async:alpine:init'));
-                    }
                     // Re-assign the dialog content without the <template> tag
                     node.innerHTML = text;
 

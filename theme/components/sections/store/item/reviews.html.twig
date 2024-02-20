@@ -151,8 +151,9 @@
                 }) }}
             </div>
         </div>
-        {{ async('customer-reviews', 'customer-reviews', { props: { reviews, perPage, currentPage, sortBy, productName: product.name } }) }}
-
+        <div x-ref="customerReviews">
+            {{ include('partials/components/store/item/customer-reviews', { reviews, perPage, currentPage, sortBy, productName: product.name }) }}
+        </div>
         {% embed 'partials/ui/pagination' with { currentPage: { value: currentPage }, totalPages } %}
             {% block data %}
                 ...reviewsPagination()

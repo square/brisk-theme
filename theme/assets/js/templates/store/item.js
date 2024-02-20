@@ -277,29 +277,40 @@ document.addEventListener('alpine:init', () => {
             });
 
             if (this.$refs.productBadges) {
-                Square.async.refreshAsyncTemplate('badges', {
-                    badges: {
-                        on_sale: regularPriceAmount > finalPriceAmount,
-                        low_stock: isLowStock,
-                        out_of_stock: isOutOfStock,
-                        is_new: isNew,
-                        has_discount: false,
+                Utils.refreshTemplate({
+                    template: 'partials/components/store/item/badges',
+                    props: {
+                        badges: {
+                            on_sale: regularPriceAmount > finalPriceAmount,
+                            low_stock: isLowStock,
+                            out_of_stock: isOutOfStock,
+                            is_new: isNew,
+                            has_discount: false,
+                        },
                     },
+                    el: this.$refs.productBadges,
                 });
             }
 
-            const caloriesText = this.product.product_type_details?.calorie_count
-                ? this.translations.caloriesLabel.replace('{{calories}}', this.product.product_type_details.calorie_count)
-                : '';
-            await Square.async.refreshAsyncTemplate('product-price', {
-                price: {
-                    regular_low: finalPriceAmount,
-                    regular_high: regularPriceAmount,
-                    currency: this.product.price.currency,
-                },
-                secondaryText: caloriesText,
-                variations: [],
-            });
+            const itemPrice = this.$el.querySelector('#itemPrice');
+            if (itemPrice) {
+                const caloriesText = this.product.product_type_details?.calorie_count
+                    ? this.translations.caloriesLabel.replace('{{calories}}', this.product.product_type_details.calorie_count)
+                    : '';
+                await Utils.refreshTemplate({
+                    template: 'partials/ui/price',
+                    props: {
+                        price: {
+                            regular_low: finalPriceAmount,
+                            regular_high: regularPriceAmount,
+                            currency: this.product.price.currency,
+                        },
+                        secondaryText: caloriesText,
+                        size: 'small',
+                    },
+                    el: itemPrice,
+                });
+            }
 
             this.isLoadingPrice = false;
         },

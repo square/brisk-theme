@@ -7,6 +7,9 @@ document.addEventListener('alpine:init', () => {
         isInteractingMiniCart: false,
         timeout: null,
         miniCartItemsTotal: 0,
+        init() {
+            this.reloadMiniCart();
+        },
         /**
          * Add to cart
          * @param {Number} payload.quantity
@@ -149,16 +152,24 @@ document.addEventListener('alpine:init', () => {
          * Fetch updated cart data and reload the template
          */
         async reloadMiniCart() {
-            if (Square.async.templates?.['mini-cart']) {
+            const miniCart = document.querySelector('#miniCart');
+            if (miniCart) {
                 await SquareWebSDK.resource.getResource({
                     cart: {
                         type: 'cart',
                     },
                 })
                     .then(async ({ cart }) => {
-                        this.miniCartItemsTotal = cart.order.total_quantity;
+                        this.miniCartItemsTotal = cart.order?.total_quantity ?? 0;
+
                         Alpine.store('cart').isMiniCartLoading = true;
-                        await Square.async.refreshAsyncTemplate('mini-cart', {}, { replaceContent: true });
+
+                        await Utils.refreshTemplate({
+                            template: 'partials/components/mini-cart',
+                            props: { cart },
+                            el: miniCart,
+                        });
+
                         Alpine.store('cart').isMiniCartLoading = false;
                     });
             }

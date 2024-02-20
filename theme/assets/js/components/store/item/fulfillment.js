@@ -31,17 +31,19 @@ document.addEventListener('alpine:init', () => {
 
             Alpine.store('product').updateProperty('locationId', location.id);
 
-            const formattedLocation = Utils.formatLocationWithDistance(location);
-
-            await Square.async.refreshAsyncTemplate('fulfillment-detail', {
-                fulfillment,
-                location,
-                formatted_distance: formattedLocation.formatted_distance,
-            }, {
-                loaded: {
-                    location: 'location',
-                },
-            });
+            const fulfillmentDetail = document.querySelector('#fulfillmentDetail');
+            if (fulfillmentDetail) {
+                const formattedLocation = Utils.formatLocationWithDistance(location);
+                await Utils.refreshTemplate({
+                    template: 'partials/components/store/item/fulfillment-detail',
+                    props: {
+                        fulfillment,
+                        location,
+                        formatted_distance: formattedLocation.formatted_distance,
+                    },
+                    el: fulfillmentDetail,
+                });
+            }
 
             if (shouldFocusButton && this.$refs.fulfillmentDetail) {
                 await this.$nextTick(() => {
