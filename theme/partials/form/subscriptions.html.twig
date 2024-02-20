@@ -144,6 +144,7 @@
             billingCycleMonths: 'partials.form.subscriptions.billing_cycle.months'|localize,
             billingCycleOneYear: 'partials.form.subscriptions.billing_cycle.one_year'|localize,
             billingCycleYears: 'partials.form.subscriptions.billing_cycle.years'|localize,
+            percentage: 'partials.form.subscriptions.percentage'|localize,
         },
     }|json_encode }}
 </script>
@@ -183,7 +184,7 @@
 
                         {% if discount.discount_type == 'FIXED_PERCENTAGE' %}
                             <div id="subscriptionBadge-{{ id }}" class="form-subscription__badge">
-                                {{ include('partials/components/store/item/badges/emphasis', { label: discount.percentage ~ '% off', shouldAnnounce: true } ) }}
+                                {{ include('partials/components/store/item/badges/emphasis', { label: 'partials.form.subscriptions.percentage'|localize({ percentage: discount.percentage }), shouldAnnounce: true } ) }}
                             </div>
                         {% endif %}
 

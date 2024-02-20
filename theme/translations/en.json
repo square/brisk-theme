@@ -233,7 +233,8 @@
                     "months": "Ends after {{months}} months",
                     "one_year": "Ends after a year",
                     "years": "Ends after {{years}} years"
-                }
+                },
+                "percentage": "{{percentage}}% off"
             },
             "swatches": {
                 "not_available.label": "Not currently available"

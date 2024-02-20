@@ -63,7 +63,7 @@ document.addEventListener('alpine:init', () => {
                 Utils.refreshTemplate({
                     template: 'partials/components/store/item/badges/emphasis',
                     props: {
-                        label: `${card.phase.pricing.discounts[0].percentage}% off`,
+                        label: this.translations.percentage.replace('{{percentage}}', card.phase.pricing.discounts[0].percentage),
                         shouldAnnounce: true,
                     },
                     el: subscriptionBadge,
