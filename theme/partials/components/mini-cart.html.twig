@@ -44,7 +44,7 @@
                                     {% for modifier in modifiersWithPrice %}
                                         {% set itemBasePrice = itemBasePrice + modifier.base_price_money.amount %}
                                     {% endfor %}
-                                    {% set itemBasePriceFormatted = (itemBasePrice)|format_price({ currency: cart.order.currency|default('USD') }) %}
+                                    {% set itemBasePriceFormatted = (itemBasePrice)|format_price({ currency: cart.order.currency|default(square.store.currency) }) %}
                                 {% endif %}
 
                                 {# Regular and sale price #}
@@ -98,7 +98,7 @@
                                 {{ include('partials/ui/price', { price: {
                                     regular_high: itemFinalPrice,
                                     regular_low: itemFinalPrice,
-                                    currency: cart.order.currency|default('USD'),
+                                    currency: cart.order.currency|default(square.store.currency),
                                 }, size: 'small' }) }}
                             </div>
                         </div>
@@ -155,7 +155,7 @@
             {% for discount in cart.order.discounts %}
                 {% set subtotal = subtotal - discount.applied_money.amount %}
             {% endfor %}
-            {% set formattedSubtotal = (subtotal)|format_price({ currency: cart.order.currency|default('USD') }) %}
+            {% set formattedSubtotal = (subtotal)|format_price({ currency: cart.order.currency|default(square.store.currency) }) %}
         {% endif %}
 
         {% embed 'partials/ui/button' with {
