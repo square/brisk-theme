@@ -1,0 +1,18 @@
+{
+    "route": "s/search",
+    "template": "templates/store/search",
+    "props": {
+        "items": {
+            "filters": {
+                "search": "request_data(query.q)"
+            },
+            "pagination": {
+                "page_query_param": "page"
+            },
+            "sort": {
+                "by": "score"
+            }
+        },
+        "search_term": "request_data(query.q)"
+    }
+}
