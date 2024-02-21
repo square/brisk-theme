@@ -1,0 +1,14 @@
+{
+    "route": "shop/:name/:id",
+    "template": "templates/store/category",
+    "props": {
+        "category": {
+            "filters": {
+                "id": "request_data(path.id)"
+            }
+        },
+        "categories": {
+            "filters": []
+        }
+    }
+}
