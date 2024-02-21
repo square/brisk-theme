@@ -20,6 +20,11 @@
         bannerAlt: 'templates.store.shop.headings.shop'|localize,
     }) }}
 
+    {# Items options #}
+    {% set itemsOptions = {
+        filters: {},
+    } %}
+
     {# Sort options #}
     {% set sortOptions = [
         { label: 'templates.store.shop.sort_options.popularity_score'|localize, value: 'popularity_score' },
@@ -31,16 +36,18 @@
     ] %}
 
     {# All items #}
-    {{ include('components/sections/store/item-list', { items, categories, category_hierarchy, sort_options: sortOptions }) }}
+    {{ include('components/sections/store/item-list', {
+        categories,
+        category_hierarchy,
+        items_options: itemsOptions,
+        sort_options: sortOptions,
+    }) }}
 </div>
 
 {% endblock %}
 
 {% schema %}
 {
-    "items": {
-        "type": "item-list"
-    },
     "categories": {
         "type": "category-list"
     },
