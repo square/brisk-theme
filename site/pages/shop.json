@@ -1,5 +1,5 @@
 {
-    "route": "shop",
+    "route": "s/shop",
     "template": "templates/store/shop",
     "props": {
         "categories": {
