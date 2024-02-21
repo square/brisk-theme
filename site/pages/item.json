@@ -1,0 +1,12 @@
+{
+    "route": "product/:name/:id",
+    "template": "templates/store/item",
+    "props": {
+        "item": {
+            "filters": {
+                "id": "request_data(path.id)",
+                "square_online_id": true
+            }
+        }
+    }
+}
