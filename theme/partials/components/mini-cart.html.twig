@@ -78,14 +78,14 @@
                                     {% for modifier in item.modifiers %}
                                         {% if modifier.base_price_money.amount > 0 %}
                                             <p class="mini-cart__item-variation">
-                                                <span class="mini-cart__item-variation-label">{{ modifier.modifier_set_name }}</span>
+                                                <span class="mini-cart__item-variation-label">{{ modifier.modifier_list_name }}</span>
                                             </p>
                                             <p class="mini-cart__item-variation">
                                                 {{ modifier.name }} (+ {{ modifier.base_price_money.formatted }})
                                             </p>
                                         {% else %}
                                             <p class="mini-cart__item-variation">
-                                                <span class="mini-cart__item-variation-label">{{ modifier.modifier_set_name }}:</span>
+                                                <span class="mini-cart__item-variation-label">{{ modifier.modifier_list_name }}:</span>
                                                 {{ modifier.name }}
                                             </p>
                                         {% endif %}
