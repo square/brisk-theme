@@ -15,25 +15,28 @@
             class="search-results__category-list-wrapper col"
             col-xs-12 col-sm-12 col-md-3
         >
+            {% set item_categories = [] %}
+            {% for item in items %}
+                {% set category = item.categories[0] %}
+                {% set categoryExists = item_categories|filter((c) => c.square_online_id == category.square_online_id) %}
+                {% if category.square_online_id and categoryExists == false %}
+                    {% set item_categories = item_categories|merge([category]) %}
+                {% endif %}
+            {% endfor %}
             <p class="search-results__category-list-header">
-                {% if query is not defined %}
+                {% if (query is not defined) and (item_categories is not empty) %}
                     {{ 'components.search.suggested_searches'|localize }}
-                {% else %}
+                {% elseif query is defined %}
                     {{ 'components.search.top_results'|localize }}
                 {% endif %}
             </p>
             <ul class="search-results__category-list">
-                {% set item_categories = [] %}
-                {% for item in items %}
-                    {% set category = item.categories[0] %}
-                    {% if category.square_online_id not in item_categories %}
-                        {% set item_categories = item_categories|merge([category.square_online_id]) %}
-                        <li class="search-results__category-list-item">
-                            <a class="search-results__category-link" href="{{ category_link(category.square_online_id) }}">
-                                {{ category.name }}
-                            </a>
-                        </li>
-                    {% endif %}
+                {% for category in item_categories %}
+                    <li class="search-results__category-list-item">
+                        <a class="search-results__category-link" href="{{ category_link(category.square_online_id) }}">
+                            {{ category.name }}
+                        </a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
