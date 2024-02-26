@@ -4,60 +4,61 @@
     {{ register_asset('css/ui/price.css') }}
 {% endif %}
 
-{% set regularPrice = price.regular_high|default(0) %}
-{% set finalPrice = price.regular_low|default(0) %}
+{% set regularPrice = price.regular_high %}
+{% set finalPrice = price.regular_low %}
 {% set productVariations = variations|default([]) %}
 
-{% if regularPrice != 0 and finalPrice != 0 %}
+{% if regularPrice.amount != 0 and finalPrice.amount != 0 %}
 
-{% if productVariations|length == 1 and productVariations[0].price.regular and productVariations[0].price.sale %}
-    {% set regularPrice = productVariations[0].price.regular %}
-    {% set finalPrice = productVariations[0].price.sale %}
-{% endif %}
+    {% if productVariations|length == 1 and productVariations[0].price.regular.amount and productVariations[0].price.sale.amount %}
+        {% set regularPrice = productVariations[0].price.regular %}
+        {% set finalPrice = productVariations[0].price.sale %}
+    {% endif %}
 
-{% set isPriceRange = productVariations|length > 1 %}
-{% set formattedRegularPrice = formattedPrice.regular|default(regularPrice|format_price({ currency: price.currency })) %}
-{% set formattedFinalPrice = formattedPrice.final|default(finalPrice|format_price({ currency: price.currency })) %}
-{% set isOnSale = formattedRegularPrice != formattedFinalPrice %}
+    {% set isPriceRange = productVariations|length > 1 %}
+    {% set formattedRegularPrice = formattedPrice.regular | default(regularPrice.formatted) %}
+    {% set formattedFinalPrice = formattedPrice.final | default(finalPrice.formatted) %}
+    
+    {% set isOnSale = formattedRegularPrice != formattedFinalPrice %}
 
-{% if isPriceRange %}
-    {% set isOnSale = price.high != price.regular_high or price.low != price.regular_low %}
-    {% if isOnSale %}
-        {% if regularPrice != finalPrice %}
-            {% set formattedRegularPrice = finalPrice|format_price({ currency: price.currency }) ~ ' - ' ~ regularPrice|format_price({ currency: price.currency }) %}
+    {% if isPriceRange %}
+        {% set isOnSale = price.high.amount != price.regular_high.amount or price.low != price.regular_low.amount %}
+        {% if isOnSale %}
+            {% if regularPrice != finalPrice %}
+                {% set formattedRegularPrice = finalPrice.formatted ~ ' - ' ~ regularPrice.formatted %}
+            {% else %}
+                {% set formattedRegularPrice = finalPrice.formatted %}
+            {% endif %}
+            {% set formattedFinalPrice = price.low.formatted ~ ' - ' ~ price.high.formatted %}
         {% else %}
-            {% set formattedRegularPrice = finalPrice|format_price({ currency: price.currency }) %}
-        {% endif %}
-        {% set formattedFinalPrice = price.low|format_price({ currency: price.currency }) ~ ' - ' ~ price.high|format_price({ currency: price.currency }) %}
-    {% else %}
-        {% if regularPrice != finalPrice %}
-            {% set formattedFinalPrice = finalPrice|format_price({ currency: price.currency }) ~ ' - ' ~ regularPrice|format_price({ currency: price.currency }) %}
-        {% else %}
-            {% set formattedFinalPrice = finalPrice|format_price({ currency: price.currency }) %}
+            {% if regularPrice != finalPrice %}
+                {% set formattedFinalPrice = finalPrice.formatted ~ ' - ' ~ regularPrice.formatted %}
+            {% else %}
+                {% set formattedFinalPrice = finalPrice.formatted %}
+            {% endif %}
         {% endif %}
     {% endif %}
-{% endif %}
 
-<div class="ui-price ui-price--{{ size|default('normal') }} {% if isPriceRange %}ui-price__range{% endif %}">
-    {% if isOnSale %}
-        <div x-ref="regularPrice" class="ui-price__regular">
-            {{ formattedRegularPrice }}
-        </div>
-        <div x-ref="finalPrice" class="ui-price__final" aria-live="polite">
-            {{ formattedFinalPrice }}
-        </div>
-    {% else %}
-        <div x-ref="finalPrice" class="ui-price ui-price--{{ size|default('normal') }}" aria-live="polite">
-            {{ formattedFinalPrice }}
-        </div>
-    {% endif %}
-    {% if secondaryText %}
-        {% if isPriceRange and isOnSale %}
-        <div class="ui-price__row-break"></div>
+    <div class="ui-price ui-price--{{ size|default('normal') }} {% if isPriceRange %}ui-price__range{% endif %}">
+        {% if isOnSale %}
+            <div x-ref="regularPrice" class="ui-price__regular">
+                {{ formattedRegularPrice }}
+            </div>
+            <div x-ref="finalPrice" class="ui-price__final" aria-live="polite">
+                {{ formattedFinalPrice }}
+            </div>
+        {% else %}
+            <div x-ref="finalPrice" class="ui-price ui-price--{{ size|default('normal') }}" aria-live="polite">
+                {{ formattedFinalPrice }}
+            </div>
         {% endif %}
-        <div class="ui-price__extra {% if isPriceRange and isOnSale %}ui-price__extra--hide-divider{% endif %}">{{ secondaryText }}</div>
-    {% endif %}
-</div>
+        {% if secondaryText %}
+            {% if isPriceRange and isOnSale %}
+            <div class="ui-price__row-break"></div>
+            {% endif %}
+            <div class="ui-price__extra {% if isPriceRange and isOnSale %}ui-price__extra--hide-divider{% endif %}">{{ secondaryText }}</div>
+        {% endif %}
+    </div>
 
 {% endif %}
 

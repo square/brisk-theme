@@ -134,7 +134,7 @@
     {{ {
         cadences: SUBSCRIPTION_CADENCES,
         subscriptionCards,
-        currency: product.price.currency,
+        currency: square.store.currency,
         translations: {
             billingCycleOneDay: 'partials.form.subscriptions.billing_cycle.one_day'|localize,
             billingCycleDays: 'partials.form.subscriptions.billing_cycle.days'|localize,
@@ -179,7 +179,7 @@
                         {% set discount = defaultPhase.pricing.discounts[0] %}
                         {% set subscriptionPrice = null %}
                         {% if defaultPhase.pricing.regular %}
-                            {% set subscriptionPrice = { regular_high: defaultPhase.pricing.regular, regular_low: defaultPhase.pricing.subscription, currency: product.price.currency } %}
+                            {% set subscriptionPrice = { regular_high: defaultPhase.pricing.regular, regular_low: defaultPhase.pricing.subscription, currency: square.store.currency } %}
                         {% endif %}
 
                         {% if discount.discount_type == 'FIXED_PERCENTAGE' %}

@@ -219,8 +219,8 @@ document.addEventListener('alpine:init', () => {
          */
         async updatePriceAndBadge() {
             const formData = Object.values(this.formData);
-            let regularPriceAmount = this.product.price.regular_high;
-            let finalPriceAmount = this.product.price.regular_low;
+            let regularPriceAmount = this.product.price.regular_high.amount;
+            let finalPriceAmount = this.product.price.regular_low.amount;
             let isLowStock = false;
             let isOutOfStock = false;
             const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
@@ -245,8 +245,8 @@ document.addEventListener('alpine:init', () => {
 
             // Update price with the first variation
             if (firstVariation) {
-                regularPriceAmount = firstVariation.price.regular;
-                finalPriceAmount = firstVariation.price.sale;
+                regularPriceAmount = firstVariation.price.regular.amount;
+                finalPriceAmount = firstVariation.price.sale.amount;
 
                 if (Number.isInteger(firstVariation.inventory)) {
                     isOutOfStock = Boolean(firstVariation.inventory === 0);
@@ -301,9 +301,17 @@ document.addEventListener('alpine:init', () => {
                     template: 'partials/ui/price',
                     props: {
                         price: {
-                            regular_low: finalPriceAmount,
-                            regular_high: regularPriceAmount,
-                            currency: this.product.price.currency,
+                            regular_low: {
+                                amount: finalPriceAmount,
+                                currency: globalStore.currency,
+                                formatted: SquareWebSDK.helpers.money.formatAmount(finalPriceAmount, globalStore.currency, globalStore.locale),
+                            },
+                            regular_high: {
+                                amount: regularPriceAmount,
+                                currency: globalStore.currency,
+                                formatted: SquareWebSDK.helpers.money.formatAmount(regularPriceAmount, globalStore.currency, globalStore.locale),
+                            },
+                            currency: globalStore.currency,
                         },
                         secondaryText: caloriesText,
                         size: 'small',
@@ -422,7 +430,7 @@ document.addEventListener('alpine:init', () => {
                     variationId = this.productVariations.find((variation) => variation.pricing_type === 'VARIABLE_PRICING')?.id;
                     priceOverride = {
                         amount: Number(this.formData.donation.value) * 100,
-                        currency: this.product.price.currency,
+                        currency: globalStore.currency,
                     };
                 } else {
                     variationId = donationVariation.id;

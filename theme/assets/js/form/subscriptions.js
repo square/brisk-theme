@@ -40,8 +40,8 @@ document.addEventListener('alpine:init', () => {
 
             if (card) {
                 const price = {
-                    regular_high: card.phase.pricing.regular,
-                    regular_low: card.phase.pricing.subscription,
+                    regular_high: card.phase.pricing.regular_high,
+                    regular_low: card.phase.pricing.regular_low,
                     currency: this.currency,
                 };
                 const subscriptionPrice = document.querySelector(`#subscriptionPrice-${selectedSubscriptionId}`);
