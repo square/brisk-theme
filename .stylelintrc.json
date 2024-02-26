@@ -1,7 +1,7 @@
 {
     "extends": [
         "stylelint-config-standard",
-        "stylelint-config-rational-order-fix"
+        "stylelint-config-recess-order"
     ],
     "rules": {
         "selector-class-pattern": null,

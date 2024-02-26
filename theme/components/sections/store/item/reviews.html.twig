@@ -92,7 +92,7 @@
             col-xs-12 col-sm-6 col-md-8
             offset-sm-1 offset-md-1
         >
-            {% set imageSizes = { xs: 599, sm: 599, md: 190 } %}
+            {% set imageSizes = [599, 599, 190] %}
             {% set reviewsPhotosTitle = 'components.sections.store.item.photo_reviews.title'|localize %}
 
             {% embed 'partials/ui/carousel' with { title: reviewsPhotosTitle } %}
@@ -106,7 +106,7 @@
                             @click.stop="openReviewImagesModal({{ image.reviewIndex }}, '{{ sortBy }}')"
                             @keydown.enter.prevent="openReviewImagesModal({{ image.reviewIndex }}, '{{ sortBy }}')"
                         >
-                            {{ include('partials/ui/image', { image: { uri: image.absolute_uri, urls: image.absolute_urls }, imageSizes, altText: reviewsPhotosTitle ~ ' ' ~ loop.index }) }}
+                            {{ include('partials/ui/image', { image: { uri: image.absolute_url, urls: image.absolute_urls }, imageSizes, altText: reviewsPhotosTitle ~ ' ' ~ loop.index }) }}
                         </figure>
                     {% endfor %}
                 {% endblock %}
@@ -151,8 +151,9 @@
                 }) }}
             </div>
         </div>
-        {{ async('customer-reviews', 'customer-reviews', { props: { reviews, perPage, currentPage, sortBy, productName: product.name } }) }}
-
+        <div x-ref="customerReviews">
+            {{ include('partials/components/store/item/customer-reviews', { reviews, perPage, currentPage, sortBy, productName: product.name }) }}
+        </div>
         {% embed 'partials/ui/pagination' with { currentPage: { value: currentPage }, totalPages } %}
             {% block data %}
                 ...reviewsPagination()

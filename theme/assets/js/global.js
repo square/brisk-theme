@@ -7,6 +7,9 @@ document.addEventListener('alpine:init', () => {
         isInteractingMiniCart: false,
         timeout: null,
         miniCartItemsTotal: 0,
+        init() {
+            this.reloadMiniCart();
+        },
         /**
          * Add to cart
          * @param {Number} payload.quantity
@@ -149,16 +152,24 @@ document.addEventListener('alpine:init', () => {
          * Fetch updated cart data and reload the template
          */
         async reloadMiniCart() {
-            if (Square.async.templates?.['mini-cart']) {
+            const miniCart = document.querySelector('#miniCart');
+            if (miniCart) {
                 await SquareWebSDK.resource.getResource({
                     cart: {
                         type: 'cart',
                     },
                 })
                     .then(async ({ cart }) => {
-                        this.miniCartItemsTotal = cart.order.total_quantity;
+                        this.miniCartItemsTotal = cart.order?.total_quantity ?? 0;
+
                         Alpine.store('cart').isMiniCartLoading = true;
-                        await Square.async.refreshAsyncTemplate('mini-cart', {}, { replaceContent: true });
+
+                        await Utils.refreshTemplate({
+                            template: 'partials/components/mini-cart',
+                            props: { cart },
+                            el: miniCart,
+                        });
+
                         Alpine.store('cart').isMiniCartLoading = false;
                     });
             }
@@ -190,8 +201,17 @@ document.addEventListener('alpine:init', () => {
          * Initial events
          */
         init() {
-            const scrollbarWidth = window.innerWidth - document.body.clientWidth;
-            document.documentElement.style.setProperty('--browser-scrollbar-width', `${scrollbarWidth}px`);
+            // create an Observer instance
+            const resizeObserver = new ResizeObserver(() => {
+                const currentScrollbarWidth = getComputedStyle(document.documentElement).getPropertyValue('--browser-scrollbar-width');
+                if (!currentScrollbarWidth || parseInt(currentScrollbarWidth, 10) === 0) {
+                    const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+                    document.documentElement.style.setProperty('--browser-scrollbar-width', `${scrollbarWidth}px`);
+                }
+            });
+
+            // start observing a DOM node
+            resizeObserver.observe(document.body);
 
             if (Utils.isTouchDevice()) {
                 document.body.classList.add('is-touch-device');

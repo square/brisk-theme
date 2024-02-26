@@ -1,20 +1,16 @@
 {
     "props": {
+        "banner": {
+            "props": {
+                "alt": "Home page banner",
+                "marquee": "Stay dry this spring"
+            }
+        },
         "main": [
-            {
-                "props": {
-                    "image": {
-                        "alt": "Home page banner",
-                        "src": "images/home-banner.png"
-                    }
-                },
-                "template": "home/banner"
-            },
             {
                 "props": {
                     "heading": "Shop by category",
                     "categories": {
-                        "type": "category-list",
                         "pagination": {
                             "page_size": 4
                         }
@@ -54,7 +50,6 @@
                         "sort": {
                             "by": "popularity_score"
                         },
-                        "type": "item-list",
                         "pagination": {
                             "page_size": 4
                         }

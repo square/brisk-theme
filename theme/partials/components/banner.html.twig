@@ -1,9 +1,10 @@
 {{ register_asset('css/components/banner.css') }}
 
 <div class="banner-image {% if fullwidth %}banner-image--fullwidth{% endif %}">
+    {% block heading %}{% endblock %}
     {{ include('partials/ui/image', {
         image: bannerImage,
-        imageSizes: bannerSizes|default({ xs: 599 }),
+        imageSizes: bannerSizes|default([599]),
         altText: bannerAlt,
     }) }}
 </div>

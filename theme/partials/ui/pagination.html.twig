@@ -114,8 +114,10 @@
                 id: paginationId ~ '__page-nav-tooltip',
                 variant: 'menu',
                 parentModel: 'currentPage',
-                asyncTemplateName: 'pagination-dropdown',
-                asyncProps: { items: pageNavigationOptions, menuTriggerRef: 'paginationButton', selectedItem: currentPage },
+                menuTemplateId: 'pagination-tooltip-menu',
+                items: pageNavigationOptions,
+                menuTriggerRef: 'paginationButton',
+                selectedItem: currentPage,
             } %}
                 {% block data %}
                     ...paginationDropdownUI('currentPage')

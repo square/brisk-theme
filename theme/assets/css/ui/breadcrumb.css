@@ -1,9 +1,9 @@
 .ui-breadcrumb {
-    color: var(--theme-color-neutral-70);
     font-size: var(--theme-font-size-minus-2);
     line-height: var(--theme-font-size-minus-2-line-height);
-    letter-spacing: var(--theme-font-size-minus-2-letter-spacing);
+    color: var(--theme-color-neutral-70);
     text-transform: uppercase;
+    letter-spacing: var(--theme-font-size-minus-2-letter-spacing);
 }
 
 .ui-breadcrumb li {

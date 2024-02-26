@@ -11,6 +11,7 @@
 {% set swatchOptions = [] %}
 {% set choiceOptions = [] %}
 {% set swatchOptionLabel = '' %}
+{% set choiceOptionLabel = '' %}
 {% set swatchOptionKey = quickAddSwatchRenderer[0] %}
 {% set choiceOptionKey = quickAddChoiceRenderer[0] %}
 {% set requiredFields = [] %}
@@ -26,6 +27,7 @@
                 {% set swatchOptions = swatchOptions|merge([{ label: choice, value: choice, color: option.colors[loop.index0] }]) %}
             {% endfor %}
         {% elseif option.name|lower in quickAddChoiceRenderer %}
+            {% set choiceOptionLabel = option.name %}
             {% set choiceOptionKey = option.name|lower %}
             {% set quickAddRendererToOptionId = quickAddRendererToOptionId|merge({ (option.name|lower): option.id }) %}
 
@@ -79,7 +81,7 @@
     {% set productImages = product.images|merge(productGifs) %}
     {% set productImage = productImages[0] %}
 
-    {% set imageSizes = { xs: 599, md: 344 } %}
+    {% set imageSizes = [599, 344] %}
     <div
         class="collection__tile-image collection__tile-image--{{ imageShape }} {% if isCarousel %}ui-carousel-slide{% endif %}"
         {% if hasQuickAddOptions and not hideHover %}
@@ -87,7 +89,7 @@
         {% endif %}
     >
         {% if productImage %}
-            {{ include('partials/ui/image', { image: { uri: productImage.absolute_uri, urls: productImage.absolute_urls }, imageSizes, altText: product.name, showPlaceholder: true }) }}
+            {{ include('partials/ui/image', { image: { uri: productImage.absolute_url, urls: productImage.absolute_urls }, imageSizes, altText: 'partials.components.collection.item.image.alt'|localize({ name: product.name }), showPlaceholder: true }) }}
         {% else %}
             {{ include('partials/ui/placeholder') }}
         {% endif %}
@@ -100,7 +102,7 @@
                 class="collection__tile-image-hover {% if hoverImage %}collection__tile-has-secondary-image{% endif %}"
             >
                 {% if hoverImage %}
-                    {{ include('partials/ui/image', { image: { uri: hoverImage.absolute_uri, urls: hoverImage.absolute_urls }, imageSizes, altText: product.name }) }}
+                    {{ include('partials/ui/image', { image: { uri: hoverImage.absolute_url, urls: hoverImage.absolute_urls }, imageSizes, altText: 'partials.components.collection.item.image.alt'|localize({ name: product.name }) }) }}
                 {% endif %}
 
                 {% if choiceOptions|length %}
@@ -122,6 +124,7 @@
                     <p>{{ 'partials.components.collection.item.quick_add.label'|localize }}</p>
 
                     {% embed 'partials/form/choice-carousel' with {
+                        label: choiceOptionLabel,
                         variant: 'grid',
                         options: choiceOptions,
                         itemWidth: 48,

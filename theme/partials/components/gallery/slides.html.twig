@@ -12,11 +12,11 @@
     @touchend="onTouchEnd"
 >
     {% if hasImages %}
-        {% set imageSizes = { xs: 559 } %}
+        {% set imageSizes = [559] %}
         {% set currentIndex = 0 %}
 
         {% for image in images %}
-            {% set uri = image.absolute_uri %}
+            {% set uri = image.absolute_url %}
             {% if image.format == 'spin' %}
                 {% set uri = image.absolute_urls[160] %}
             {% endif %}

@@ -76,7 +76,7 @@
                 {% set badges = product.badges|filter(value => value) %}
                 {% if badges|length > 0 %}
                 <div x-ref="productBadges">
-                    {{ async('badges', 'badges', { props: { badges, discounts: product.discounts, shouldAnnounce: true, } }) }}
+                    {{ include('partials/components/store/item/badges', { badges, discounts: product.discounts, shouldAnnounce: true } ) }}
                 </div>
                 {% endif %}
 
@@ -84,9 +84,11 @@
                 <div class="item-page__price">
                     {% set caloriesText = '' %}
                     {% if product.product_type_details.calorie_count %}
-                        {% set caloriesText = product.product_type_details.calorie_count ~ ' Cal' %}
+                        {% set caloriesText = 'componenets.sections.store.item.main.calories.label'|localize({ calories: item.product_type_details.calorie_count }) %}
                     {% endif %}
-                    {{ async('price', 'product-price', { props: { price: product.price, variations: product.variations, secondaryText: caloriesText } }) }}
+                    <div id="itemPrice">
+                        {{ include('partials/ui/price', { price: product.price, variations: product.variations, secondaryText: caloriesText }) }}
+                    </div>
                 </div>
 
                 {# Rating #}
@@ -112,17 +114,33 @@
                 {% endif %}
 
                 {% if product.item_options|length %}
-                    {{ include('partials/components/store/item/options') }}
+                    <fieldset>
+                        <legend class="visually-hidden">{{ 'partials.components.store.item.options.label'|localize }}</legend>
+                        {{ include('partials/components/store/item/options') }}
+                    </fieldset>
                 {% else %}
+                    <fieldset>
+                        <legend class="visually-hidden">{{ 'partials.components.store.item.flat_variations.label'|localize }}</legend>
                     {{ include('partials/components/store/item/flat-variations') }}
+                    </fieldset>
                 {% endif %}
-                {{ include('partials/components/store/item/modifiers') }}
+
+                {% if product.modifier_lists|length %}
+                <fieldset>
+                    <legend class="visually-hidden">{{ 'partials.components.store.item.modifiers.label'|localize }}</legend>
+                    {{ include('partials/components/store/item/modifiers') }}
+                </fieldset>
+                {% endif %}
 
                 {% if isManualFulfillment == false %}
-                    {{ include('partials/components/store/item/fulfillment', {
-                        fulfillments: product.fulfillment.methods,
-                        defaultFulfillment,
-                    }) }}
+                    <fieldset>
+                        <legend class="visually-hidden">{{ 'partials.components.store.item.fulfillment.label'|localize }}</legend>
+                        {{ include('partials/components/store/item/fulfillment', {
+                            fulfillments: product.fulfillment.methods,
+                            defaultFulfillment,
+                            defaultLocation,
+                        }) }}
+                    </fieldset>
                 {% endif %}
 
                 {% if product.square_online_type == 'EVENT' and product.product_type_details %}
@@ -130,11 +148,17 @@
                 {% endif %}
 
                 {% if product.square_online_type == 'DONATION' and (product.variations|length) %}
-                    {{ include('partials/form/donation', { donationVariations: product.variations }) }}
+                    <fieldset>
+                        <legend class="visually-hidden">{{ 'partials.components.store.item.donation.label'|localize }}</legend>
+                        {{ include('partials/form/donation', { donationVariations: product.variations }) }}
+                    </fieldset>
                 {% endif %}
 
                 {% if product.subscriptions|length %}
-                    {{ include('partials/form/subscriptions', { subscriptions: product.subscriptions }) }}
+                    <fieldset>
+                        <legend class="visually-hidden">{{ 'partials.components.store.item.subscriptions.label'|localize }}</legend>
+                        {{ include('partials/form/subscriptions', { subscriptions: product.subscriptions }) }}
+                    </fieldset>
                 {% endif %}
 
                 {% if product.square_online_type != 'DONATION' %}

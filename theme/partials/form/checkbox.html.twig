@@ -9,18 +9,24 @@
 {% set placeholderText = 'partials.form.placeholder'|localize %}
 {% set labelId = 'checkbox-label-' ~ random() %}
 
-<fieldset
+<div
     x-data="{ isInvalid: false, model: [], onCheckboxInputChange() {}, {% block data %}{% endblock %} }"
     {% if parentModel %}x-modelable="model"{% endif %}
     {% if isRequired %}aria-required="true"{% endif %}
     :aria-invalid="isInvalid"
-    aria-describedby="{{ labelId }} {{ labelId }}__error"
+    {% if hideLabel %}
+        aria-describedby="{{ labelId }}"
+    {% else %}
+        :aria-describedby="isInvalid ? '{{ labelId }} {{ labelId }}__error' : '{{ labelId }}'"
+    {% endif %}
     role="group"
-    class="form-fieldset form-checkbox--{{ variant|default('normal') }} form-checkbox--{{ size|default('medium') }} form-checkbox--{{ align|default('left') }} {% if showDivider %}form-checkbox--{{ variant|default('normal') }}-divider{% endif %} {{ checkboxClasses }}"
+    class="form-element form-checkbox--{{ variant|default('normal') }} form-checkbox--{{ size|default('medium') }} form-checkbox--{{ align|default('left') }} {% if showDivider %}form-checkbox--{{ variant|default('normal') }}-divider{% endif %} {{ checkboxClasses }}"
     :class="{'form-checkbox--invalid': isInvalid }"
 >
-    {% if hideLabel == false %}
-        {{ include('partials/form/fieldset-label') }}
+    {% if hideLabel %}
+        <span id="{{ labelId }}" hidden>{{ label }}</span>
+    {% else %}
+        {{ include('partials/form/element-label') }}
     {% endif %}
 
     <div class="form-checkbox__options">
@@ -60,10 +66,10 @@
                 </span>
                 {% if option.image.absolute_url %}
                     <span class="form-checkbox__input-image">
-                        {{ include('partials/ui/image', { image: { uri: option.image.absolute_url, urls: option.image.absolute_urls }, imageSizes: { xs: 80 }, altText: option.name }) }}
+                        {{ include('partials/ui/image', { image: { uri: option.image.absolute_url, urls: option.image.absolute_urls }, imageSizes: [80], altText: option.name }) }}
                     </span>
                 {% endif %}
             </label>
         {% endfor %}
     </div>
-</fieldset>
+</div>

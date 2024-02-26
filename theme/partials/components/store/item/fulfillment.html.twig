@@ -50,7 +50,9 @@
     {% endblock %}
     {% block after %}
         {% if locations|length > 0 %}
-            {{ async('fulfillment-detail', 'fulfillment-detail', { props: { location: defaultLocation|default([]), fulfillment: defaultFulfillment } }) }}
+            <div id="fulfillmentDetail">
+                {{ include('partials/components/store/item/fulfillment-detail', { location: defaultLocation|default([]), fulfillment: defaultFulfillment, formatted_distance: '' }) }}
+            </div>
         {% endif %}
     {% endblock %}
 {% endembed %}

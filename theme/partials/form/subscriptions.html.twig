@@ -144,6 +144,7 @@
             billingCycleMonths: 'partials.form.subscriptions.billing_cycle.months'|localize,
             billingCycleOneYear: 'partials.form.subscriptions.billing_cycle.one_year'|localize,
             billingCycleYears: 'partials.form.subscriptions.billing_cycle.years'|localize,
+            percentage: 'partials.form.subscriptions.percentage'|localize,
         },
     }|json_encode }}
 </script>
@@ -182,8 +183,8 @@
                         {% endif %}
 
                         {% if discount.discount_type == 'FIXED_PERCENTAGE' %}
-                            <div class="form-subscription__badge">
-                                {{ async('single-badge', 'subscription-badge-' ~ id, { props: { template: 'emphasis', label: discount.percentage ~ '% off', shouldAnnounce: true } }) }}
+                            <div id="subscriptionBadge-{{ id }}" class="form-subscription__badge">
+                                {{ include('partials/components/store/item/badges/emphasis', { label: 'partials.form.subscriptions.percentage'|localize({ percentage: discount.percentage }), shouldAnnounce: true } ) }}
                             </div>
                         {% endif %}
 
@@ -198,8 +199,8 @@
                             } %}
                                 {% block secondaryLabel %}
                                     {% if subscriptionPrice %}
-                                    <div class="form-subscription__price">
-                                        {{ async('price', 'subscription-price-' ~ id, { props: { price: subscriptionPrice, size: 'small' } }) }}
+                                    <div id="subscriptionPrice-{{ id }}" class="form-subscription__price">
+                                        {{ include('partials/ui/price', { price: subscriptionPrice, size: 'small' }) }}
                                     </div>
                                     {% endif %}
                                 {% endblock %}
@@ -208,7 +209,9 @@
                         {% else %}
                             <p class="form-subscription__single-option">{{ card.options[0].label }}</p>
                             {% if subscriptionPrice %}
-                            {{ async('price', 'subscription-price-' ~ id, { props: { price: subscriptionPrice, size: 'small' } }) }}
+                            <div id="subscriptionPrice-{{ id }}">
+                                {{ include('partials/ui/price', { price: subscriptionPrice, size: 'small' }) }}
+                            </div>
                             {% endif %}
                         {% endif %}
 

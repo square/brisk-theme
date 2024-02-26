@@ -1,10 +1,10 @@
 <div
     x-show="$store.dialog.isHeaderVisible"
     class="ui-dialog__header"
-    :class="{ 'ui-dialog__header--close-visible': $store.dialog.options.showCloseButton }"
+    :class="{ 'ui-dialog__header--close-visible': $store.dialog.currentDialogOptions().showCloseButton }"
 >
     <div
-        x-show="$store.dialog.options.showCloseButton"
+        x-show="$store.dialog.currentDialogOptions().showCloseButton"
         class="ui-dialog__header-close"
     >
         {{ include('partials/ui/button', { variant: 'secondary', style: 'fill', icon: 'close', iconAlt: 'partials.ui.dialog.close_icon_alt'|localize, action: '$store.dialog.closeDialog()' }) }}
@@ -25,15 +25,15 @@
 {# Content #}
 <div
     class="ui-dialog__content-wrapper"
-    :class="{ 'ui-dialog__content-wrapper--scrollbar': $store.dialog.options.scrollable || $store.dialog.isMultiPane }"
+    :class="{ 'ui-dialog__content-wrapper--scrollbar': $store.dialog.currentDialogOptions().scrollable || $store.dialog.isMultiPane }"
 >
     <div
         id="{{ dialogId }}__content"
         class="ui-dialog__content"
-        :class="{ 'custom-scrollbar': $store.dialog.options.scrollable || $store.dialog.isMultiPane }"
+        :class="{ 'custom-scrollbar': $store.dialog.currentDialogOptions().scrollable || $store.dialog.isMultiPane }"
     >
         <div
-            :class="{ 'custom-scrollbar-inner': $store.dialog.options.scrollable || $store.dialog.isMultiPane }"
+            :class="{ 'custom-scrollbar-inner': $store.dialog.currentDialogOptions().scrollable || $store.dialog.isMultiPane }"
             x-ref="dialogContent"
         ></div>
     </div>

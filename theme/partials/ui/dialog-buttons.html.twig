@@ -1,4 +1,4 @@
-<span x-show="$store.dialog.options.showSecondaryButton">
+<span x-show="$store.dialog.currentDialogOptions().showSecondaryButton">
     {% embed 'partials/ui/button' with {
         variant: 'secondary',
         style: 'fill',
@@ -6,7 +6,7 @@
         action: '$store.dialog.secondaryButtonClick',
     } %}
         {% block content %}
-            <span x-text="$store.dialog.options.secondaryButtonText"></span>
+            <span x-text="$store.dialog.currentDialogOptions().secondaryButtonText"></span>
         {% endblock %}
         {% block attributes %}
             :disabled="$store.dialog.isSecondaryButtonDisabled()"
@@ -14,14 +14,14 @@
         {% endblock %}
     {% endembed %}
 </span>
-<span x-show="$store.dialog.options.showPrimaryButton">
+<span x-show="$store.dialog.currentDialogOptions().showPrimaryButton">
     {% embed 'partials/ui/button' with {
         variant: 'primary',
         fullWidth: true,
         action: '$store.dialog.primaryButtonClick',
     } %}
         {% block content %}
-            <span x-text="$store.dialog.options.primaryButtonText"></span>
+            <span x-text="$store.dialog.currentDialogOptions().primaryButtonText"></span>
         {% endblock %}
         {% block attributes %}
             :disabled="$store.dialog.isPrimaryButtonDisabled()"

@@ -1,0 +1,29 @@
+{% set buttonLabel = 'templates.components.choose_location_link'|localize %}
+{% if location.address %}
+    {% set formattedLocation = location.address|address_format_multiline %}
+    {% set buttonLabel = formattedLocation|first %}
+{% endif %}
+{{ include('partials/ui/button', {
+        label: buttonLabel,
+        size: button_size,
+        variant: 'text',
+        action,
+    })
+}}
+
+{% schema %}
+{
+    "location": {
+        "type": "location",
+        "optional": true
+    },
+    "button_size": {
+        "type": "string",
+        "optional": true,
+        "default": "small"
+    },
+    "action": {
+        "type": "string"
+    }
+}
+{% endschema %}

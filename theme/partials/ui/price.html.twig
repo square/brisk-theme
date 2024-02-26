@@ -8,6 +8,8 @@
 {% set finalPrice = price.regular_low|default(0) %}
 {% set productVariations = variations|default([]) %}
 
+{% if regularPrice != 0 and finalPrice != 0 %}
+
 {% if productVariations|length == 1 and productVariations[0].price.regular and productVariations[0].price.sale %}
     {% set regularPrice = productVariations[0].price.regular %}
     {% set finalPrice = productVariations[0].price.sale %}
@@ -57,6 +59,8 @@
     {% endif %}
 </div>
 
+{% endif %}
+
 {% schema %}
 {
     "price": {
@@ -67,6 +71,10 @@
         "optional": true
     },
     "secondaryText": {
+        "type": "string",
+        "optional": true
+    },
+    "size": {
         "type": "string",
         "optional": true
     }

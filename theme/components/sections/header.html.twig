@@ -3,6 +3,7 @@
 {{ register_asset('js/sections/header.js', { defer: false }) }}
 {{ register_asset('js/ui/nested-menu.js', { defer: false }) }}
 {{ register_asset('js/components/search.js', { defer: false }) }}
+{{ register_asset('js/components/mini-cart.js', { defer: false }) }}
 
 {# Create the data that we'll use for the Alpine header component #}
 
@@ -176,9 +177,11 @@
                 class="site-header__logo-wrapper col"
                 col-xs-6 col-sm-6 col-md-2 col-lg-2
             >
-                <a class="site-logo" href="/">
-                    {{ square.site.title }}
-                </a>
+                <h1>
+                    <a class="site-logo" href="/">
+                        {{ square.site.title }}
+                    </a>
+                </h1>
             </div>
 
             <nav
@@ -190,8 +193,18 @@
             >
                 <ul class="site-header__nav-linklist">
                     {% for link in formattedLinks %}
-                        <li @mouseenter.native="onMouseEnter('{{ link.title }}')" @mouseleave.native="onMouseLeave">
-                            <a class="site-header__nav-link" :class="currentlyDisplayedLink?.title === '{{ link.title }}' && 'is-active' " href="{{ link.url }}">
+                        <li
+                            @mouseenter="onMouseEnter('{{ link.title }}')"
+                            @mouseleave="onMouseLeave"
+                        >
+                            <a
+                                class="site-header__nav-link"
+                                :class="currentlyDisplayedLink?.title === '{{ link.title }}' && 'is-active' "
+                                href="{{ link.url }}"
+                                @focus="onMouseEnter('{{ link.title }}')"
+                                @blur="onMouseLeave"
+                                @keydown.tab="onKeyboardTab"
+                            >
                                 {{ link.title }}
                             </a>
                         </li>
@@ -258,7 +271,8 @@
                         isDropdown: true,
                     } %}
                         {% block content %}
-                            {{ async('mini-cart', 'mini-cart') }}
+                            {# Placeholder for the mini cart #}
+                            <div id="miniCart"></div>
                         {% endblock %}
                     {% endembed %}
                 </div>
@@ -301,3 +315,32 @@
         }
     }
 {% endschema %}
+
+{% editor %}
+{
+    "name": "Header",
+    "controls": [
+        {
+            "option": "toggle",
+            "label": "Show announcement bar",
+            "value": {
+                "$ref": "#/schema/announcement_bar_show"
+            }
+        },
+        {
+            "option": "input",
+            "label": "Announcement bar",
+            "value": {
+                "$ref": "#/schema/announcement_bar_text"
+            }
+        },
+        {
+            "option": "link-chooser",
+            "label": "Announcement link",
+            "value": {
+                "$ref": "#/schema/announcement_bar_link"
+            }
+        }
+    ]
+}
+{% endeditor %}

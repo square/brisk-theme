@@ -88,11 +88,18 @@ document.addEventListener('alpine:init', () => {
                 items.push({ label, value: i });
             }
 
-            await Square.async.refreshAsyncTemplate('pagination-dropdown', {
-                items,
-                selectedItem: this.currentPage,
-                menuTriggerRef: 'paginationButton',
-            });
+            const paginationDropdown = document.querySelector('#pagination-tooltip-menu');
+            if (paginationDropdown) {
+                await Utils.refreshTemplate({
+                    template: 'partials/components/tooltip-menu',
+                    props: {
+                        items,
+                        selectedItem: this.currentPage,
+                        menuTriggerRef: 'paginationButton',
+                    },
+                    el: paginationDropdown,
+                });
+            }
 
             this.isDropdownVisible = false;
         },

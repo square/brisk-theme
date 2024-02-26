@@ -6,7 +6,7 @@ document.addEventListener('alpine:init', () => {
     };
 
     const createItemReviewsData = (dataId) => ({
-        isLoadingReviews: true,
+        isLoadingReviews: false,
         pagination: {
             sortBy: SORT_OPTIONS.newest,
             perPage: { value: 2 },
@@ -65,14 +65,24 @@ document.addEventListener('alpine:init', () => {
         /**
          * Reload the customer reviews by the pagination or sort selection
          */
-        refreshReviews() {
-            Square.async.refreshAsyncTemplate('customer-reviews', {
-                reviews: this.reviews,
-                currentPage: this.pagination.currentPage.value,
-                perPage: this.pagination.perPage.value,
-                sortBy: this.pagination.sortBy,
-                productName: this.productName,
-            }, { replaceContent: true });
+        async refreshReviews() {
+            this.isLoadingReviews = true;
+
+            if (this.$refs.customerReviews) {
+                await Utils.refreshTemplate({
+                    template: 'partials/components/store/item/customer-reviews',
+                    props: {
+                        reviews: this.reviews,
+                        currentPage: this.pagination.currentPage.value,
+                        perPage: this.pagination.perPage.value,
+                        sortBy: this.pagination.sortBy,
+                        productName: this.productName,
+                    },
+                    el: this.$refs.customerReviews,
+                });
+            }
+
+            this.isLoadingReviews = false;
         },
         /**
          * Opens the dialog with all reviews with images
@@ -80,20 +90,24 @@ document.addEventListener('alpine:init', () => {
         openReviewImagesModal(activeIndex = 0, sortBy = SORT_OPTIONS.newest) {
             const { product } = Alpine.store('product');
             const reviews = this.getSortedReviews(sortBy).filter((review) => review.images?.length);
-            const props = {
+            const templateProps = {
                 reviews,
                 productName: product.name,
                 activeIndex,
             };
-            this.$store.dialog.openPrimaryDialog('templates/components/dialogs/product-reviews-content', {
-                title: this.translations.imagesDialogTitle,
-                size: 'large',
-                variant: 'multi-pane',
-                currentPane: Number(activeIndex),
-                totalPane: reviews.length,
-                primaryButtonText: this.translations.imagesDialogNext,
-                secondaryButtonText: this.translations.imagesDialogPrev,
-            }, props);
+            this.$store.dialog.openPrimaryDialog({
+                templateUrl: 'templates/components/dialogs/product-reviews-content',
+                dialogOptions: {
+                    title: this.translations.imagesDialogTitle,
+                    size: 'large',
+                    variant: 'multi-pane',
+                    currentPane: Number(activeIndex),
+                    totalPane: reviews.length,
+                    primaryButtonText: this.translations.imagesDialogNext,
+                    secondaryButtonText: this.translations.imagesDialogPrev,
+                },
+                templateProps,
+            });
         },
     });
 

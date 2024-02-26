@@ -14,9 +14,9 @@
     height: 40px;
     margin: 2px 0 0;
     vertical-align: middle;
+    cursor: pointer;
     border: 1px solid var(--theme-form-field-image-border);
     border-radius: 50%;
-    cursor: pointer;
     transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
@@ -39,11 +39,11 @@
     width: 7px;
     height: 7px;
     margin: var(--space-x2) 0 0 var(--space-x2);
+    content: '';
     background-color: var(--theme-form-field-icon);
     border-radius: 50%;
     opacity: 0;
     transition: all 0.3s ease;
-    content: '';
 }
 
 .form-swatches__input:focus::after {
@@ -66,8 +66,8 @@
     height: 40px;
     margin: 0 0 0 19px;
     border-radius: 0;
-    transform: rotate(45deg);
     opacity: 1;
+    transform: rotate(45deg);
 }
 
 /* checkmark icon */
@@ -77,11 +77,11 @@
     left: 1.1em;
     width: 11px;
     height: 15px;
+    content: "";
     border-right: 2px solid var(--theme-form-field-icon);
     border-bottom: 2px solid var(--theme-form-field-icon);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    content: "";
 }
 
 .form-swatches__input--light::before {

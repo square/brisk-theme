@@ -125,10 +125,10 @@
 
 .ui-carousel__item--full-bleed {
     position: relative;
+    box-sizing: content-box;
     display: flex;
     flex: 0 0 var(--carousel-item-width);
     flex-flow: column;
-    box-sizing: content-box;
     width: var(--carousel-item-width);
     height: var(--carousel-item-height);
     overflow: hidden;
@@ -140,8 +140,8 @@
 }
 
 .ui-carousel__item--full-bleed:last-child {
-    margin-right: 0;
     padding-right: calc(50vw - (var(--carousel-item-width) / 2));
+    margin-right: 0;
 }
 
 .ui-carousel__item--full-bleed img {

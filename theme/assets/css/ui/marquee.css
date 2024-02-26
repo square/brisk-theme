@@ -11,9 +11,9 @@
     align-items: center;
     font-size: var(--theme-font-size-minus-2);
     line-height: var(--theme-font-size-minus-2-line-height);
+    text-transform: uppercase;
     letter-spacing: var(--theme-font-size-minus-2-letter-spacing);
     white-space: nowrap;
-    text-transform: uppercase;
     animation-duration: 3s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
@@ -30,8 +30,8 @@
     width: 4px;
     height: 4px;
     margin: auto var(--theme-marquee-gap);
-    background-color: var(--theme-bulleted-list-icon-color);
     content: '';
+    background-color: var(--theme-bulleted-list-icon-color);
 }
 
 .ui-marquee::before {

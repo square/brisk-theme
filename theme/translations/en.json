@@ -59,24 +59,16 @@
             "cart_icon.alt": "Cart",
             "search_icon.alt": "Search"
         },
-        "async.mini_cart": {
+        "mini_cart": {
             "heading": "Your bag",
             "empty": "Your bag is empty",
             "delete_icon.alt": "Delete",
             "button": "Continue to cart"
         },
-        "async.choose-location-link": "Choose a location",
-        "async.customer_reviews": {
-            "photo_by": "photo by {{name}}"
-        },
-        "async.fulfillment_detail": {
-            "location_label": "Location: {{name}}",
-            "buttons": {
-                "pickup": "Change store"
-            }
-        },
         "sections.home": {
+            "banner.alt": "Home banner",
             "banner.marquee": "Stay dry this spring",
+            "text_and_images.label": "Featured images",
             "text_and_images.button": "Shop spring collection"
         },
         "sections.store.item.main": {
@@ -106,13 +98,15 @@
         "components.collection.item": {
             "quick_add.label": "Quick add",
             "quick_add.status.add": "Adding",
-            "quick_add.status.success": "Added to cart!"
+            "quick_add.status.success": "Added to cart!",
+            "image.alt": "{{name}} image"
         },
         "components.store.filters": {
             "buttons": {
                 "filters": "Filters",
                 "categories": "Category",
-                "sort": "Sort by: {{sortValue}}"
+                "sort": "Sort by: {{sortValue}}",
+                "sort.label": "Sort filter"
             },
             "options": {
                 "categories_selector": {
@@ -148,6 +142,9 @@
                 "expiration": "Expiration: {{detail}}",
                 "recurring": "Recurring discount: {{detail}}"
             },
+            "donation": {
+                "label": "Donation"
+            },
             "event_details": {
                 "date_time.label": "Date & time",
                 "start_date_time": "Start: {{startDate}} at {{startTime}}",
@@ -155,6 +152,7 @@
                 "location.label": "Location"
             },
             "flat_variations": {
+                "label": "Variations",
                 "default_label": "Option"
             },
             "food_details": {
@@ -167,6 +165,7 @@
                 "buttons.pickup": "Pickup"
             },
             "modifiers": {
+                "label": "Modifiers",
                 "choices_allowed": {
                     "unlimited": "Select all that apply",
                     "some": "Select {{count}}",
@@ -179,6 +178,9 @@
                     "checkbox_label": "This is a gift"
                 }
             },
+            "options": {
+                "label": "Options"
+            },
             "policies": {
                 "shipping.label": "Shipping policy",
                 "return.label": "Return policy"
@@ -189,6 +191,9 @@
             "review": {
                 "verified": "Verified purchase",
                 "name_and_date": "by {{name}} on {{date}}"
+            },
+            "subscriptions": {
+                "label": "Subscriptions"
             }
         },
         "form": {
@@ -200,7 +205,8 @@
                 "label": "Donation amount"
             },
             "price_range": {
-                "divider": "to"
+                "divider": "to",
+                "label": "Price range"
             },
             "stepper": {
                 "increase.label": "Remove",
@@ -227,7 +233,8 @@
                     "months": "Ends after {{months}} months",
                     "one_year": "Ends after a year",
                     "years": "Ends after {{years}} years"
-                }
+                },
+                "percentage": "{{percentage}}% off"
             },
             "swatches": {
                 "not_available.label": "Not currently available"
@@ -256,32 +263,44 @@
         }
     },
     "templates": {
-        "components.dialogs": {
-            "advanced_filters": {
-                "heading": "Filters",
-                "selected_count": "{{total}} selected",
-                "categories.heading": "Categories"
+        "components": {
+            "choose_location_link": "Choose a location",
+            "customer_reviews": {
+                "photo_by": "photo by {{name}}"
             },
-            "discount": {
-                "eligible_items.title": "Eligible items"
+            "dialogs": {
+                "advanced_filters": {
+                    "heading": "Filters",
+                    "selected_count": "{{total}} selected",
+                    "categories.heading": "Categories"
+                },
+                "discount": {
+                    "eligible_items.title": "Eligible items"
+                },
+                "gallery": {
+                    "back_button": "Back to item"
+                },
+                "locations": {
+                    "has_locations.label": "Change store",
+                    "empty_locations.label": "Check zip code",
+                    "input.label": "City, street, or zip code",
+                    "input.placeholder": "Zip code",
+                    "results.label": "Nearest stores"
+                },
+                "preorder": {
+                    "heading": "Preorder available",
+                    "order_at.title": "Last day to order",
+                    "available_dates.title": "{{fulfillment}} dates"
+                },
+                "product_reviews": {
+                    "img_alt": "photo by {{name}}"
+                }
             },
-            "gallery": {
-                "back_button": "Back to item"
-            },
-            "locations": {
-                "has_locations.label": "Change store",
-                "empty_locations.label": "Check zip code",
-                "input.label": "City, street, or zip code",
-                "input.placeholder": "Zip code",
-                "results.label": "Nearest stores"
-            },
-            "preorder": {
-                "heading": "Preorder available",
-                "order_at.title": "Last day to order",
-                "available_dates.title": "{{fulfillment}} dates"
-            },
-            "product_reviews": {
-                "img_alt": "photo by {{name}}"
+            "fulfillment_detail": {
+                "location_label": "Location: {{name}}",
+                "buttons": {
+                    "pickup": "Change store"
+                }
             }
         },
         "store": {
