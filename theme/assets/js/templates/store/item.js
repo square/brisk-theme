@@ -218,6 +218,7 @@ document.addEventListener('alpine:init', () => {
          * Updates the price and badge
          */
         async updatePriceAndBadge() {
+            const globalStore = Alpine.store('global');
             const formData = Object.values(this.formData);
             let regularPriceAmount = this.product.price.regular_high.amount;
             let finalPriceAmount = this.product.price.regular_low.amount;
