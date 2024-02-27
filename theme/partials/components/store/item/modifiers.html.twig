@@ -30,7 +30,7 @@
             {% for modifier in option.modifiers %}
                 {% set price = '' %}
                 {% if modifier.price_money.amount > 0 %}
-                    {% set price = modifier.price_money.amount|format_currency(modifier.price_money.currency) %}
+                    {% set price = modifier.price_money.formatted %}
                 {% endif %}
                 {% set options = options|merge([{ label: modifier.name, value: modifier.id, sublabel: price, image: modifier.image }]) %}
             {% endfor %}
