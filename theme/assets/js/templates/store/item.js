@@ -373,6 +373,7 @@ document.addEventListener('alpine:init', () => {
          * @return {Object}
          */
         generateCartData(isBuyNow = false) {
+            const globalStore = Alpine.store('global');
             let variationId = null;
             let subscriptionPlanVariationId = null;
             let modifiers = [];
