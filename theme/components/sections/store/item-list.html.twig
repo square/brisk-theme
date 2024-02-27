@@ -36,7 +36,7 @@
     {# Get sub categories #}
     {% set subCategoryIds = category_hierarchy|map((cat) => cat.square_online_id) %}
     {% if subCategoryIds|length %}
-        {% set featuredCategories = category_list({ filters: { ids: subCategoryIds } })|merge(categories) %}
+        {% set featuredCategories = category_list({ filters: { ids: subCategoryIds, square_online_id: true } })|merge(categories) %}
     {% endif %}
 {% endif %}
 

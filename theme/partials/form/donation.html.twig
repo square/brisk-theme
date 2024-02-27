@@ -10,8 +10,8 @@
 {% set donationOptions = [] %}
 {% set customOption = null %}
 {% for choice in donationVariations %}
-    {% if choice.price.regular > 0 %}
-        {% set formattedPrice = choice.price.regular|format_price({ currency: donationCurrency, min_fraction_digits: 0 }) %}
+    {% if choice.price.regular.amount > 0 %}
+        {% set formattedPrice = choice.price.regular.formatted %}
         {% set donationOptions = donationOptions|merge([{ label: formattedPrice, value: choice.id }]) %}
     {% else %}
         {% set customOption = choice %}

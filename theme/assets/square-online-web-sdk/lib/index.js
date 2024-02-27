@@ -1,56 +1,56 @@
-var q = Object.defineProperty;
-var Z = (i, e, t) => e in i ? q(i, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[e] = t;
-var y = (i, e, t) => (Z(i, typeof e != "symbol" ? e + "" : e, t), t), b = (i, e, t) => {
+var te = Object.defineProperty;
+var re = (i, e, t) => e in i ? te(i, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[e] = t;
+var p = (i, e, t) => (re(i, typeof e != "symbol" ? e + "" : e, t), t), F = (i, e, t) => {
   if (!e.has(i))
     throw TypeError("Cannot " + t);
 };
-var j = (i, e, t) => (b(i, e, "read from private field"), t ? t.call(i) : e.get(i)), w = (i, e, t) => {
+var j = (i, e, t) => (F(i, e, "read from private field"), t ? t.call(i) : e.get(i)), T = (i, e, t) => {
   if (e.has(i))
     throw TypeError("Cannot add the same private member more than once");
   e instanceof WeakSet ? e.add(i) : e.set(i, t);
-}, G = (i, e, t, r) => (b(i, e, "write to private field"), r ? r.call(i, t) : e.set(i, t), t);
-var _ = (i, e, t) => (b(i, e, "access private method"), t);
-const M = {
+}, G = (i, e, t, r) => (F(i, e, "write to private field"), r ? r.call(i, t) : e.set(i, t), t);
+var _ = (i, e, t) => (F(i, e, "access private method"), t);
+const X = {
   SHIPMENT: "SHIPMENT",
   PICKUP: "PICKUP",
   DELIVERY: "DELIVERY",
   MANUAL: "MANUAL"
-}, X = {
+}, x = {
   ASAP: "ASAP",
   SCHEDULED: "SCHEDULED"
-}, x = {
+}, H = {
   CHOICE: "CHOICE",
   TEXT: "TEXT",
   GIFT_WRAP: "GIFT_WRAP",
   GIFT_MESSAGE: "GIFT_MESSAGE"
-}, ee = () => {
+}, ie = () => {
   var i;
   return (i = document.querySelector('meta[name="csrf-token"]')) == null ? void 0 : i.content;
 }, E = () => ({
   Accept: "application/json",
   "content-type": "application/json; charset=UTF-8",
-  "X-CSRF-TOKEN": ee()
+  "X-CSRF-TOKEN": ie()
 }), N = (i) => {
   const e = i + "=", r = decodeURIComponent(document.cookie).split(";");
-  for (let n = 0; n < r.length; n++) {
-    let s = r[n];
-    for (; s.charAt(0) == " "; )
-      s = s.substring(1);
-    if (s.indexOf(e) == 0)
-      return s.substring(e.length, s.length);
+  for (let o = 0; o < r.length; o++) {
+    let n = r[o];
+    for (; n.charAt(0) == " "; )
+      n = n.substring(1);
+    if (n.indexOf(e) == 0)
+      return n.substring(e.length, n.length);
   }
   return null;
-}, T = "/s/api/v1/cart", K = "Something went wrong", V = (i, e) => {
-  const t = F(e.error || e.message || i.statusText), r = new Error(t);
+}, C = "/s/api/v1/cart", K = "Something went wrong", V = (i, e) => {
+  const t = U(e.error || e.message || i.statusText), r = new Error(t);
   if (e.errors) {
-    const n = {};
-    Object.keys(e.errors).forEach((s) => {
-      const o = e.errors[s].map((a) => F(a));
-      n[F(s)] = o;
-    }), r.errors = n;
+    const o = {};
+    Object.keys(e.errors).forEach((n) => {
+      const s = e.errors[n].map((a) => U(a));
+      o[U(n)] = s;
+    }), r.errors = o;
   }
   return e.fields && (r.fields = e.fields), i.status && (r.status = i.status, r.status === 200 && (r.status = 500)), r;
-}, P = async (i) => {
+}, k = async (i) => {
   const e = await i.json();
   if (!i.ok)
     throw V(i, e);
@@ -58,7 +58,7 @@ const M = {
     response: i,
     data: e.data
   };
-}, te = async (i) => {
+}, ne = async (i) => {
   var e;
   if (i.redirected) {
     if (window.location.href === i.url) {
@@ -72,50 +72,50 @@ const M = {
     throw V(i, t);
   }
   throw new Error(K);
-}, F = (i) => i.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), U = (i) => i.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), O = (i) => {
+}, U = (i) => i.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), L = (i) => i.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), D = (i) => {
   const e = {};
   return Object.keys(i).forEach((t) => {
     const r = i[t];
-    Array.isArray(r) ? e[U(t)] = Y(r) : r && typeof r == "object" ? e[U(t)] = O(r) : e[U(t)] = r;
+    Array.isArray(r) ? e[L(t)] = W(r) : r && typeof r == "object" ? e[L(t)] = D(r) : e[L(t)] = r;
   }), e;
-}, Y = (i) => {
+}, W = (i) => {
   const e = [];
   return i.forEach((t) => {
-    Array.isArray(t) ? e.push(Y(t)) : t && typeof t == "object" ? e.push(O(t)) : e.push(t);
+    Array.isArray(t) ? e.push(W(t)) : t && typeof t == "object" ? e.push(D(t)) : e.push(t);
   }), e;
-}, re = (i) => {
-  const e = W(i);
+}, oe = (i) => {
+  const e = q(i);
   return delete e.order_id, e;
-}, Q = (i) => {
+}, z = (i) => {
   const e = JSON.parse(JSON.stringify(i));
-  return e.fulfillmentType === M.PICKUP ? (e.pickupDetails || (e.pickupDetails = {}), e.pickupDetails.scheduleType || (e.pickupDetails.scheduleType = X.ASAP), e.pickupDetails.curbsidePickupRequested == null && (e.pickupDetails.curbsidePickupRequested = !1), e.pickupDetails.curbsidePickupDetails || (e.pickupDetails.curbsidePickupDetails = {
+  return e.fulfillmentType === X.PICKUP ? (e.pickupDetails || (e.pickupDetails = {}), e.pickupDetails.scheduleType || (e.pickupDetails.scheduleType = x.ASAP), e.pickupDetails.curbsidePickupRequested == null && (e.pickupDetails.curbsidePickupRequested = !1), e.pickupDetails.curbsidePickupDetails || (e.pickupDetails.curbsidePickupDetails = {
     curbsideDetails: ""
-  })) : e.fulfillmentType === M.DELIVERY && e.deliveryDetails && (e.deliveryDetails.noContactDelivery == null && (e.deliveryDetails.noContactDelivery = !1), e.deliveryDetails.scheduleType || (e.deliveryDetails.scheduleType = X.ASAP)), e;
-}, W = (i) => {
-  var n;
+  })) : e.fulfillmentType === X.DELIVERY && e.deliveryDetails && (e.deliveryDetails.noContactDelivery == null && (e.deliveryDetails.noContactDelivery = !1), e.deliveryDetails.scheduleType || (e.deliveryDetails.scheduleType = x.ASAP)), e;
+}, q = (i) => {
+  var o;
   const e = JSON.parse(JSON.stringify(i.lineItem));
   e.quantity || (e.quantity = 1);
-  const t = O(e);
-  if ((n = t.modifiers) != null && n.length) {
-    const s = {};
-    t.modifiers.forEach((o) => {
-      if (o.type) {
-        s[o.type] || (s[o.type] = {});
-        const a = JSON.parse(JSON.stringify(o));
-        delete a.id, delete a.type, s[o.type][o.id] = a;
+  const t = D(e);
+  if ((o = t.modifiers) != null && o.length) {
+    const n = {};
+    t.modifiers.forEach((s) => {
+      if (s.type) {
+        n[s.type] || (n[s.type] = {});
+        const a = JSON.parse(JSON.stringify(s));
+        delete a.id, delete a.type, n[s.type][s.id] = a;
       }
-    }), t.modifiers = s;
+    }), t.modifiers = n;
   } else
     t.modifiers && delete t.modifiers;
   return {
     line_item: t,
-    fulfillment: O(Q(i.fulfillment)),
+    fulfillment: D(z(i.fulfillment)),
     location_id: i.locationId,
     // JSON.stringify will remove if undefined
-    order_id: k(i)
+    order_id: b(i)
   };
-}, k = (i) => i.orderId !== void 0 ? i.orderId : N("com_cart_id") || void 0;
-class ie {
+}, b = (i) => i.orderId !== void 0 ? i.orderId : N("com_cart_id") || void 0;
+class se {
   /**
       * Retrieves the active cart id if it exists.
       *
@@ -172,12 +172,12 @@ class ie {
       * @throws {@link CartError}
       */
   async addItem(e) {
-    const t = W(e), r = await fetch(`${T}/add`, {
+    const t = q(e), r = await fetch(`${C}/add`, {
       method: "POST",
       body: JSON.stringify(t),
       headers: E()
     });
-    return await P(r);
+    return await k(r);
   }
   /**
       * Adds an item to a new order and redirects to checkout on success.
@@ -225,12 +225,12 @@ class ie {
       * @throws {@link CartError}
       */
   async buyNowItem(e) {
-    const t = re(e), r = await fetch(`${T}/buy`, {
+    const t = oe(e), r = await fetch(`${C}/buy`, {
       method: "POST",
       body: JSON.stringify(t),
       headers: E()
     });
-    return te(r);
+    return ne(r);
   }
   /**
       * Updates the quantity of an item on an order. Quantity must be greater than 0.
@@ -249,16 +249,16 @@ class ie {
       * @throws {@link CartError}
       */
   async updateItemQuantity(e) {
-    const t = await fetch(`${T}/update-quantity`, {
+    const t = await fetch(`${C}/update-quantity`, {
       method: "POST",
       body: JSON.stringify({
         order_item_id: e.orderItemId,
         quantity: e.quantity,
-        order_id: k(e)
+        order_id: b(e)
       }),
       headers: E()
     });
-    return P(t);
+    return k(t);
   }
   /**
       * Removes a line item from an order.
@@ -276,15 +276,15 @@ class ie {
       * @throws {@link CartError}
       */
   async removeItem(e) {
-    const t = await fetch(`${T}/remove-item`, {
+    const t = await fetch(`${C}/remove-item`, {
       method: "POST",
       body: JSON.stringify({
         order_item_id: e.orderItemId,
-        order_id: k(e)
+        order_id: b(e)
       }),
       headers: E()
     });
-    return P(t);
+    return k(t);
   }
   /**
       * Updates the fulfillment on an order. At the moment must update all properties as it acts like a POST.
@@ -310,20 +310,20 @@ class ie {
       * @throws {@link CartError}
       */
   async patchFulfillment(e) {
-    const t = await fetch(`${T}/${k(e)}/fulfillment`, {
+    const t = await fetch(`${C}/${b(e)}/fulfillment`, {
       method: "PATCH",
       body: JSON.stringify({
-        fulfillment: O(Q(e.fulfillment)),
+        fulfillment: D(z(e.fulfillment)),
         location_id: e.locationId
       }),
       headers: E()
     });
-    return P(t);
+    return k(t);
   }
 }
-class se {
+class ae {
   constructor(e) {
-    y(this, "initConfig");
+    p(this, "initConfig");
     this.initConfig = e;
   }
   /**
@@ -343,32 +343,32 @@ class se {
    * ```
    */
   async getOrder(e) {
-    const t = e.jwtToken, r = e.locationId, n = e.fulfillments;
+    const t = e.jwtToken, r = e.locationId, o = e.fulfillments;
     if (!t)
       throw new Error("missing jwtToken");
     if (!r)
       throw new Error("missing locationId");
-    if (!n)
+    if (!o)
       throw new Error("missing fulfillments");
     if (!this.initConfig.cmsSiteId)
       throw new Error("missing cmsSiteId");
-    if (!Array.isArray(n))
+    if (!Array.isArray(o))
       throw new Error("fulfillments must be an array");
-    const s = this.initConfig.cmsSiteId, o = ["shipping", "pickup", "delivery"];
-    n.forEach((l) => {
-      if (!o.includes(l.toLowerCase()))
-        throw new Error("invalid value in fulfillments array: " + l);
+    const n = this.initConfig.cmsSiteId, s = ["shipping", "pickup", "delivery"];
+    o.forEach((u) => {
+      if (!s.includes(u.toLowerCase()))
+        throw new Error("invalid value in fulfillments array: " + u);
     });
-    let a = `/app/cms/api/v1/sites/${s}/order-again/${t}?location=${r}`;
-    return n.forEach((l) => {
-      a += `&fulfillments[]=${l}`;
+    let a = `/app/cms/api/v1/sites/${n}/order-again/${t}?location=${r}`;
+    return o.forEach((u) => {
+      a += `&fulfillments[]=${u}`;
     }), await (await fetch(a, {
       method: "GET",
       headers: E()
     })).json();
   }
 }
-class ne {
+class ce {
   /**
       * Used to load up to 5 resources.
       *
@@ -381,7 +381,7 @@ class ne {
       *          type: 'category-options',
       *          filters: {
       *              category_id: '2'
-      *          }
+      *          }   
       *      },
       *      'itemListResource': {
       *          type: 'item-list',
@@ -410,9 +410,9 @@ class ne {
       */
   async getResource(e) {
     const t = {};
-    for (const s in e) {
-      const o = e[s];
-      t[s] = o;
+    for (const n in e) {
+      const s = e[n];
+      t[n] = s;
     }
     return await (await fetch("/s/api/v1/resource", {
       method: "POST",
@@ -423,13 +423,13 @@ class ne {
     })).json();
   }
 }
-const oe = {
+const le = {
   ADDRESS: "address",
   GEOCODE: "geocode"
 };
-class ae {
+class de {
   constructor(e) {
-    y(this, "initConfig");
+    p(this, "initConfig");
     this.initConfig = e;
   }
   /**
@@ -449,8 +449,8 @@ class ae {
       * @throws {@link Error}
       */
   async autocompletePlaces(e) {
-    const t = this.initConfig.userId, r = this.initConfig.siteId, n = e.address, s = e.types ?? oe.GEOCODE, o = `/app/store/api/v28/pub/users/${t}/sites/${r}/places?types=${s}&input=${n}`;
-    return await (await fetch(o, {
+    const t = this.initConfig.userId, r = this.initConfig.siteId, o = e.address, n = e.types ?? le.GEOCODE, s = `/app/store/api/v28/pub/users/${t}/sites/${r}/places?types=${n}&input=${o}`;
+    return await (await fetch(s, {
       method: "GET",
       headers: E()
     })).json();
@@ -471,22 +471,22 @@ class ae {
       * @throws {@link Error}
       */
   async getPlace(e) {
-    const t = this.initConfig.userId, r = this.initConfig.siteId, n = e.placeId, s = `/app/store/api/v28/pub/users/${t}/sites/${r}/places/${n}`, a = await (await fetch(s, {
+    const t = this.initConfig.userId, r = this.initConfig.siteId, o = e.placeId, n = `/app/store/api/v28/pub/users/${t}/sites/${r}/places/${o}`, a = await (await fetch(n, {
       method: "GET",
       headers: E()
     })).json();
     return Array.isArray(a.data) && (a.data = {}), a;
   }
 }
-class ce extends Error {
+class ue extends Error {
   constructor(t, r) {
     super(t);
     /** Provides the generic rendered HTML error template that would be rendered via the page on a failure. You can choose to use this to display a rendered error, or handle it how you see fit. */
-    y(this, "template");
+    p(this, "template");
     this.template = r;
   }
 }
-class le {
+class fe {
   /**
       * Used to load a Twig template via the API.
       *
@@ -519,16 +519,165 @@ class le {
       headers: E()
     }), r = await t.text();
     if (t.ok === !1)
-      throw new ce("Unable to render template", r);
+      throw new ue("Unable to render template", r);
     return r;
   }
 }
-const C = {
+const J = "customer_xsrf", B = "/app/accounts/v1", he = "/ping", pe = "/loyalty/account/search";
+var v, A, $, R, Z, P, M;
+class me {
+  constructor(e) {
+    T(this, A);
+    T(this, R);
+    /**
+        * Calling ping will set the session ID and XSRF token cookies needed for subsequent requests
+        */
+    T(this, P);
+    T(this, v, void 0);
+    G(this, v, e);
+  }
+  async getLoyaltyAccount(e) {
+    const t = {
+      phone: e
+    }, r = await _(this, A, $).call(this, `${B}${pe}`, "POST", t);
+    return (r == null ? void 0 : r.data.loyalty_account) ?? null;
+  }
+}
+v = new WeakMap(), A = new WeakSet(), $ = async function(e, t, r = null, o = !0) {
+  let n = N(J);
+  n || (await _(this, P, M).call(this), n = N(J) ?? "");
+  const s = {
+    method: t,
+    headers: _(this, R, Z).call(this, n)
+  };
+  r && (s.body = JSON.stringify(r));
+  const a = await fetch(e, s);
+  if (!a.ok) {
+    if (a.status === 404)
+      return null;
+    if (a.status === 419 && o)
+      return await _(this, P, M).call(this), await _(this, A, $).call(this, e, t, r, !1);
+    throw new Error(`Error ${a.status}: ${a.statusText}`);
+  }
+  return await a.json();
+}, R = new WeakSet(), Z = function(e) {
+  return {
+    Accept: "application/json",
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-XSRF-TOKEN": e,
+    "Square-Merchant-Token": j(this, v)
+  };
+}, P = new WeakSet(), M = async function() {
+  const e = `${B}${he}`;
+  await fetch(e);
+};
+class ye {
+  constructor(e) {
+    p(this, "initConfig");
+    p(this, "buyersServiceClient");
+    this.initConfig = e, this.buyersServiceClient = new me(e.merchantId);
+  }
+  /**
+      * Used to try and get the coordinates of the buyer based on their IP address.
+      * If the coordinates can't be determined, this method returns an empty object.
+      *
+      * ```ts
+      *	try {
+      *		const coordinates = await sdk.customers.getCoordinates();
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link Error}
+      */
+  async getCoordinates() {
+    const t = `/app/website/cms/api/v1/users/${this.initConfig.userId}/customers/coordinates`;
+    let o = await (await fetch(t, {
+      method: "GET",
+      headers: E()
+    })).json();
+    return Array.isArray(o) && (o = {}), o;
+  }
+  /**
+      * Search for an existing customer loyalty account by phone number. 
+      * If no loyalty account exists, this method returns an empty object.
+      *
+      * ```ts
+      *	try {
+      *		const loyaltyAccount = await sdk.customers.getLoyaltyAccount();
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link Error}
+      */
+  async getLoyaltyAccount(e) {
+    const t = e.phone, r = await this.buyersServiceClient.getLoyaltyAccount(t);
+    return r ? {
+      data: r
+    } : {};
+  }
+}
+const O = {
   INVALID_QUANTITY: "INVALID_QUANTITY",
   SOLD_OUT: "SOLD_OUT",
   STOCK_EXCEEDED: "STOCK_EXCEEDED",
   PER_ORDER_MAX_EXCEEDED: "PER_ORDER_MAX_EXCEEDED"
-}, H = (i) => {
+}, Y = (i) => {
+  var r;
+  return ((r = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: i
+  }).formatToParts(1).find((o) => o.type === "fraction")) == null ? void 0 : r.value.length) ?? 0;
+};
+class ee {
+  /**
+   * Formats the Money object based on the provided locale.
+   * 
+   * @param money - The Money object to format.
+   * @param formattedLocale - The locale to format the Money object in (BCP 47).
+   * @returns The formatted amount.
+   */
+  formatMoney(e, t = "en-US") {
+    return this.formatAmount(e.amount, e.currency, t);
+  }
+  /**
+   * Formats a subunits amount based on the provided currency and locale.
+   * 
+   * @param amount - The amount in subunits.
+   * @param currency - The currency of the amount (ISO 4217).
+   * @param formattedLocale - The locale to format the amount in (BCP 47).
+   * @returns The formatted amount.
+   */
+  formatAmount(e, t, r = "en-US") {
+    let o;
+    try {
+      o = new Intl.NumberFormat(r, {
+        style: "currency",
+        currency: t
+      });
+    } catch {
+      o = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: t
+      });
+    }
+    const n = Y(t);
+    return n > 0 && (e = e / Math.pow(10, n)), o.format(e);
+  }
+  /**
+   * Converts a float amount to the lowest subunits for the currency.
+   * 
+   * @param float - The float amount to convert.
+   * @param currency - The currency of the amount (ISO 4217).
+   * @returns The amount in subunits.
+   */
+  convertFloatToSubunits(e, t) {
+    const r = Y(t);
+    return r > 0 ? e * Math.pow(10, r) : e;
+  }
+}
+const Q = (i) => {
   const e = [];
   return i.item_option_values && Object.keys(i.item_option_values).forEach((t) => {
     e.push({
@@ -536,16 +685,16 @@ const C = {
       choice: i.item_option_values[t].choice
     });
   }), e;
-}, de = (i) => {
+}, Ee = (i) => {
   const e = i.product_type_details.end_date, t = i.product_type_details.end_time;
   let r = e + "T";
-  const n = t.split(" "), s = n[0].split(":");
-  let o = parseInt(s[0]) + (n[1] === "PM" ? 12 : 0);
-  o -= s[0] === "12" ? 12 : 0;
-  const a = s[1];
-  return o.toString().length === 1 && (r += "0"), r += `${o}:${a}:00${i.product_type_details.timezone_info.utc_offset_string}`, new Date(r);
+  const o = t.split(" "), n = o[0].split(":");
+  let s = parseInt(n[0]) + (o[1] === "PM" ? 12 : 0);
+  s -= n[0] === "12" ? 12 : 0;
+  const a = n[1];
+  return s.toString().length === 1 && (r += "0"), r += `${s}:${a}:00${i.product_type_details.timezone_info.utc_offset_string}`, new Date(r);
 };
-class ue {
+class Ie {
   /**
       * Returns the variations for an item resource.
       */
@@ -574,7 +723,7 @@ class ue {
       * Returns the QuantityErrorType if there's an item quantity error with the item varation, otherwise null.
       */
   getItemQuantityError(e, t, r) {
-    return r <= 0 ? C.INVALID_QUANTITY : this.isVariationSoldOut(t) ? C.SOLD_OUT : t.inventory_tracking_enabled && r > t.inventory ? C.STOCK_EXCEEDED : e.per_order_max && r > e.per_order_max ? C.PER_ORDER_MAX_EXCEEDED : null;
+    return r <= 0 ? O.INVALID_QUANTITY : this.isVariationSoldOut(t) ? O.SOLD_OUT : t.inventory_tracking_enabled && r > t.inventory ? O.STOCK_EXCEEDED : e.per_order_max && r > e.per_order_max ? O.PER_ORDER_MAX_EXCEEDED : null;
   }
   /**
       * Returns whether all variations of an item are sold out.
@@ -585,140 +734,145 @@ class ue {
   /**
       * Returns all variations in stock for the selected options or variation.
       */
-  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: r = "", skipStockCheck: n = !1 }) {
-    return this.getVariations(e).reduce((s, o) => {
-      if (!r && o.item_option_values) {
-        const a = H(o);
-        if (!t.every((c) => a.find((u) => u.itemOptionId === c.itemOptionId && u.choice === c.choice)))
-          return s;
-      } else if (e.variations.length > 1 && o.id !== r)
-        return s;
-      return !n && this.isVariationSoldOut(o) || s.push(o), s;
+  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: r = "", skipStockCheck: o = !1 }) {
+    return this.getVariations(e).reduce((n, s) => {
+      if (!r && s.item_option_values) {
+        const a = Q(s);
+        if (!t.every((c) => a.find((d) => d.itemOptionId === c.itemOptionId && d.choice === c.choice)))
+          return n;
+      } else if (e.variations.length > 1 && s.id !== r)
+        return n;
+      return !o && this.isVariationSoldOut(s) || n.push(s), n;
     }, []);
   }
   /**
       * Returns whether an item's option choice is disabled based on the selected options.
       */
-  isOptionChoiceDisabledForSelectedOptions(e, t, r, n = !0) {
-    n && (r = r.filter((a) => a.itemOptionId !== t.itemOptionId));
-    const s = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: r });
-    let o = !1;
-    return s.forEach((a) => {
-      H(a).find((u) => u.itemOptionId === t.itemOptionId && u.choice === t.choice) && (o = !0);
-    }), !o;
+  isOptionChoiceDisabledForSelectedOptions(e, t, r, o = !0) {
+    o && (r = r.filter((a) => a.itemOptionId !== t.itemOptionId));
+    const n = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: r });
+    let s = !1;
+    return n.forEach((a) => {
+      Q(a).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (s = !0);
+    }), !s;
   }
   /**
       * Returns whether a modifier list is valid for the selected modifiers.
       */
   isModifierListForSelectedModifiersValid(e, t) {
     var a, c;
-    const r = t.find((u) => u.id == e.id), n = e.min_selected_modifiers, s = e.max_selected_modifiers;
-    let o = ((a = r == null ? void 0 : r.textEntry) == null ? void 0 : a.length) || 0;
+    const r = t.find((d) => d.id == e.id), o = e.min_selected_modifiers, n = e.max_selected_modifiers;
+    let s = ((a = r == null ? void 0 : r.textEntry) == null ? void 0 : a.length) || 0;
     if ((c = r == null ? void 0 : r.choiceSelections) != null && c.length) {
-      const u = r.choiceSelections.find((I) => {
+      const d = r.choiceSelections.find((I) => {
         var h;
-        return !((h = e.modifiers) != null && h.find((m) => m.id === I));
-      }), l = r.choiceSelections.find((I) => {
-        var h, m;
-        return (m = (h = e.modifiers) == null ? void 0 : h.find((f) => f.id === I)) == null ? void 0 : m.sold_out;
+        return !((h = e.modifiers) != null && h.find((f) => f.id === I));
+      }), u = r.choiceSelections.find((I) => {
+        var h, f;
+        return (f = (h = e.modifiers) == null ? void 0 : h.find((g) => g.id === I)) == null ? void 0 : f.sold_out;
       });
-      if (u || l)
+      if (d || u)
         return !1;
-      o = r.choiceSelections.length;
+      s = r.choiceSelections.length;
     }
-    return n && s && n === s ? o === n : n && s ? o >= n && o <= s : s ? o <= s : n ? o >= n : !0;
+    return o && n && o === n ? s === o : o && n ? s >= o && s <= n : n ? s <= n : o ? s >= o : !0;
   }
   /**
       * Returns the disabled option choices for an item based on the selected options.
       */
-  getDisabledOptionChoicesForSelectedOptions(e, t, r, n = !0) {
-    const s = t.choices.map((a) => ({
+  getDisabledOptionChoicesForSelectedOptions(e, t, r, o = !0) {
+    const n = t.choices.map((a) => ({
       itemOptionId: t.id,
       choice: a
-    })), o = [];
-    return n && (r = r.filter((a) => a.itemOptionId !== t.id)), s.forEach((a) => {
-      this.isOptionChoiceDisabledForSelectedOptions(e, a, r, n) && o.push(a.choice);
-    }), o;
+    })), s = [];
+    return o && (r = r.filter((a) => a.itemOptionId !== t.id)), n.forEach((a) => {
+      this.isOptionChoiceDisabledForSelectedOptions(e, a, r, o) && s.push(a.choice);
+    }), s;
   }
   /**
       * Returns whether an item with any combination of selected options, modifiers, variationId, and quantity is valid.
       * @throws {@link ValidateItemError}
       */
-  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: r = [], selectedVariationId: n = "", quantity: s = void 0, skipStockCheck: o = !1, skipModifierCheck: a = !1 }) {
-    var g, S;
+  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: r = [], selectedVariationId: o = "", quantity: n = void 0, skipStockCheck: s = !1, skipModifierCheck: a = !1 }) {
+    var m, w;
     const c = [];
-    let u = !1, l = "", I = C.SOLD_OUT;
+    let d = !1, u = "", I = O.SOLD_OUT;
     const h = [];
-    (g = e.item_options) != null && g.length && !n ? e.item_options.forEach((d) => {
-      t != null && t.find((p) => p.itemOptionId === d.id && d.choices.includes(p.choice)) || c.push(d.id);
-    }) : !e.item_options && e.variations.length > 1 && !n && (u = !0);
-    let m = null;
-    if (c.length === 0 && !u) {
-      const d = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: n, skipStockCheck: o });
-      if (d.length === 0) {
-        const p = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: n, skipStockCheck: !0 });
-        p.length > 0 && (l = p[0].id);
-      } else if (m = d[0], s != null) {
-        const p = this.getItemQuantityError(e, m, s);
-        p && (I = p, l = m.id);
+    (m = e.item_options) != null && m.length && !o ? e.item_options.forEach((l) => {
+      t != null && t.find((y) => y.itemOptionId === l.id && l.choices.includes(y.choice)) || c.push(l.id);
+    }) : !e.item_options && e.variations.length > 1 && !o && (d = !0);
+    let f = null;
+    if (c.length === 0 && !d) {
+      const l = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: s });
+      if (l.length === 0) {
+        const y = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: !0 });
+        y.length > 0 && (u = y[0].id);
+      } else if (f = l[0], n != null) {
+        const y = this.getItemQuantityError(e, f, n);
+        y && (I = y, u = f.id);
       }
     }
-    if ((S = e.modifier_lists) != null && S.length && !a && e.modifier_lists.forEach((d) => {
-      this.isModifierListForSelectedModifiersValid(d, r) || h.push(d.id);
-    }), !m || c.length || l || h.length) {
-      const d = new Error("Failed to validate item.");
-      throw c.length && (d.itemOptionIds = c), u && (d.flatVariationSelectionMissing = !0), l && (d.variationId = l, d.quantityErrorType = I), h.length && (d.modifierListIds = h), d;
+    if ((w = e.modifier_lists) != null && w.length && !a && e.modifier_lists.forEach((l) => {
+      this.isModifierListForSelectedModifiersValid(l, r) || h.push(l.id);
+    }), !f || c.length || u || h.length) {
+      const l = new Error("Failed to validate item.");
+      throw c.length && (l.itemOptionIds = c), d && (l.flatVariationSelectionMissing = !0), u && (l.variationId = u, l.quantityErrorType = I), h.length && (l.modifierListIds = h), l;
     }
-    const f = {
+    const g = {
       itemId: e.id,
-      variationId: m.id,
+      variationId: f.id,
       modifiers: r
     };
-    return s && (f.quantity = s), f;
+    return n && (g.quantity = n), g;
   }
   /**
       * Returns the price of an item based on the selected options, modifiers, and/or variation id.
       */
-  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: r = "", selectedModifiers: n = [], skipStockCheck: s = !1, skipModifierCheck: o = !1, formattedLocale: a = void 0 }) {
-    var u;
+  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: r = "", selectedModifiers: o = [], skipStockCheck: n = !1, skipModifierCheck: s = !1, formattedLocale: a = void 0 }) {
+    var d;
     let c = null;
     try {
-      c = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: r, selectedModifiers: n, skipStockCheck: s, skipModifierCheck: o });
+      c = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: r, selectedModifiers: o, skipStockCheck: n, skipModifierCheck: s });
     } catch {
     }
     if (c) {
-      const l = e.variations.find((f) => f.id === c.variationId);
-      let I = l.price.regular, h = l.price.sale;
-      (u = c.modifiers) == null || u.forEach((f) => {
-        var g, S;
-        if (f.type === x.CHOICE || f.type === x.GIFT_WRAP) {
-          const d = (g = e.modifier_lists) == null ? void 0 : g.find((p) => p.id === f.id);
-          d && ((S = d.modifiers) == null || S.forEach((p) => {
-            f.choiceSelections.includes(p.id) && p.price_money && (I += p.price_money.amount, h += p.price_money.amount);
+      const u = e.variations.find((m) => m.id === c.variationId);
+      let I = u.price.regular.amount, h = u.price.sale.amount;
+      const f = u.price.regular.currency;
+      (d = c.modifiers) == null || d.forEach((m) => {
+        var w, l;
+        if (m.type === H.CHOICE || m.type === H.GIFT_WRAP) {
+          const y = (w = e.modifier_lists) == null ? void 0 : w.find((S) => S.id === m.id);
+          y && ((l = y.modifiers) == null || l.forEach((S) => {
+            m.choiceSelections.includes(S.id) && S.price_money && (I += S.price_money.amount, h += S.price_money.amount);
           }));
         }
       });
-      const m = {
-        regular: I,
-        sale: h,
-        currency: l.price.currency
+      const g = {
+        regular: {
+          amount: I,
+          currency: f,
+          formatted: ""
+        },
+        sale: {
+          amount: h,
+          currency: f,
+          formatted: ""
+        }
       };
       if (a) {
-        let f;
-        try {
-          f = new Intl.NumberFormat(a, {
-            style: "currency",
-            currency: l.price.currency
-          });
-        } catch {
-          f = new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: l.price.currency
-          });
-        }
-        m.regularFormatted = f.format(I), m.saleFormatted = f.format(h);
+        const m = new ee();
+        g.regular.formatted = m.formatMoney({
+          amount: I,
+          currency: f,
+          formatted: ""
+        }, a), g.sale.formatted = m.formatMoney({
+          amount: h,
+          currency: f,
+          formatted: ""
+        }, a);
       }
-      return m;
+      return g;
     }
     return null;
   }
@@ -726,7 +880,7 @@ class ue {
       * Returns whether an item is an event and has ended.
       */
   isEventItemInThePast(e) {
-    return e.square_online_type !== "EVENT" ? !1 : de(e) <= /* @__PURE__ */ new Date();
+    return e.square_online_type !== "EVENT" ? !1 : Ee(e) <= /* @__PURE__ */ new Date();
   }
   /**
       * Returns whether an item is a preorder and the cutoff time has passed.
@@ -738,111 +892,16 @@ class ue {
     return new Date(t) <= /* @__PURE__ */ new Date();
   }
 }
-const J = "customer_xsrf", B = "/app/accounts/v1", fe = "/ping", pe = "/loyalty/account/search";
-var D, v, $, R, z, A, L;
-class he {
+class Se {
   constructor(e) {
-    w(this, v);
-    w(this, R);
-    /**
-        * Calling ping will set the session ID and XSRF token cookies needed for subsequent requests
-        */
-    w(this, A);
-    w(this, D, void 0);
-    G(this, D, e);
-  }
-  async getLoyaltyAccount(e) {
-    const t = {
-      phone: e
-    }, r = await _(this, v, $).call(this, `${B}${pe}`, "POST", t);
-    return (r == null ? void 0 : r.data.loyalty_account) ?? null;
-  }
-}
-D = new WeakMap(), v = new WeakSet(), $ = async function(e, t, r = null, n = !0) {
-  let s = N(J);
-  s || (await _(this, A, L).call(this), s = N(J) ?? "");
-  const o = {
-    method: t,
-    headers: _(this, R, z).call(this, s)
-  };
-  r && (o.body = JSON.stringify(r));
-  const a = await fetch(e, o);
-  if (!a.ok) {
-    if (a.status === 404)
-      return null;
-    if (a.status === 419 && n)
-      return await _(this, A, L).call(this), await _(this, v, $).call(this, e, t, r, !1);
-    throw new Error(`Error ${a.status}: ${a.statusText}`);
-  }
-  return await a.json();
-}, R = new WeakSet(), z = function(e) {
-  return {
-    Accept: "application/json",
-    "Content-Type": "application/json; charset=UTF-8",
-    "X-XSRF-TOKEN": e,
-    "Square-Merchant-Token": j(this, D)
-  };
-}, A = new WeakSet(), L = async function() {
-  const e = `${B}${fe}`;
-  await fetch(e);
-};
-class me {
-  constructor(e) {
-    y(this, "initConfig");
-    y(this, "buyersServiceClient");
-    this.initConfig = e, this.buyersServiceClient = new he(e.merchantId);
-  }
-  /**
-      * Used to try and get the coordinates of the buyer based on their IP address.
-      * If the coordinates can't be determined, this method returns an empty object.
-      *
-      * ```ts
-      *	try {
-      *		const coordinates = await sdk.customers.getCoordinates();
-      *	} catch (error) {
-      *		// Handle errors
-      *	}
-      * ```
-      * @throws {@link Error}
-      */
-  async getCoordinates() {
-    const t = `/app/website/cms/api/v1/users/${this.initConfig.userId}/customers/coordinates`;
-    let n = await (await fetch(t, {
-      method: "GET",
-      headers: E()
-    })).json();
-    return Array.isArray(n) && (n = {}), n;
-  }
-  /**
-      * Search for an existing customer loyalty account by phone number.
-      * If no loyalty account exists, this method returns an empty object.
-      *
-      * ```ts
-      *	try {
-      *		const loyaltyAccount = await sdk.customers.getLoyaltyAccount();
-      *	} catch (error) {
-      *		// Handle errors
-      *	}
-      * ```
-      * @throws {@link Error}
-      */
-  async getLoyaltyAccount(e) {
-    const t = e.phone, r = await this.buyersServiceClient.getLoyaltyAccount(t);
-    return r ? {
-      data: r
-    } : {};
-  }
-}
-class Ee {
-  constructor(e) {
-    y(this, "version", "1.0.0-alpha.11");
-    y(this, "cart");
-    y(this, "orders");
-    y(this, "places");
-    y(this, "resource");
-    y(this, "template");
-    y(this, "customers");
-    y(this, "helpers");
+    p(this, "version", "0.0.0-semantic-release");
+    p(this, "cart");
+    p(this, "orders");
+    p(this, "places");
+    p(this, "resource");
+    p(this, "template");
+    p(this, "customers");
+    p(this, "helpers");
     if (!e.userId)
       throw new Error("missing user id");
     if (!e.siteId)
@@ -853,11 +912,12 @@ class Ee {
       throw new Error("invalid user id");
     if (!Number.isInteger(Number(e.siteId)))
       throw new Error("invalid site id");
-    this.cart = new ie(), this.orders = new se(e), this.places = new ae(e), this.resource = new ne(), this.template = new le(), this.customers = new me(e), this.helpers = {
-      item: new ue()
+    this.cart = new se(), this.orders = new ae(e), this.places = new de(e), this.resource = new ce(), this.template = new fe(), this.customers = new ye(e), this.helpers = {
+      item: new Ie(),
+      money: new ee()
     };
   }
 }
 export {
-  Ee as default
+  Se as default
 };
