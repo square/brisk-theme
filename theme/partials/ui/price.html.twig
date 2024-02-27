@@ -16,13 +16,13 @@
     {% endif %}
 
     {% set isPriceRange = productVariations|length > 1 %}
-    {% set formattedRegularPrice = formattedPrice.regular | default(regularPrice.formatted) %}
-    {% set formattedFinalPrice = formattedPrice.final | default(finalPrice.formatted) %}
+    {% set formattedRegularPrice = regularPrice.formatted %}
+    {% set formattedFinalPrice = finalPrice.formatted %}
     
     {% set isOnSale = formattedRegularPrice != formattedFinalPrice %}
 
     {% if isPriceRange %}
-        {% set isOnSale = price.high.amount != price.regular_high.amount or price.low != price.regular_low.amount %}
+        {% set isOnSale = price.high.amount != price.regular_high.amount or price.low.amount != price.regular_low.amount %}
         {% if isOnSale %}
             {% if regularPrice != finalPrice %}
                 {% set formattedRegularPrice = finalPrice.formatted ~ ' - ' ~ regularPrice.formatted %}
