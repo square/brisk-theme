@@ -19,10 +19,79 @@
 {% schema %}
 {
     "banner": {
-        "type": "section"
+        "type": "section",
+        "default": {
+            "props": {
+                "alt": "Home page banner",
+                "marquee": "Stay dry this spring"
+            }
+        }
     },
     "main": {
-        "type": "section-list"
+        "type": "section-list",
+        "default": [
+            {
+                "props":
+                {
+                    "heading": "Shop by category",
+                    "categories":
+                    {
+                        "pagination":
+                        {
+                            "page_size": 4
+                        }
+                    }
+                },
+                "template": "home/featured-categories"
+            },
+            {
+                "props":
+                {
+                    "text": "Our mission is to revolutionize the fashion industry by providing stylish and sustainable clothing options that promote environmental consciousness. We’re committed to minimizing our ecological footprint.",
+                    "heading": "Our mission"
+                },
+                "template": "home/text"
+            },
+            {
+                "props":
+                {
+                    "images":
+                    [
+                        {
+                            "alt": "Our mission 1",
+                            "src": "images/our-mission-1.png"
+                        },
+                        {
+                            "alt": "Our mission 2",
+                            "src": "images/our-mission-2.png"
+                        },
+                        {
+                            "alt": "Our mission 3",
+                            "src": "images/our-mission-3.png"
+                        }
+                    ]
+                },
+                "template": "home/featured-images"
+            },
+            {
+                "props":
+                {
+                    "items":
+                    {
+                        "sort":
+                        {
+                            "by": "popularity_score"
+                        },
+                        "pagination":
+                        {
+                            "page_size": 4
+                        }
+                    },
+                    "heading": "Best sellers"
+                },
+                "template": "home/featured-items"
+            }
+        ]
     }
 }
 {% endschema %}
