@@ -28,7 +28,7 @@
     {% endif %}
 
     {# Items options #}
-    {% set itemsOptions = { category_id: category.square_online_id } %}
+    {% set itemsOptions = { category_id: category.square_online_id, square_online_id: true } %}
 
     {# Sort options #}
     {% set sortOptions = [
@@ -48,7 +48,7 @@
     {{ include('components/sections/store/item-list', {
         category,
         categories,
-        category_hierarchy: category_hierarchy(null, category.square_online_id),
+        category_hierarchy: category_hierarchy(null, category.square_online_id, true),
         items_options: itemsOptions,
         sort_options: sortOptions,
         global_options: globalOptions,

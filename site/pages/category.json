@@ -4,7 +4,8 @@
     "props": {
         "category": {
             "filters": {
-                "id": "request_data(path.id)"
+                "id": "request_data(path.id)",
+                "square_online_id": true
             }
         },
         "categories": {
