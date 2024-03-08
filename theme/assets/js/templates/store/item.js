@@ -498,7 +498,6 @@ document.addEventListener('alpine:init', () => {
     });
 
     const createAfterpayBadgeData = () => ({
-        isLoading: true,
         payments: null,
         paymentAmount: null,
         selector: '.afterpay-placement',
@@ -507,11 +506,11 @@ document.addEventListener('alpine:init', () => {
          *
          * @param {String} applicationId the application id
          * @param {String} locationId the location id
-         * @return {Object}
+         * @return {Object|null}
         */
         initWebPaymentsSDK(applicationId, locationId) {
             if (!this.webPaymentsSDKLoaded()) {
-                console.error('Web Payments SDK not loaded');
+                return null;
             }
 
             const Square = window.Square;
@@ -531,6 +530,9 @@ document.addEventListener('alpine:init', () => {
             const locationId = Alpine.store('product').locationId;
             const storeLocale = Alpine.store('global').locale;
             const payments = this.initWebPaymentsSDK(applicationId, locationId);
+            if (!payments) {
+                return;
+            }
             payments.setLocale(storeLocale);
             this.payments = payments;
 
@@ -546,18 +548,10 @@ document.addEventListener('alpine:init', () => {
             this.attachAfterpayMessaging();
         },
         async attachAfterpayMessaging() {
-            this.isLoading = true;
-            this.error = null;
-
-            try {
-                const paymentRequest = this.buildPaymentRequest(this.paymentAmount);
-                const afterpay = await this.payments.afterpayClearpay(paymentRequest);
-                this.cleanupAfterpayMessaging();
-                await afterpay.attachMessaging(this.selector, Constants.AFTERPAY_MESSAGING_OPTIONS);
-                this.isLoading = false;
-            } catch (err) {
-                console.error(err);
-            }
+            const paymentRequest = this.buildPaymentRequest(this.paymentAmount);
+            const afterpay = await this.payments.afterpayClearpay(paymentRequest);
+            this.cleanupAfterpayMessaging();
+            await afterpay.attachMessaging(this.selector, Constants.AFTERPAY_MESSAGING_OPTIONS);
         },
 
         /**
