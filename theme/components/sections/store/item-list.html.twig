@@ -24,6 +24,10 @@
     {% if request.query[filter] %}
         {% set value = request.query[filter]|split(',') %}
         {% set items_options = items_options|merge({ (filter): value }) %}
+
+        {% if filter == 'category_ids' %}
+            {% set items_options = items_options|merge({ square_online_id: true }) %}
+        {% endif %}
     {% endif %}
 {% endfor %}
 
