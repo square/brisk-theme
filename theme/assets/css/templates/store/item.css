@@ -163,7 +163,7 @@
 }
 
 .afterpay-badge {
-    --theme-loader-size: 32px;
+    margin-top: var(--space-x2);
 }
 
 /* stylelint-disable-next-line selector-type-no-unknown */
