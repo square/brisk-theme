@@ -161,3 +161,15 @@
 .product-reviews__heading {
     margin-bottom: var(--space-x3);
 }
+
+/* stylelint-disable-next-line selector-type-no-unknown */
+afterpay-placement {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* stylelint-disable-next-line selector-type-no-unknown */
+afterpay-modal {
+    position: relative;
+    z-index: var(--theme-z-index-overlay);
+}
