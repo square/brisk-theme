@@ -162,6 +162,10 @@
     margin-bottom: var(--space-x3);
 }
 
+.afterpay-badge {
+    --theme-loader-size: 32px;
+}
+
 /* stylelint-disable-next-line selector-type-no-unknown */
 afterpay-placement {
     margin-top: 0;

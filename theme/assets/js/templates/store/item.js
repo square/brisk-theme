@@ -500,6 +500,7 @@ document.addEventListener('alpine:init', () => {
     const createAfterpayBadgeData = () => ({
         payments: null,
         paymentAmount: null,
+        isLoadingAfterpayBadge: false,
         selector: '.afterpay-placement',
         /**
          * Initialize Square Web Payments SDK
@@ -510,7 +511,7 @@ document.addEventListener('alpine:init', () => {
         */
         initWebPaymentsSDK(applicationId, locationId) {
             if (!this.webPaymentsSDKLoaded()) {
-                return null;
+                throw new Error('Square Web Payments SDK is not loaded');
             }
 
             const Square = window.Square;
@@ -530,9 +531,6 @@ document.addEventListener('alpine:init', () => {
             const locationId = Alpine.store('product').locationId;
             const storeLocale = Alpine.store('global').locale;
             const payments = this.initWebPaymentsSDK(applicationId, locationId);
-            if (!payments) {
-                return;
-            }
             payments.setLocale(storeLocale);
             this.payments = payments;
 
@@ -548,10 +546,17 @@ document.addEventListener('alpine:init', () => {
             this.attachAfterpayMessaging();
         },
         async attachAfterpayMessaging() {
-            const paymentRequest = this.buildPaymentRequest(this.paymentAmount);
-            const afterpay = await this.payments.afterpayClearpay(paymentRequest);
-            this.cleanupAfterpayMessaging();
-            await afterpay.attachMessaging(this.selector, Constants.AFTERPAY_MESSAGING_OPTIONS);
+            this.isLoadingAfterpayBadge = true;
+            try {
+                const paymentRequest = this.buildPaymentRequest(this.paymentAmount);
+                const afterpay = await this.payments.afterpayClearpay(paymentRequest);
+                this.cleanupAfterpayMessaging();
+                await afterpay.attachMessaging(this.selector, Constants.AFTERPAY_MESSAGING_OPTIONS);
+            } catch (err) {
+                throw new Error('Failed to attach afterpay messaging');
+            } finally {
+                this.isLoadingAfterpayBadge = false;
+            }
         },
 
         /**
