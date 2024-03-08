@@ -511,7 +511,7 @@ document.addEventListener('alpine:init', () => {
         */
         initWebPaymentsSDK(applicationId, locationId) {
             if (!this.webPaymentsSDKLoaded()) {
-                throw new Error('Web Payments SDK not loaded');
+                console.error('Web Payments SDK not loaded');
             }
 
             const Square = window.Square;
@@ -556,7 +556,7 @@ document.addEventListener('alpine:init', () => {
                 await afterpay.attachMessaging(this.selector, Constants.AFTERPAY_MESSAGING_OPTIONS);
                 this.isLoading = false;
             } catch (err) {
-                throw new Error(err);
+                console.error(err);
             }
         },
 
