@@ -90,6 +90,38 @@
                         {{ include('partials/ui/price', { price: product.price, variations: product.variations, secondaryText: caloriesText }) }}
                     </div>
                 </div>
+                {# Afterpay #}
+
+                {% if square.store.payment_methods.afterpay.enabled %}
+                    {% set item_price_eligible = square.store.payment_methods.afterpay.restrictions.product_price_min.amount <= product.price.regular_low.amount and square.store.payment_methods.afterpay.restrictions.product_price_max.amount >= product.price.regular_low.amount %}
+
+                    {% set invalid_types_for_afterpay = [
+                        "DONATION",
+                        "SERVICE",
+                        "DIGITAL",
+                        "SIMPLE_DIGITAL",
+                        "EVENT",
+                        "MEMBERSHIP"
+                    ] %}
+
+                    {% set item_type_valid = item.product_type not in invalid_types_for_afterpay %}
+
+                    {% set item_price_eligible = item_price_eligible and item_type_valid %}
+
+                    {% if item_price_eligible and item_type_valid %}
+                        <script src="https://web.squarecdn.com/v1/square.js"></script>
+                        <div x-data="productAfterpayBadge()" class="afterpay-badge">
+                            <div x-ref="container">
+                                <div
+                                    x-show="isLoadingAfterpayBadge"
+                                >
+                                    {{ include('partials/ui/loader') }}
+                                </div>
+                                <div class="afterpay-placement"></div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
 
                 {# Rating #}
                 {% if product.review_meta.rating_breakdown.total > 0 %}
