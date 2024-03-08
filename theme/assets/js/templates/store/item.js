@@ -1,10 +1,3 @@
-const AFTERPAY_MESSAGING_OPTIONS = {
-    badgeTheme: 'black-on-mint',
-    modalLinkStyle: 'circled-info-icon',
-    modalTheme: 'white',
-    size: 'sm',
-};
-
 document.addEventListener('alpine:init', () => {
     // Product store shared between product components
     Alpine.store('product', {
@@ -560,7 +553,7 @@ document.addEventListener('alpine:init', () => {
                 const paymentRequest = this.buildPaymentRequest(this.paymentAmount);
                 const afterpay = await this.payments.afterpayClearpay(paymentRequest);
                 this.cleanupAfterpayMessaging();
-                await afterpay.attachMessaging(this.selector, AFTERPAY_MESSAGING_OPTIONS);
+                await afterpay.attachMessaging(this.selector, Constants.AFTERPAY_MESSAGING_OPTIONS);
                 this.isLoading = false;
             } catch (err) {
                 throw new Error(err);
