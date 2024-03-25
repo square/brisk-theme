@@ -1,121 +1,121 @@
-var te = Object.defineProperty;
-var re = (i, e, t) => e in i ? te(i, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[e] = t;
-var p = (i, e, t) => (re(i, typeof e != "symbol" ? e + "" : e, t), t), F = (i, e, t) => {
-  if (!e.has(i))
+var ae = Object.defineProperty;
+var ce = (n, e, t) => e in n ? ae(n, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : n[e] = t;
+var y = (n, e, t) => (ce(n, typeof e != "symbol" ? e + "" : e, t), t), V = (n, e, t) => {
+  if (!e.has(n))
     throw TypeError("Cannot " + t);
 };
-var j = (i, e, t) => (F(i, e, "read from private field"), t ? t.call(i) : e.get(i)), T = (i, e, t) => {
-  if (e.has(i))
+var K = (n, e, t) => (V(n, e, "read from private field"), t ? t.call(n) : e.get(n)), v = (n, e, t) => {
+  if (e.has(n))
     throw TypeError("Cannot add the same private member more than once");
-  e instanceof WeakSet ? e.add(i) : e.set(i, t);
-}, G = (i, e, t, r) => (F(i, e, "write to private field"), r ? r.call(i, t) : e.set(i, t), t);
-var _ = (i, e, t) => (F(i, e, "access private method"), t);
-const X = {
+  e instanceof WeakSet ? e.add(n) : e.set(n, t);
+}, Y = (n, e, t, r) => (V(n, e, "write to private field"), r ? r.call(n, t) : e.set(n, t), t);
+var _ = (n, e, t) => (V(n, e, "access private method"), t);
+const B = {
   SHIPMENT: "SHIPMENT",
   PICKUP: "PICKUP",
   DELIVERY: "DELIVERY",
   MANUAL: "MANUAL"
-}, x = {
+}, J = {
   ASAP: "ASAP",
   SCHEDULED: "SCHEDULED"
-}, H = {
+}, W = {
   CHOICE: "CHOICE",
   TEXT: "TEXT",
   GIFT_WRAP: "GIFT_WRAP",
   GIFT_MESSAGE: "GIFT_MESSAGE"
-}, ie = () => {
-  var i;
-  return (i = document.querySelector('meta[name="csrf-token"]')) == null ? void 0 : i.content;
-}, E = () => ({
+}, ue = () => {
+  var n;
+  return (n = document.querySelector('meta[name="csrf-token"]')) == null ? void 0 : n.content;
+}, S = () => ({
   Accept: "application/json",
   "content-type": "application/json; charset=UTF-8",
-  "X-CSRF-TOKEN": ie()
-}), N = (i) => {
-  const e = i + "=", r = decodeURIComponent(document.cookie).split(";");
-  for (let o = 0; o < r.length; o++) {
-    let n = r[o];
-    for (; n.charAt(0) == " "; )
-      n = n.substring(1);
-    if (n.indexOf(e) == 0)
-      return n.substring(e.length, n.length);
+  "X-CSRF-TOKEN": ue()
+}), U = (n) => {
+  const e = n + "=", r = decodeURIComponent(document.cookie).split(";");
+  for (let i = 0; i < r.length; i++) {
+    let o = r[i];
+    for (; o.charAt(0) == " "; )
+      o = o.substring(1);
+    if (o.indexOf(e) == 0)
+      return o.substring(e.length, o.length);
   }
   return null;
-}, C = "/s/api/v1/cart", K = "Something went wrong", V = (i, e) => {
-  const t = U(e.error || e.message || i.statusText), r = new Error(t);
+}, C = "/s/api/v1/cart", Q = "Something went wrong", G = (n, e) => {
+  const t = x(e.error || e.message || n.statusText), r = new Error(t);
   if (e.errors) {
-    const o = {};
-    Object.keys(e.errors).forEach((n) => {
-      const s = e.errors[n].map((a) => U(a));
-      o[U(n)] = s;
-    }), r.errors = o;
+    const i = {};
+    Object.keys(e.errors).forEach((o) => {
+      const s = e.errors[o].map((a) => x(a));
+      i[x(o)] = s;
+    }), r.errors = i;
   }
-  return e.fields && (r.fields = e.fields), i.status && (r.status = i.status, r.status === 200 && (r.status = 500)), r;
-}, k = async (i) => {
-  const e = await i.json();
-  if (!i.ok)
-    throw V(i, e);
+  return e.fields && (r.fields = e.fields), n.status && (r.status = n.status, r.status === 200 && (r.status = 500)), r;
+}, L = async (n) => {
+  const e = await n.json();
+  if (!n.ok)
+    throw G(n, e);
   return {
-    response: i,
+    response: n,
     data: e.data
   };
-}, ne = async (i) => {
+}, le = async (n) => {
   var e;
-  if (i.redirected) {
-    if (window.location.href === i.url) {
-      const t = await i.json();
-      throw (e = t == null ? void 0 : t.response) != null && e.errors ? V(i, t.response.errors) : new Error(K);
+  if (n.redirected) {
+    if (window.location.href === n.url) {
+      const t = await n.json();
+      throw (e = t == null ? void 0 : t.response) != null && e.errors ? G(n, t.response.errors) : new Error(Q);
     }
-    window.location.href = i.url;
+    window.location.href = n.url;
     return;
-  } else if (!i.ok) {
-    const t = await i.json();
-    throw V(i, t);
+  } else if (!n.ok) {
+    const t = await n.json();
+    throw G(n, t);
   }
-  throw new Error(K);
-}, U = (i) => i.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), L = (i) => i.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), D = (i) => {
+  throw new Error(Q);
+}, x = (n) => n.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), M = (n) => n.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), k = (n) => {
   const e = {};
-  return Object.keys(i).forEach((t) => {
-    const r = i[t];
-    Array.isArray(r) ? e[L(t)] = W(r) : r && typeof r == "object" ? e[L(t)] = D(r) : e[L(t)] = r;
+  return Object.keys(n).forEach((t) => {
+    const r = n[t];
+    Array.isArray(r) ? e[M(t)] = te(r) : r && typeof r == "object" ? e[M(t)] = k(r) : e[M(t)] = r;
   }), e;
-}, W = (i) => {
+}, te = (n) => {
   const e = [];
-  return i.forEach((t) => {
-    Array.isArray(t) ? e.push(W(t)) : t && typeof t == "object" ? e.push(D(t)) : e.push(t);
+  return n.forEach((t) => {
+    Array.isArray(t) ? e.push(te(t)) : t && typeof t == "object" ? e.push(k(t)) : e.push(t);
   }), e;
-}, oe = (i) => {
-  const e = q(i);
+}, de = (n) => {
+  const e = ne(n);
   return delete e.order_id, e;
-}, z = (i) => {
-  const e = JSON.parse(JSON.stringify(i));
-  return e.fulfillmentType === X.PICKUP ? (e.pickupDetails || (e.pickupDetails = {}), e.pickupDetails.scheduleType || (e.pickupDetails.scheduleType = x.ASAP), e.pickupDetails.curbsidePickupRequested == null && (e.pickupDetails.curbsidePickupRequested = !1), e.pickupDetails.curbsidePickupDetails || (e.pickupDetails.curbsidePickupDetails = {
+}, re = (n) => {
+  const e = JSON.parse(JSON.stringify(n));
+  return e.fulfillmentType === B.PICKUP ? (e.pickupDetails || (e.pickupDetails = {}), e.pickupDetails.scheduleType || (e.pickupDetails.scheduleType = J.ASAP), e.pickupDetails.curbsidePickupRequested == null && (e.pickupDetails.curbsidePickupRequested = !1), e.pickupDetails.curbsidePickupDetails || (e.pickupDetails.curbsidePickupDetails = {
     curbsideDetails: ""
-  })) : e.fulfillmentType === X.DELIVERY && e.deliveryDetails && (e.deliveryDetails.noContactDelivery == null && (e.deliveryDetails.noContactDelivery = !1), e.deliveryDetails.scheduleType || (e.deliveryDetails.scheduleType = x.ASAP)), e;
-}, q = (i) => {
-  var o;
-  const e = JSON.parse(JSON.stringify(i.lineItem));
+  })) : e.fulfillmentType === B.DELIVERY && e.deliveryDetails && (e.deliveryDetails.noContactDelivery == null && (e.deliveryDetails.noContactDelivery = !1), e.deliveryDetails.scheduleType || (e.deliveryDetails.scheduleType = J.ASAP)), e;
+}, ne = (n) => {
+  var i;
+  const e = JSON.parse(JSON.stringify(n.lineItem));
   e.quantity || (e.quantity = 1);
-  const t = D(e);
-  if ((o = t.modifiers) != null && o.length) {
-    const n = {};
+  const t = k(e);
+  if ((i = t.modifiers) != null && i.length) {
+    const o = {};
     t.modifiers.forEach((s) => {
       if (s.type) {
-        n[s.type] || (n[s.type] = {});
+        o[s.type] || (o[s.type] = {});
         const a = JSON.parse(JSON.stringify(s));
-        delete a.id, delete a.type, n[s.type][s.id] = a;
+        delete a.id, delete a.type, o[s.type][s.id] = a;
       }
-    }), t.modifiers = n;
+    }), t.modifiers = o;
   } else
     t.modifiers && delete t.modifiers;
   return {
     line_item: t,
-    fulfillment: D(z(i.fulfillment)),
-    location_id: i.locationId,
+    fulfillment: k(re(n.fulfillment)),
+    location_id: n.locationId,
     // JSON.stringify will remove if undefined
-    order_id: b(i)
+    order_id: F(n)
   };
-}, b = (i) => i.orderId !== void 0 ? i.orderId : N("com_cart_id") || void 0;
-class se {
+}, F = (n) => n.orderId !== void 0 ? n.orderId : U("com_cart_id") || void 0;
+class fe {
   /**
       * Retrieves the active cart id if it exists.
       *
@@ -124,7 +124,7 @@ class se {
       * ```
       */
   getActiveId() {
-    return N("com_cart_id") || void 0;
+    return U("com_cart_id") || void 0;
   }
   /**
       * Adds an item to your cart order.
@@ -172,12 +172,12 @@ class se {
       * @throws {@link CartError}
       */
   async addItem(e) {
-    const t = q(e), r = await fetch(`${C}/add`, {
+    const t = ne(e), r = await fetch(`${C}/add`, {
       method: "POST",
       body: JSON.stringify(t),
-      headers: E()
+      headers: S()
     });
-    return await k(r);
+    return await L(r);
   }
   /**
       * Adds an item to a new order and redirects to checkout on success.
@@ -225,12 +225,12 @@ class se {
       * @throws {@link CartError}
       */
   async buyNowItem(e) {
-    const t = oe(e), r = await fetch(`${C}/buy`, {
+    const t = de(e), r = await fetch(`${C}/buy`, {
       method: "POST",
       body: JSON.stringify(t),
-      headers: E()
+      headers: S()
     });
-    return ne(r);
+    return le(r);
   }
   /**
       * Updates the quantity of an item on an order. Quantity must be greater than 0.
@@ -254,11 +254,11 @@ class se {
       body: JSON.stringify({
         order_item_id: e.orderItemId,
         quantity: e.quantity,
-        order_id: b(e)
+        order_id: F(e)
       }),
-      headers: E()
+      headers: S()
     });
-    return k(t);
+    return L(t);
   }
   /**
       * Removes a line item from an order.
@@ -280,17 +280,17 @@ class se {
       method: "POST",
       body: JSON.stringify({
         order_item_id: e.orderItemId,
-        order_id: b(e)
+        order_id: F(e)
       }),
-      headers: E()
+      headers: S()
     });
-    return k(t);
+    return L(t);
   }
   /**
-      * Updates the fulfillment on an order. At the moment must update all properties as it acts like a POST.
+      * Replaces the fulfillment on an order.
       *
       * ```ts
-      *	const patchFulfillmentRequest = {
+      *	const putFulfillmentRequest = {
       *		fulfillment: {
       *			fulfillmentType: 'PICKUP',
       *			pickupDetails: {
@@ -302,28 +302,28 @@ class se {
       *		}
       *	};
       *	try {
-      *		const response = await sdk.cart.patchFulfillment(patchFulfillmentRequest);
+      *		const response = await sdk.cart.putFulfillment(putFulfillmentRequest);
       *	} catch (error) {
       *		// Handle errors
       *	}
       * ```
       * @throws {@link CartError}
       */
-  async patchFulfillment(e) {
-    const t = await fetch(`${C}/${b(e)}/fulfillment`, {
-      method: "PATCH",
+  async putFulfillment(e) {
+    const t = await fetch(`${C}/${F(e)}/fulfillment`, {
+      method: "PUT",
       body: JSON.stringify({
-        fulfillment: D(z(e.fulfillment)),
+        fulfillment: k(re(e.fulfillment)),
         location_id: e.locationId
       }),
-      headers: E()
+      headers: S()
     });
-    return k(t);
+    return L(t);
   }
 }
-class ae {
+class me {
   constructor(e) {
-    p(this, "initConfig");
+    y(this, "initConfig");
     this.initConfig = e;
   }
   /**
@@ -343,32 +343,32 @@ class ae {
    * ```
    */
   async getOrder(e) {
-    const t = e.jwtToken, r = e.locationId, o = e.fulfillments;
+    const t = e.jwtToken, r = e.locationId, i = e.fulfillments;
     if (!t)
       throw new Error("missing jwtToken");
     if (!r)
       throw new Error("missing locationId");
-    if (!o)
+    if (!i)
       throw new Error("missing fulfillments");
     if (!this.initConfig.cmsSiteId)
       throw new Error("missing cmsSiteId");
-    if (!Array.isArray(o))
+    if (!Array.isArray(i))
       throw new Error("fulfillments must be an array");
-    const n = this.initConfig.cmsSiteId, s = ["shipping", "pickup", "delivery"];
-    o.forEach((u) => {
-      if (!s.includes(u.toLowerCase()))
-        throw new Error("invalid value in fulfillments array: " + u);
+    const o = this.initConfig.cmsSiteId, s = ["shipping", "pickup", "delivery"];
+    i.forEach((l) => {
+      if (!s.includes(l.toLowerCase()))
+        throw new Error("invalid value in fulfillments array: " + l);
     });
-    let a = `/app/cms/api/v1/sites/${n}/order-again/${t}?location=${r}`;
-    return o.forEach((u) => {
-      a += `&fulfillments[]=${u}`;
+    let a = `/app/cms/api/v1/sites/${o}/order-again/${t}?location=${r}`;
+    return i.forEach((l) => {
+      a += `&fulfillments[]=${l}`;
     }), await (await fetch(a, {
       method: "GET",
-      headers: E()
+      headers: S()
     })).json();
   }
 }
-class ce {
+class he {
   /**
       * Used to load up to 5 resources.
       *
@@ -410,26 +410,26 @@ class ce {
       */
   async getResource(e) {
     const t = {};
-    for (const n in e) {
-      const s = e[n];
-      t[n] = s;
+    for (const o in e) {
+      const s = e[o];
+      t[o] = s;
     }
     return await (await fetch("/s/api/v1/resource", {
       method: "POST",
       body: JSON.stringify({
         input: t
       }),
-      headers: E()
+      headers: S()
     })).json();
   }
 }
-const le = {
+const pe = {
   ADDRESS: "address",
   GEOCODE: "geocode"
 };
-class de {
+class ye {
   constructor(e) {
-    p(this, "initConfig");
+    y(this, "initConfig");
     this.initConfig = e;
   }
   /**
@@ -449,10 +449,10 @@ class de {
       * @throws {@link Error}
       */
   async autocompletePlaces(e) {
-    const t = this.initConfig.userId, r = this.initConfig.siteId, o = e.address, n = e.types ?? le.GEOCODE, s = `/app/store/api/v28/pub/users/${t}/sites/${r}/places?types=${n}&input=${o}`;
+    const t = this.initConfig.userId, r = this.initConfig.siteId, i = e.address, o = e.types ?? pe.GEOCODE, s = `/app/store/api/v28/pub/users/${t}/sites/${r}/places?types=${o}&input=${i}`;
     return await (await fetch(s, {
       method: "GET",
-      headers: E()
+      headers: S()
     })).json();
   }
   /**
@@ -471,22 +471,22 @@ class de {
       * @throws {@link Error}
       */
   async getPlace(e) {
-    const t = this.initConfig.userId, r = this.initConfig.siteId, o = e.placeId, n = `/app/store/api/v28/pub/users/${t}/sites/${r}/places/${o}`, a = await (await fetch(n, {
+    const t = this.initConfig.userId, r = this.initConfig.siteId, i = e.placeId, o = `/app/store/api/v28/pub/users/${t}/sites/${r}/places/${i}`, a = await (await fetch(o, {
       method: "GET",
-      headers: E()
+      headers: S()
     })).json();
     return Array.isArray(a.data) && (a.data = {}), a;
   }
 }
-class ue extends Error {
+class ge extends Error {
   constructor(t, r) {
     super(t);
     /** Provides the generic rendered HTML error template that would be rendered via the page on a failure. You can choose to use this to display a rendered error, or handle it how you see fit. */
-    p(this, "template");
+    y(this, "template");
     this.template = r;
   }
 }
-class fe {
+class Ie {
   /**
       * Used to load a Twig template via the API.
       *
@@ -516,66 +516,301 @@ class fe {
         template: e.template,
         props: e.props
       }),
-      headers: E()
+      headers: S()
     }), r = await t.text();
     if (t.ok === !1)
-      throw new ue("Unable to render template", r);
+      throw new ge("Unable to render template", r);
     return r;
   }
 }
-const J = "customer_xsrf", B = "/app/accounts/v1", he = "/ping", pe = "/loyalty/account/search";
-var v, A, $, R, Z, P, M;
-class me {
+const g = {
+  weekdayShort: { weekday: "short" },
+  weekdayLong: { weekday: "long" },
+  hourNminuteN: { hour: "numeric", minute: "numeric" },
+  hourNminuteNsecondN: { hour: "numeric", minute: "numeric", second: "numeric" },
+  yearNmonth2day2: { year: "numeric", month: "2-digit", day: "2-digit" },
+  yearNmonthNdayN: { year: "numeric", month: "numeric", day: "numeric" },
+  yearNmonthLdayN: { year: "numeric", month: "long", day: "numeric" },
+  yearNmonthSdayN: { year: "numeric", month: "short", day: "numeric" },
+  yearNmonthLdayNhourNminuteN: { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" },
+  yearNmonthSdayNhourNminuteN: { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" },
+  weekdayLyearNmonthLdayNhourNminuteN: { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" },
+  weekdaySyearNmonthSdayNhourNminuteN: { weekday: "short", year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" },
+  weekdayLhourNminuteN: { weekday: "long", hour: "numeric", minute: "numeric" }
+}, w = (n) => Number(n.replace(/:/g, "")), Ee = (n, e, t) => {
+  const r = new Date(n).toISOString().slice(0, 10);
+  return /* @__PURE__ */ new Date(`${r}T${e}${t}`);
+}, O = (n, e, t, r, i) => {
+  const o = { ...t };
+  return o.timeZone = r, typeof i == "boolean" && (o.hour12 = i), n.toLocaleString(e, o);
+}, j = (n, e, t) => O(n, e, g.weekdayShort, t).toUpperCase(), D = (n, e, t, r, i) => {
+  const o = e.split(":");
+  let s = o[0];
+  const a = o[1];
+  return Number.parseInt(s, 10) === 24 && (s = "0"), n.setHours(Number.parseInt(s, 10), Number.parseInt(a, 10)), O(n, r, t, i).replace("AM", "am").replace("PM", "pm");
+};
+var ie = /* @__PURE__ */ ((n) => (n.CURRENTLY_OPEN = "currentlyOpen", n.OPENS_LATER_TODAY = "opensLaterToday", n.OPENS_ANOTHER_DAY = "opensAnotherDay", n))(ie || {});
+class Se {
+  constructor() {
+    y(this, "OpenStatus", ie);
+  }
+  /**
+   * Returns the current open status and relevant time for a location's fulfillment type
+   *
+   * @param {LocationResource} location
+   * @param {string} locale - Hyphenized language/country locale combo, e.g. en-US (BCP 47).
+   * @param {'PICKUP' | 'DELIVERY'} fulfillment
+   * @return { OpenStatusDayAndTime | null }	
+   */
+  getLocationFulfillmentOpenStatusDayAndTime(e, t, r) {
+    const i = e.timezone.name, o = e.timezone.offset_string, s = e[r].hours;
+    return this.getOpenStatusDayAndTime(t, i, o, s);
+  }
+  /**
+   * Returns the current open status and relevant time for a location's business hours
+   *
+   * @param {LocationResource} location
+   * @param {string} locale - Hyphenized language/country locale combo, e.g. en-US (BCP 47).
+   * @return { OpenStatusDayAndTime | null }	
+   */
+  getLocationBusinessHoursOpenStatusDayAndTime(e, t) {
+    const r = e.timezone.name, i = e.timezone.offset_string, o = e.square_business_hours;
+    return this.getOpenStatusDayAndTime(t, r, i, o);
+  }
+  /**
+   * Given an hours object, returns the current open status and relevant time
+   *
+   * @param {string} locale - Hyphenized language/country locale combo, e.g. en-US (BCP 47).
+   * @param {string} timezone
+   * @param {string} tzOffsetString
+   * @param {Hours} hours
+   * @return { OpenStatusDayAndTime | null }
+   */
+  getOpenStatusDayAndTime(e, t, r, i) {
+    const o = /* @__PURE__ */ new Date(), s = this.getCurrentOpenInterval(e, t, i);
+    if (s) {
+      const c = this.getIntervalCloseDateObject(s, e, t, r, i);
+      if (!c)
+        return {
+          status: this.OpenStatus.CURRENTLY_OPEN,
+          time: "",
+          day: ""
+        };
+      const l = O(c, e, g.hourNminuteNsecondN, t, !1), d = D(c, l, g.hourNminuteN, e, t), f = D(c, l, g.weekdayLong, e, t);
+      return {
+        status: this.OpenStatus.CURRENTLY_OPEN,
+        time: d,
+        day: f
+      };
+    }
+    const a = this.getNextOpenIntervalToday(e, t, i);
+    if (a) {
+      const c = D(o, a.open, g.hourNminuteN, e, t), l = D(o, a.open, g.weekdayLong, e, t);
+      return {
+        status: this.OpenStatus.OPENS_LATER_TODAY,
+        time: c,
+        day: l
+      };
+    }
+    const u = this.getNextOpenIntervalAfterToday(e, t, i);
+    if (u) {
+      const { date: c, interval: l } = u, d = D(c, l.open, g.hourNminuteN, e, t), f = D(c, l.open, g.weekdayLong, e, t);
+      return {
+        status: this.OpenStatus.OPENS_ANOTHER_DAY,
+        time: d,
+        day: f
+      };
+    }
+    return null;
+  }
+  /**
+   * Returns date object of interval close time, accounting for 24 hour businesses, and hours that span between days
+   *
+   * @param {OpenInterval} currentOpenInterval
+   * @param {string} locale - Hyphenized language/country locale combo, e.g. en-US (BCP 47).
+   * @param {string} timezone
+   * @param {string} tzOffsetString
+   * @param {Hours} hours
+   * @return {Date}
+   */
+  getIntervalCloseDateObject(e, t, r, i, o) {
+    const s = /* @__PURE__ */ new Date();
+    let a = e.close, u = O(s, t, g.yearNmonthNdayN, r), c = null, l = 0;
+    if (a === "24:00:00") {
+      const d = /* @__PURE__ */ new Date();
+      for (let f = 0; f < 8; f += 1) {
+        if (f === 7)
+          return null;
+        d.setDate(d.getDate() + 1);
+        const p = j(
+          d,
+          t,
+          r
+        ), I = o[p];
+        if (I.length) {
+          const h = I.find((N) => N.open === "00:00:00");
+          if (h && h.close === "24:00:00") {
+            c = h, l = d.getDay();
+            continue;
+          }
+          if (h) {
+            a = h.close, u = O(d, t, g.yearNmonthNdayN, r);
+            break;
+          }
+        }
+        c && (a = c.close, d.setDate(l), u = O(d, t, g.yearNmonthNdayN, r));
+        break;
+      }
+    }
+    return Ee(
+      u,
+      a,
+      i
+    );
+  }
+  /**
+   * Gets open intervals for today
+   *
+   * @param {string} locale - Hyphenized language/country locale combo, e.g. en-US (BCP 47).
+   * @param {string} timezone
+   * @param {Hours} hours
+   * @return {OpenInterval[]}
+   */
+  getOpenIntervalsForToday(e, t, r) {
+    const i = j(
+      /* @__PURE__ */ new Date(),
+      e,
+      t
+    );
+    return r[i];
+  }
+  /**
+   * Get the open interval if we are currently in an open interval. Otherwise null
+   *
+   * @param {string} locale - Hyphenized language/country locale combo, e.g. en-US (BCP 47).
+   * @param {string} timezone
+   * @param {Hours} hours
+   * @return {OpenInterval | null }
+   */
+  getCurrentOpenInterval(e, t, r) {
+    const i = this.getOpenIntervalsForToday(e, t, r);
+    if (!i.length)
+      return null;
+    const o = O(/* @__PURE__ */ new Date(), e, g.hourNminuteNsecondN, t, !1);
+    let s = w(o);
+    return s >= 24e4 && (s -= 24e4), i.find((u) => {
+      const { open: c, close: l } = u;
+      return s >= w(c) && s < w(l);
+    }) || null;
+  }
+  /**
+   * Get the next open interval today
+   * If we are currently open in an interval, that will be returned
+   *
+   * @param {string} locale - Hyphenized language/country locale combo, e.g. en-US (BCP 47).
+   * @param {string} timezone
+   * @param {Hours} hours
+   * @return {OpenInterval | null }
+   */
+  getNextOpenIntervalToday(e, t, r) {
+    const i = this.getOpenIntervalsForToday(e, t, r);
+    if (!i.length)
+      return null;
+    const o = O(/* @__PURE__ */ new Date(), e, g.hourNminuteNsecondN, t, !1), s = w(o);
+    let a = null;
+    return i.forEach((u) => {
+      const c = w(u.open), l = w(u.close);
+      (s < c || s >= c && s < l) && // If we don't have a currentOrNextInterval yet, or if the current interval is earlier than the currentOrNextInterval
+      // we are doing this check since the intervals could be be out of order, and we want to make sure we are returing the
+      // next closest interval
+      (!a || c < w(a.open)) && (a = u);
+    }), a;
+  }
+  /**
+   * Get the next opening period after today within the next seven days
+   *
+   * @param {string} locale - Hyphenized language/country locale combo, e.g. en-US (BCP 47).
+   * @param {string} timezone
+   * @param {Hours} hours
+   * @return {Object | null} { open: openTime, close: closeTime }
+   */
+  getNextOpenIntervalAfterToday(e, t, r) {
+    const i = /* @__PURE__ */ new Date();
+    let o = null;
+    for (let u = 0; u < 7; u += 1) {
+      i.setDate(i.getDate() + 1);
+      const c = j(
+        i,
+        e,
+        t
+      ), l = r[c];
+      if (l.length) {
+        o = l[0];
+        break;
+      }
+    }
+    if (!o)
+      return null;
+    const [s, a] = o.open.split(":");
+    return i.setHours(Number.parseInt(s, 10), Number.parseInt(a, 10), 0), {
+      date: i,
+      interval: o
+    };
+  }
+}
+const q = "customer_xsrf", Z = "/app/accounts/v1", Oe = "/ping", Ne = "/loyalty/account/search";
+var b, P, H, $, oe, R, X;
+class we {
   constructor(e) {
-    T(this, A);
-    T(this, R);
+    v(this, P);
+    v(this, $);
     /**
         * Calling ping will set the session ID and XSRF token cookies needed for subsequent requests
         */
-    T(this, P);
-    T(this, v, void 0);
-    G(this, v, e);
+    v(this, R);
+    v(this, b, void 0);
+    Y(this, b, e);
   }
   async getLoyaltyAccount(e) {
     const t = {
       phone: e
-    }, r = await _(this, A, $).call(this, `${B}${pe}`, "POST", t);
+    }, r = await _(this, P, H).call(this, `${Z}${Ne}`, "POST", t);
     return (r == null ? void 0 : r.data.loyalty_account) ?? null;
   }
 }
-v = new WeakMap(), A = new WeakSet(), $ = async function(e, t, r = null, o = !0) {
-  let n = N(J);
-  n || (await _(this, P, M).call(this), n = N(J) ?? "");
+b = new WeakMap(), P = new WeakSet(), H = async function(e, t, r = null, i = !0) {
+  let o = U(q);
+  o || (await _(this, R, X).call(this), o = U(q) ?? "");
   const s = {
     method: t,
-    headers: _(this, R, Z).call(this, n)
+    headers: _(this, $, oe).call(this, o)
   };
   r && (s.body = JSON.stringify(r));
   const a = await fetch(e, s);
   if (!a.ok) {
     if (a.status === 404)
       return null;
-    if (a.status === 419 && o)
-      return await _(this, P, M).call(this), await _(this, A, $).call(this, e, t, r, !1);
+    if (a.status === 419 && i)
+      return await _(this, R, X).call(this), await _(this, P, H).call(this, e, t, r, !1);
     throw new Error(`Error ${a.status}: ${a.statusText}`);
   }
   return await a.json();
-}, R = new WeakSet(), Z = function(e) {
+}, $ = new WeakSet(), oe = function(e) {
   return {
     Accept: "application/json",
     "Content-Type": "application/json; charset=UTF-8",
     "X-XSRF-TOKEN": e,
-    "Square-Merchant-Token": j(this, v)
+    "Square-Merchant-Token": K(this, b)
   };
-}, P = new WeakSet(), M = async function() {
-  const e = `${B}${he}`;
+}, R = new WeakSet(), X = async function() {
+  const e = `${Z}${Oe}`;
   await fetch(e);
 };
-class ye {
+class Te {
   constructor(e) {
-    p(this, "initConfig");
-    p(this, "buyersServiceClient");
-    this.initConfig = e, this.buyersServiceClient = new me(e.merchantId);
+    y(this, "initConfig");
+    y(this, "buyersServiceClient");
+    this.initConfig = e, this.buyersServiceClient = new we(e.merchantId);
   }
   /**
       * Used to try and get the coordinates of the buyer based on their IP address.
@@ -592,11 +827,11 @@ class ye {
       */
   async getCoordinates() {
     const t = `/app/website/cms/api/v1/users/${this.initConfig.userId}/customers/coordinates`;
-    let o = await (await fetch(t, {
+    let i = await (await fetch(t, {
       method: "GET",
-      headers: E()
+      headers: S()
     })).json();
-    return Array.isArray(o) && (o = {}), o;
+    return Array.isArray(i) && (i = {}), i;
   }
   /**
       * Search for an existing customer loyalty account by phone number. 
@@ -618,19 +853,19 @@ class ye {
     } : {};
   }
 }
-const O = {
+const A = {
   INVALID_QUANTITY: "INVALID_QUANTITY",
   SOLD_OUT: "SOLD_OUT",
   STOCK_EXCEEDED: "STOCK_EXCEEDED",
   PER_ORDER_MAX_EXCEEDED: "PER_ORDER_MAX_EXCEEDED"
-}, Y = (i) => {
+}, z = (n) => {
   var r;
   return ((r = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: i
-  }).formatToParts(1).find((o) => o.type === "fraction")) == null ? void 0 : r.value.length) ?? 0;
+    currency: n
+  }).formatToParts(1).find((i) => i.type === "fraction")) == null ? void 0 : r.value.length) ?? 0;
 };
-class ee {
+class se {
   /**
    * Formats the Money object based on the provided locale.
    * 
@@ -650,51 +885,61 @@ class ee {
    * @returns The formatted amount.
    */
   formatAmount(e, t, r = "en-US") {
-    let o;
+    let i;
     try {
-      o = new Intl.NumberFormat(r, {
+      i = new Intl.NumberFormat(r, {
         style: "currency",
         currency: t
       });
     } catch {
-      o = new Intl.NumberFormat("en-US", {
+      i = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: t
       });
     }
-    const n = Y(t);
-    return n > 0 && (e = e / Math.pow(10, n)), o.format(e);
+    return e = this.convertSubunitsToFloat(e, t), i.format(e);
   }
   /**
-   * Converts a float amount to the lowest subunits for the currency.
+   * Converts a float amount to the lowest subunits for the currency, e.g. 10.00 to 1000 for USD.
    * 
    * @param float - The float amount to convert.
    * @param currency - The currency of the amount (ISO 4217).
    * @returns The amount in subunits.
    */
   convertFloatToSubunits(e, t) {
-    const r = Y(t);
+    const r = z(t);
     return r > 0 ? e * Math.pow(10, r) : e;
   }
+  /**
+   * Converts a subunits amount to a float for the currency, e.g. 1000 subunits to 10.00 for USD.
+   * 
+   * @param subunits - The subunits amount to convert.
+   * @param currency - The currency of the amount (ISO 4217).
+   * @returns The amount as a float.
+   */
+  convertSubunitsToFloat(e, t) {
+    const r = z(t);
+    return r > 0 ? e / Math.pow(10, r) : e;
+  }
 }
-const Q = (i) => {
+const ee = (n) => {
   const e = [];
-  return i.item_option_values && Object.keys(i.item_option_values).forEach((t) => {
+  return n.item_option_values && Object.keys(n.item_option_values).forEach((t) => {
     e.push({
       itemOptionId: t,
-      choice: i.item_option_values[t].choice
+      choice: n.item_option_values[t].choice
     });
   }), e;
-}, Ee = (i) => {
-  const e = i.product_type_details.end_date, t = i.product_type_details.end_time;
+}, _e = (n) => {
+  const e = n.item_type_details.end_date, t = n.item_type_details.end_time;
   let r = e + "T";
-  const o = t.split(" "), n = o[0].split(":");
-  let s = parseInt(n[0]) + (o[1] === "PM" ? 12 : 0);
-  s -= n[0] === "12" ? 12 : 0;
-  const a = n[1];
-  return s.toString().length === 1 && (r += "0"), r += `${s}:${a}:00${i.product_type_details.timezone_info.utc_offset_string}`, new Date(r);
+  const i = t.split(" "), o = i[0].split(":");
+  let s = parseInt(o[0]) + (i[1] === "PM" ? 12 : 0);
+  s -= o[0] === "12" ? 12 : 0;
+  const a = o[1];
+  return s.toString().length === 1 && (r += "0"), r += `${s}:${a}:00${n.item_type_details.timezone_info.utc_offset_string}`, new Date(r);
 };
-class Ie {
+class De {
   /**
       * Returns the variations for an item resource.
       */
@@ -723,7 +968,7 @@ class Ie {
       * Returns the QuantityErrorType if there's an item quantity error with the item varation, otherwise null.
       */
   getItemQuantityError(e, t, r) {
-    return r <= 0 ? O.INVALID_QUANTITY : this.isVariationSoldOut(t) ? O.SOLD_OUT : t.inventory_tracking_enabled && r > t.inventory ? O.STOCK_EXCEEDED : e.per_order_max && r > e.per_order_max ? O.PER_ORDER_MAX_EXCEEDED : null;
+    return r <= 0 ? A.INVALID_QUANTITY : this.isVariationSoldOut(t) ? A.SOLD_OUT : t.inventory_tracking_enabled && r > t.inventory ? A.STOCK_EXCEEDED : e.per_order_max && r > e.per_order_max ? A.PER_ORDER_MAX_EXCEEDED : null;
   }
   /**
       * Returns whether all variations of an item are sold out.
@@ -734,145 +979,145 @@ class Ie {
   /**
       * Returns all variations in stock for the selected options or variation.
       */
-  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: r = "", skipStockCheck: o = !1 }) {
-    return this.getVariations(e).reduce((n, s) => {
+  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: r = "", skipStockCheck: i = !1 }) {
+    return this.getVariations(e).reduce((o, s) => {
       if (!r && s.item_option_values) {
-        const a = Q(s);
-        if (!t.every((c) => a.find((d) => d.itemOptionId === c.itemOptionId && d.choice === c.choice)))
-          return n;
+        const a = ee(s);
+        if (!t.every((u) => a.find((c) => c.itemOptionId === u.itemOptionId && c.choice === u.choice)))
+          return o;
       } else if (e.variations.length > 1 && s.id !== r)
-        return n;
-      return !o && this.isVariationSoldOut(s) || n.push(s), n;
+        return o;
+      return !i && this.isVariationSoldOut(s) || o.push(s), o;
     }, []);
   }
   /**
       * Returns whether an item's option choice is disabled based on the selected options.
       */
-  isOptionChoiceDisabledForSelectedOptions(e, t, r, o = !0) {
-    o && (r = r.filter((a) => a.itemOptionId !== t.itemOptionId));
-    const n = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: r });
+  isOptionChoiceDisabledForSelectedOptions(e, t, r, i = !0) {
+    i && (r = r.filter((a) => a.itemOptionId !== t.itemOptionId));
+    const o = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: r });
     let s = !1;
-    return n.forEach((a) => {
-      Q(a).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (s = !0);
+    return o.forEach((a) => {
+      ee(a).find((c) => c.itemOptionId === t.itemOptionId && c.choice === t.choice) && (s = !0);
     }), !s;
   }
   /**
       * Returns whether a modifier list is valid for the selected modifiers.
       */
   isModifierListForSelectedModifiersValid(e, t) {
-    var a, c;
-    const r = t.find((d) => d.id == e.id), o = e.min_selected_modifiers, n = e.max_selected_modifiers;
+    var a, u;
+    const r = t.find((c) => c.id == e.id), i = e.min_selected_modifiers, o = e.max_selected_modifiers;
     let s = ((a = r == null ? void 0 : r.textEntry) == null ? void 0 : a.length) || 0;
-    if ((c = r == null ? void 0 : r.choiceSelections) != null && c.length) {
-      const d = r.choiceSelections.find((I) => {
-        var h;
-        return !((h = e.modifiers) != null && h.find((f) => f.id === I));
-      }), u = r.choiceSelections.find((I) => {
-        var h, f;
-        return (f = (h = e.modifiers) == null ? void 0 : h.find((g) => g.id === I)) == null ? void 0 : f.sold_out;
+    if ((u = r == null ? void 0 : r.choiceSelections) != null && u.length) {
+      const c = r.choiceSelections.find((d) => {
+        var f;
+        return !((f = e.modifiers) != null && f.find((p) => p.id === d));
+      }), l = r.choiceSelections.find((d) => {
+        var f, p;
+        return (p = (f = e.modifiers) == null ? void 0 : f.find((I) => I.id === d)) == null ? void 0 : p.sold_out;
       });
-      if (d || u)
+      if (c || l)
         return !1;
       s = r.choiceSelections.length;
     }
-    return o && n && o === n ? s === o : o && n ? s >= o && s <= n : n ? s <= n : o ? s >= o : !0;
+    return i && o && i === o ? s === i : i && o ? s >= i && s <= o : o ? s <= o : i ? s >= i : !0;
   }
   /**
       * Returns the disabled option choices for an item based on the selected options.
       */
-  getDisabledOptionChoicesForSelectedOptions(e, t, r, o = !0) {
-    const n = t.choices.map((a) => ({
+  getDisabledOptionChoicesForSelectedOptions(e, t, r, i = !0) {
+    const o = t.choices.map((a) => ({
       itemOptionId: t.id,
       choice: a
     })), s = [];
-    return o && (r = r.filter((a) => a.itemOptionId !== t.id)), n.forEach((a) => {
-      this.isOptionChoiceDisabledForSelectedOptions(e, a, r, o) && s.push(a.choice);
+    return i && (r = r.filter((a) => a.itemOptionId !== t.id)), o.forEach((a) => {
+      this.isOptionChoiceDisabledForSelectedOptions(e, a, r, i) && s.push(a.choice);
     }), s;
   }
   /**
       * Returns whether an item with any combination of selected options, modifiers, variationId, and quantity is valid.
       * @throws {@link ValidateItemError}
       */
-  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: r = [], selectedVariationId: o = "", quantity: n = void 0, skipStockCheck: s = !1, skipModifierCheck: a = !1 }) {
-    var m, w;
-    const c = [];
-    let d = !1, u = "", I = O.SOLD_OUT;
-    const h = [];
-    (m = e.item_options) != null && m.length && !o ? e.item_options.forEach((l) => {
-      t != null && t.find((y) => y.itemOptionId === l.id && l.choices.includes(y.choice)) || c.push(l.id);
-    }) : !e.item_options && e.variations.length > 1 && !o && (d = !0);
-    let f = null;
-    if (c.length === 0 && !d) {
-      const l = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: s });
-      if (l.length === 0) {
-        const y = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: !0 });
-        y.length > 0 && (u = y[0].id);
-      } else if (f = l[0], n != null) {
-        const y = this.getItemQuantityError(e, f, n);
-        y && (I = y, u = f.id);
+  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: r = [], selectedVariationId: i = "", quantity: o = void 0, skipStockCheck: s = !1, skipModifierCheck: a = !1 }) {
+    var h, N;
+    const u = [];
+    let c = !1, l = "", d = A.SOLD_OUT;
+    const f = [];
+    (h = e.item_options) != null && h.length && !i ? e.item_options.forEach((m) => {
+      t != null && t.find((E) => E.itemOptionId === m.id && m.choices.includes(E.choice)) || u.push(m.id);
+    }) : !e.item_options && e.variations.length > 1 && !i && (c = !0);
+    let p = null;
+    if (u.length === 0 && !c) {
+      const m = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: i, skipStockCheck: s });
+      if (m.length === 0) {
+        const E = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: i, skipStockCheck: !0 });
+        E.length > 0 && (l = E[0].id);
+      } else if (p = m[0], o != null) {
+        const E = this.getItemQuantityError(e, p, o);
+        E && (d = E, l = p.id);
       }
     }
-    if ((w = e.modifier_lists) != null && w.length && !a && e.modifier_lists.forEach((l) => {
-      this.isModifierListForSelectedModifiersValid(l, r) || h.push(l.id);
-    }), !f || c.length || u || h.length) {
-      const l = new Error("Failed to validate item.");
-      throw c.length && (l.itemOptionIds = c), d && (l.flatVariationSelectionMissing = !0), u && (l.variationId = u, l.quantityErrorType = I), h.length && (l.modifierListIds = h), l;
+    if ((N = e.modifier_lists) != null && N.length && !a && e.modifier_lists.forEach((m) => {
+      this.isModifierListForSelectedModifiersValid(m, r) || f.push(m.id);
+    }), !p || u.length || l || f.length) {
+      const m = new Error("Failed to validate item.");
+      throw u.length && (m.itemOptionIds = u), c && (m.flatVariationSelectionMissing = !0), l && (m.variationId = l, m.quantityErrorType = d), f.length && (m.modifierListIds = f), m;
     }
-    const g = {
+    const I = {
       itemId: e.id,
-      variationId: f.id,
+      variationId: p.id,
       modifiers: r
     };
-    return n && (g.quantity = n), g;
+    return o && (I.quantity = o), I;
   }
   /**
       * Returns the price of an item based on the selected options, modifiers, and/or variation id.
       */
-  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: r = "", selectedModifiers: o = [], skipStockCheck: n = !1, skipModifierCheck: s = !1, formattedLocale: a = void 0 }) {
-    var d;
-    let c = null;
+  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: r = "", selectedModifiers: i = [], skipStockCheck: o = !1, skipModifierCheck: s = !1, formattedLocale: a = void 0 }) {
+    var c;
+    let u = null;
     try {
-      c = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: r, selectedModifiers: o, skipStockCheck: n, skipModifierCheck: s });
+      u = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: r, selectedModifiers: i, skipStockCheck: o, skipModifierCheck: s });
     } catch {
     }
-    if (c) {
-      const u = e.variations.find((m) => m.id === c.variationId);
-      let I = u.price.regular.amount, h = u.price.sale.amount;
-      const f = u.price.regular.currency;
-      (d = c.modifiers) == null || d.forEach((m) => {
-        var w, l;
-        if (m.type === H.CHOICE || m.type === H.GIFT_WRAP) {
-          const y = (w = e.modifier_lists) == null ? void 0 : w.find((S) => S.id === m.id);
-          y && ((l = y.modifiers) == null || l.forEach((S) => {
-            m.choiceSelections.includes(S.id) && S.price_money && (I += S.price_money.amount, h += S.price_money.amount);
+    if (u) {
+      const l = e.variations.find((h) => h.id === u.variationId);
+      let d = l.price.regular.amount, f = l.price.sale.amount;
+      const p = l.price.regular.currency;
+      (c = u.modifiers) == null || c.forEach((h) => {
+        var N, m;
+        if (h.type === W.CHOICE || h.type === W.GIFT_WRAP) {
+          const E = (N = e.modifier_lists) == null ? void 0 : N.find((T) => T.id === h.id);
+          E && ((m = E.modifiers) == null || m.forEach((T) => {
+            h.choiceSelections.includes(T.id) && T.price_money && (d += T.price_money.amount, f += T.price_money.amount);
           }));
         }
       });
-      const g = {
+      const I = {
         regular: {
-          amount: I,
-          currency: f,
+          amount: d,
+          currency: p,
           formatted: ""
         },
         sale: {
-          amount: h,
-          currency: f,
+          amount: f,
+          currency: p,
           formatted: ""
         }
       };
       if (a) {
-        const m = new ee();
-        g.regular.formatted = m.formatMoney({
-          amount: I,
-          currency: f,
+        const h = new se();
+        I.regular.formatted = h.formatMoney({
+          amount: d,
+          currency: p,
           formatted: ""
-        }, a), g.sale.formatted = m.formatMoney({
-          amount: h,
-          currency: f,
+        }, a), I.sale.formatted = h.formatMoney({
+          amount: f,
+          currency: p,
           formatted: ""
         }, a);
       }
-      return g;
+      return I;
     }
     return null;
   }
@@ -880,7 +1125,7 @@ class Ie {
       * Returns whether an item is an event and has ended.
       */
   isEventItemInThePast(e) {
-    return e.square_online_type !== "EVENT" ? !1 : Ee(e) <= /* @__PURE__ */ new Date();
+    return e.square_online_type !== "EVENT" ? !1 : _e(e) <= /* @__PURE__ */ new Date();
   }
   /**
       * Returns whether an item is a preorder and the cutoff time has passed.
@@ -892,16 +1137,16 @@ class Ie {
     return new Date(t) <= /* @__PURE__ */ new Date();
   }
 }
-class Se {
+class Ce {
   constructor(e) {
-    p(this, "version", "0.0.0-semantic-release");
-    p(this, "cart");
-    p(this, "orders");
-    p(this, "places");
-    p(this, "resource");
-    p(this, "template");
-    p(this, "customers");
-    p(this, "helpers");
+    y(this, "version", "0.0.0-semantic-release");
+    y(this, "cart");
+    y(this, "orders");
+    y(this, "places");
+    y(this, "resource");
+    y(this, "template");
+    y(this, "customers");
+    y(this, "helpers");
     if (!e.userId)
       throw new Error("missing user id");
     if (!e.siteId)
@@ -912,12 +1157,13 @@ class Se {
       throw new Error("invalid user id");
     if (!Number.isInteger(Number(e.siteId)))
       throw new Error("invalid site id");
-    this.cart = new se(), this.orders = new ae(e), this.places = new de(e), this.resource = new ce(), this.template = new fe(), this.customers = new ye(e), this.helpers = {
-      item: new Ie(),
-      money: new ee()
+    this.cart = new fe(), this.orders = new me(e), this.places = new ye(e), this.resource = new he(), this.template = new Ie(), this.customers = new Te(e), this.helpers = {
+      item: new De(),
+      location: new Se(),
+      money: new se()
     };
   }
 }
 export {
-  Se as default
+  Ce as default
 };
