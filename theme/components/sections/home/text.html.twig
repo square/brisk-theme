@@ -1,5 +1,12 @@
 <div class="container home-page__container">
     {{ include('partials/components/text', { heading, text }) }}
+
+    <div
+        class="rich-text"
+    >
+        {{ richText|array_to_string }}
+        {{ rich_text(richText) }}
+    </div>
 </div>
 
 {% schema %}
@@ -9,6 +16,9 @@
     },
     "text": {
         "type": "string"
+    },
+    "richText": {
+        "type": "array"
     }
 }
 {% endschema %}
@@ -29,6 +39,13 @@
             "label": "Text",
             "value": {
                 "$ref": "#/schema/text"
+            }
+        },
+        {
+            "option": "rich-text",
+            "label": "Text",
+            "value": {
+                "$ref": "#/schema/richText"
             }
         }
     ]
