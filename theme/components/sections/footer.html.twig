@@ -176,10 +176,105 @@
 {% schema %}
     {
         "footer_menu_links": {
-            "type": "link-list"
+            "type": "link-list",
+            "default": [
+                {
+                    "label": "Learn",
+                    "type": "external",
+                    "href": "/",
+                    "children": [
+                        {
+                            "label": "About Us",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Philosophy",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Sustainability",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Blog",
+                            "type": "external",
+                            "href": "/"
+                        }
+                    ]
+                },
+                {
+                    "label": "Help",
+                    "type": "external",
+                    "href": "/",
+                    "children": [
+                        {
+                            "label": "Locations And Hours",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Returns And Exchanges",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "FAQ",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Contact Us",
+                            "type": "external",
+                            "href": "/"
+                        }
+                    ]
+                },
+                {
+                    "label": "Social",
+                    "type": "external",
+                    "href": "/",
+                    "children": [
+                        {
+                            "label": "TikTok",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Instagram",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Twitter",
+                            "type": "external",
+                            "href": "/"
+                        },
+                        {
+                            "label": "Facebook",
+                            "type": "external",
+                            "href": "/"
+                        }
+                    ]
+                }
+            ]
         },
         "footer_info_links": {
-            "type": "link-list"
+            "type": "link-list",
+            "default": [
+                {
+                    "label": "Terms and Conditions",
+                    "type": "external",
+                    "href": "/"
+                },
+                {
+                    "label": "Privacy Policy",
+                    "type": "external",
+                    "href": "/"
+                }
+            ]
         }
     }
 {% endschema %}

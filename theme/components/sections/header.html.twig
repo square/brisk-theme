@@ -301,17 +301,35 @@
 {% schema %}
     {
         "announcement_bar_show": {
-            "type": "bool"
+            "type": "bool",
+            "default": true
         },
         "announcement_bar_text": {
-            "type": "string"
+            "type": "string",
+            "default": "Free shipping on all orders over $75*"
         },
         "announcement_bar_link": {
             "type": "link",
-            "optional": "true"
+            "optional": "true",
+            "default": {
+                "label": "Shop All",
+                "type": "shopAll"
+            }
         },
         "nav_links": {
-            "type": "link-list"
+            "type": "link-list",
+            "default": [
+                {
+                    "label": "Gifts",
+                    "type": "external",
+                    "href": "/gifts"
+                },
+                {
+                    "label": "Sale",
+                    "type": "external",
+                    "href": "/sale"
+                }
+            ]
         }
     }
 {% endschema %}
