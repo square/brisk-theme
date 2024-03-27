@@ -20,9 +20,17 @@
             },
             {
                 "props": {
-                    "text": "Our mission is to revolutionize the fashion industry by providing stylish and sustainable clothing options that promote environmental consciousness. We're committed to minimizing our ecological footprint.",
+                    "text": "Our mission is to revolutionize the fashion industry by providing stylish and sustainable clothing options that promote environmental consciousness. We’re committed to minimizing our ecological footprint.",
                     "heading": "Our mission",
                     "richText": {
+                        "formats": [
+                            "bold",
+                            "italic",
+                            "list",
+                            "link",
+                            "color",
+                            "align"
+                        ],
                         "richTextContent": "<strong>This is <a href='{% link({ type: 'shopAll' }) %}'>example</a></strong>"
                     }
                 },
