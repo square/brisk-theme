@@ -19,7 +19,7 @@
 
     {# Items options #}
     {% set itemsOptions = {
-        filters: { search: request.query.q },
+        filters: { search: search_term },
         sort: { by: 'score' },
     } %}
 
