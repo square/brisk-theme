@@ -1,0 +1,15 @@
+{
+    "route": "shop/:name/:id",
+    "template": "templates/store/category",
+    "props": {
+        "category": {
+            "filters": {
+                "id": "request_data(path.id)",
+                "square_online_id": true
+            }
+        },
+        "categories": {
+            "filters": []
+        }
+    }
+}

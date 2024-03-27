@@ -1,0 +1,7 @@
+{
+    "route": "s/search",
+    "template": "templates/store/search",
+    "props": {
+        "search_term": "request_data(query.q)"
+    }
+}

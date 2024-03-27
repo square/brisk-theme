@@ -27,6 +27,9 @@
         }) }}
     {% endif %}
 
+    {# Items options #}
+    {% set itemsOptions = { category_id: category.square_online_id, square_online_id: true } %}
+
     {# Sort options #}
     {% set sortOptions = [
         { label: 'templates.store.shop.sort_options.category_order'|localize, value: 'category_order' },
@@ -43,10 +46,10 @@
 
     {# Category items #}
     {{ include('components/sections/store/item-list', {
-        items,
         category,
         categories,
-        category_hierarchy: category_hierarchy(null, category.square_online_id),
+        category_hierarchy: category_hierarchy(null, category.square_online_id, true),
+        items_options: itemsOptions,
         sort_options: sortOptions,
         global_options: globalOptions,
     }) }}
@@ -58,9 +61,6 @@
 {
     "category": {
         "type": "category"
-    },
-    "items": {
-        "type": "item-list"
     },
     "categories": {
         "type": "category-list"
