@@ -295,8 +295,8 @@ document.addEventListener('alpine:init', () => {
 
             const itemPrice = this.$el.querySelector('#itemPrice');
             if (itemPrice) {
-                const caloriesText = this.product.product_type_details?.calorie_count
-                    ? this.translations.caloriesLabel.replace('{{calories}}', this.product.product_type_details.calorie_count)
+                const caloriesText = this.product.item_type_details?.calorie_count
+                    ? this.translations.caloriesLabel.replace('{{calories}}', this.product.item_type_details.calorie_count)
                     : '';
                 await Utils.refreshTemplate({
                     template: 'partials/ui/price',

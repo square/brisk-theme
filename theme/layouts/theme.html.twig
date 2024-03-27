@@ -30,7 +30,7 @@
 
             <!-- Must be included before alpine -->
             <script type="module">
-                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v1.0.0-alpha.12') | asset_url }}";
+                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v1.0.0-alpha.16') | asset_url }}";
                 window.SquareWebSDK = new SDK({{ sdk_init_config() }});
             </script>
 

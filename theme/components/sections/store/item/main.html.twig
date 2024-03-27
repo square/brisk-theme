@@ -83,8 +83,8 @@
                 {# Price #}
                 <div class="item-page__price">
                     {% set caloriesText = '' %}
-                    {% if product.product_type_details.calorie_count %}
-                        {% set caloriesText = 'componenets.sections.store.item.main.calories.label'|localize({ calories: item.product_type_details.calorie_count }) %}
+                    {% if product.item_type_details.calorie_count %}
+                        {% set caloriesText = 'componenets.sections.store.item.main.calories.label'|localize({ calories: item.item_type_details.calorie_count }) %}
                     {% endif %}
                     <div id="itemPrice">
                         {{ include('partials/ui/price', { price: product.price, variations: product.variations, secondaryText: caloriesText }) }}
@@ -109,7 +109,7 @@
             <form
                 class="item-page__form"
             >
-                {% if product.square_online_type == 'FOOD' and product.product_type_details %}
+                {% if product.square_online_type == 'FOOD' and product.item_type_details %}
                     {{ include('partials/components/store/item/food-details') }}
                 {% endif %}
 
@@ -143,7 +143,7 @@
                     </fieldset>
                 {% endif %}
 
-                {% if product.square_online_type == 'EVENT' and product.product_type_details %}
+                {% if product.square_online_type == 'EVENT' and product.item_type_details %}
                     {{ include('partials/components/store/item/event-details') }}
                 {% endif %}
 
