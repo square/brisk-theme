@@ -2,8 +2,20 @@ document.addEventListener('alpine:init', () => {
     Alpine.store('storeLocator', {
         locationId: '',
         locations: [],
+        googleMapIframe: null,
         googleMapsBase: '',
         translations: {},
+        /**
+         * Initial events
+         */
+        init() {
+            this.googleMapIframe = document.querySelector('[x-ref="googleMapIframe"]');
+
+            if (this.googleMapIframe) {
+                const iframeHref = new URL(this.googleMapIframe.src);
+                this.googleMapsBase = iframeHref.origin;
+            }
+        },
         /**
          * Update location id
          * @param {String} id
@@ -16,10 +28,8 @@ document.addEventListener('alpine:init', () => {
          * @param {String} locationId
          */
         onStoreLocatorItemClick(locationId) {
-            const googleMapIframe = document.querySelector('[x-ref="googleMapIframe"]');
-
-            if (googleMapIframe) {
-                googleMapIframe.contentWindow.postMessage({
+            if (this.googleMapIframe) {
+                this.googleMapIframe.contentWindow.postMessage({
                     event: 'open:location',
                     data: locationId,
                 }, this.googleMapsBase);
@@ -34,11 +44,15 @@ document.addEventListener('alpine:init', () => {
             const dialogStore = Alpine.store('dialog');
 
             if (location && !dialogStore?.isDialogOpen) {
-                dialogStore.openPrimaryDialog('templates/components/dialogs/store-locator-content', {
-                    showCloseButton: true,
-                    size: 'large',
-                    title: this.translations.dialogTitle,
-                }, { location });
+                dialogStore.openPrimaryDialog({
+                    templateUrl: 'templates/components/dialogs/store-locator-content',
+                    dialogOptions: {
+                        showCloseButton: true,
+                        size: 'large',
+                        title: this.translations.dialogTitle,
+                    },
+                    templateProps: { location },
+                });
             }
         },
     });
@@ -119,13 +133,20 @@ document.addEventListener('alpine:init', () => {
                 this.$nextTick(async () => {
                     await globalStore.getPlaceDetails(value);
 
-                    const locations = globalStore.formatLocationsWithDistance(Alpine.store('storeLocator').locations, globalStore.suggestedPlaceItem);
-                    const formattedDistance = locations.map((loc) => loc.formatted_distance);
+                    const storeLocatorList = document.querySelector('#store-locator-list');
+                    if (storeLocatorList) {
+                        const locations = globalStore.formatLocationsWithDistance(Alpine.store('storeLocator').locations, globalStore.suggestedPlaceItem);
+                        const formattedDistance = locations.map((loc) => loc.formatted_distance);
 
-                    await Square.async.refreshAsyncTemplate('store-locator-list', {
-                        locations,
-                        formatted_distance: formattedDistance,
-                    }, { replaceContent: true });
+                        await Utils.refreshTemplate({
+                            template: 'partials/components/store-locator-list',
+                            props: {
+                                locations,
+                                formatted_distance: formattedDistance,
+                            },
+                            el: storeLocatorList,
+                        });
+                    }
 
                     this.isLoadingAutocomplete = false;
                 });

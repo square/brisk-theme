@@ -10,7 +10,6 @@
 <script id="store-locator-data" type="application/json">
     {{ {
         locations,
-        googleMapsBase: square.site.google_maps_base,
         translations: {
             dialogTitle: 'templates.components.dialogs.store_locator.heading'|localize,
         },
@@ -38,7 +37,7 @@
                 {% endembed %}
             </div>
             <div class="store-locator-list-async">
-                {{ async('store-locator-list', 'store-locator-list', { props: { locations } }) }}
+                {{ include('partials/components/store-locator-list', { locations }) }}
             </div>
         </div>
         <div
