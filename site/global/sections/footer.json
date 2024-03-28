@@ -47,7 +47,7 @@
                 "children": [
                     {
                         "label": "Locations And Hours",
-                        "type": "external",
+                        "type": "storeLocator",
                         "href": "/s/store-locator"
                     },
                     {
