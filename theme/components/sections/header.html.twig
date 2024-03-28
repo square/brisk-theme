@@ -3,6 +3,7 @@
 {{ register_asset('js/sections/header.js', { defer: false }) }}
 {{ register_asset('js/ui/nested-menu.js', { defer: false }) }}
 {{ register_asset('js/components/search.js', { defer: false }) }}
+{{ register_asset('js/components/mini-cart.js', { defer: false }) }}
 
 {# Create the data that we'll use for the Alpine header component #}
 
@@ -270,7 +271,8 @@
                         isDropdown: true,
                     } %}
                         {% block content %}
-                            {{ async('mini-cart', 'mini-cart') }}
+                            {# Placeholder for the mini cart #}
+                            <div id="miniCart"></div>
                         {% endblock %}
                     {% endembed %}
                 </div>
@@ -313,3 +315,32 @@
         }
     }
 {% endschema %}
+
+{% editor %}
+{
+    "name": "Header",
+    "controls": [
+        {
+            "control": "toggle",
+            "label": "Show announcement bar",
+            "value": {
+                "$ref": "#/schema/announcement_bar_show"
+            }
+        },
+        {
+            "control": "input",
+            "label": "Announcement bar",
+            "value": {
+                "$ref": "#/schema/announcement_bar_text"
+            }
+        },
+        {
+            "control": "link-chooser",
+            "label": "Announcement link",
+            "value": {
+                "$ref": "#/schema/announcement_bar_link"
+            }
+        }
+    ]
+}
+{% endeditor %}

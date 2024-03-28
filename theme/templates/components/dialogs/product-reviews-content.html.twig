@@ -6,11 +6,11 @@
                     {% block images %}
                         {% if review.images|length > 0 %}
                             <div class="product-reviews__images">
-                            {% set imageSizes = { xs: 602 } %}
+                            {% set imageSizes = [602] %}
                                 {% for image in review.images %}
                                     {% set altText = productName ~ ' - ' ~ ('templates.components.dialogs.product_reviews.img_alt'|localize({ name: review.reviewer_name })) ~ ' ' ~ loop.index %}
                                     <figure class="product-reviews__images-figure">
-                                        {{ include('partials/ui/image', { image: { uri: image.absolute_uri, urls: image.absolute_urls }, imageSizes, altText }) }}
+                                        {{ include('partials/ui/image', { image: { uri: image.absolute_url, urls: image.absolute_urls }, imageSizes, altText }) }}
                                     </figure>
                                 {% endfor %}
                             </div>

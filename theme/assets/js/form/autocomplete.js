@@ -82,11 +82,18 @@ if (!window.onAutocompleteFormReady) {
              * Reloads the dropdown with the new items and value
              */
             async refreshDropdown() {
-                await Square.async.refreshAsyncTemplate('autocomplete-tooltip-menu', {
-                    items: this.items,
-                    value: this.model,
-                    menuTriggerRef: 'input',
-                });
+                const autocompleteDropdown = document.querySelector('#autocomplete-tooltip-menu');
+                if (autocompleteDropdown) {
+                    await Utils.refreshTemplate({
+                        template: 'partials/components/tooltip-menu',
+                        props: {
+                            items: this.items,
+                            value: this.model,
+                            menuTriggerRef: 'input',
+                        },
+                        el: autocompleteDropdown,
+                    });
+                }
             },
             /**
              * Toggles the dropdown

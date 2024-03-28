@@ -1,0 +1,12 @@
+{
+    "route": "s/shop",
+    "template": "templates/store/shop",
+    "props": {
+        "categories": {
+            "filters": []
+        },
+        "category_hierarchy": {
+            "filters": []
+        }
+    }
+}

@@ -15,7 +15,7 @@
     :aria-describedby="$store.dialog.shouldShowSecondaryDialog() ? '{{ dialogId }}-secondary__content' : '{{ dialogId }}__content'"
     :aria-hidden="!$store.dialog.isDialogOpen"
     class="ui-dialog__overlay"
-    :class="{ ['ui-dialog__overlay--' + $store.dialog.options.size]: true, ['ui-dialog__overlay--' + $store.dialog.options.variant]: true, 'ui-dialog__overlay--scrollable': $store.dialog.options.scrollable, 'ui-dialog__overlay--flush': $store.dialog.options.flush }"
+    :class="{ ['ui-dialog__overlay--' + $store.dialog.currentDialogOptions().size]: true, ['ui-dialog__overlay--' + $store.dialog.currentDialogOptions().variant]: true, 'ui-dialog__overlay--scrollable': $store.dialog.currentDialogOptions().scrollable, 'ui-dialog__overlay--flush': $store.dialog.currentDialogOptions().flush }"
     x-ref="dialog"
     x-show="$store.dialog.isDialogOpen"
     x-transition:enter="fade-enter-active"

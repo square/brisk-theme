@@ -1,0 +1,46 @@
+{% set options = [] %}
+{% for location in locations %}
+    {% set formattedAddress = location.address|address_format_multiline %}
+    {% set options = options|merge([{ label: location.name, sublabel: formattedAddress[0], value: location.id, distance: location_id_to_distance[location.id] }]) %}
+{% endfor %}
+
+{% embed 'partials/form/radio' with {
+    options: options,
+    hideLabel: true,
+    showDivider: true,
+    variant: 'row',
+    isRequired: true,
+    parentModel: 'locationId',
+} %}
+    {% block data %}
+        init() {
+            this.$watch('locationId', (value) => {
+                Alpine.store('dialog').updateDialogOptions('disablePrimaryButton', !value);
+            });
+        },
+    {% endblock %}
+    {% block side %}
+        {% set distance = formatted_distance[loop.index0] %}
+        {% if distance %}
+            {{ distance }}
+        {% endif %}
+    {% endblock %}
+{% endembed %}
+
+<div
+    x-show="isLoadingLocationSelector"
+    class="ui-loader--overlay"
+>
+    {{ include('partials/ui/loader') }}
+</div>
+
+{% schema %}
+{
+    "locations": {
+        "type": "array"
+    },
+    "formatted_distance": {
+        "type": "array"
+    }
+}
+{% endschema %}

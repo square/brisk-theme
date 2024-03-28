@@ -7,13 +7,13 @@
     @click.throttle="(e) => { if (isDragging) { e.preventDefault() } }"
 >
     {% set itemImage = item.images[0] %}
-    {% set imageSizes = { xs: 599 } %}
+    {% set imageSizes = [599] %}
     <div
         class="collection__tile-image collection__tile-image--rectangle {% if isCarousel %}ui-carousel-slide{% endif %}"
         {% if isMixedTemplates %}:style="collectionImageHeight > 0 ? { height: collectionImageHeight + 'px' } : {}"{% endif %}
     >
         {% if itemImage %}
-            {{ include('partials/ui/image', { image: { uri: itemImage.absolute_uri, urls: itemImage.absolute_urls }, imageSizes, altText: 'partials.components.collection.item.image.alt'|localize({ name: item.name }), showPlaceholder: true }) }}
+            {{ include('partials/ui/image', { image: { uri: itemImage.absolute_url, urls: itemImage.absolute_urls }, imageSizes, altText: 'partials.components.collection.item.image.alt'|localize({ name: item.name }), showPlaceholder: true }) }}
         {% else %}
             {{ include('partials/ui/placeholder') }}
         {% endif %}

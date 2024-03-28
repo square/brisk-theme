@@ -1,94 +1,101 @@
-var U = Object.defineProperty;
-var $ = (r, e, t) => e in r ? U(r, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : r[e] = t;
-var y = (r, e, t) => ($(r, typeof e != "symbol" ? e + "" : e, t), t);
-const M = {
+var te = Object.defineProperty;
+var re = (i, e, t) => e in i ? te(i, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[e] = t;
+var p = (i, e, t) => (re(i, typeof e != "symbol" ? e + "" : e, t), t), F = (i, e, t) => {
+  if (!e.has(i))
+    throw TypeError("Cannot " + t);
+};
+var j = (i, e, t) => (F(i, e, "read from private field"), t ? t.call(i) : e.get(i)), T = (i, e, t) => {
+  if (e.has(i))
+    throw TypeError("Cannot add the same private member more than once");
+  e instanceof WeakSet ? e.add(i) : e.set(i, t);
+}, G = (i, e, t, r) => (F(i, e, "write to private field"), r ? r.call(i, t) : e.set(i, t), t);
+var _ = (i, e, t) => (F(i, e, "access private method"), t);
+const X = {
   SHIPMENT: "SHIPMENT",
   PICKUP: "PICKUP",
+  DELIVERY: "DELIVERY",
   MANUAL: "MANUAL"
-}, j = {
-  ASAP: "ASAP"
-}, v = {
+}, x = {
+  ASAP: "ASAP",
+  SCHEDULED: "SCHEDULED"
+}, H = {
   CHOICE: "CHOICE",
   TEXT: "TEXT",
   GIFT_WRAP: "GIFT_WRAP",
   GIFT_MESSAGE: "GIFT_MESSAGE"
-}, x = () => {
-  var r;
-  return (r = document.querySelector('meta[name="csrf-token"]')) == null ? void 0 : r.content;
-}, I = () => ({
+}, ie = () => {
+  var i;
+  return (i = document.querySelector('meta[name="csrf-token"]')) == null ? void 0 : i.content;
+}, E = () => ({
   Accept: "application/json",
   "content-type": "application/json; charset=UTF-8",
-  "X-CSRF-TOKEN": x()
-}), O = "/s/api/v1/cart", N = "Something went wrong", A = (r, e) => {
-  const t = D(e.error || e.message || r.statusText), i = new Error(t);
-  if (e.errors) {
-    const o = {};
-    Object.keys(e.errors).forEach((n) => {
-      const s = e.errors[n].map((a) => D(a));
-      o[D(n)] = s;
-    }), i.errors = o;
-  }
-  return e.fields && (i.fields = e.fields), r.status && (i.status = r.status, i.status === 200 && (i.status = 500)), i;
-}, C = async (r) => {
-  const e = await r.json();
-  if (!r.ok)
-    throw A(r, e);
-  return {
-    response: r,
-    data: e.data
-  };
-}, L = async (r) => {
-  var e;
-  if (r.redirected) {
-    if (window.location.href === r.url) {
-      const t = await r.json();
-      throw (e = t == null ? void 0 : t.response) != null && e.errors ? A(r, t.response.errors) : new Error(N);
-    }
-    window.location.href = r.url;
-    return;
-  } else if (!r.ok) {
-    const t = await r.json();
-    throw A(r, t);
-  }
-  throw new Error(N);
-}, D = (r) => r.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), k = (r) => r.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), T = (r) => {
-  const e = {};
-  return Object.keys(r).forEach((t) => {
-    const i = r[t];
-    Array.isArray(i) ? e[k(t)] = F(i) : i && typeof i == "object" ? e[k(t)] = T(i) : e[k(t)] = i;
-  }), e;
-}, F = (r) => {
-  const e = [];
-  return r.forEach((t) => {
-    Array.isArray(t) ? e.push(F(t)) : t && typeof t == "object" ? e.push(T(t)) : e.push(t);
-  }), e;
-}, X = (r) => {
-  const e = r + "=", i = decodeURIComponent(document.cookie).split(";");
-  for (let o = 0; o < i.length; o++) {
-    let n = i[o];
+  "X-CSRF-TOKEN": ie()
+}), N = (i) => {
+  const e = i + "=", r = decodeURIComponent(document.cookie).split(";");
+  for (let o = 0; o < r.length; o++) {
+    let n = r[o];
     for (; n.charAt(0) == " "; )
       n = n.substring(1);
     if (n.indexOf(e) == 0)
       return n.substring(e.length, n.length);
   }
   return null;
-}, G = (r) => {
-  const e = V(r);
+}, C = "/s/api/v1/cart", K = "Something went wrong", V = (i, e) => {
+  const t = U(e.error || e.message || i.statusText), r = new Error(t);
+  if (e.errors) {
+    const o = {};
+    Object.keys(e.errors).forEach((n) => {
+      const s = e.errors[n].map((a) => U(a));
+      o[U(n)] = s;
+    }), r.errors = o;
+  }
+  return e.fields && (r.fields = e.fields), i.status && (r.status = i.status, r.status === 200 && (r.status = 500)), r;
+}, k = async (i) => {
+  const e = await i.json();
+  if (!i.ok)
+    throw V(i, e);
+  return {
+    response: i,
+    data: e.data
+  };
+}, ne = async (i) => {
+  var e;
+  if (i.redirected) {
+    if (window.location.href === i.url) {
+      const t = await i.json();
+      throw (e = t == null ? void 0 : t.response) != null && e.errors ? V(i, t.response.errors) : new Error(K);
+    }
+    window.location.href = i.url;
+    return;
+  } else if (!i.ok) {
+    const t = await i.json();
+    throw V(i, t);
+  }
+  throw new Error(K);
+}, U = (i) => i.replace(/[_][a-z0-9]/g, (e) => e.toUpperCase().replace("_", "")), L = (i) => i.replace(/[A-Z0-9]/g, (e) => `_${e.toLowerCase()}`), D = (i) => {
+  const e = {};
+  return Object.keys(i).forEach((t) => {
+    const r = i[t];
+    Array.isArray(r) ? e[L(t)] = W(r) : r && typeof r == "object" ? e[L(t)] = D(r) : e[L(t)] = r;
+  }), e;
+}, W = (i) => {
+  const e = [];
+  return i.forEach((t) => {
+    Array.isArray(t) ? e.push(W(t)) : t && typeof t == "object" ? e.push(D(t)) : e.push(t);
+  }), e;
+}, oe = (i) => {
+  const e = q(i);
   return delete e.order_id, e;
-}, b = (r) => {
-  const e = JSON.parse(JSON.stringify(r));
-  return e.fulfillmentType === "PICKUP" && (e.pickupDetails || (e.pickupDetails = {}), e.pickupDetails.scheduleType || (e.pickupDetails.scheduleType = "ASAP"), e.pickupDetails.curbsidePickupRequested == null && (e.pickupDetails.curbsidePickupRequested = !1), e.pickupDetails.curbsidePickupDetails || (e.pickupDetails.curbsidePickupDetails = {
+}, z = (i) => {
+  const e = JSON.parse(JSON.stringify(i));
+  return e.fulfillmentType === X.PICKUP ? (e.pickupDetails || (e.pickupDetails = {}), e.pickupDetails.scheduleType || (e.pickupDetails.scheduleType = x.ASAP), e.pickupDetails.curbsidePickupRequested == null && (e.pickupDetails.curbsidePickupRequested = !1), e.pickupDetails.curbsidePickupDetails || (e.pickupDetails.curbsidePickupDetails = {
     curbsideDetails: ""
-  }), e.pickupDetails.pickupAt || (e.pickupDetails.pickupAt = (/* @__PURE__ */ new Date()).toISOString().split(".")[0] + "Z")), e;
-}, P = (r) => {
-  var t;
-  const e = b(r.fulfillment);
-  return e.fulfillmentType === M.PICKUP && ((t = e.pickupDetails) == null ? void 0 : t.scheduleType) === j.ASAP;
-}, V = (r) => {
+  })) : e.fulfillmentType === X.DELIVERY && e.deliveryDetails && (e.deliveryDetails.noContactDelivery == null && (e.deliveryDetails.noContactDelivery = !1), e.deliveryDetails.scheduleType || (e.deliveryDetails.scheduleType = x.ASAP)), e;
+}, q = (i) => {
   var o;
-  const e = JSON.parse(JSON.stringify(r.lineItem));
+  const e = JSON.parse(JSON.stringify(i.lineItem));
   e.quantity || (e.quantity = 1);
-  const t = T(e);
+  const t = D(e);
   if ((o = t.modifiers) != null && o.length) {
     const n = {};
     t.modifiers.forEach((s) => {
@@ -102,258 +109,305 @@ const M = {
     t.modifiers && delete t.modifiers;
   return {
     line_item: t,
-    fulfillment: T(b(r.fulfillment)),
-    location_id: r.locationId,
+    fulfillment: D(z(i.fulfillment)),
+    location_id: i.locationId,
     // JSON.stringify will remove if undefined
-    order_id: S(r)
+    order_id: b(i)
   };
-}, S = (r) => r.orderId !== void 0 ? r.orderId : X("com_cart_id") || void 0;
-class J {
+}, b = (i) => i.orderId !== void 0 ? i.orderId : N("com_cart_id") || void 0;
+class se {
   /**
-   * Adds an item to the current order.
-   *
-   * ```ts
-   *	const addItemRequest = {
-   *		lineItem: {
-   *			itemId: '47HCEE6ZQUFFY3Y7X52CRVCO',
-   *			variationId: '6YOTMYGOFTJR4PTTYRCLE7BH',
-   *			quantity: 1,
-   *			modifiers: [
-   *				{
-   *					id: '6WVGAE3PKEHRWZHF54KR2PIN',
-   *					type: 'CHOICE',
-   *					choiceSelections: ['E3MWZ3PJ3VZDQWGW4G3KFZGW', 'GKCUYTB7ARN25J7BTRTOSVHO']
-   *				},
-   *				{
-   *					id: '11ede91fbff63a3ab4dbde667deefb9b',
-   *					type: 'TEXT',
-   *					textEntry: 'my t-shirt-text'
-   *				},
-   *				{
-   *					id: '11ee185ca1cd3e98a25c9e3d692ffefb',
-   *					type: 'GIFT_WRAP',
-   *					choiceSelections: ['11ee185ca1cd7daebd029e3d692ffefb']
-   *				},
-   *				{
-   *					id: '11ee185ca17973e490449e3d692ffefb',
-   *					type: 'GIFT_MESSAGE',
-   *					textEntry: 'happy bday'
-   *				}
-   *			]
-   *		},
-   *		fulfillment: {
-   *			fulfillmentType: 'SHIPMENT'
-   *		},
-   *		locationId: 'L36RW9ABXQTEE'
-   *	};
-   *	try {
-   *		let response = await sdk.Cart.addItem(addItemRequest);
-   *	} catch (error) {
-   *		// Handle errors
-   *	}
-   * ```
-   */
+      * Retrieves the active cart id if it exists.
+      *
+      * ```ts
+      * 	const cartId = sdk.cart.getActiveId();
+      * ```
+      */
+  getActiveId() {
+    return N("com_cart_id") || void 0;
+  }
+  /**
+      * Adds an item to your cart order.
+      *
+      * ```ts
+      *	const addItemRequest = {
+      *		lineItem: {
+      *			itemId: '47HCEE6ZQUFFY3Y7X52CRVCO',
+      *			variationId: '6YOTMYGOFTJR4PTTYRCLE7BH',
+      *			quantity: 1,
+      *			modifiers: [
+      *				{
+      *					id: '6WVGAE3PKEHRWZHF54KR2PIN',
+      *					type: 'CHOICE',
+      *					choiceSelections: ['E3MWZ3PJ3VZDQWGW4G3KFZGW', 'GKCUYTB7ARN25J7BTRTOSVHO']
+      *				},
+      *				{
+      *					id: '11ede91fbff63a3ab4dbde667deefb9b',
+      *					type: 'TEXT',
+      *					textEntry: 'my t-shirt-text'
+      *				},
+      *				{
+      *					id: '11ee185ca1cd3e98a25c9e3d692ffefb',
+      *					type: 'GIFT_WRAP',
+      *					choiceSelections: ['11ee185ca1cd7daebd029e3d692ffefb']
+      *				},
+      *				{
+      *					id: '11ee185ca17973e490449e3d692ffefb',
+      *					type: 'GIFT_MESSAGE',
+      *					textEntry: 'happy bday'
+      *				}
+      *			]
+      *		},
+      *		fulfillment: {
+      *			fulfillmentType: 'SHIPMENT'
+      *		},
+      *		locationId: 'L36RW9ABXQTEE'
+      *	};
+      *	try {
+      *		const response = await sdk.cart.addItem(addItemRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link CartError}
+      */
   async addItem(e) {
-    const t = V(e), i = await fetch(`${O}/add`, {
+    const t = q(e), r = await fetch(`${C}/add`, {
       method: "POST",
       body: JSON.stringify(t),
-      headers: I()
-    }), o = await C(i);
-    return P(e) && await this.patchAsapPickupTime(e), o;
-  }
-  /**
-   * Adds an item to a new order and redirects to checkout (/s/checkout) on success.
-   *
-   * ```ts
-   *	const buyNowItemRequest = {
-   *		lineItem: {
-   *			itemId: '47HCEE6ZQUFFY3Y7X52CRVCO',
-   *			variationId: '6YOTMYGOFTJR4PTTYRCLE7BH',
-   *			quantity: 1,
-   *			modifiers: [
-   *				{
-   *					id: '6WVGAE3PKEHRWZHF54KR2PIN',
-   *					type: 'CHOICE',
-   *					choiceSelections: ['E3MWZ3PJ3VZDQWGW4G3KFZGW', 'GKCUYTB7ARN25J7BTRTOSVHO']
-   *				},
-   *				{
-   *					id: '11ede91fbff63a3ab4dbde667deefb9b',
-   *					type: 'TEXT',
-   *					textEntry: 'my t-shirt-text'
-   *				},
-   *				{
-   *					id: '11ee185ca1cd3e98a25c9e3d692ffefb',
-   *					type: 'GIFT_WRAP',
-   *					choiceSelections: ['11ee185ca1cd7daebd029e3d692ffefb']
-   *				},
-   *				{
-   *					id: '11ee185ca17973e490449e3d692ffefb',
-   *					type: 'GIFT_MESSAGE',
-   *					textEntry: 'happy bday'
-   *				}
-   *			]
-   *		},
-   *		fulfillment: {
-   *			fulfillmentType: 'SHIPMENT'
-   *		},
-   *		locationId: 'L36RW9ABXQTEE'
-   *	};
-   *	try {
-   *		await sdk.Cart.buyNowItem(buyNowItemRequest);
-   *	} catch (error) {
-   *		// Handle errors
-   *	}
-   * ```
-   */
-  async buyNowItem(e) {
-    const t = G(e), i = await fetch(`${O}/buy`, {
-      method: "POST",
-      body: JSON.stringify(t),
-      headers: I()
+      headers: E()
     });
-    return !e.lineItem.subscriptionPlanVariationId && P(e) && await this.patchAsapPickupTime(e), L(i);
+    return await k(r);
   }
   /**
-   * Updates the quantity of an item in the order. Quantity must be greater than 0.
-   *
-   * ```ts
-   *	const updateItemQuantityRequest = {
-   *		orderItemId: '11ee2722e42886d182fa089e019fd17a',
-   *		quantity: 2
-   *	};
-   *	try {
-   *		let response = await SDK.Cart.updateItemQuantity(updateItemQuantityRequest);
-   *	} catch (error) {
-   *		// Handle errors
-   *	}
-   * ```
-   */
+      * Adds an item to a new order and redirects to checkout on success.
+      *
+      * ```ts
+      *	const buyNowItemRequest = {
+      *		lineItem: {
+      *			itemId: '47HCEE6ZQUFFY3Y7X52CRVCO',
+      *			variationId: '6YOTMYGOFTJR4PTTYRCLE7BH',
+      *			quantity: 1,
+      *			modifiers: [
+      *				{
+      *					id: '6WVGAE3PKEHRWZHF54KR2PIN',
+      *					type: 'CHOICE',
+      *					choiceSelections: ['E3MWZ3PJ3VZDQWGW4G3KFZGW', 'GKCUYTB7ARN25J7BTRTOSVHO']
+      *				},
+      *				{
+      *					id: '11ede91fbff63a3ab4dbde667deefb9b',
+      *					type: 'TEXT',
+      *					textEntry: 'my t-shirt-text'
+      *				},
+      *				{
+      *					id: '11ee185ca1cd3e98a25c9e3d692ffefb',
+      *					type: 'GIFT_WRAP',
+      *					choiceSelections: ['11ee185ca1cd7daebd029e3d692ffefb']
+      *				},
+      *				{
+      *					id: '11ee185ca17973e490449e3d692ffefb',
+      *					type: 'GIFT_MESSAGE',
+      *					textEntry: 'happy bday'
+      *				}
+      *			]
+      *		},
+      *		fulfillment: {
+      *			fulfillmentType: 'SHIPMENT'
+      *		},
+      *		locationId: 'L36RW9ABXQTEE'
+      *	};
+      *	try {
+      *		await sdk.cart.buyNowItem(buyNowItemRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link CartError}
+      */
+  async buyNowItem(e) {
+    const t = oe(e), r = await fetch(`${C}/buy`, {
+      method: "POST",
+      body: JSON.stringify(t),
+      headers: E()
+    });
+    return ne(r);
+  }
+  /**
+      * Updates the quantity of an item on an order. Quantity must be greater than 0.
+      *
+      * ```ts
+      *	const updateItemQuantityRequest = {
+      *		orderItemId: '11ee2722e42886d182fa089e019fd17a',
+      *		quantity: 2
+      *	};
+      *	try {
+      *		const response = await SDK.cart.updateItemQuantity(updateItemQuantityRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link CartError}
+      */
   async updateItemQuantity(e) {
-    const t = await fetch(`${O}/update-quantity`, {
+    const t = await fetch(`${C}/update-quantity`, {
       method: "POST",
       body: JSON.stringify({
         order_item_id: e.orderItemId,
         quantity: e.quantity,
-        order_id: S(e)
+        order_id: b(e)
       }),
-      headers: I()
+      headers: E()
     });
-    return C(t);
+    return k(t);
   }
   /**
-   * Removes the line item from the order.
-   *
-   * ```ts
-   *	const removeItemRequest = {
-   *		orderItemId: '11ee2722e42886d182fa089e019fd17a'
-   *	};
-   *	try {
-   *		let response = await SDK.Cart.removeItem(removeItemRequest);
-   *	} catch (error) {
-   *		// Handle errors
-   *	}
-   * ```
-   */
+      * Removes a line item from an order.
+      *
+      * ```ts
+      *	const removeItemRequest = {
+      *		orderItemId: '11ee2722e42886d182fa089e019fd17a'
+      *	};
+      *	try {
+      *		const response = await SDK.cart.removeItem(removeItemRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link CartError}
+      */
   async removeItem(e) {
-    const t = await fetch(`${O}/remove-item`, {
+    const t = await fetch(`${C}/remove-item`, {
       method: "POST",
       body: JSON.stringify({
         order_item_id: e.orderItemId,
-        order_id: S(e)
+        order_id: b(e)
       }),
-      headers: I()
+      headers: E()
     });
-    return C(t);
+    return k(t);
   }
   /**
-   * Updates the order fulfillment. At the moment must update all properties.
-   *
-   * ```ts
-   *	const patchFulfillmentRequest = {
-   *		fulfillment: {
-   *			fulfillmentType: 'PICKUP',
-   *			pickupDetails: {
-   *				curbsidePickupRequested: true,
-   *				curbsidePickupDetails: {
-   *					curbsideDetails: 'Contactless please'
-   *				},
-   *			}
-   *		}
-   *	};
-   *	try {
-   *		let response = await sdk.Cart.patchFulfillment(patchFulfillmentRequest);
-   *	} catch (error) {
-   *		// Handle errors
-   *	}
-   * ```
-   */
+      * Updates the fulfillment on an order. At the moment must update all properties as it acts like a POST.
+      *
+      * ```ts
+      *	const patchFulfillmentRequest = {
+      *		fulfillment: {
+      *			fulfillmentType: 'PICKUP',
+      *			pickupDetails: {
+      *				curbsidePickupRequested: true,
+      *				curbsidePickupDetails: {
+      *					curbsideDetails: 'Contactless please'
+      *				},
+      *			}
+      *		}
+      *	};
+      *	try {
+      *		const response = await sdk.cart.patchFulfillment(patchFulfillmentRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link CartError}
+      */
   async patchFulfillment(e) {
-    const t = await fetch(`${O}/${S(e)}/fulfillment`, {
+    const t = await fetch(`${C}/${b(e)}/fulfillment`, {
       method: "PATCH",
       body: JSON.stringify({
-        fulfillment: T(b(e.fulfillment))
+        fulfillment: D(z(e.fulfillment)),
+        location_id: e.locationId
       }),
-      headers: I()
+      headers: E()
     });
-    return C(t);
+    return k(t);
+  }
+}
+class ae {
+  constructor(e) {
+    p(this, "initConfig");
+    this.initConfig = e;
   }
   /**
-   * Updates the order fulfillment's `fulfillment.pickupDetails.pickupAt` with the ASAP time.
-   * At the moment must provide all other existing fulfillment properties. Note that if
-   * you provide `fulfillment.pickupDetails.pickupAt`, it will just be ignored.
+   * Fetches complete details about a past order using the jwt token associated with that order.
    *
    * ```ts
-   *	const patchAsapPickupTimeRequest = {
-   *		fulfillment: {
-   *			fulfillmentType: 'PICKUP',
-   *			pickupDetails: {
-   *				curbsidePickupRequested: true,
-   *				curbsidePickupDetails: {
-   *					curbsideDetails: 'Contactless please'
-   *				},
-   *			}
-   *		}
-   *	};
+   *  const orderRequest = {
+   *      jwtToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE...truncated',
+   *      locationId: '11ecdbb1f3706d91a4ab2c601c83f953',
+   *      fulfillments: ['shipping']
+   *  };
    *	try {
-   *		let response = await sdk.Cart.patchAsapPickupTime(patchAsapPickupTimeRequest);
+   *		const response = await sdk.orders.getOrder(orderRequest);
    *	} catch (error) {
    *		// Handle errors
    *	}
    * ```
    */
-  async patchAsapPickupTime(e) {
-    var t;
-    if (P(e)) {
-      const o = await (await fetch("/s/api/v1/resource", {
-        method: "POST",
-        headers: I(),
-        body: JSON.stringify({
-          input: {
-            schedule: {
-              type: "schedule",
-              filters: {
-                location_id: null
-              }
-            }
-          }
-        })
-      })).json();
-      if ((t = o.schedule) != null && t.earliest_time.time_unix) {
-        const n = new Date(o.schedule.earliest_time.time_unix * 1e3).toISOString().split(".")[0] + "Z", s = {
-          orderId: S(e),
-          fulfillment: JSON.parse(JSON.stringify(e.fulfillment))
-        };
-        return s.fulfillment.pickupDetails || (s.fulfillment.pickupDetails = {}), s.fulfillment.pickupDetails.pickupAt = n, this.patchFulfillment(s);
-      }
-    }
-    return {
-      data: {
-        cart: S(e) || ""
-      }
-    };
+  async getOrder(e) {
+    const t = e.jwtToken, r = e.locationId, o = e.fulfillments;
+    if (!t)
+      throw new Error("missing jwtToken");
+    if (!r)
+      throw new Error("missing locationId");
+    if (!o)
+      throw new Error("missing fulfillments");
+    if (!this.initConfig.cmsSiteId)
+      throw new Error("missing cmsSiteId");
+    if (!Array.isArray(o))
+      throw new Error("fulfillments must be an array");
+    const n = this.initConfig.cmsSiteId, s = ["shipping", "pickup", "delivery"];
+    o.forEach((u) => {
+      if (!s.includes(u.toLowerCase()))
+        throw new Error("invalid value in fulfillments array: " + u);
+    });
+    let a = `/app/cms/api/v1/sites/${n}/order-again/${t}?location=${r}`;
+    return o.forEach((u) => {
+      a += `&fulfillments[]=${u}`;
+    }), await (await fetch(a, {
+      method: "GET",
+      headers: E()
+    })).json();
   }
 }
-class K {
+class ce {
+  /**
+      * Used to load up to 5 resources.
+      *
+      * ```ts
+      *  const resourceRequest = {
+      *      'categoryListResource': {
+      *          type: 'category-list'
+      *      },
+      *      'categoryOptionsResource': {
+      *          type: 'category-options',
+      *          filters: {
+      *              category_id: '2'
+      *          }   
+      *      },
+      *      'itemListResource': {
+      *          type: 'item-list',
+      *          filters: {
+      *              'option_choices': [ "11ee258c913644169c41a2491ad79fa8" ],
+      *              'square_online_id': true
+      *          }
+      *      },
+      *      'cartResource': {
+      *          type: 'cart',
+      *      },
+      *      'itemResource': {
+      *          type: 'item',
+      *          filters: {
+      *              'id': "47HCEE6ZQUFFY3Y7X52CRVCO"
+      *          }
+      *      }
+      *  };
+      *	try {
+      *		const resources = await sdk.resource.getResource(resourceRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link Error}
+      */
   async getResource(e) {
     const t = {};
     for (const n in e) {
@@ -365,38 +419,96 @@ class K {
       body: JSON.stringify({
         input: t
       }),
-      headers: I()
+      headers: E()
     })).json();
   }
 }
-class B {
+const le = {
+  ADDRESS: "address",
+  GEOCODE: "geocode"
+};
+class de {
   constructor(e) {
-    y(this, "initConfig");
+    p(this, "initConfig");
     this.initConfig = e;
   }
+  /**
+      * Used to get a list of places autocompleted from an address (or partial address).
+      *
+      * ```ts
+      *  const autocompletePlacesRequest = {
+      *      address: '4 Pennsylvania Plaza'
+      *      types: 'address'
+      *  };
+      *	try {
+      *		const response = await sdk.places.autocompletePlaces(autocompletePlacesRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link Error}
+      */
   async autocompletePlaces(e) {
-    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : "", n = e.address, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places?types=geocode&input=${n}`;
+    const t = this.initConfig.userId, r = this.initConfig.siteId, o = e.address, n = e.types ?? le.GEOCODE, s = `/app/store/api/v28/pub/users/${t}/sites/${r}/places?types=${n}&input=${o}`;
     return await (await fetch(s, {
       method: "GET",
-      headers: I()
+      headers: E()
     })).json();
   }
+  /**
+      * Used to get the full details for a place using a `place_id` from autocompletePlaces.
+      *
+      * ```ts
+      *  const getPlaceRequest = {
+      *      placeId: 'G:ChIJFcXEG65ZwokRLH0n5pmtMIQ'
+      *  };
+      *	try {
+      *		const response = await sdk.places.getPlace(getPlaceRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link Error}
+      */
   async getPlace(e) {
-    const t = this.initConfig.userId, i = this.initConfig.siteId, o = this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : "", n = e.placeId, s = `${o}/app/store/api/v28/pub/users/${t}/sites/${i}/places/${n}`, c = await (await fetch(s, {
+    const t = this.initConfig.userId, r = this.initConfig.siteId, o = e.placeId, n = `/app/store/api/v28/pub/users/${t}/sites/${r}/places/${o}`, a = await (await fetch(n, {
       method: "GET",
-      headers: I()
+      headers: E()
     })).json();
-    return Array.isArray(c.data) && (c.data = {}), c;
+    return Array.isArray(a.data) && (a.data = {}), a;
   }
 }
-class H extends Error {
-  constructor(t, i) {
+class ue extends Error {
+  constructor(t, r) {
     super(t);
-    y(this, "template");
-    this.template = i;
+    /** Provides the generic rendered HTML error template that would be rendered via the page on a failure. You can choose to use this to display a rendered error, or handle it how you see fit. */
+    p(this, "template");
+    this.template = r;
   }
 }
-class Q {
+class fe {
+  /**
+      * Used to load a Twig template via the API.
+      *
+      * ```ts
+      *  const templateRequest = {
+      *      template: 'sections/item-modal',
+      *      props: {
+      *          item: {
+      *              filters: {
+      *                  id: item.id
+      *              }
+      *          }
+      *      }
+      *  };
+      *	try {
+      *		const template = await sdk.template.getTemplate(templateRequest);
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link TemplateError}
+      */
   async getTemplate(e) {
     const t = await fetch("/s/api/v1/template", {
       method: "POST",
@@ -404,178 +516,375 @@ class Q {
         template: e.template,
         props: e.props
       }),
-      headers: I()
-    }), i = await t.text();
+      headers: E()
+    }), r = await t.text();
     if (t.ok === !1)
-      throw new H("Unable to render template", i);
-    return i;
+      throw new ue("Unable to render template", r);
+    return r;
   }
 }
-const w = {
+const J = "customer_xsrf", B = "/app/accounts/v1", he = "/ping", pe = "/loyalty/account/search";
+var v, A, $, R, Z, P, M;
+class me {
+  constructor(e) {
+    T(this, A);
+    T(this, R);
+    /**
+        * Calling ping will set the session ID and XSRF token cookies needed for subsequent requests
+        */
+    T(this, P);
+    T(this, v, void 0);
+    G(this, v, e);
+  }
+  async getLoyaltyAccount(e) {
+    const t = {
+      phone: e
+    }, r = await _(this, A, $).call(this, `${B}${pe}`, "POST", t);
+    return (r == null ? void 0 : r.data.loyalty_account) ?? null;
+  }
+}
+v = new WeakMap(), A = new WeakSet(), $ = async function(e, t, r = null, o = !0) {
+  let n = N(J);
+  n || (await _(this, P, M).call(this), n = N(J) ?? "");
+  const s = {
+    method: t,
+    headers: _(this, R, Z).call(this, n)
+  };
+  r && (s.body = JSON.stringify(r));
+  const a = await fetch(e, s);
+  if (!a.ok) {
+    if (a.status === 404)
+      return null;
+    if (a.status === 419 && o)
+      return await _(this, P, M).call(this), await _(this, A, $).call(this, e, t, r, !1);
+    throw new Error(`Error ${a.status}: ${a.statusText}`);
+  }
+  return await a.json();
+}, R = new WeakSet(), Z = function(e) {
+  return {
+    Accept: "application/json",
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-XSRF-TOKEN": e,
+    "Square-Merchant-Token": j(this, v)
+  };
+}, P = new WeakSet(), M = async function() {
+  const e = `${B}${he}`;
+  await fetch(e);
+};
+class ye {
+  constructor(e) {
+    p(this, "initConfig");
+    p(this, "buyersServiceClient");
+    this.initConfig = e, this.buyersServiceClient = new me(e.merchantId);
+  }
+  /**
+      * Used to try and get the coordinates of the buyer based on their IP address.
+      * If the coordinates can't be determined, this method returns an empty object.
+      *
+      * ```ts
+      *	try {
+      *		const coordinates = await sdk.customers.getCoordinates();
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link Error}
+      */
+  async getCoordinates() {
+    const t = `/app/website/cms/api/v1/users/${this.initConfig.userId}/customers/coordinates`;
+    let o = await (await fetch(t, {
+      method: "GET",
+      headers: E()
+    })).json();
+    return Array.isArray(o) && (o = {}), o;
+  }
+  /**
+      * Search for an existing customer loyalty account by phone number. 
+      * If no loyalty account exists, this method returns an empty object.
+      *
+      * ```ts
+      *	try {
+      *		const loyaltyAccount = await sdk.customers.getLoyaltyAccount();
+      *	} catch (error) {
+      *		// Handle errors
+      *	}
+      * ```
+      * @throws {@link Error}
+      */
+  async getLoyaltyAccount(e) {
+    const t = e.phone, r = await this.buyersServiceClient.getLoyaltyAccount(t);
+    return r ? {
+      data: r
+    } : {};
+  }
+}
+const O = {
   INVALID_QUANTITY: "INVALID_QUANTITY",
   SOLD_OUT: "SOLD_OUT",
   STOCK_EXCEEDED: "STOCK_EXCEEDED",
   PER_ORDER_MAX_EXCEEDED: "PER_ORDER_MAX_EXCEEDED"
-}, R = (r) => {
+}, Y = (i) => {
+  var r;
+  return ((r = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: i
+  }).formatToParts(1).find((o) => o.type === "fraction")) == null ? void 0 : r.value.length) ?? 0;
+};
+class ee {
+  /**
+   * Formats the Money object based on the provided locale.
+   * 
+   * @param money - The Money object to format.
+   * @param formattedLocale - The locale to format the Money object in (BCP 47).
+   * @returns The formatted amount.
+   */
+  formatMoney(e, t = "en-US") {
+    return this.formatAmount(e.amount, e.currency, t);
+  }
+  /**
+   * Formats a subunits amount based on the provided currency and locale.
+   * 
+   * @param amount - The amount in subunits.
+   * @param currency - The currency of the amount (ISO 4217).
+   * @param formattedLocale - The locale to format the amount in (BCP 47).
+   * @returns The formatted amount.
+   */
+  formatAmount(e, t, r = "en-US") {
+    let o;
+    try {
+      o = new Intl.NumberFormat(r, {
+        style: "currency",
+        currency: t
+      });
+    } catch {
+      o = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: t
+      });
+    }
+    const n = Y(t);
+    return n > 0 && (e = e / Math.pow(10, n)), o.format(e);
+  }
+  /**
+   * Converts a float amount to the lowest subunits for the currency.
+   * 
+   * @param float - The float amount to convert.
+   * @param currency - The currency of the amount (ISO 4217).
+   * @returns The amount in subunits.
+   */
+  convertFloatToSubunits(e, t) {
+    const r = Y(t);
+    return r > 0 ? e * Math.pow(10, r) : e;
+  }
+}
+const Q = (i) => {
   const e = [];
-  return r.item_option_values && Object.keys(r.item_option_values).forEach((t) => {
+  return i.item_option_values && Object.keys(i.item_option_values).forEach((t) => {
     e.push({
       itemOptionId: t,
-      choice: r.item_option_values[t].choice
+      choice: i.item_option_values[t].choice
     });
   }), e;
-}, W = (r) => {
-  const e = r.product_type_details.end_date, t = r.product_type_details.end_time;
-  let i = e + "T";
+}, Ee = (i) => {
+  const e = i.product_type_details.end_date, t = i.product_type_details.end_time;
+  let r = e + "T";
   const o = t.split(" "), n = o[0].split(":");
   let s = parseInt(n[0]) + (o[1] === "PM" ? 12 : 0);
   s -= n[0] === "12" ? 12 : 0;
   const a = n[1];
-  return s.toString().length === 1 && (i += "0"), i += `${s}:${a}:00${r.product_type_details.timezone_info.utc_offset_string}`, new Date(i);
+  return s.toString().length === 1 && (r += "0"), r += `${s}:${a}:00${i.product_type_details.timezone_info.utc_offset_string}`, new Date(r);
 };
-class Y {
+class Ie {
+  /**
+      * Returns the variations for an item resource.
+      */
   getVariations(e) {
     return e.variations;
   }
+  /**
+      * Returns the item options for an item resource.
+      */
   getItemOptions(e) {
     return e.item_options;
   }
+  /**
+      * Returns the modifier lists for an item resource.
+      */
   getModifierLists(e) {
     return e.modifier_lists;
   }
+  /**
+      * Returns whether a particular variation is sold out.
+      */
   isVariationSoldOut(e) {
     return e.sold_out || e.inventory_tracking_enabled && e.inventory === 0;
   }
-  getItemQuantityError(e, t, i) {
-    return i <= 0 ? w.INVALID_QUANTITY : this.isVariationSoldOut(t) ? w.SOLD_OUT : t.inventory_tracking_enabled && i > t.inventory ? w.STOCK_EXCEEDED : e.per_order_max && i > e.per_order_max ? w.PER_ORDER_MAX_EXCEEDED : null;
+  /**
+      * Returns the QuantityErrorType if there's an item quantity error with the item varation, otherwise null.
+      */
+  getItemQuantityError(e, t, r) {
+    return r <= 0 ? O.INVALID_QUANTITY : this.isVariationSoldOut(t) ? O.SOLD_OUT : t.inventory_tracking_enabled && r > t.inventory ? O.STOCK_EXCEEDED : e.per_order_max && r > e.per_order_max ? O.PER_ORDER_MAX_EXCEEDED : null;
   }
+  /**
+      * Returns whether all variations of an item are sold out.
+      */
   isItemSoldOut(e) {
     return e.variations.every((t) => this.isVariationSoldOut(t));
   }
-  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: i = "", skipStockCheck: o = !1 }) {
+  /**
+      * Returns all variations in stock for the selected options or variation.
+      */
+  getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t = [], selectedVariationId: r = "", skipStockCheck: o = !1 }) {
     return this.getVariations(e).reduce((n, s) => {
-      if (!i && s.item_option_values) {
-        const a = R(s);
+      if (!r && s.item_option_values) {
+        const a = Q(s);
         if (!t.every((c) => a.find((d) => d.itemOptionId === c.itemOptionId && d.choice === c.choice)))
           return n;
-      } else if (e.variations.length > 1 && s.id !== i)
+      } else if (e.variations.length > 1 && s.id !== r)
         return n;
       return !o && this.isVariationSoldOut(s) || n.push(s), n;
     }, []);
   }
-  isOptionChoiceDisabledForSelectedOptions(e, t, i, o = !0) {
-    o && (i = i.filter((a) => a.itemOptionId !== t.itemOptionId));
-    const n = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: i });
+  /**
+      * Returns whether an item's option choice is disabled based on the selected options.
+      */
+  isOptionChoiceDisabledForSelectedOptions(e, t, r, o = !0) {
+    o && (r = r.filter((a) => a.itemOptionId !== t.itemOptionId));
+    const n = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: r });
     let s = !1;
     return n.forEach((a) => {
-      R(a).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (s = !0);
+      Q(a).find((d) => d.itemOptionId === t.itemOptionId && d.choice === t.choice) && (s = !0);
     }), !s;
   }
+  /**
+      * Returns whether a modifier list is valid for the selected modifiers.
+      */
   isModifierListForSelectedModifiersValid(e, t) {
     var a, c;
-    const i = t.find((d) => d.id == e.id), o = e.min_selected_modifiers, n = e.max_selected_modifiers;
-    let s = ((a = i == null ? void 0 : i.textEntry) == null ? void 0 : a.length) || 0;
-    if ((c = i == null ? void 0 : i.choiceSelections) != null && c.length) {
-      const d = i.choiceSelections.find((_) => {
+    const r = t.find((d) => d.id == e.id), o = e.min_selected_modifiers, n = e.max_selected_modifiers;
+    let s = ((a = r == null ? void 0 : r.textEntry) == null ? void 0 : a.length) || 0;
+    if ((c = r == null ? void 0 : r.choiceSelections) != null && c.length) {
+      const d = r.choiceSelections.find((I) => {
         var h;
-        return !((h = e.modifiers) != null && h.find((m) => m.id === _));
-      }), p = i.choiceSelections.find((_) => {
-        var h, m;
-        return (m = (h = e.modifiers) == null ? void 0 : h.find((u) => u.id === _)) == null ? void 0 : m.sold_out;
+        return !((h = e.modifiers) != null && h.find((f) => f.id === I));
+      }), u = r.choiceSelections.find((I) => {
+        var h, f;
+        return (f = (h = e.modifiers) == null ? void 0 : h.find((g) => g.id === I)) == null ? void 0 : f.sold_out;
       });
-      if (d || p)
+      if (d || u)
         return !1;
-      s = i.choiceSelections.length;
+      s = r.choiceSelections.length;
     }
     return o && n && o === n ? s === o : o && n ? s >= o && s <= n : n ? s <= n : o ? s >= o : !0;
   }
-  getDisabledOptionChoicesForSelectedOptions(e, t, i, o = !0) {
+  /**
+      * Returns the disabled option choices for an item based on the selected options.
+      */
+  getDisabledOptionChoicesForSelectedOptions(e, t, r, o = !0) {
     const n = t.choices.map((a) => ({
       itemOptionId: t.id,
       choice: a
     })), s = [];
-    return o && (i = i.filter((a) => a.itemOptionId !== t.id)), n.forEach((a) => {
-      this.isOptionChoiceDisabledForSelectedOptions(e, a, i, o) && s.push(a.choice);
+    return o && (r = r.filter((a) => a.itemOptionId !== t.id)), n.forEach((a) => {
+      this.isOptionChoiceDisabledForSelectedOptions(e, a, r, o) && s.push(a.choice);
     }), s;
   }
-  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: i = [], selectedVariationId: o = "", quantity: n = void 0, skipStockCheck: s = !1, skipModifierCheck: a = !1 }) {
-    var g, E;
+  /**
+      * Returns whether an item with any combination of selected options, modifiers, variationId, and quantity is valid.
+      * @throws {@link ValidateItemError}
+      */
+  validateItem({ item: e, selectedOptions: t = [], selectedModifiers: r = [], selectedVariationId: o = "", quantity: n = void 0, skipStockCheck: s = !1, skipModifierCheck: a = !1 }) {
+    var m, w;
     const c = [];
-    let d = !1, p = "", _ = w.SOLD_OUT;
+    let d = !1, u = "", I = O.SOLD_OUT;
     const h = [];
-    (g = e.item_options) != null && g.length && !o ? e.item_options.forEach((l) => {
-      t != null && t.find((f) => f.itemOptionId === l.id && l.choices.includes(f.choice)) || c.push(l.id);
+    (m = e.item_options) != null && m.length && !o ? e.item_options.forEach((l) => {
+      t != null && t.find((y) => y.itemOptionId === l.id && l.choices.includes(y.choice)) || c.push(l.id);
     }) : !e.item_options && e.variations.length > 1 && !o && (d = !0);
-    let m = null;
+    let f = null;
     if (c.length === 0 && !d) {
       const l = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: s });
       if (l.length === 0) {
-        const f = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: !0 });
-        f.length > 0 && (p = f[0].id);
-      } else if (m = l[0], n != null) {
-        const f = this.getItemQuantityError(e, m, n);
-        f && (_ = f, p = m.id);
+        const y = this.getInStockVariationsForSelectedOptionsOrVariation({ item: e, selectedOptions: t, selectedVariationId: o, skipStockCheck: !0 });
+        y.length > 0 && (u = y[0].id);
+      } else if (f = l[0], n != null) {
+        const y = this.getItemQuantityError(e, f, n);
+        y && (I = y, u = f.id);
       }
     }
-    if ((E = e.modifier_lists) != null && E.length && !a && e.modifier_lists.forEach((l) => {
-      this.isModifierListForSelectedModifiersValid(l, i) || h.push(l.id);
-    }), !m || c.length || p || h.length) {
+    if ((w = e.modifier_lists) != null && w.length && !a && e.modifier_lists.forEach((l) => {
+      this.isModifierListForSelectedModifiersValid(l, r) || h.push(l.id);
+    }), !f || c.length || u || h.length) {
       const l = new Error("Failed to validate item.");
-      throw c.length && (l.itemOptionIds = c), d && (l.flatVariationSelectionMissing = !0), p && (l.variationId = p, l.quantityErrorType = _), h.length && (l.modifierListIds = h), l;
+      throw c.length && (l.itemOptionIds = c), d && (l.flatVariationSelectionMissing = !0), u && (l.variationId = u, l.quantityErrorType = I), h.length && (l.modifierListIds = h), l;
     }
-    const u = {
+    const g = {
       itemId: e.id,
-      variationId: m.id,
-      modifiers: i
+      variationId: f.id,
+      modifiers: r
     };
-    return n && (u.quantity = n), u;
+    return n && (g.quantity = n), g;
   }
-  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: i = "", selectedModifiers: o = [], skipStockCheck: n = !1, skipModifierCheck: s = !1, formattedLocale: a = void 0 }) {
+  /**
+      * Returns the price of an item based on the selected options, modifiers, and/or variation id.
+      */
+  getItemPrice({ item: e, selectedOptions: t = [], selectedVariationId: r = "", selectedModifiers: o = [], skipStockCheck: n = !1, skipModifierCheck: s = !1, formattedLocale: a = void 0 }) {
     var d;
     let c = null;
     try {
-      c = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: i, selectedModifiers: o, skipStockCheck: n, skipModifierCheck: s });
+      c = this.validateItem({ item: e, selectedOptions: t, selectedVariationId: r, selectedModifiers: o, skipStockCheck: n, skipModifierCheck: s });
     } catch {
     }
     if (c) {
-      const p = e.variations.find((u) => u.id === c.variationId);
-      let _ = p.price.regular, h = p.price.sale;
-      (d = c.modifiers) == null || d.forEach((u) => {
-        var g, E;
-        if (u.type === v.CHOICE || u.type === v.GIFT_WRAP) {
-          const l = (g = e.modifier_lists) == null ? void 0 : g.find((f) => f.id === u.id);
-          l && ((E = l.modifiers) == null || E.forEach((f) => {
-            u.choiceSelections.includes(f.id) && f.price_money && (_ += f.price_money.amount, h += f.price_money.amount);
+      const u = e.variations.find((m) => m.id === c.variationId);
+      let I = u.price.regular.amount, h = u.price.sale.amount;
+      const f = u.price.regular.currency;
+      (d = c.modifiers) == null || d.forEach((m) => {
+        var w, l;
+        if (m.type === H.CHOICE || m.type === H.GIFT_WRAP) {
+          const y = (w = e.modifier_lists) == null ? void 0 : w.find((S) => S.id === m.id);
+          y && ((l = y.modifiers) == null || l.forEach((S) => {
+            m.choiceSelections.includes(S.id) && S.price_money && (I += S.price_money.amount, h += S.price_money.amount);
           }));
         }
       });
-      const m = {
-        regular: _,
-        sale: h,
-        currency: p.price.currency
+      const g = {
+        regular: {
+          amount: I,
+          currency: f,
+          formatted: ""
+        },
+        sale: {
+          amount: h,
+          currency: f,
+          formatted: ""
+        }
       };
       if (a) {
-        let u;
-        try {
-          u = new Intl.NumberFormat(a, {
-            style: "currency",
-            currency: p.price.currency
-          });
-        } catch {
-          u = new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: p.price.currency
-          });
-        }
-        m.regularFormatted = u.format(_), m.saleFormatted = u.format(h);
+        const m = new ee();
+        g.regular.formatted = m.formatMoney({
+          amount: I,
+          currency: f,
+          formatted: ""
+        }, a), g.sale.formatted = m.formatMoney({
+          amount: h,
+          currency: f,
+          formatted: ""
+        }, a);
       }
-      return m;
+      return g;
     }
     return null;
   }
+  /**
+      * Returns whether an item is an event and has ended.
+      */
   isEventItemInThePast(e) {
-    return e.square_online_type !== "EVENT" ? !1 : W(e) <= /* @__PURE__ */ new Date();
+    return e.square_online_type !== "EVENT" ? !1 : Ee(e) <= /* @__PURE__ */ new Date();
   }
+  /**
+      * Returns whether an item is a preorder and the cutoff time has passed.
+      */
   isPreorderItemCutoffInThePast(e) {
     if (!e.preordering.PICKUP)
       return !1;
@@ -583,42 +892,32 @@ class Y {
     return new Date(t) <= /* @__PURE__ */ new Date();
   }
 }
-class Z {
+class Se {
   constructor(e) {
-    y(this, "initConfig");
-    this.initConfig = e;
-  }
-  async getCoordinates() {
-    const e = this.initConfig.userId, i = `${this.initConfig.cdnDomain ? "https://" + this.initConfig.cdnDomain : ""}/app/website/cms/api/v1/users/${e}/customers/coordinates`;
-    let n = await (await fetch(i, {
-      method: "GET",
-      headers: I()
-    })).json();
-    return Array.isArray(n) && (n = {}), n;
-  }
-}
-class q {
-  constructor(e) {
-    y(this, "version", "4.4.1");
-    y(this, "cart");
-    y(this, "places");
-    y(this, "resource");
-    y(this, "template");
-    y(this, "customers");
-    y(this, "helpers");
+    p(this, "version", "0.0.0-semantic-release");
+    p(this, "cart");
+    p(this, "orders");
+    p(this, "places");
+    p(this, "resource");
+    p(this, "template");
+    p(this, "customers");
+    p(this, "helpers");
     if (!e.userId)
       throw new Error("missing user id");
     if (!e.siteId)
       throw new Error("missing site id");
+    if (!e.merchantId)
+      throw new Error("missing merchant id");
     if (!Number.isInteger(Number(e.userId)))
       throw new Error("invalid user id");
     if (!Number.isInteger(Number(e.siteId)))
       throw new Error("invalid site id");
-    this.cart = new J(), this.places = new B(e), this.resource = new K(), this.template = new Q(), this.customers = new Z(e), this.helpers = {
-      item: new Y()
+    this.cart = new se(), this.orders = new ae(e), this.places = new de(e), this.resource = new ce(), this.template = new fe(), this.customers = new ye(e), this.helpers = {
+      item: new Ie(),
+      money: new ee()
     };
   }
 }
 export {
-  q as default
+  Se as default
 };

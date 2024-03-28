@@ -50,6 +50,7 @@
     max-width: 90%;
     max-height: calc(100% - 64px);
     padding: var(--space-x4);
+    overflow: hidden;
     background-color: var(--theme-dialog-container-color);
     border-radius: var(--theme-dialog-container-radius);
     box-shadow: var(--theme-dialog-container-shadow);
@@ -118,6 +119,10 @@
 
 .ui-dialog__overlay--flush .ui-dialog__container-inner {
     padding: 0;
+}
+
+.ui-dialog__container-inner:not(.ui-dialog__container--header-visible, .ui-dialog__container--footer-visible) {
+    grid-template-rows: 100%;
 }
 
 .ui-dialog__header {

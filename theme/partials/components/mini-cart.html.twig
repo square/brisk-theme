@@ -1,0 +1,209 @@
+<div
+    x-data="miniCart({{ cart.order.total_quantity }})"
+    class="mini-cart"
+    :class="{ 'is-interacting': $store.cart.isInteractingMiniCart, 'is-loading': $store.cart.isMiniCartLoading }"
+    @mouseenter="$store.cart.isInteractingMiniCart = true"
+    @mouseleave="onMiniCartBlur"
+>
+    {% if cart.created and cart.order.total_quantity > 0 %}
+        <div class="heading-5">
+            {{ 'components.mini_cart.heading'|localize }} ({{ cart.order.total_quantity }})
+        </div>
+
+        <div class="mini-cart__items-wrapper">
+            <div class="mini-cart__items-scrollbar custom-scrollbar">
+                <div class="custom-scrollbar-inner">
+                {% for item in cart.order.line_items %}
+                    <div
+                        x-data="miniCartItem()"
+                        class="mini-cart__item"
+                        :class="{ 'mini-cart__item--last': Boolean({{ loop.last }}) }"
+                    >
+                        <div class="row">
+                            <div class="col" col-2>
+                                {# Item image #}
+                                <div class="mini-cart__item-image">
+                                    <a href="{{ item_link(item.square_online_product_id) }}">
+                                        {{ include('partials/ui/image', { image: { uri: item.image.absolute_url, urls: item.image.urls }, imageSizes: [64], altText: item.name, showPlaceholder: true }) }}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col mini-cart__item-col" col-7>
+                                {# Item name #}
+                                <div class="mini-cart__item-name">
+                                    <a href="{{ item_link(item.square_online_product_id) }}">
+                                        {{ item.name }}
+                                    </a>
+                                </div>
+
+                                {# Increase item base price with modifiers #}
+                                {% set modifiersWithPrice = item.modifiers|filter(m => m.base_price_money.amount > 0) %}
+                                {% set itemBasePriceFormatted = item.base_price_money.formatted %}
+                                {% set itemBasePrice = item.base_price_money.amount %}
+                                {% if modifiersWithPrice|length %}
+                                    {% for modifier in modifiersWithPrice %}
+                                        {% set itemBasePrice = itemBasePrice + modifier.base_price_money.amount %}
+                                    {% endfor %}
+                                    {% set itemBasePriceFormatted = (itemBasePrice)|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) }) %}
+                                {% endif %}
+
+                                {# Regular and sale price #}
+                                {% set isOnSale = itemBasePrice != item.gross_price_money.amount %}
+                                {% if isOnSale %}
+                                    {{ include('partials/ui/price', { price: { 
+                                    regular_high: {
+                                        amount: itemBasePrice,
+                                        currency: cart.order.total_money.currency|default(square.store.currency),
+                                        formatted: itemBasePrice|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) })
+                                    }, 
+                                    regular_low: {
+                                        amount: item.gross_price_money.amount,
+                                        currency: cart.order.total_money.currency|default(square.store.currency),
+                                        formatted: item.gross_price_money.amount|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) })
+                                    },
+                                    }, size: 'tiny' }) }}
+                                {% endif %}
+
+                                {# Discount badge #}
+                                {% if item.applied_discounts|length %}
+                                    <div class="mini-cart__item-discounts">
+                                        {{ include('partials/components/store/item/badges', { badges: { has_discounts: true }, discounts: item.applied_discounts, badgeSize: 'small' } ) }}
+                                    </div>
+                                {% endif %}
+
+                                {# Variations #}
+                                {% for variation in item.variation_name|split(',') %}
+                                    {% set variationArray = variation|split(':') %}
+                                    <p class="mini-cart__item-variation">
+                                        <span class="mini-cart__item-variation-label">{{ variationArray[0] }}:</span>
+                                        {{ variationArray[1] }}
+                                    </p>
+                                {% endfor %}
+
+                                {# Modifiers #}
+                                {% if item.modifiers is not empty %}
+                                    {% for modifier in item.modifiers %}
+                                        {% if modifier.base_price_money.amount > 0 %}
+                                            <p class="mini-cart__item-variation">
+                                                <span class="mini-cart__item-variation-label">{{ modifier.modifier_list_name }}</span>
+                                            </p>
+                                            <p class="mini-cart__item-variation">
+                                                {{ modifier.name }} (+ {{ modifier.base_price_money.formatted }})
+                                            </p>
+                                        {% else %}
+                                            <p class="mini-cart__item-variation">
+                                                <span class="mini-cart__item-variation-label">{{ modifier.modifier_list_name }}:</span>
+                                                {{ modifier.name }}
+                                            </p>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col mini-cart__item-price" col-3>
+                                {# Display just the final price #}
+                                {% set itemFinalPrice = item.gross_price_money.amount * item.quantity %}
+                                {{ include('partials/ui/price', { price: {
+                                    regular_high: {
+                                    amount: itemFinalPrice,
+                                    currency: cart.order.total_money.currency|default(square.store.currency),
+                                    formatted: itemFinalPrice|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) })
+                                },
+                                regular_low: {
+                                    amount: itemFinalPrice,
+                                    currency: cart.order.total_money.currency|default(square.store.currency),
+                                    formatted: itemFinalPrice|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) })
+                                },
+                                }, size: 'small' }) }}
+                            </div>
+                        </div>
+                        <div class="row mini-cart__item-actions">
+                            {# Quantity input #}
+                            <div class="col mini-cart__item-actions--quantity" col-6 offset-2>
+                                {% embed 'partials/form/stepper' with {
+                                    label: 'partials.components.store.item.quantity.label'|localize,
+                                    min: 1,
+                                    hideLabel: true,
+                                    size: 'small',
+                                } %}
+                                    {% block data %}
+                                        model: {{ item.quantity }},
+                                        init() {
+                                            this.$watch('model', (value) => {
+                                                this.updateItemQuantity('{{ item.id }}', value);
+                                            });
+                                            this.$watch('isMiniCartLoading', (isLoading) => {
+                                                this.isLoading = isLoading;
+                                            });
+                                        },
+                                    {% endblock %}
+                                {% endembed %}
+                            </div>
+
+                            {# Delete button #}
+                            <div class="col mini-cart__item-actions--delete" col-4>
+                                {{ include('partials/ui/button', {
+                                    variant: 'neutral',
+                                    size: 'small',
+                                    icon: 'delete',
+                                    iconAlt: 'components.mini_cart.delete_icon.alt'|localize,
+                                    action: "deleteItem('" ~ item.id ~ "')",
+                                }) }}
+                            </div>
+                        </div>
+
+                        {# Error message #}
+                        <div x-show="failedToUpdateOrderId == '{{ item.id }}'" class="row mini-cart__item-errors">
+                            <div class="col" col-10 offset-2>
+                                {{ include('partials/ui/notice', { variant: 'critical', message: 'shared.errors.general'|localize } ) }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% set formattedSubtotal = cart.order.subtotal_money.formatted %}
+        {% if cart.order.discounts is not empty %}
+            {% set subtotal = cart.order.subtotal_money.amount %}
+            {% for discount in cart.order.discounts %}
+                {% set subtotal = subtotal - discount.applied_money.amount %}
+            {% endfor %}
+            {% set formattedSubtotal = (subtotal)|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) }) %}
+        {% endif %}
+
+        {% embed 'partials/ui/button' with {
+            label: 'components.mini_cart.button'|localize ~ ' ',
+            variant: 'primary',
+            fullWidth: true,
+            action: 'goToCartPage',
+        } %}
+            {% block attributes %}
+                @blur="onMiniCartBlur"
+                @keydown.tab="(e) => isShiftKeyPressed = e.shiftKey"
+            {% endblock %}
+            {% block content %}
+                <span>{{ formattedSubtotal }}</span>
+            {% endblock %}
+        {% endembed %}
+
+        {# Loader #}
+        <div
+            x-show="isMiniCartLoading"
+            class="ui-loader--overlay"
+        >
+            {{ include('partials/ui/loader') }}
+        </div>
+    {% else %}
+        <div class="heading-5">{{ 'components.mini_cart.heading'|localize }}</div>
+        <p class="mini-cart__empty">{{ 'components.mini_cart.empty'|localize }}</p>
+    {% endif %}
+</div>
+
+{% schema %}
+{
+    "cart": {
+        "type": "cart"
+    }
+}
+{% endschema %}

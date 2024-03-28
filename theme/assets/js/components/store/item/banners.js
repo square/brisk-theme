@@ -47,11 +47,15 @@ document.addEventListener('alpine:init', () => {
          */
         openPreorderDialog() {
             if (this.hasPreorder()) {
-                this.$store.dialog.openPrimaryDialog('templates/components/dialogs/preorder-content', {
-                    showCloseButton: false,
-                    showPrimaryButton: true,
-                    primaryButtonText: this.translations.buttonClose,
-                }, { preorder: this.getPreorder(), fulfillment: this.fulfillment });
+                this.$store.dialog.openPrimaryDialog({
+                    templateUrl: 'templates/components/dialogs/preorder-content',
+                    dialogOptions: {
+                        showCloseButton: false,
+                        showPrimaryButton: true,
+                        primaryButtonText: this.translations.buttonClose,
+                    },
+                    templateProps: { preorder: this.getPreorder(), fulfillment: this.fulfillment },
+                });
             }
         },
         /**
@@ -59,11 +63,15 @@ document.addEventListener('alpine:init', () => {
          */
         openDiscountDialog(index) {
             if (this.hasDiscount()) {
-                this.$store.dialog.openPrimaryDialog('templates/components/dialogs/discount-content', {
-                    showCloseButton: false,
-                    showPrimaryButton: true,
-                    primaryButtonText: this.translations.buttonClose,
-                }, { discount: this.discounts[index] });
+                this.$store.dialog.openPrimaryDialog({
+                    templateUrl: 'templates/components/dialogs/discount-content',
+                    dialogOptions: {
+                        showCloseButton: false,
+                        showPrimaryButton: true,
+                        primaryButtonText: this.translations.buttonClose,
+                    },
+                    templateProps: { discount: this.discounts[index] },
+                });
             }
         },
     });
