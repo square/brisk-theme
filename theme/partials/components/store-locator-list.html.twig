@@ -1,9 +1,6 @@
 {{ register_asset('js/components/store-locator-list.js', { defer: false }) }}
 
-<div
-    id="store-locator-list"
-    x-data="{ isReady: true }"
->
+<div id="store-locator-list">
     {% for location in locations %}
         {% set sublabels = location.address|address_format_multiline|slice(0,-1) %}
         {% set today = 'now'|date('D', location.timezone.name)|lower %}
@@ -14,7 +11,6 @@
         {% endfor %}
 
         <div
-            x-show="isReady"
             x-transition:enter="fade-enter-active"
             x-transition:enter-start="fade-enter-from"
             x-transition:enter-end="fade-enter-to"
@@ -55,12 +51,6 @@
             {% endembed %}
         </div>
     {% endfor %}
-    <div
-        x-show="!isReady"
-        class="ui-loader--overlay"
-    >
-        {{ include('partials/ui/loader') }}
-    </div>
 </div>
 
 {% schema %}
