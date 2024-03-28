@@ -4,6 +4,6 @@
             "filters": []
         }
     },
-    "template": "templates\/store\/locations",
-    "route": "s\/store-locator"
+    "template": "templates/store/locations",
+    "route": "s/store-locator"
 }
