@@ -17,6 +17,7 @@
     {% set imageSrc = 'images/home-banner.png'|asset_url %}
     {{ include('partials/components/banner', {
         bannerImage: { uri: imageSrc, urls: { 640: imageSrc ~ '?width=640', 1280: imageSrc ~ '?width=1280' } },
+        bannerSizes: { sm: 640, lg: 1280 },
         bannerAlt: 'templates.store.shop.headings.shop'|localize,
     }) }}
 

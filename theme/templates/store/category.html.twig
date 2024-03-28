@@ -23,6 +23,7 @@
     {% if categoryImage %}
         {{ include('partials/components/banner', {
             bannerImage: { uri: categoryImage.absolute_url, urls: categoryImage.absolute_urls },
+            bannerSizes: { sm: 640, lg: 1280 },
             bannerAlt: category.name,
         }) }}
     {% endif %}
