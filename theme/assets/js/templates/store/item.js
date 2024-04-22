@@ -6,6 +6,7 @@ document.addEventListener('alpine:init', () => {
         product: {},
         locations: [],
         formData: {},
+        selectedVariationPrice: null,
         init() {
             window.onbeforeunload = () => {
                 Alpine.store('global').updateHistory(this.product.square_online_id, this.formData);
@@ -321,6 +322,7 @@ document.addEventListener('alpine:init', () => {
                 });
             }
 
+            Alpine.store('product').updateProperty('selectedVariationPrice', finalPriceAmount);
             this.isLoadingPrice = false;
         },
         /**
@@ -495,6 +497,103 @@ document.addEventListener('alpine:init', () => {
         },
     });
 
+    const createAfterpayBadgeData = () => ({
+        payments: null,
+        paymentAmount: null,
+        isLoadingAfterpayBadge: false,
+        selector: '.afterpay-placement',
+        /**
+         * Initialize Square Web Payments SDK
+         *
+         * @param {String} applicationId the application id
+         * @param {String} locationId the location id
+         * @return {Object|null}
+        */
+        initWebPaymentsSDK(applicationId, locationId) {
+            if (!this.webPaymentsSDKLoaded()) {
+                throw new Error('Square Web Payments SDK is not loaded');
+            }
+
+            const Square = window.Square;
+            return Square.payments(applicationId, locationId);
+        },
+
+        /**
+         * Whether the Web Payments SDK has already been loaded
+         * @return {Boolean}
+         */
+        webPaymentsSDKLoaded() {
+            return !!window.Square;
+        },
+        async init() {
+            // Initialize the payments SDK
+            const applicationId = Alpine.store('global').applicationId;
+            const locationId = Alpine.store('product').locationId;
+            const storeLocale = Alpine.store('global').locale;
+            const payments = this.initWebPaymentsSDK(applicationId, locationId);
+            payments.setLocale(storeLocale);
+            this.payments = payments;
+
+            this.paymentAmount = this.product.price.regular_low.amount;
+
+            // Load afterpay messaging
+            await this.attachAfterpayMessaging();
+            this.$watch('$store.product.selectedVariationPrice', () => this.reloadAfterpayMessaging());
+        },
+        reloadAfterpayMessaging() {
+            this.cleanupAfterpayMessaging();
+            this.paymentAmount = Alpine.store('product').selectedVariationPrice;
+            this.attachAfterpayMessaging();
+        },
+        async attachAfterpayMessaging() {
+            this.isLoadingAfterpayBadge = true;
+            try {
+                const paymentRequest = this.buildPaymentRequest(this.paymentAmount);
+                const afterpay = await this.payments.afterpayClearpay(paymentRequest);
+                this.cleanupAfterpayMessaging();
+                await afterpay.attachMessaging(this.selector, Constants.AFTERPAY_MESSAGING_OPTIONS);
+            } catch (err) {
+                throw new Error('Failed to attach afterpay messaging');
+            } finally {
+                this.isLoadingAfterpayBadge = false;
+            }
+        },
+
+        /**
+         * Remove all afterpay messages that have been attached to this badge
+         */
+        cleanupAfterpayMessaging() {
+            // Container may not exist if there was previously an error
+            if (this.$refs.container) {
+                const afterpayMessages = this.$refs.container.querySelectorAll('afterpay-placement');
+                afterpayMessages.forEach((element) => {
+                    element.remove();
+                });
+            }
+        },
+        buildPaymentRequest() {
+            const currencyCode = Alpine.store('global').currency;
+            const countryCode = Alpine.store('global').countryCode;
+
+            // We need a float amount for the payment request, without currency symbol, e.g. '10.00'
+            const amountFloat = SquareWebSDK.helpers.money.convertSubunitsToFloat(this.paymentAmount, currencyCode).toFixed(2);
+            const total = {
+                amount: amountFloat,
+                label: 'Total',
+            };
+
+            const paymentRequestDetails = {
+                countryCode,
+                currencyCode,
+                requestBillingContact: true,
+                requestShippingContact: true,
+                total,
+            };
+
+            return this.payments.paymentRequest(paymentRequestDetails);
+        },
+    });
+
     const createProductFormButtonsData = (isManualFulfillment = false) => ({
         isSubscribeButton: false,
         isManualFulfillment,
@@ -534,4 +633,5 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('productPage', createProductPageData);
     Alpine.data('productForm', createProductFormData);
     Alpine.data('productFormButtons', createProductFormButtonsData);
+    Alpine.data('productAfterpayBadge', createAfterpayBadgeData);
 });

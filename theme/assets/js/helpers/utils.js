@@ -8,6 +8,12 @@ window.Constants = {
     DEFAULT_JS_SAFE_LOCALE: 'en-US',
     SDK_FORM_OPTION_KEY: 'option',
     SDK_FORM_MODIFIER_KEY: 'modifier',
+    AFTERPAY_MESSAGING_OPTIONS: {
+        badgeTheme: 'black-on-mint',
+        modalLinkStyle: 'circled-info-icon',
+        modalTheme: 'white',
+        size: 'sm',
+    },
 };
 
 window.Utils = {

@@ -198,6 +198,8 @@ document.addEventListener('alpine:init', () => {
         pageScrollY: 0,
         headerHeight: 0,
         timeout: null,
+        applicationId: '',
+        countryCode: '',
         /**
          * Initial events
          */
@@ -548,6 +550,7 @@ document.addEventListener('alpine:init', () => {
         locale: Constants.DEFAULT_LOCALE,
         currency: Constants.DEFAULT_CURRENCY,
         defaultFulfillment: Constants.FULFILLMENT_SHIPPING,
+        applicationId: null,
         pageHeight: 0,
         pageWidth: 0,
         bodyStyles: {},
@@ -560,6 +563,8 @@ document.addEventListener('alpine:init', () => {
             const store = Alpine.store('global');
             store.updateProperty('locale', this.locale.replace(/_/g, '-'));
             store.updateProperty('fulfillment', this.defaultFulfillment);
+            store.updateProperty('applicationId', this.applicationId);
+            store.updateProperty('countryCode', this.countryCode);
             store.setCurrency(this.currency);
 
             // add whitespace at top to fit header
