@@ -45,6 +45,14 @@ window.Utils = {
         );
     },
     /**
+     * Defines "browser" as having the `window` global
+     * Checks if the browser supports them
+     * @return {boolean}
+     */
+    isBrowser() {
+        return (typeof window !== 'undefined');
+    },
+    /**
      * Checks if the current device is a touch device
      */
     isTouchDevice() {
@@ -53,11 +61,26 @@ window.Utils = {
             || (navigator.msMaxTouchPoints > 0);
     },
     /**
+     * Checks if the user agent is an android device
+     * @return {boolean}
+     */
+    isAndroidDevice() {
+        return this.isBrowser() && Boolean(window.navigator.userAgent.match(/android/i));
+    },
+    /**
+     * Checks if the user agent is an ios device
+     * Does *not* check whether it is in a webview or actual browser
+     * @return {boolean}
+     */
+    isIOSDevice() {
+        return this.isBrowser() && Boolean(window.navigator.userAgent.match(/iPad|iPhone|iPod/i));
+    },
+    /**
      * Is it apple safari browser
      * @return {boolean}
      */
     isSafari() {
-        return (typeof window !== 'undefined') && window.navigator.userAgent.includes('Safari')
+        return this.isBrowser() && window.navigator.userAgent.includes('Safari')
             && !window.navigator.userAgent.includes('Chrome');
     },
     /**
@@ -186,6 +209,7 @@ window.Utils = {
         }
         return {
             ...location,
+            distance,
             formatted_distance: formattedDistance,
         };
     },
@@ -387,7 +411,7 @@ window.Utils = {
         for (let y = 0; y <= topPos; y += yPosPerScroll) {
             window.scrollTo({ top: y, behavior: 'smooth' });
             // eslint-disable-next-line no-await-in-loop
-            await Utils.delay(scrollDelay);
+            await this.delay(scrollDelay);
             if (y + yPosPerScroll > topPos && typeof callback === 'function') {
                 callback();
             }
@@ -445,5 +469,19 @@ window.Utils = {
             // eslint-disable-next-line no-param-reassign
             el.innerHTML = text;
         });
+    },
+    /**
+     * Get directions url
+     * Opens native map app for android and ios devices
+     * @param {String} destination
+     * @return {String}
+     */
+    getDirectionsUrl(destination) {
+        if (this.isAndroidDevice()) {
+            return `geo:0,0?q=${destination}`;
+        } if (this.isIOSDevice()) {
+            return `maps://google.com/maps?daddr=${destination}`;
+        }
+        return `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
     },
 };

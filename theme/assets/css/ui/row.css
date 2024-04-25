@@ -10,7 +10,8 @@
 
 .ui-row__icon,
 .ui-row__label,
-.ui-row__sublabel {
+.ui-row__sublabel,
+.ui-row__side {
     position: relative;
 }
 
@@ -42,4 +43,9 @@
 
 .ui-row:hover::before {
     opacity: 1;
+}
+
+.ui-row__side {
+    display: flex;
+    gap: var(--space-x2);
 }

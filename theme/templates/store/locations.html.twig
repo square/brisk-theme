@@ -1,0 +1,94 @@
+{% extends "layouts/theme" %}
+
+{% block main_content %}
+
+{% if locations|length %}
+
+{{ register_asset('css/templates/store/store-locator.css') }}
+{{ register_asset('js/templates/store/store-locator.js', { defer: false }) }}
+
+<script id="store-locator-data" type="application/json">
+    {{ {
+        locations,
+        translations: {
+            dialogTitle: 'templates.components.dialogs.store_locator.heading'|localize,
+        },
+    }|json_encode }}
+</script>
+
+<div x-data="storeLocatorPage('store-locator-data')" class="store-locator-page page container">
+    <div class="row">
+        <div
+            class="store-locator-list col"
+            col-xs-12 col-sm-6 col-md-5
+        >
+            <div class="store-locator-page__heading">
+                <h3 class="heading-3">{{ 'templates.store.store_locator.heading'|localize }}</h3>
+            </div>
+
+            <div class="store-locator-input__wrapper">
+                {% embed 'partials/form/autocomplete' with {
+                    hideLabel: true,
+                    placeholder: 'templates.components.dialogs.locations.input.placeholder'|localize,
+                } %}
+                    {% block data %}
+                        ...storeLocatorInput(),
+                    {% endblock %}
+                {% endembed %}
+            </div>
+            <div class="store-locator-list-async">
+                {{ include('partials/components/store-locator-list', { locations }) }}
+            </div>
+        </div>
+        <div
+            class="store-locator-map col"
+            col-xs-12 col-sm-6 col-md-7
+            :hidden="$store.global.isMobile"
+        >
+            {% set markers = [] %}
+            {% for location in locations %}
+                {% set markers = markers|merge([{
+                    id: location.id,
+                    display_name: location.name,
+                    address: location.address|address_format,
+                    phone: location.address.phone,
+                    lat: location.coordinates.latitude,
+                    long: location.coordinates.longitude,
+                }]) %}
+            {% endfor %}
+            {% set mapConfig = {
+                height: '640px',
+                lat: 0,
+                long: 0,
+                activeMarker: null,
+                markers,
+                control: 3,
+                scalecontrol: 1,
+            } %}
+            {% embed 'partials/ui/google-map' with { mapConfig } %}
+                {% block attributes %}
+                    x-ref="googleMapIframe"
+                    @message.window="onIframeMessage"
+                {% endblock %}
+            {% endembed %}
+        </div>
+    </div>
+</div>
+
+<template x-if="!dialogExists()">
+    <template x-teleport="body">
+        {{ include('partials/ui/dialog') }}
+    </template>
+</template>
+
+{% endif %}
+
+{% endblock %}
+
+{% schema %}
+{
+    "locations": {
+        "type": "location-list"
+    }
+}
+{% endschema %}

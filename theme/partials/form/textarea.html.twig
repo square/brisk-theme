@@ -27,6 +27,7 @@
     <textarea
         id="textarea-{{ textareaId }}"
         x-model="{% if parentModel %}{{ parentModel }}{% else %}model{% endif %}"
+        name="{{ name|default(label) }}"
         placeholder="{{ placeholder|default('') }}"
         {% if max %}maxlength="{{ max }}"{% endif %}
         class="form-textarea__input"

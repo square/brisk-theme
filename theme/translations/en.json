@@ -294,6 +294,25 @@
                 },
                 "product_reviews": {
                     "img_alt": "photo by {{name}}"
+                },
+                "store_locator": {
+                    "heading": "Location information",
+                    "open_today": "Open today {{time}}",
+                    "buttons": {
+                        "directions": "Get directions",
+                        "call": "Call the store"
+                    },
+                    "hours": {
+                        "heading": "Hours",
+                        "mon": "Monday",
+                        "tue": "Tuesday",
+                        "wed": "Wednesday",
+                        "thu": "Thursday",
+                        "fri": "Friday",
+                        "sat": "Saturday",
+                        "sun": "Sunday",
+                        "closed": "Closed"
+                    }
                 }
             },
             "fulfillment_detail": {
@@ -326,6 +345,9 @@
                     "price_asc": "Price low - High",
                     "score": "Relevance"
                 }
+            },
+            "store_locator": {
+                "heading": "Find a store"
             }
         }
     }

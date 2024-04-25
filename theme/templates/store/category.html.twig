@@ -23,9 +23,13 @@
     {% if categoryImage %}
         {{ include('partials/components/banner', {
             bannerImage: { uri: categoryImage.absolute_url, urls: categoryImage.absolute_urls },
+            bannerSizes: { sm: 640, lg: 1280 },
             bannerAlt: category.name,
         }) }}
     {% endif %}
+
+    {# Items options #}
+    {% set itemsOptions = { category_id: category.square_online_id, square_online_id: true } %}
 
     {# Sort options #}
     {% set sortOptions = [
@@ -43,10 +47,10 @@
 
     {# Category items #}
     {{ include('components/sections/store/item-list', {
-        items,
         category,
         categories,
-        category_hierarchy: category_hierarchy(null, category.square_online_id),
+        category_hierarchy: category_hierarchy(null, category.square_online_id, true),
+        items_options: itemsOptions,
         sort_options: sortOptions,
         global_options: globalOptions,
     }) }}
@@ -58,9 +62,6 @@
 {
     "category": {
         "type": "category"
-    },
-    "items": {
-        "type": "item-list"
     },
     "categories": {
         "type": "category-list"

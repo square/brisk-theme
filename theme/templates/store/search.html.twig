@@ -17,6 +17,12 @@
         <h2 class="heading-2">{{ search_term }}</h2>
     </div>
 
+    {# Items options #}
+    {% set itemsOptions = {
+        filters: { search: search_term },
+        sort: { by: 'score' },
+    } %}
+
     {# Sort options #}
     {% set sortOptions = [
         { label: 'templates.store.shop.sort_options.score'|localize, value: 'score' },
@@ -29,16 +35,19 @@
     ] %}
 
     {# Search results #}
-    {{ include('components/sections/store/item-list', { items, categories: category_list([]), category_hierarchy: category_hierarchy(), sort_options: sortOptions, search_term }) }}
+    {{ include('components/sections/store/item-list', {
+        categories: category_list([]),
+        category_hierarchy: category_hierarchy(),
+        items_options: itemsOptions,
+        sort_options: sortOptions,
+        search_term,
+    }) }}
 </div>
 
 {% endblock %}
 
 {% schema %}
 {
-    "items": {
-        "type": "item-list"
-    },
     "search_term": {
         "type": "string"
     }

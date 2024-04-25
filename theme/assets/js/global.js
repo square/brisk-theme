@@ -189,6 +189,7 @@ document.addEventListener('alpine:init', () => {
         fulfillment: Alpine.$persist(''),
         customerLocale: Alpine.$persist({}),
         suggestedPlaceItem: Alpine.$persist({}),
+        suggestedPlaceItemsCached: Alpine.$persist({}),
         isMobile: true,
         isTablet: false,
         isPageScrollDisabled: false,
@@ -484,6 +485,7 @@ document.addEventListener('alpine:init', () => {
          */
         formatLocationsWithDistance(locations, sort) {
             let customerCoordinates = {};
+            let formattedLocations = locations;
 
             if (this.suggestedPlaceItem?.place_id === sort?.place_id && Utils.hasValidCoordinates(this.suggestedPlaceItem)) {
                 customerCoordinates = { latitude: this.suggestedPlaceItem.latitude, longitude: this.suggestedPlaceItem.longitude };
@@ -492,9 +494,9 @@ document.addEventListener('alpine:init', () => {
             }
 
             if (Utils.hasValidCoordinates(customerCoordinates)) {
-                return locations.map((location) => Utils.formatLocationWithDistance(location, customerCoordinates));
+                formattedLocations = locations.map((location) => Utils.formatLocationWithDistance(location, customerCoordinates));
             }
-            return locations;
+            return formattedLocations.sort((a, b) => a.distance - b.distance);
         },
         /**
          * Gets the location id by the user's current location and fulfillment
@@ -504,6 +506,41 @@ document.addEventListener('alpine:init', () => {
             const store = Alpine.store('global');
             await store.getCustomerCoordinates();
             await store.getClosestLocation(fulfillment);
+        },
+        /**
+         * Gets the place coordinates
+         * @param {Object} suggestedItem
+         */
+        async getPlaceDetails(suggestedItem) {
+            const store = Alpine.store('global');
+            const placeId = suggestedItem.place_id;
+
+            if (store.suggestedPlaceItemsCached[placeId]) {
+                store.updateProperty('suggestedPlaceItem', store.suggestedPlaceItemsCached[placeId]);
+            } else {
+                store.updateProperty('suggestedPlaceItem', suggestedItem);
+            }
+
+            const suggestedPlaceItem = store.suggestedPlaceItem;
+            if (Utils.hasValidCoordinates(suggestedPlaceItem) && suggestedPlaceItem.place_id === placeId) {
+                return;
+            }
+
+            await SquareWebSDK.places.getPlace({ placeId })
+                .then(async ({ data }) => {
+                    if (Utils.hasValidCoordinates(data)) {
+                        const suggestedPlaceItemDetail = {
+                            ...suggestedPlaceItem,
+                            latitude: data.latitude,
+                            longitude: data.longitude,
+                        };
+                        store.updateProperty('suggestedPlaceItemsCached', {
+                            ...store.suggestedPlaceItemsCached,
+                            [placeId]: suggestedPlaceItemDetail,
+                        });
+                        store.updateProperty('suggestedPlaceItem', suggestedPlaceItemDetail);
+                    }
+                });
         },
     });
 

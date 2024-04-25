@@ -1,0 +1,118 @@
+{% set formattedAddress = location.address|filter((value, key) => key != 'country')|address_format %}
+
+<script id="store-locator-dialog-data" type="application/json">
+    {{ {
+        formattedAddress,
+        latitude: location.coordinates.latitude,
+        longitude: location.coordinates.longitude,
+        phoneNumber: location.address.phone,
+    }|json_encode }}
+</script>
+
+<div x-data="storeLocatorDialog('store-locator-dialog-data')" class="store-locator-dialog">
+    {% if location.coordinates.latitude and location.coordinates.longitude %}
+    <div class="store-locator-dialog__map">
+        {% set mapConfig = {
+            height: '227px',
+            lat: location.coordinates.latitude,
+            long: location.coordinates.longitude,
+            activeMarker: null,
+            control: 3,
+            scalecontrol: 1,
+        } %}
+        {{ include('partials/ui/google-map', { mapConfig }) }}
+    </div>
+    {% endif %}
+
+    <div class="store-locator-dialog__detail">
+        <h6 class="heading-6 store-locator-dialog__heading">{{ location.name }}</h6>
+        {% set formattedAddressArray = location.address|address_format_multiline|slice(0,-1) %}
+        {% set openToday = '' %}
+        {% set today = 'now'|date('D', location.timezone.name)|lower %}
+        {% for key, value in location.square_business_hours %}
+            {% if (key|lower) == today and value is not empty %}
+                {% set openToday = 'templates.components.dialogs.store_locator.open_today'|localize({ time: value[0].open_formatted ~ ' - ' ~ value[0].close_formatted }) %}
+            {% endif %}
+        {% endfor %}
+        {% for address in formattedAddressArray %}
+            <p>{{ address }}</p>
+        {% endfor %}
+        {% if openToday is not empty %}
+            <p>{{ openToday }}</p>
+        {% endif %}
+
+        {% if formattedAddress is not empty or location.address.phone %}
+            <div class="store-locator-dialog__buttons">
+                {% if formattedAddress is not empty %}
+                    {% embed 'partials/ui/button' with {
+                        variant: 'neutral',
+                        size: 'small',
+                        icon: 'directions',
+                        label: 'templates.components.dialogs.store_locator.buttons.directions'|localize,
+                        action: 'onDirectionsButtonClick()'
+                    } %}
+                        {% block attributes %}
+                            :fullwidth="$store.global.isMobile"
+                        {% endblock %}
+                    {% endembed %}
+                {% endif %}
+                {% if location.address.phone %}
+                    {% embed 'partials/ui/button' with {
+                        variant: 'neutral',
+                        size: 'small',
+                        icon: 'call',
+                        label: 'templates.components.dialogs.store_locator.buttons.call'|localize,
+                        action: 'onCallButtonClick()'
+                    } %}
+                        {% block attributes %}
+                            :fullwidth="$store.global.isMobile"
+                        {% endblock %}
+                    {% endembed %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="store-locator-dialog__business-hours">
+        <h6 class="heading-6 store-locator-dialog__heading">{{ 'templates.components.dialogs.store_locator.hours.heading'|localize }}</h6>
+            {% set weekdaysOrder = {} %}
+            {% for day in  0..6 %}
+                {% set currentDate = '+' ~ day ~ ' day' %}
+                {% set weekdaysOrder = weekdaysOrder|merge({ (currentDate|date('D', location.timezone.name)|lower): day }) %}
+            {% endfor %}
+            {% set businessHours = location.square_business_hours|keys|sort((a, b) => weekdaysOrder[a|lower] - weekdaysOrder[b|lower])|map((key) => { day: key|lower, hours: location.square_business_hours[key] }) %}
+        <div class="row store-locator-dialog__hours-row">
+            {% for businessInfo in businessHours %}
+            <div
+                class="col"
+                col-xs-4 col-sm-4
+            >
+                <p>{{ ('templates.components.dialogs.store_locator.hours.' ~ businessInfo.day)|localize }}</p>
+            </div>
+            <div
+                class="col"
+                col-xs-8 col-sm-8
+            >
+                <p>
+                    {% if businessInfo.hours|length %}
+                        {% for openHour in businessInfo.hours %}
+                            {% if loop.first == false %},{% endif %}
+                            {{ openHour.open_formatted ~ ' - ' ~ openHour.close_formatted }}
+                        {% endfor %}
+                    {% else %}
+                        {{ 'templates.components.dialogs.store_locator.hours.closed'|localize }}
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "location": {
+        "type": "array"
+    }
+}
+{% endschema %}

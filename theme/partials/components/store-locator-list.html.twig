@@ -1,0 +1,66 @@
+{{ register_asset('js/components/store-locator-list.js', { defer: false }) }}
+
+<div id="store-locator-list">
+    {% for location in locations %}
+        {% set sublabels = location.address|address_format_multiline|slice(0,-1) %}
+        {% set today = 'now'|date('D', location.timezone.name)|lower %}
+        {% for key, value in location.square_business_hours %}
+            {% if (key|lower) == today and value is not empty %}
+                {% set sublabels = sublabels|merge(['templates.components.dialogs.store_locator.open_today'|localize({ time: value[0].open_formatted ~ ' - ' ~ value[0].close_formatted })]) %}
+            {% endif %}
+        {% endfor %}
+
+        <div
+            x-transition:enter="fade-enter-active"
+            x-transition:enter-start="fade-enter-from"
+            x-transition:enter-end="fade-enter-to"
+            x-transition:leave="fade-leave-active"
+            x-transition:leave-start="fade-leave-from"
+            x-transition:leave-end="fade-leave-to"
+        >
+            {% embed 'partials/ui/row' with { rowClasses: 'store-locator-list__item' } %}
+                {% block attributes %}
+                    x-data="storeLocatorItem('{{ location.id }}')"
+                    tabindex="0"
+                    :class="{ 'is-active': isActive }"
+                    @click="onStoreLocatorItemClick('{{ location.id }}')"
+                    @focus="onStoreLocatorItemFocus('{{ location.id }}')"
+                    @keydown.enter="onStoreLocatorKeyEnter('{{ location.id }}')"
+                {% endblock %}
+                {% block title %}
+                    {{ location.name }}
+                {% endblock %}
+                {% block text %}
+                    {% for sublabel in sublabels %}
+                        <p>{{ sublabel }}</p>
+                    {% endfor %}
+                {% endblock %}
+                {% block side %}
+                    {% set distance = formatted_distance[loop.index0] %}
+                    {% if distance %}
+                        <div class="store-locator-list__item-distance">
+                            {{ distance }}
+                        </div>
+                    {% endif %}
+                    <span
+                        @click="openLocationDetails('{{ location.id }}')"
+                    >
+                        {{ include('partials/ui/icon', { name: 'info', ariaHidden: true, iconClasses: 'store-locator-list__item-icon' }) }}
+                    </span>
+                {% endblock %}
+            {% endembed %}
+        </div>
+    {% endfor %}
+</div>
+
+{% schema %}
+{
+    "locations": {
+        "type": "array"
+    },
+    "formatted_distance": {
+        "type": "array",
+        "optional": true
+    }
+}
+{% endschema %}
