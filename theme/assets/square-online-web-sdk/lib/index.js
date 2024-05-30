@@ -510,19 +510,40 @@ class Ie {
       * @throws {@link TemplateError}
       */
   async getTemplate(e) {
+    const renderMode = getRenderMode(); // Get the render mode
+    const headers = {
+        ...S(), // Existing headers
+        'X-Render-Mode': renderMode // Add the render mode header
+    };
     const t = await fetch("/s/api/v1/template", {
       method: "POST",
       body: JSON.stringify({
         template: e.template,
         props: e.props
       }),
-      headers: S()
+      headers: headers
     }), r = await t.text();
     if (t.ok === !1)
       throw new ge("Unable to render template", r);
     return r;
   }
 }
+
+function getRenderMode()
+{
+    const url = window.location.href;
+    if (url.includes('/dashboard/editor') && url.includes('/preview')) {
+        return 'design-editor-preview';
+    }
+    if (url.includes('/dashboard/editor')) {
+        return 'design-editor';
+    }
+    if (url.includes('/preview')) {
+        return 'code-editor-preview';
+    }
+    return 'published';
+}
+
 const g = {
   weekdayShort: { weekday: "short" },
   weekdayLong: { weekday: "long" },
