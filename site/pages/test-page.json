@@ -1,6 +1,6 @@
 {
-    "route": "/",
-    "template": "templates/pages/home",
+    "route": "/test-page",
+	"template": "templates/pages/default",
     "props": {
         "banner": {
             "props": {
@@ -21,19 +21,19 @@
                             "link",
                             "align"
                         ],
-                        "content": {
+                        "richTextContent": {
                             "type": "div",
                             "children": [
                                 {
                                     "type": "p",
                                     "children": [
-                                        "aaa bbb ",
-                                        {
-                                            "type": "strong",
-                                            "children": [
-                                                "ccc"
-                                            ]
-                                        }
+                                        "AAA"
+                                    ]
+                                },
+                                {
+                                    "type": "p",
+                                    "children": [
+                                        "BBB"
                                     ]
                                 }
                             ]

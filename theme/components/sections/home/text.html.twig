@@ -1,12 +1,7 @@
 <div class="container home-page__container">
     {{ include('partials/components/text', { heading, text }) }}
 
-    <div
-        class="rich-text"
-    >
-        {{ richText|array_to_string }}
-        {{ rich_text(richText) }}
-    </div>
+    {{ rich_text(richText) }}
 </div>
 
 {% schema %}
@@ -27,13 +22,6 @@
 {
     "name": "Text",
     "controls": [
-        {
-            "control": "input",
-            "label": "Heading",
-            "value": {
-                "$ref": "#/schema/heading"
-            }
-        },
         {
             "control": "textarea",
             "label": "Text",
