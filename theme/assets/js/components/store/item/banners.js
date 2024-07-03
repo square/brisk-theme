@@ -87,8 +87,8 @@ document.addEventListener('alpine:init', () => {
         async init() {
             Utils.loadJsonDataIntoComponent.call(this, dataId);
 
-            const excludeProductIds = this.discount.exclude_square_online_product_ids;
-            const includeProductIds = this.discount.match_square_online_product_ids;
+            const excludeProductIds = this.discount.exclude_square_online_item_ids;
+            const includeProductIds = this.discount.match_square_online_item_ids;
             const details = this.discount.display_strings?.details;
             const expirationDetail = this.discount.expiration_detail;
             const recurringDetails = this.discount.recurring_details;

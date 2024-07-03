@@ -30,21 +30,17 @@
 
             <!-- Must be included before alpine -->
             <script type="module">
-                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v1.0.0-alpha.12') | asset_url }}";
+                import SDK from "{{ ('square-online-web-sdk/lib/index.js?cachebuster=v1.0.0-alpha.16') | asset_url }}";
                 window.SquareWebSDK = new SDK({{ sdk_init_config() }});
             </script>
 
             <!-- Must be included before core file -->
-            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
-            <script defer src="https://cdn.jsdelivr.net/npm/async-alpine@1.x.x/dist/async-alpine.script.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
-            <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-            <script src="https://unpkg.com/@popperjs/core@2"></script>
-
-            <!-- product spin -->
-            <script src="https://scripts.sirv.com/sirv.js" async></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js" integrity="sha256-x2YdTizwRl481pMZDeu19ZKsctzEz+ZQWBJzdnVYsns=" crossorigin="anonymous"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.14.1/dist/cdn.min.js" integrity="sha256-sav73qRAT3EB3ibvbi5l9O+uc757MwIUHuzyfe9oVg4="crossorigin="anonymous" ></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.14.1/dist/cdn.min.js" integrity="sha256-Ayau4EuKva7SPKujcCUpGluBqBLa+TgSi/4eRIRVc+8=" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.14.1/dist/cdn.min.js" integrity="sha256-jFBwr6faTqqhp3sVi4/VTxJ0FpaF9YGZN1ZGLl/5QYM=" crossorigin="anonymous"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" integrity="sha256-NY2a+7GrW++i9IBhowd25bzXcH9BCmBrqYX5i8OxwDQ=" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha256-whL0tQWoY1Ku1iskqPFvmZ+CHsvmRWx/PIoEvIeWh4I=" crossorigin="anonymous"></script>
 
             <script src="{{ 'js/helpers/utils.js' | asset_url }}"></script>
             <script src="{{ 'js/helpers/tooltip.js' | asset_url }}"></script>
