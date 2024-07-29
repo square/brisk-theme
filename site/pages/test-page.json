@@ -14,20 +14,13 @@
                 "props": {
                     "text": "Our mission is to revolutionize the fashion industry by providing stylish and sustainable clothing options that promote environmental consciousness. We’re committed to minimizing our ecological footprint.",
                     "richText": {
-                        "formats": [
-                            "bold",
-                            "italic",
-                            "list",
-                            "link",
-                            "align"
-                        ],
-                        "richTextContent": {
+                        "content": {
                             "type": "div",
                             "children": [
                                 {
                                     "type": "p",
                                     "children": [
-                                        "AAA"
+                                        "AABA"
                                     ]
                                 },
                                 {

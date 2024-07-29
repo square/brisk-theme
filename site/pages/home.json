@@ -14,30 +14,52 @@
                 "props": {
                     "text": "Our mission is to revolutionize the fashion industry by providing stylish and sustainable clothing options that promote environmental consciousness. We’re committed to minimizing our ecological footprint.",
                     "richText": {
-                        "formats": [
-                            "bold",
-                            "italic",
-                            "list",
-                            "link",
-                            "align"
-                        ],
                         "content": {
-                            "type": "div",
-                            "children": [
-                                {
-                                    "type": "p",
-                                    "children": [
-                                        "aaa bbb ",
-                                        {
-                                            "type": "strong",
-                                            "children": [
-                                                "ccc"
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
+							"type": "div",
+							"children": [
+								{
+									"type": "ol",
+									"children": [
+										{
+											"type": "li",
+											"attrs": {
+												"style": "text-align: center;"
+											},
+											"children": [
+												"bold text"
+											]
+										}
+									]
+								},
+								{
+									"type": "p",
+									"attrs": {
+										"style": "text-align: center;"
+									},
+									"children": [
+										{
+											"type": "br",
+											"children": []
+										}
+									]
+								},
+								{
+									"type": "p",
+									"attrs": {
+										"style": "text-align: center;"
+									},
+									"children": [
+										"with new lines"
+									]
+								},
+								{
+									"type": "img",
+									"attrs": {
+										"src": "https://via.placeholder.com/150"
+									}
+								}
+							]
+						}
                     }
                 }
             }
