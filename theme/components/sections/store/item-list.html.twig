@@ -8,28 +8,32 @@
 
 {% set collectionItems = [] %}
 {% set categoryOptions = [] %}
+{% set items_options = {} %}
+{% set filters = {} %}
 
 {# Item list filtering #}
 {# Pluck item filters from query #}
 {% set queryFilters = ['price_min', 'price_max', 'location_id', 'has_discounts'] %}
 {% for filter in queryFilters %}
     {% if request.query[filter] %}
-        {% set items_options = items_options|merge({ (filter): request.query[filter] }) %}
+        {% set filters = filters|merge({ (filter): request.query[filter] }) %}
     {% endif %}
 {% endfor %}
 
 {# Pluck comma separated item filters from query and convert to array #}
-{% set commaQueryFilters = ['fulfillments', 'category_ids', 'item_status', 'option_choices'] %}
+{% set commaQueryFilters = ['fulfillments', 'category_ids', 'status', 'option_choices'] %}
 {% for filter in commaQueryFilters %}
     {% if request.query[filter] %}
         {% set value = request.query[filter]|split(',') %}
-        {% set items_options = items_options|merge({ (filter): value }) %}
+        {% set filters = filters|merge({ (filter): value }) %}
 
         {% if filter == 'category_ids' %}
-            {% set items_options = items_options|merge({ square_online_id: true }) %}
+            {% set filters = filters|merge({ square_online_id: true }) %}
         {% endif %}
     {% endif %}
 {% endfor %}
+
+{% set items_options = items_options|merge({ filters: filters }) %}
 
 {# Item pagination #}
 {% if request.query.limit %}
