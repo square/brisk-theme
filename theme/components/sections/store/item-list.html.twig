@@ -8,7 +8,6 @@
 
 {% set collectionItems = [] %}
 {% set categoryOptions = [] %}
-{% set items_options = {} %}
 {% set filters = {} %}
 
 {# Item list filtering #}
@@ -33,7 +32,7 @@
     {% endif %}
 {% endfor %}
 
-{% set items_options = items_options|merge({ filters: filters }) %}
+{% set items_options = { filters: filters } %}
 
 {# Item pagination #}
 {% if request.query.limit %}
