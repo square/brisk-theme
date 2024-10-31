@@ -44,22 +44,22 @@
                                     {% for modifier in modifiersWithPrice %}
                                         {% set itemBasePrice = itemBasePrice + modifier.base_price_money.amount %}
                                     {% endfor %}
-                                    {% set itemBasePriceFormatted = (itemBasePrice)|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) }) %}
+                                    {% set itemBasePriceFormatted = (itemBasePrice)|format_price({ currency: cart.order.total_money.currency|default(store_info.currency) }) %}
                                 {% endif %}
 
                                 {# Regular and sale price #}
                                 {% set isOnSale = itemBasePrice != item.gross_price_money.amount %}
                                 {% if isOnSale %}
-                                    {{ include('partials/ui/price', { price: { 
+                                    {{ include('partials/ui/price', { price: {
                                     regular_high: {
                                         amount: itemBasePrice,
-                                        currency: cart.order.total_money.currency|default(square.store.currency),
-                                        formatted: itemBasePrice|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) })
-                                    }, 
+                                        currency: cart.order.total_money.currency|default(store_info.currency),
+                                        formatted: itemBasePrice|format_price({ currency: cart.order.total_money.currency|default(store_info.currency) })
+                                    },
                                     regular_low: {
                                         amount: item.gross_price_money.amount,
-                                        currency: cart.order.total_money.currency|default(square.store.currency),
-                                        formatted: item.gross_price_money.amount|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) })
+                                        currency: cart.order.total_money.currency|default(store_info.currency),
+                                        formatted: item.gross_price_money.amount|format_price({ currency: cart.order.total_money.currency|default(store_info.currency) })
                                     },
                                     }, size: 'tiny' }) }}
                                 {% endif %}
@@ -105,13 +105,13 @@
                                 {{ include('partials/ui/price', { price: {
                                     regular_high: {
                                     amount: itemFinalPrice,
-                                    currency: cart.order.total_money.currency|default(square.store.currency),
-                                    formatted: itemFinalPrice|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) })
+                                    currency: cart.order.total_money.currency|default(store_info.currency),
+                                    formatted: itemFinalPrice|format_price({ currency: cart.order.total_money.currency|default(store_info.currency) })
                                 },
                                 regular_low: {
                                     amount: itemFinalPrice,
-                                    currency: cart.order.total_money.currency|default(square.store.currency),
-                                    formatted: itemFinalPrice|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) })
+                                    currency: cart.order.total_money.currency|default(store_info.currency),
+                                    formatted: itemFinalPrice|format_price({ currency: cart.order.total_money.currency|default(store_info.currency) })
                                 },
                                 }, size: 'small' }) }}
                             </div>
@@ -169,7 +169,7 @@
             {% for discount in cart.order.discounts %}
                 {% set subtotal = subtotal - discount.applied_money.amount %}
             {% endfor %}
-            {% set formattedSubtotal = (subtotal)|format_price({ currency: cart.order.total_money.currency|default(square.store.currency) }) %}
+            {% set formattedSubtotal = (subtotal)|format_price({ currency: cart.order.total_money.currency|default(store_info.currency) }) %}
         {% endif %}
 
         {% embed 'partials/ui/button' with {
@@ -204,6 +204,9 @@
 {
     "cart": {
         "type": "cart"
+    },
+    "store_info": {
+        "type": "store-info"
     }
 }
 {% endschema %}
