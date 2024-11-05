@@ -1,4 +1,4 @@
-{% if 'PICKUP' in square.store.fulfillment_support %}
+{% if 'PICKUP' in storeInfo.fulfillment_support %}
     {{ register_asset('css/components/store/item/locations-dialog.css') }}
     {{ register_asset('js/components/store/item/locations-dialog.js', { defer: false }) }}
 {% endif %}
@@ -40,7 +40,7 @@
 
                         <div class="filters__advanced-options-row">
                             {# Fulfillments and item status #}
-                            {{ include('partials/components/store/filters/options/fulfillments-and-status', { chooseLocationTemplateId, fulfillmentSupport: square.store.fulfillment_support }) }}
+                            {{ include('partials/components/store/filters/options/fulfillments-and-status', { chooseLocationTemplateId, fulfillmentSupport: storeInfo.fulfillment_support }) }}
                         </div>
 
                         {% if globalOptions|length %}

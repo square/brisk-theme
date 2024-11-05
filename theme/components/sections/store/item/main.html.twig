@@ -157,7 +157,7 @@
                 {% if product.subscriptions|length %}
                     <fieldset>
                         <legend class="visually-hidden">{{ 'partials.components.store.item.subscriptions.label'|localize }}</legend>
-                        {{ include('partials/form/subscriptions', { subscriptions: product.subscriptions }) }}
+                        {{ include('partials/form/subscriptions', { subscriptions: product.subscriptions, storeInfo: store_info }) }}
                     </fieldset>
                 {% endif %}
 
@@ -169,9 +169,9 @@
                     x-data="productFormButtons(Boolean({{ isManualFulfillment }}))"
                     class="item-page__add-to-buttons"
                 >
-                    {% set isNotAcceptingOrders = square.store.accepting_orders == false %}
+                    {% set isNotAcceptingOrders = store_info.accepting_orders == false %}
                     {% set shouldShowAddToCartButton = true %}
-                    {% set shouldShowBuyNowButton = square.store.show_pdp_buy_now_button %}
+                    {% set shouldShowBuyNowButton = store_info.show_pdp_buy_now_button %}
                     {% set buyNowButtonText = 'shared.buttons.buy_now'|localize %}
 
                     {% if productTypes[product.square_online_type] %}
@@ -250,7 +250,7 @@
             {% endif %}
 
             {# Shipping and return policies #}
-            {{ include('partials/components/store/item/policies') }}
+            {{ include('partials/components/store/item/policies', { storeInfo: store_info }) }}
         </div>
     </div>
 </div>
@@ -271,6 +271,9 @@ function setInitialProductStore() {
     },
     "locations": {
         "type": "location-list"
+    },
+    "store_info": {
+        "type": "store-info"
     }
 }
 {% endschema %}

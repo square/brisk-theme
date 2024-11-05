@@ -107,7 +107,7 @@
 {% endif %}
 {% set filtersDialogProps = {
     id: filterDropdownId ~ '__dialog',
-    fulfillment_support: square.store.fulfillment_support,
+    fulfillment_support: store_info.fulfillment_support,
     current_value: request.query|default({}),
     global_options,
     category,
@@ -168,7 +168,7 @@
                         {{ include('partials/components/store/filters/buttons/categories', { id: filterDropdownId ~ '__categories', currentValue: (request.query.category_ids|split(','))|default({}), category }) }}
                     </span>
                 {% endif %}
-                {{ include('partials/components/store/filters/buttons/advanced', { id: filterDropdownId ~ '__advanced', chooseLocationTemplateId, currentValue: request.query|default({}), filtersDialogProps, globalOptions: global_options }) }}
+                {{ include('partials/components/store/filters/buttons/advanced', { id: filterDropdownId ~ '__advanced', storeInfo: store_info, chooseLocationTemplateId, currentValue: request.query|default({}), filtersDialogProps, globalOptions: global_options }) }}
             </div>
             {{ include('partials/components/store/filters/buttons/sort', { id: filterDropdownId ~ '__sort', sortOptions: sort_options, currentValue: currentSortValue }) }}
         </div>
@@ -215,6 +215,9 @@
     },
     "sort_options": {
         "type": "array"
+    },
+    "store_info": {
+        "type": "store-info"
     },
     "global_options": {
         "type": "array",

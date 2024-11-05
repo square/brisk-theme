@@ -47,7 +47,7 @@
         {% endblock %}
     </head>
 
-    {% set defaultFulfillment = (square.store.default_item_fulfillment|split(',')[0])|default('SHIPMENT') %}
+    {% set defaultFulfillment = (store_info.default_item_fulfillment|split(',')[0])|default('SHIPMENT') %}
 
     {% if config.theme.shouldUseSiteStyles %}
         {% set themeContainerWidth = max(square.site.styles.spacing.site_width, 1200) %}
@@ -65,8 +65,8 @@
     >
         <script id="global-data" type="application/json">
             {{ {
-                locale: square.store.locale,
-                currency: square.store.currency,
+                locale: store_info.locale,
+                currency: store_info.currency,
                 defaultFulfillment,
             }|json_encode }}
         </script>
