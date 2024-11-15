@@ -47,7 +47,7 @@
         {% endblock %}
     </head>
 
-    {% set defaultFulfillment = (store_info.default_item_fulfillment|split(',')[0])|default('SHIPMENT') %}
+    {% set defaultFulfillment = (store_info.seller_preferred_fulfillment|split(',')[0])|default('SHIPMENT') %}
 
     {% if config.theme.shouldUseSiteStyles %}
         {% set themeContainerWidth = max(square.site.styles.spacing.site_width, 1200) %}
