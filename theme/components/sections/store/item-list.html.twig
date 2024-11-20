@@ -8,28 +8,31 @@
 
 {% set collectionItems = [] %}
 {% set categoryOptions = [] %}
+{% set filters = {} %}
 
 {# Item list filtering #}
 {# Pluck item filters from query #}
 {% set queryFilters = ['price_min', 'price_max', 'location_id', 'has_discounts'] %}
 {% for filter in queryFilters %}
     {% if request.query[filter] %}
-        {% set items_options = items_options|merge({ (filter): request.query[filter] }) %}
+        {% set filters = filters|merge({ (filter): request.query[filter] }) %}
     {% endif %}
 {% endfor %}
 
 {# Pluck comma separated item filters from query and convert to array #}
-{% set commaQueryFilters = ['fulfillments', 'category_ids', 'item_status', 'option_choices'] %}
+{% set commaQueryFilters = ['fulfillments', 'category_ids', 'status', 'option_choices'] %}
 {% for filter in commaQueryFilters %}
     {% if request.query[filter] %}
         {% set value = request.query[filter]|split(',') %}
-        {% set items_options = items_options|merge({ (filter): value }) %}
+        {% set filters = filters|merge({ (filter): value }) %}
 
         {% if filter == 'category_ids' %}
-            {% set items_options = items_options|merge({ square_online_id: true }) %}
+            {% set filters = filters|merge({ square_online_id: true }) %}
         {% endif %}
     {% endif %}
 {% endfor %}
+
+{% set items_options = { filters: filters } %}
 
 {# Item pagination #}
 {% if request.query.limit %}
@@ -104,7 +107,7 @@
 {% endif %}
 {% set filtersDialogProps = {
     id: filterDropdownId ~ '__dialog',
-    fulfillment_support: square.store.fulfillment_support,
+    fulfillment_support: store_info.fulfillment_support,
     current_value: request.query|default({}),
     global_options,
     category,
@@ -165,7 +168,7 @@
                         {{ include('partials/components/store/filters/buttons/categories', { id: filterDropdownId ~ '__categories', currentValue: (request.query.category_ids|split(','))|default({}), category }) }}
                     </span>
                 {% endif %}
-                {{ include('partials/components/store/filters/buttons/advanced', { id: filterDropdownId ~ '__advanced', chooseLocationTemplateId, currentValue: request.query|default({}), filtersDialogProps, globalOptions: global_options }) }}
+                {{ include('partials/components/store/filters/buttons/advanced', { id: filterDropdownId ~ '__advanced', storeInfo: store_info, chooseLocationTemplateId, currentValue: request.query|default({}), filtersDialogProps, globalOptions: global_options }) }}
             </div>
             {{ include('partials/components/store/filters/buttons/sort', { id: filterDropdownId ~ '__sort', sortOptions: sort_options, currentValue: currentSortValue }) }}
         </div>
@@ -212,6 +215,9 @@
     },
     "sort_options": {
         "type": "array"
+    },
+    "store_info": {
+        "type": "store-info"
     },
     "global_options": {
         "type": "array",

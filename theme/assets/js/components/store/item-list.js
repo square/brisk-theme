@@ -111,8 +111,8 @@ document.addEventListener('alpine:init', () => {
             if (urlParams.location_id?.length) {
                 query.locationId = urlParams.location_id;
             }
-            if (urlParams.item_status?.length) {
-                const statuses = urlParams.item_status.split(',');
+            if (urlParams.status?.length) {
+                const statuses = urlParams.status.split(',');
                 query.isOnSale = statuses.includes('on_sale');
                 query.isInStock = statuses.includes('in_stock');
             }
@@ -174,7 +174,7 @@ document.addEventListener('alpine:init', () => {
                 statuses.push('in_stock');
             }
             if (statuses.length) {
-                query.set('item_status', statuses);
+                query.set('status', statuses);
             }
             if (categoryIds?.length) {
                 query.set('category_ids', categoryIds);

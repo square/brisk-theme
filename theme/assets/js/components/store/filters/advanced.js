@@ -67,8 +67,8 @@ document.addEventListener('alpine:init', () => {
                     }
                 });
             }
-            if (this.currentValue.item_status?.length) {
-                const itemStatus = this.currentValue.item_status.split(',');
+            if (this.currentValue.status?.length) {
+                const itemStatus = this.currentValue.status.split(',');
                 itemStatus.forEach((status) => {
                     this.advancedFilterValues[status] = true;
                 });
@@ -290,7 +290,7 @@ document.addEventListener('alpine:init', () => {
             const selectedValues = [
                 this.currentValue.location_id,
                 ...[this.currentValue.fulfillments?.split(',') ?? []],
-                ...[this.currentValue.item_status?.split(',') ?? []],
+                ...[this.currentValue.status?.split(',') ?? []],
                 ...[this.currentValue.option_choices?.split(',') ?? []],
                 this.currentValue.price_min,
                 this.currentValue.price_max,
