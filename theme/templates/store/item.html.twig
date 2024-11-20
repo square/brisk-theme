@@ -6,7 +6,8 @@
 {{ register_asset('js/templates/store/item.js', { defer: false }) }}
 
 {# Checks if the default fulfillment is enabled #}
-{% if item.fulfillment.methods[defaultFulfillment] == false %}
+{# We check for methods at any location, since it's valid for location to not be set on this page #}
+{% if item.fulfillment.methods_at_any_location[defaultFulfillment] == false %}
     {% set enabledFulfillment = item.fulfillment.methods_at_any_location|filter(value => value)|keys|first %}
     {% if enabledFulfillment %}
         {% set defaultFulfillment = enabledFulfillment %}
