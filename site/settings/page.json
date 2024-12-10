@@ -1,0 +1,30 @@
+{
+	"types": {
+		"item": {
+			"name": "Product pages",
+			"resource": "item",
+			"route_parameters": {
+				"id": "square_online_id",
+				"name": "name"
+			}
+		},
+
+		"category": {
+			"name": "Category pages",
+			"resource": "category",
+			"route_parameters": {
+				"id": "id",
+				"name": "name"
+			}
+		},
+		"shop": {
+			"name": "Store pages"
+		},
+		"search": {
+			"name": "Store pages"
+		},
+		"store-locator": {
+			"name": "Store pages"
+		}
+	}
+}
